@@ -1,3 +1,7 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/Login";
+import Home from "./pages/Home";
+=======
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate  } from "react-router-dom";
@@ -88,78 +92,16 @@ const Login = () => {
     };
 
 
-    return (
-        <div className={classes.root}>
-            <Paper elevation={3} className={classes.paper}>
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Đăng nhập
-                    </Typography>
-                    <form noValidate className={classes.form} onSubmit={handleSubmit}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="username"
-                            label="Tên đăng nhập"
-                            name="username"
-                            autoComplete="username"
-                            autoFocus
-                            value={username}
-                            onChange={handleUsernameChange}
-                            error={error}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Mật khẩu"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            value={password}
-                            onChange={handlePasswordChange}
-                            error={error}
-                        />
-                        {error.length !== 0 && (
-                            <Typography color="error" variant="subtitle2">
-                                {error}
-                            </Typography>
-                        )}
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            className={classes.submit}
-                        >
-                            Đăng nhập
-                        </Button>
-                        <Snackbar
-                            open={success}
-                            autoHideDuration={3000}
-                            onClose={handleSnackbarClose}
-                        >
-                            <MuiAlert
-                                elevation={6}
-                                variant="filled"
-                                onClose={handleSnackbarClose}
-                                severity="success"
-                            >
-                                Đăng nhập thành công
-                            </MuiAlert>
-                        </Snackbar>
-                    </form>
-                </div>
-            </Paper>
-        </div>
-    );
-};
 
-export default Login;    
+const App = () => {
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<Home/>}/>
+                <Route path="/Login" element={<Login/>}/>
+            </Routes>
+        </BrowserRouter>
+    );
+}
+
+export default App
