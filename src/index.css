@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components{
+    .sidebar-items{
+        @apply ml-[16px] text-[14px] leading-[40px] flex
+    }
+}
