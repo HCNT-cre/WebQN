@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import { useNavigate  } from "react-router-dom";
 
 import {
     TextField,
@@ -42,20 +43,27 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = () => {
+    // const navigate = useNavigate();
     const classes = useStyles();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(false);
+    const [error, setError] = useState("");
     const [success, setSuccess] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (username !== 'admin' || password !== 'password') {
-            setError(true);
+        if(username ==="" || password ===""){
+            setError("Tên đăng nhập hoặc mật khẩu không thể bỏ trống")
+            setSuccess(false)
+        }
+        else if (username !== 'admin' || password !== 'password') {
+            setError("Sai tên đăng nhập hoặc mật khẩu");
             setSuccess(false);
         } else {
-            setError(false);
+            console.log("success");
+            setError("");
             setSuccess(true);
+            // navigate('/new-page')
         }
     };
 
@@ -88,7 +96,7 @@ const Login = () => {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Login
+                        Đăng nhập
                     </Typography>
                     <form noValidate className={classes.form} onSubmit={handleSubmit}>
                         <TextField
@@ -97,7 +105,7 @@ const Login = () => {
                             required
                             fullWidth
                             id="username"
-                            label="Username"
+                            label="Tên đăng nhập"
                             name="username"
                             autoComplete="username"
                             autoFocus
@@ -111,7 +119,7 @@ const Login = () => {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label="Mật khẩu"
                             type="password"
                             id="password"
                             autoComplete="current-password"
@@ -119,9 +127,9 @@ const Login = () => {
                             onChange={handlePasswordChange}
                             error={error}
                         />
-                        {error && (
+                        {error.length !== 0 && (
                             <Typography color="error" variant="subtitle2">
-                                Incorrect username or password
+                                {error}
                             </Typography>
                         )}
                         <Button
@@ -131,7 +139,7 @@ const Login = () => {
                             color="primary"
                             className={classes.submit}
                         >
-                            Login
+                            Đăng nhập
                         </Button>
                         <Snackbar
                             open={success}
@@ -144,7 +152,7 @@ const Login = () => {
                                 onClose={handleSnackbarClose}
                                 severity="success"
                             >
-                                Login Successful!
+                                Đăng nhập thành công
                             </MuiAlert>
                         </Snackbar>
                     </form>
