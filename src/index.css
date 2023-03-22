@@ -4,6 +4,12 @@
 
 @layer components{
     .sidebar-items{
-        @apply ml-[16px] text-[14px] leading-[40px] flex
+        @apply pl-[16px] text-[14px] leading-[40px] flex cursor-pointer
+    }
+    .sidebar-items--active{
+        @apply text-blue-800 bg-[#e6eaff] border-r-[5px] border-r-[#0000ff] 
+    }
+    .sidebar-items:hover{
+        @apply text-blue-800
     }
 }
