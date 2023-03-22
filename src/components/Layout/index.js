@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
             <Header sideBarWidth={sideBarWidth} setSideBarWidth={setSideBarWidth}/>
             <SideBar sideBarWidth={sideBarWidth}/>
 
-            <div className='w-full mt-[60px] flex'>
+            <div className={`${sideBarWidth === 200 ? "ml-[200px] w-[calc(100%-200px)]" : "ml-[50px] w-[calc(100%-50px)]"} mt-[60px] flex`}>
                 <div>
                     {children}
                 </div>
