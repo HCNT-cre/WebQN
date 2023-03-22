@@ -1,8 +1,4 @@
 const Header = ({ sideBarWidth, setSideBarWidth }) => {
-    console.log(sideBarWidth === 200);
-    if (sideBarWidth === undefined)
-        sideBarWidth = 0
-
     return (
         <>
             <div className={`flex justify-between px-[16px] transition-all ${sideBarWidth === 200 ? "ml-[200px] w-[calc(100%-200px)]" : "ml-[50px] w-[calc(100%-50px)]"} fixed h-[60px] bg-blue-800 top-0`}>

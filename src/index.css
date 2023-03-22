@@ -12,4 +12,8 @@
     .sidebar-items:hover{
         @apply text-blue-800
     }
+
+    .after-form{
+        @apply after:content-['(*)'] after:text-[#f00] after:pl-[4px]
+    }
 }
