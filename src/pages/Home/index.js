@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import FormAddFile from "../../components/Form/AddFile"
 
 const Home = () => {
     const [files, setFiles] = useState([])

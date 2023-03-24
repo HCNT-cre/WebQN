@@ -4,13 +4,12 @@
 
 @layer components{
     .sidebar-items{
-        @apply pl-[16px] text-[14px] leading-[40px] flex cursor-pointer
+        @apply mx-[24px] text-[16px] leading-[40px] flex cursor-pointer mb-[16px] py-[4px]
     }
     .sidebar-items--active{
-        @apply text-blue-800 bg-[#e6eaff] border-r-[5px] border-r-[#0000ff] 
+        @apply  bg-[#b6b6b6] rounded-[8px]
     }
     .sidebar-items:hover{
-        @apply text-blue-800
     }
 
     .after-form{

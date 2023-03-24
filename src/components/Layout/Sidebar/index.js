@@ -11,12 +11,12 @@ const SideBar = ({ sideBarWidth }) => {
 
     return (
         <>
-            <div className={`${sideBarWidth === 200 ? "w-[200px]" : "w-[50px]"} transition-all fixed left-0 top-0 pt-[60px] shadow h-full my-[4px]`}>
+            <div className={`${sideBarWidth === 200 ? "w-[300px]" : "w-[50px]"} transition-all fixed left-0 top-0 pt-[60px] shadow h-full bg-[#dcdcdc]`}>
      
                     {tabs.map((tab, idx) => {
                         return (
                             <Link to={tab.to} onClick={()=>{setCurrentTab(idx)}} key={idx} className={`sidebar-items ${idx === currentTab ? "sidebar-items--active" : ""}`}>
-                                <div className="mr-[8px]"><i class="fa-solid fa-house"></i></div>
+                                <div className="mx-[24px]"><i class="fa-solid fa-house"></i></div>
                                 {sideBarWidth === 200 && <span>{tab.title}</span>}
                             </Link>
                         )
