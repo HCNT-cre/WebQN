@@ -48,9 +48,9 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     return (
         <>
             {stateFormAddFile &&
-                <div className="fixed top-0 right-0 bottom-0 left-0 h-full w-full z-10 bg-[rgba(0,0,0,.45)]">
-                    <div className="overflow-x-auto relative top-[100px] w-[1200px] max-w-[calc(100vw-32px)] my-0 mx-auto bg-white">
-                        <div className="overflow-x-auto  relative rounded-[2px] bg-white">
+                <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-10 bg-[rgba(0,0,0,.45)]">
+                    <div className="relative top-[100px] w-[1200px] max-w-[calc(100vw-32px)] my-0 mx-auto bg-white mb-[100px]">
+                        <div className="relative rounded-[2px] bg-white">
                             <button onClick={() => { setStateFormAddFile(false) }} className="text-[20px] absolute right-0 w-[40px] h-[40px] bg-[#2f54eb] top-0 text-white ">x</button>
                             <div className="bg-[#2f54eb] text-white py-[16px] px-[24px]">
                                 <p>Tạo hồ sơ</p>
