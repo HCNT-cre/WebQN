@@ -1,32 +1,28 @@
 import { useState } from "react"
+import { Link } from "react-router-dom"
 const SideBar = ({ sideBarWidth }) => {
 
     const [currentTab, setCurrentTab] = useState(-1)
     
     const tabs = [
-        "Hồ sơ tài liêu",
-        "Hồ sơ tài liêu",
-        "Hồ sơ tài liêu",
-        "Tai lieu",
-        "Hồ sơ tài liêu",
-        "Hồ sơ tài liêu",
-        "Hồ sơ tài liêu"
+        {title: "Trang chủ", to: "/"},
+        {title: "Thêm hồ sơ", to: "/them-ho-so"},
     ]
 
     return (
         <>
             <div className={`${sideBarWidth === 200 ? "w-[200px]" : "w-[50px]"} transition-all fixed left-0 top-0 pt-[60px] shadow h-full my-[4px]`}>
-                <ul>
-                    {tabs.map((item, idx) => {
+     
+                    {tabs.map((tab, idx) => {
                         return (
-                            <li onClick={()=>{setCurrentTab(idx)}} key={idx} className={`sidebar-items ${idx === currentTab ? "sidebar-items--active" : ""}`}>
+                            <Link to={tab.to} onClick={()=>{setCurrentTab(idx)}} key={idx} className={`sidebar-items ${idx === currentTab ? "sidebar-items--active" : ""}`}>
                                 <div className="mr-[8px]"><i class="fa-solid fa-house"></i></div>
-                                {sideBarWidth === 200 && <span>{item}</span>}
-                            </li>
+                                {sideBarWidth === 200 && <span>{tab.title}</span>}
+                            </Link>
                         )
                     })
                     }
-                </ul>
+             
             </div>
         </>
     )
