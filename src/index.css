@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    body{
+        @apply bg-[#f0f2f5]
+    }
+}
+
 @layer components{
     .sidebar-items--large{
         @apply mx-[24px] text-[16px] leading-[40px] flex cursor-pointer mb-[16px] py-[4px]
