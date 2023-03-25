@@ -4,7 +4,7 @@ const Home = () => {
     const [files, setFiles] = useState([])
 
     useEffect(() => {
-            const fetchFileData = async () => {
+        const fetchFileData = async () => {
             const response = await fetch('https://6381f08c53081dd5498bea48.mockapi.io/api/v1/file');
             const rawDatas = await response.json();
             let filesArray = []
@@ -20,23 +20,32 @@ const Home = () => {
     }, [])
 
     return (
-        <>
-            <div className="w-[calc(full-300px)] ">
+        <>  
+            <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
+                <p className="text-[20px] font-bold ">Trang chủ</p>        
+                <div className="mt-[8px]">
+                    <p className="mb-[12px] font-[500]">Cơ sở dữ liệu tài liệu lưu trữ điện tử</p>
+                    <p className="mb-[12px]">Tổng số phông: <span className="text-[#ff0000]">12</span></p>
+                    <p className="mb-[12px]">Tổng số hồ sơ: <span className="text-[#ff0000]">1234</span></p>
+                    <p className="mb-[12px]">Tổng số văn bản: <span className="text-[#ff0000]">4567</span></p>
+                </div>    
+            </div>
+            <div className="p-[24px] bg-[#f0f2f5] rounded-[2px]">
                 <table className="table-fixed w-full">
                     <colgroup></colgroup>
-                    <thead><tr>
-                        <th>Thứ tự</th>
-                        <th>Mã hồ sơ</th>
-                        <th>Tiêu đề hồ sơ</th>
-                        <th>Phông</th>
+                    <thead className="bg-[#fafafa]"><tr>
+                        <th className="relative w-[40px] text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]">TT</th>
+                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]" >Mã hồ sơ</th>
+                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]" >Tiêu đề hồ sơ</th>
+                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]" >Phông</th>
                     </tr></thead>
                     <tbody>{files.map((file, index) => {
                         return (
-                            <tr key={index}>
-                                <td>{index}</td>
-                                <td>{file.FileCode}</td>
-                                <td>{file.Identifier}</td>
-                                <td>{file.Organld}</td>
+                            <tr className="hover:bg-[#fafafa] bg-white border-t-[1px] border-solid border-[#f0f0f0]" key={index}>
+                                <td className="text-center px-[8px] py-[12px]"><span className="block w-[24px] h-[24px] rounded-[50%] bg-[#ccc]">{index + 1}</span></td>
+                                <td className="px-[8px] py-[12px]" >{file.FileCode}</td>
+                                <td className="px-[8px] py-[12px]" >{file.Identifier}</td>
+                                <td className="px-[8px] py-[12px]" >{file.Organld}</td>
                             </tr>
                         )
                     })}</tbody>
