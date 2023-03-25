@@ -18,9 +18,9 @@ const SideBar = ({ sideBarWidth }) => {
         <>
 
             <div className={`${sideBarWidth === 300 ? "w-[300px]" : "w-[80px]"} transition-all fixed left-0 top-0  shadow h-full bg-[#dcdcdc]`}>
-                <div className={`${sideBarWidth === 300 ? 'mx-[24px]' : 'mx-[8px]'} border-[#b7b7b7] flex justify-center my-[16px] pb-[8px] border-b-[2px] border-solid `}>
+                <Link to='/' className={`${sideBarWidth === 300 ? 'mx-[24px]' : 'mx-[8px]'} border-[#b7b7b7] flex justify-center my-[16px] pb-[8px] border-b-[2px] border-solid `}>
                     <img className="w-[70px]" alt="Quoc Huy" src={QuocHuy} />
-                </div>
+                </Link>
 
                 {tabs.map((tab, idx) => {
                     return (
