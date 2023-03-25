@@ -3,8 +3,12 @@
 @tailwind utilities;
 
 @layer components{
-    .sidebar-items{
+    .sidebar-items--large{
         @apply mx-[24px] text-[16px] leading-[40px] flex cursor-pointer mb-[16px] py-[4px]
+    }
+
+    .sidebar-items--small{
+        @apply mx-[8px] text-[16px] leading-[40px] flex cursor-pointer mb-[16px] py-[4px]
     }
     .sidebar-items--active{
         @apply  bg-[#b6b6b6] rounded-[8px]

@@ -4,7 +4,7 @@ const Home = () => {
     const [files, setFiles] = useState([])
 
     useEffect(() => {
-        const fetchFileData = async () => {
+            const fetchFileData = async () => {
             const response = await fetch('https://6381f08c53081dd5498bea48.mockapi.io/api/v1/file');
             const rawDatas = await response.json();
             let filesArray = []
@@ -21,7 +21,7 @@ const Home = () => {
 
     return (
         <>
-            <div className="w-[calc(full-200px)] ">
+            <div className="w-[calc(full-300px)] ">
                 <table className="table-fixed w-full">
                     <colgroup></colgroup>
                     <thead><tr>
