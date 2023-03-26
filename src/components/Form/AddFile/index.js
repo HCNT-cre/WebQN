@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const API = 'https://6381f08c53081dd5498bea48.mockapi.io/api/v1/file'
+const API = 'https://641e04a5945125fff3db0a63.mockapi.io/file'
 const fieldsLeft = [
     {
         key: "Identifier",
@@ -142,23 +142,95 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
                                             <div className="w-[50%] px-[10px]">
                                                 {fieldsLeft.map((field, index) => {
                                                     return (
-                                                        <div key={field.key} className="mt-[8px] w-full mb-[24px]">
-                                                            <label className={`${field.require ? "after-form" : ""} text-[14px]`} title={field.title}>{field.title}</label>
+                                                        <div
+                                                            key={field.key}
+                                                            className="mt-[8px] w-full mb-[24px]"
+                                                        >
+                                                            <label
+                                                                className={`${field.require ? "after-form" : ""
+                                                                    } text-[14px]`}
+                                                                title={field.title}
+                                                            >
+                                                                {field.title}
+                                                            </label>
 
-                                                            <input required={field.require} onChange={(ev) => handleChangeForm(ev)} name={field.key} placeholder={field.title} type={field.type} min="0" className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"></input>
+                                                            {field.type === "select" ? (
+                                                                <select
+                                                                    required={field.require}
+                                                                    onChange={(ev) => handleChangeForm(ev)}
+                                                                    name={field.key}
+                                                                    placeholder={field.title}
+                                                                    className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                >
+                                                                    {field.options.map((option) => (
+                                                                        <option
+                                                                            key={option.value}
+                                                                            value={option.value}
+                                                                        >
+                                                                            {option.label}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+                                                            ) : (
+                                                                <input
+                                                                    required={field.require}
+                                                                    onChange={(ev) => handleChangeForm(ev)}
+                                                                    name={field.key}
+                                                                    placeholder={field.title}
+                                                                    type={field.type}
+                                                                    min="0"
+                                                                    className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                />
+                                                            )}
                                                         </div>
-                                                    )
+                                                    );
                                                 })}
                                             </div>
                                             <div className="w-[50%] px-[10px]">
                                                 {fieldsRight.map((field, index) => {
                                                     return (
-                                                        <div key={field.key} className="mt-[8px] w-full mb-[24px]">
-                                                            <label className={`${field.require ? "after-form" : ""} text-[14px]`} title={field.title}>{field.title}</label>
+                                                        <div
+                                                            key={field.key}
+                                                            className="mt-[8px] w-full mb-[24px]"
+                                                        >
+                                                            <label
+                                                                className={`${field.require ? "after-form" : ""
+                                                                    } text-[14px]`}
+                                                                title={field.title}
+                                                            >
+                                                                {field.title}
+                                                            </label>
 
-                                                            <input required={field.require} onChange={(ev) => handleChangeForm(ev)} name={field.key} placeholder={field.title} type={field.type} min="0" className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"></input>
+                                                            {field.type === "select" ? (
+                                                                <select
+                                                                    required={field.require}
+                                                                    onChange={(ev) => handleChangeForm(ev)}
+                                                                    name={field.key}
+                                                                    placeholder={field.title}
+                                                                    className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                >
+                                                                    {field.options.map((option) => (
+                                                                        <option
+                                                                            key={option.value}
+                                                                            value={option.value}
+                                                                        >
+                                                                            {option.label}
+                                                                        </option>
+                                                                    ))}
+                                                                </select>
+                                                            ) : (
+                                                                <input
+                                                                    required={field.require}
+                                                                    onChange={(ev) => handleChangeForm(ev)}
+                                                                    name={field.key}
+                                                                    placeholder={field.title}
+                                                                    type={field.type}
+                                                                    min="0"
+                                                                    className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                />
+                                                            )}
                                                         </div>
-                                                    )
+                                                    );
                                                 })}
                                             </div>
                                         </div>
