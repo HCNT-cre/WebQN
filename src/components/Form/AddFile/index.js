@@ -1,5 +1,6 @@
 import {useState } from "react"
 
+const API = 'https://6381f08c53081dd5498bea48.mockapi.io/api/v1/file' 
 const fieldsLeft = [
     { key: 'Identifier', title: 'Mã cơ quan lưu trữ lịch sử', require: false, type: "text" },
     { key: 'Organld', title: 'Mã phông/công trình/sưu tập lưu trữ', require: true, type: "options" },
@@ -34,6 +35,7 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
         { 'Rights': '' },
         { 'Language': '' },
         { 'StartDate': '' },
+        { 'EndDate': '' },
         { 'TotalDoc': '' },
         { 'Description': '' },
         { 'InforSign': '' },
@@ -52,13 +54,15 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const currentDate = new Date().toISOString().slice(0, 10);
+        request['EndDate'] = currentDate
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(request)
         };
 
-        await fetch('https://6381f08c53081dd5498bea48.mockapi.io/api/v1/file', requestOptions)
+        await fetch(API, requestOptions)
             .then(response => response.json())
             .then(data => { console.log(data); });
 
