@@ -35,7 +35,7 @@ const Home = () => {
                     <colgroup></colgroup>
                     <thead className="bg-[#fafafa]"><tr>
                         <th className="relative w-[40px] text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]">TT</th>
-                        <th className="relative w-[40px] text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]">Mã hồ sơ</th>
+                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]   ">Mã hồ sơ</th>
                         <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]" >Tiêu đề hồ sơ</th>
                         <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]" >Phông</th>
                         <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]" >Thời hạn bảo quản</th>
