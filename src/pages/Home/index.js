@@ -34,22 +34,22 @@ const Home = () => {
                 <table className="table-fixed w-full">
                     <colgroup></colgroup>
                     <thead className="bg-[#fafafa]"><tr>
-                        <th className="relative w-[40px] text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]">TT</th>
-                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]   ">Mã hồ sơ</th>
-                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]" >Tiêu đề hồ sơ</th>
-                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]" >Phông</th>
-                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]" >Thời hạn bảo quản</th>
-                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[rgba(0,0,0,.06)] before:top-[50%] before:translate-y-[-50%]" >Chế độ sử dụng</th>
+                        <th className="relative w-[40px] text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]">TT</th>
+                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]   ">Mã hồ sơ</th>
+                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Tiêu đề hồ sơ</th>
+                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Phông</th>
+                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Thời hạn bảo quản</th>
+                        <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Chế độ sử dụng</th>
                     </tr></thead>
                     <tbody>{files.map((file, index) => {
                         return (
-                            <tr className="hover:bg-[#fafafa] bg-white border-t-[1px] border-solid border-[#f0f0f0]" key={index}>
-                                <td className="text-center px-[8px] py-[12px]"><span className="block w-[24px] h-[24px] rounded-[50%] bg-[#ccc]">{index + 1}</span></td>
-                                <td className="px-[8px] py-[12px]" >{file.FileCode}</td>
-                                <td className="px-[8px] py-[12px]" >{file.Title}</td>
-                                <td className="px-[8px] py-[12px]" >{file.Organld}</td>
-                                <td className="px-[8px] py-[12px]" >{file.Maintenance}</td>
-                                <td className="px-[8px] py-[12px]" >{file.Rights}</td>
+                            <tr className="hover:bg-[#fafafa] bg-white border-t-[1px] border-solid border-[#e0e0e0]" key={index}>
+                                <td className="text-center px-[12px] py-[16px]"><span className="block w-[24px] h-[24px] rounded-[50%] bg-[#ccc]">{index + 1}</span></td>
+                                <td className="px-[12px] py-[16px] overflow-hidden" >{file.FileCode}</td>
+                                <td className="px-[12px] py-[16px] overflow-hidden" >{file.Title}</td>
+                                <td className="px-[12px] py-[16px] overflow-hidden" >{file.Organld}</td>
+                                <td className="px-[12px] py-[16px] overflow-hidden" >{file.Maintenance}</td>
+                                <td className="px-[12px] py-[16px] overflow-hidden" >{file.Rights}</td>
                             </tr>
                         )
                     })}</tbody>

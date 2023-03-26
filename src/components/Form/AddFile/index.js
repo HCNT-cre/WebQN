@@ -79,13 +79,13 @@ const fieldsRight = [
 
 const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     const [request, setRequest] = useState(
+        { 'Rights': 'Công khai'},
         { 'Identifier': '' },
         { 'Organld': '' },
         { 'FileCatalog': '' },
         { 'FileNotation': '' },
         { 'Title': '' },
         { 'Maintenance': '' },
-        { 'Rights': '' },
         { 'Language': '' },
         { 'StartDate': '' },
         { 'EndDate': '' },
@@ -98,10 +98,13 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
         { 'Format': '' }
     )
 
+    console.log(request);
+
     const handleChangeForm = (event) => {
         const name = event.target.name;
         let cur = request;
         cur[name] = event.target.value;
+        console.log(cur);
         setRequest(cur);
     };
 
@@ -162,7 +165,7 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
                                                                     placeholder={field.title}
                                                                     className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
                                                                 >
-                                                                    {field.options.map((option) => (
+                                                                    {field.options.map((option, index) => (
                                                                         <option
                                                                             key={option.value}
                                                                             value={option.value}
@@ -209,7 +212,7 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
                                                                     placeholder={field.title}
                                                                     className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
                                                                 >
-                                                                    {field.options.map((option) => (
+                                                                    {field.options.map((option, index) => (
                                                                         <option
                                                                             key={option.value}
                                                                             value={option.value}
