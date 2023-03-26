@@ -1,28 +1,81 @@
-import {useState } from "react"
+import { useState } from "react"
 
-const API = 'https://6381f08c53081dd5498bea48.mockapi.io/api/v1/file' 
+const API = 'https://6381f08c53081dd5498bea48.mockapi.io/api/v1/file'
 const fieldsLeft = [
-    { key: 'Identifier', title: 'Mã cơ quan lưu trữ lịch sử', require: false, type: "text" },
-    { key: 'Organld', title: 'Mã phông/công trình/sưu tập lưu trữ', require: true, type: "options" },
-    { key: 'FileCatalog', title: 'Mục lục hoặc năm hình thành hồ sơ', require: false, type: "number" },
-    { key: 'FileNotation', title: 'Số và ký hiệu hồ sơ', require: false, type: "text" },
-    { key: 'Title', title: 'Tiêu đề hồ sơ', require: true, type: "text" },
-    { key: 'Maintenance', title: 'Thời hạn bảo quản', require: true, type: "options" },
-    { key: 'Rights', title: 'Chế độ sử dụng', require: true, type: "options" },
-    { key: 'Language', title: 'Ngôn ngữ', require: false, type: "text" },
-]
+    {
+        key: "Identifier",
+        title: "Mã cơ quan lưu trữ lịch sử",
+        require: false,
+        type: "text",
+    },
+    {
+        key: "Organld",
+        title: "Mã phông/công trình/sưu tập lưu trữ",
+        require: true,
+        type: "options",
+    },
+    {
+        key: "FileCatalog",
+        title: "Mục lục hoặc năm hình thành hồ sơ",
+        require: false,
+        type: "number",
+    },
+    {
+        key: "FileNotation",
+        title: "Số và ký hiệu hồ sơ",
+        require: false,
+        type: "text",
+    },
+    { key: "Title", title: "Tiêu đề hồ sơ", require: true, type: "text" },
+    {
+        key: "Maintenance",
+        title: "Thời hạn bảo quản",
+        require: true,
+        type: "options",
+    },
+    {
+        key: "Rights",
+        title: "Chế độ sử dụng",
+        require: true,
+        type: "select",
+        options: [
+            { value: "Public", label: "Công Khai" },
+            { value: "Private", label: "Riêng tư" },
+        ],
+    },
+    { key: "Language", title: "Ngôn ngữ", require: false, type: "text" },
+];
 
 const fieldsRight = [
-    { key: 'StartDate', title: 'Thời gian bắt đầu', require: false, type: "date" },
-    { key: 'TotalDoc', title: 'Tổng số văn bản trong hồ sơ', require: false, type: "number" },
-    { key: 'Description', title: 'Chú giải', require: false, type: "options" },
-    { key: 'InforSign', title: 'Ký hiệu thông tin', require: false, type: "text" },
-    { key: 'Keyword', title: 'Từ khóa', require: false, type: "text" },
-    { key: 'PhysicalNum', title: 'Số lượng tờ', require: false, type: "number" },
-    { key: 'PageNumber', title: 'Số lượng trang', require: false, type: "number" },
-    { key: 'Format', title: 'Tình trạng vật lý', require: false, type: "text" },
-
-]
+    {
+        key: "StartDate",
+        title: "Thời gian bắt đầu",
+        require: false,
+        type: "date",
+    },
+    {
+        key: "TotalDoc",
+        title: "Tổng số văn bản trong hồ sơ",
+        require: false,
+        type: "number",
+    },
+    { key: "Description", title: "Chú giải", require: false, type: "options" },
+    {
+        key: "InforSign",
+        title: "Ký hiệu thông tin",
+        require: false,
+        type: "text",
+    },
+    { key: "Keyword", title: "Từ khóa", require: false, type: "text" },
+    { key: "PhysicalNum", title: "Số lượng tờ", require: false, type: "number" },
+    {
+        key: "PageNumber",
+        title: "Số lượng trang",
+        require: false,
+        type: "number",
+    },
+    { key: "Format", title: "Tình trạng vật lý", require: false, type: "text" },
+];
 
 const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     const [request, setRequest] = useState(
@@ -46,11 +99,11 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     )
 
     const handleChangeForm = (event) => {
-        const name = event.target.name
-        let cur = request
-        cur[name] = event.target.value
-        setRequest(cur)
-    }
+        const name = event.target.name;
+        let cur = request;
+        cur[name] = event.target.value;
+        setRequest(cur);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -126,10 +179,9 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
                     </div>
                 </div>
 
-
             }
         </>
-    )
-}
+    );
+};
 
 export default FormAddFile;
