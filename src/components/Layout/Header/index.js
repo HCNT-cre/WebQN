@@ -1,15 +1,11 @@
 const Header = ({ sideBarWidth, setSideBarWidth }) => {
-    console.log(sideBarWidth === 200);
-    if (sideBarWidth === undefined)
-        sideBarWidth = 0
-
     return (
         <>
-            <div className={`flex justify-between px-[16px] transition-all ${sideBarWidth === 200 ? "ml-[200px] w-[calc(100%-200px)]" : "ml-[50px] w-[calc(100%-50px)]"} fixed h-[60px] bg-blue-800 top-0`}>
+            <div className={`flex justify-between px-[16px] transition-all ${sideBarWidth === 300 ? "ml-[300px] w-[calc(100%-300px)]" : "ml-[80px] w-[calc(100%-80px)]"} fixed h-[60px] bg-blue-800 top-0`}>
                 <div className="flex justify-between items-center">
                     <button className="mr-[8px] text-white cursor-pointer" onClick={() => 
                     {
-                        sideBarWidth === 200 ? setSideBarWidth(50) : setSideBarWidth(200)
+                        sideBarWidth === 300 ? setSideBarWidth(50) : setSideBarWidth(300)
                     }}>
                         <i class="fa-solid fa-bars"></i>
                     </button>
