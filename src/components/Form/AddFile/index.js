@@ -39,8 +39,8 @@ const fieldsLeft = [
         require: true,
         type: "select",
         options: [
-            { value: "Public", label: "Công Khai" },
-            { value: "Private", label: "Riêng tư" },
+            { value: "Công Khai", label: "Công Khai" },
+            { value: "Riêng tư", label: "Riêng tư" },
         ],
     },
     { key: "Language", title: "Ngôn ngữ", require: false, type: "text" },
@@ -79,7 +79,7 @@ const fieldsRight = [
 
 const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     const [request, setRequest] = useState(
-        { 'Rights': 'Công khai'},
+        { 'Rights': 'Công khai' },
         { 'Identifier': '' },
         { 'Organld': '' },
         { 'FileCatalog': '' },
