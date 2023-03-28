@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import { useState } from 'react'
 
 // Import Worker
 import { Worker } from '@react-pdf-viewer/core';
@@ -18,12 +18,10 @@ const App = (props) => {
 
   // creating new plugin instance
   const defaultLayoutPluginInstance = defaultLayoutPlugin();
-
   // pdf file onChange state
-  const [pdfFile, setPdfFile]=useState(null);
-
+  const [pdfFile, setPdfFile] = useState(null);
   // pdf file error state
-  const [pdfError, setPdfError]=useState('');
+  const [pdfError, setPdfError] = useState('');
 
 
   // handle file onChange event
@@ -33,22 +31,22 @@ const App = (props) => {
     // console.log(selectedFile.type);
     if (selectedFile) {
       console.log("uploaded file:", selectedFile);
-      if (selectedFile && allowedFiles.includes(selectedFile.type)){
+      if (selectedFile && allowedFiles.includes(selectedFile.type)) {
         let reader = new FileReader();
         reader.readAsDataURL(selectedFile);
-        reader.onloadend=(e)=>{
+        reader.onloadend = (e) => {
           setPdfError('');
           setPdfFile(e.target.result);
         }
-        
+
         console.log("Props day tml:", props);
 
         // call API
         const formData = new FormData();
-        formData.append('file', selectedFile);  
+        formData.append('file', selectedFile);
         formData.append('ratio', '20,1');
         formData.append('threshold', '0.7');
-        
+
         try {
           props.setDocNo("Đang phân tích ...");
           props.setDocDate("Đang phân tích ...");
@@ -63,12 +61,12 @@ const App = (props) => {
         }
       }
 
-      else{
+      else {
         setPdfError('Chỉ hỗ trợ file PDF');
         setPdfFile('');
       }
     }
-    else{
+    else {
       console.log('please select a PDF');
     }
   }
@@ -83,11 +81,11 @@ const App = (props) => {
         <br></br>
 
         <input type='file' className="form-control"
-        onChange={handleFile}></input>
+          onChange={handleFile}></input>
 
         {/* we will display error message in case user select some file
         other than pdf */}
-        {pdfError&&<span className='text-danger'>{pdfError}</span>}
+        {pdfError && <span className='text-danger'>{pdfError}</span>}
 
       </form>
 
@@ -96,15 +94,15 @@ const App = (props) => {
       <div className="viewer">
 
         {/* render this if we have a pdf file */}
-        {pdfFile&&(
+        {pdfFile && (
           <Worker workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.worker.min.js">
             <Viewer fileUrl={pdfFile}
-            plugins={[defaultLayoutPluginInstance]}></Viewer>
+              plugins={[defaultLayoutPluginInstance]}></Viewer>
           </Worker>
         )}
 
         {/* render this if we have pdfFile state null   */}
-        {!pdfFile&&<>No file is selected yet</>}
+        {!pdfFile && <>No file is selected yet</>}
 
       </div>
 

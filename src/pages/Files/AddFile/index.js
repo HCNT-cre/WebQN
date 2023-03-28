@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import FormAddFile from "../../../components/Form/AddFile"
-
+import EditFile from "../../../components/Form/EditFile"
 const AddFile = () => {
     const [files, setFiles] = useState([])
     const [searchQuery, setSearchQuery] = useState('');
@@ -27,6 +27,8 @@ const AddFile = () => {
 
 
     const [stateFormAddFile, setStateFormAddFile] = useState(false)
+    const [stateFormEditFile, setStateFormEditFile] = useState(false)
+
     return (
         <>
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
@@ -82,7 +84,7 @@ const AddFile = () => {
                             <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Phông</th>
                             <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Thời hạn bảo quản</th>
                             <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Chế độ sử dụng</th>
-                            <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Sửa chữa</th>
+                            <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Sửa </th>
                         </tr></thead>
                     <tbody>{files.map((file, index) => {
                         return (
@@ -93,6 +95,7 @@ const AddFile = () => {
                                 <td className="px-[12px] py-[16px] overflow-hidden" >{file.Organld}</td>
                                 <td className="px-[12px] py-[16px] overflow-hidden" >{file.Maintenance}</td>
                                 <td className="px-[12px] py-[16px] overflow-hidden" >{file.Rights}</td>
+                                <td className="px-[12px] py-[16px] overflow-hidden cursor-pointer" onClick={() => { setStateFormEditFile(!stateFormEditFile) }} ><i class="fa-regular fa-pen-to-square"></i></td>
                             </tr>
                         )
                     })}</tbody>
@@ -100,8 +103,9 @@ const AddFile = () => {
 
                 </table>
             </div>
-
+            
             <FormAddFile stateFormAddFile={stateFormAddFile} setStateFormAddFile={setStateFormAddFile} />
+            <EditFile stateFormEditFile={stateFormEditFile} setStateFormEditFile={setStateFormEditFile} />
         </>
     )
 }
