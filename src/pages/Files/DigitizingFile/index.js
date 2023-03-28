@@ -1,119 +1,76 @@
+import Datatable from "./DataTable";
+import { TextSearchFilter } from "./Filter";
 
-import React from 'react';
-import MaterialReactTable from 'material-react-table';
-import { Box, Button } from '@mui/material';
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { ExportToCsv } from 'export-to-csv'; //or use your library of choice here
-import { data } from './makeData';
-
-//defining columns outside of the component is fine, is stable
 const columns = [
     {
-        accessorKey: 'id',
-        header: 'ID',
-        size: 40,
+        Header: "Mã hồ sơ",
+        accessor: "fileCode",
+        Filter: TextSearchFilter,
+
     },
     {
-        accessorKey: 'firstName',
-        header: 'First Name',
-        size: 120,
+        Header: "Tiêu đề hồ sơ",
+        accessor: "Title",
+        filter: "text",
+        Filter: TextSearchFilter,
+
     },
     {
-        accessorKey: 'lastName',
-        header: 'Last Name',
-        size: 120,
+        Header: "Phông",
+        accessor: "Organld",
     },
     {
-        accessorKey: 'company',
-        header: 'Company',
-        size: 300,
+        Header: "Thời hạn bảo quản",
+        accessor: "Maintenance",
     },
     {
-        accessorKey: 'city',
-        header: 'City',
-    },
-    {
-        accessorKey: 'country',
-        header: 'Country',
-        size: 220,
+        Header: "Chế độ sử dụng",
+        accessor: "Rights",
     },
 ];
 
-const csvOptions = {
-    fieldSeparator: ',',
-    quoteStrings: '"',
-    decimalSeparator: '.',
-    showLabels: true,
-    useBom: true,
-    useKeysAsHeaders: false,
-    headers: columns.map((c) => c.header),
-};
+const data = [
+    {
+        fileCode: "alksdjlasjkd",
+        Title: "Hồ sơ test",
+        Organld: "accccccccccccccccc",
+        Maintenance: "accccccccccccccccc",
+        Rights: "accccccccccccccccc",
+    },
+    {
+        fileCode: "accccccccccccccccc",
+        Title: "accccccccccccccccc",
+        Organld: "accccccccccccccccc",
+        Maintenance: "accccccccccccccccc",
+        Rights: "accccccccccccccccc",
+    },
+    {
+        fileCode: "accccccccccccccccc",
+        Title: "accccccccccccccccc",
+        Organld: "accccccccccccccccc",
+        Maintenance: "accccccccccccccccc",
+        Rights: "accccccccccccccccc"
+    },
+    {
+        fileCode: "accccccccccccccccc",
+        Title: "accccccccccccccccc",
+        Organld: "accccccccccccccccc",
+        Maintenance: "accccccccccccccccc",
+        Rights: "accccccccccccccccc"
+    },
+    {
+        fileCode: "accccccccccccccccc",
+        Title: "accccccccccccccccc",
+        Organld: "accccccccccccccccc",
+        Maintenance: "accccccccccccccccc",
+        Rights: "accccccccccccccccc"
+    },
+];
 
-const csvExporter = new ExportToCsv(csvOptions);
+const PeopleDataTable = () => {
+    console.log("success");
+    // Loading must be handled here because DataTable MUST have data on load
+    return <Datatable data={data} columns={columns} />;
+}
 
-const DigitizingFile = () => {
-    const handleExportRows = (rows) => {
-        csvExporter.generateCsv(rows.map((row) => row.original));
-    };
-
-    const handleExportData = () => {
-        csvExporter.generateCsv(data);
-    };
-
-    return (
-        <MaterialReactTable
-            columns={columns}
-            data={data}
-            enableRowSelection
-            positionToolbarAlertBanner="bottom"
-            renderTopToolbarCustomActions={({ table }) => (
-                <Box
-                    sx={{ display: 'flex', gap: '1rem', p: '0.5rem', flexWrap: 'wrap' }}
-                >
-                    <Button
-                        color="primary"
-                        //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
-                        onClick={handleExportData}
-                        startIcon={<FileDownloadIcon />}
-                        variant="contained"
-                    >
-                        Export All Data
-                    </Button>
-                    <Button
-                        disabled={table.getPrePaginationRowModel().rows.length === 0}
-                        //export all rows, including from the next page, (still respects filtering and sorting)
-                        onClick={() =>
-                            handleExportRows(table.getPrePaginationRowModel().rows)
-                        }
-                        startIcon={<FileDownloadIcon />}
-                        variant="contained"
-                    >
-                        Export All Rows
-                    </Button>
-                    <Button
-                        disabled={table.getRowModel().rows.length === 0}
-                        //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
-                        onClick={() => handleExportRows(table.getRowModel().rows)}
-                        startIcon={<FileDownloadIcon />}
-                        variant="contained"
-                    >
-                        Export Page Rows
-                    </Button>
-                    <Button
-                        disabled={
-                            !table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
-                        }
-                        //only export selected rows
-                        onClick={() => handleExportRows(table.getSelectedRowModel().rows)}
-                        startIcon={<FileDownloadIcon />}
-                        variant="contained"
-                    >
-                        Export Selected Rows
-                    </Button>
-                </Box>
-            )}
-        />
-    );
-};
-
-export default DigitizingFile;
+export default PeopleDataTable;

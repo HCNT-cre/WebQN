@@ -60,7 +60,7 @@ const SideBar = ({ sideBarWidth }) => {
     return (
         <>
             <div className={`overflow-scroll overflow-x-hidden transition-all ${sideBarWidth === 300 ? "w-[300px]" : "w-[80px]"} fixed left-0 top-0 shadow h-full bg-[#dcdcdc] pb-[20px]`}>
-                <Link to='/' className={`${sideBarWidth === 300 ? 'mx-[24px]' : 'mx-[8px]'} border-[#b7b7b7] flex justify-center my-[16px] pb-[8px] border-b-[2px] border-solid `}>
+                <Link to='/' className={`${sideBarWidth === 300 ? 'mx-[16px]' : 'mx-[8px]'} border-[#b7b7b7] flex justify-center my-[16px] pb-[8px] border-b-[2px] border-solid `}>
                     <img className="w-[70px]" alt="Quoc Huy" src={QuocHuy} />
                 </Link>
 
@@ -87,7 +87,7 @@ const SideBar = ({ sideBarWidth }) => {
                                         <div className="flex mx-[30px] flex-col">
                                             {tab.childTabs.map((child, index) => {
                                                 return (
-                                                    <Link className="pl-[16px] hover:bg-[#b9b9b9] rounded-[8px] block mt-[8px]" to={child.to} >
+                                                    <Link className="px-[8px] hover:bg-[#b9b9b9] rounded-[8px] block mt-[8px]" to={child.to} >
                                                         {sideBarWidth === 300 && <span>{child.title}</span>}
                                                     </Link>
                                                 )

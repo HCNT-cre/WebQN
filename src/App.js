@@ -3,14 +3,14 @@ import Layout from "./components/Layout";
 import Home from './pages/Home'
 import Login from './pages/Login'
 import AddFile from './pages/Files/AddFile'
-import DigitizingFile from './pages/Files/DigitizingFile'
+import PeopleDataTable from './pages/Files/DigitizingFile'
 import DueFile from './pages/Files/DueFile'
 const App = () => {
     const routes =
         [
             { path: "/", element: <Home /> },
             { path: "/ho-so/tao-ho-so-dien-tu", element: <AddFile /> },
-            { path: "/ho-so/so-hoa-ho-so-tai-lieu", element: <DigitizingFile /> },
+            { path: "/ho-so/so-hoa-ho-so-tai-lieu", element: <PeopleDataTable /> },
             { path: "/ho-so/ho-so-den-han-nop-luu", element: <DueFile /> },
         ]
 
