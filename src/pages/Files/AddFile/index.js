@@ -1,5 +1,5 @@
 import { useState } from "react"
-import FormAddFile from "../../components/Form/AddFile"
+import FormAddFile from "../../../components/Form/AddFile"
 
 const AddFile = () => {
     const [stateFormAddFile, setStateFormAddFile] = useState(false)

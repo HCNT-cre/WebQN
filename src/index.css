@@ -10,16 +10,17 @@
 
 @layer components{
     .sidebar-items--large{
-        @apply mx-[24px] text-[16px] leading-[40px] flex cursor-pointer mb-[16px] py-[4px]
+        @apply mx-[16px] text-[16px] leading-[40px] cursor-pointer  py-[4px]
     }
 
     .sidebar-items--small{
-        @apply mx-[8px] text-[16px] leading-[40px] flex cursor-pointer mb-[16px] py-[4px]
+        @apply mx-[8px] text-[16px] leading-[40px] cursor-pointer  py-[4px]
     }
     .sidebar-items--active{
         @apply  bg-[#b6b6b6] rounded-[8px]
     }
     .sidebar-items:hover{
+        @apply bg-[#b9b9b9]
     }
 
     .after-form{
