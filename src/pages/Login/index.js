@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     width: "100%",
     maxWidth: "400px",
-    borderRadius:"50px",
+    borderRadius: "50px",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -57,7 +57,7 @@ const Login = () => {
     if (username.length === 0 || password.length === 0) {
       setError("Tên đăng nhập hoặc mật khẩu không thể trống");
       setSuccess(false);
-    } 
+    }
     // else if (username !== "admin" || password !== "password") {
     //   setError("Tên đăng nhập hoặc mật khẩu sai");
     //   setSuccess(false);
