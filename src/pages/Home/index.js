@@ -34,13 +34,37 @@ const Home = () => {
                     <p className="mb-[12px]">Tổng số văn bản: <span className="text-[#ff0000]">4567</span></p>
                 </div>
             </div>
-            <div className="mt-[16px] ml-[24px]">
-                <input className="mr-[16px] outline-none px-[12px] py-[4px]"></input>
-                <input className="mr-[16px] outline-none px-[12px] py-[4px]"></input>
-                <input className="mr-[16px] outline-none px-[12px] py-[4px]"></input>
-                <select></select>
-                <button></button>
-                <button></button>
+            <div className="mt-[16px] ml-[24px] flex ">
+                <div className="w-[12.5%]">
+                    <input placeholder="Tiêu đề hồ sơ" className="text-[14px] mr-[16px] outline-none px-[12px] py-[6px]"></input>
+                </div>
+                <div className="w-[12.5%]">
+                    <input placeholder="Phông" className="text-[14px] mr-[16px] outline-none px-[12px] py-[6px]"></input>
+                </div>
+                <div className="w-[12.5%]">
+                    <input placeholder="Cơ quan" className="text-[14px] mr-[16px] outline-none px-[12px] py-[6px]"></input>
+                </div>
+                <div className="w-[12.5%] px-[5px]">
+                    <select className="w-full py-[6px] px-[4px] text-[14px] outline-none">
+                        <option>Tất cả</option>
+                    </select>
+                </div>
+                <div className="w-[12.5%] text-white text-center px-[5px] flex">
+                    <button className="flex justify-center bg-[#00f] w-full px-[16px] py-[6px] text-[14px] ">
+                        <div className="mr-[8px]">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>    
+                        Tìm kiếm
+                    </button>
+                </div>
+                <div className="w-[12.5%] text-white  text-center px-[5px]">
+                    <button className="flex justify-center bg-[#00f] w-full px-[16px] py-[6px] text-[14px] ">
+                    <div className="mr-[8px]">
+                    <i class="fa-regular fa-file-excel"></i>
+                    </div>
+                        Xuất Excel
+                    </button>
+                </div>
             </div>
             <div className="p-[24px] bg-[#f0f2f5] rounded-[2px]">
                 <table className="table-fixed w-full">
