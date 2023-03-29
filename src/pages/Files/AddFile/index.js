@@ -32,10 +32,18 @@ const AddFile = () => {
     return (
         <>
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
+                <p className="text-[14px] font-300 cursor-pointer ">
+                    <span className="text-[rgba(0,0,0,.45)]">Hồ sơ, tài liệu / </span>
+                    <span>
+                        Tạo hồ sơ điện tử
+                    </span>
+                </p>
+            </div>
+            <div className="w-full px-[24px] pb-[16px] bg-white">
                 <p className="text-[20px] font-bold ">Tạo hồ sơ tài liệu</p>
             </div>
 
-            <div className="mt-[16px] ml-[24px] flex ">
+            <div className="mt-[16px] mx-[24px] flex ">
                 <div className="w-[12.5%]">
                     <input placeholder="Tiêu đề hồ sơ" className="text-[14px] mr-[16px] outline-none px-[12px] py-[6px]"></input>
                 </div>
@@ -84,7 +92,7 @@ const AddFile = () => {
                             <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Phông</th>
                             <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Thời hạn bảo quản</th>
                             <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Chế độ sử dụng</th>
-                            <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Sửa </th>
+                            <th className="relative text-left px-[8px] py-[12px]" >Sửa </th>
                         </tr></thead>
                     <tbody>{files.map((file, index) => {
                         return (
@@ -103,7 +111,7 @@ const AddFile = () => {
 
                 </table>
             </div>
-            
+
             <FormAddFile stateFormAddFile={stateFormAddFile} setStateFormAddFile={setStateFormAddFile} />
             <EditFile stateFormEditFile={stateFormEditFile} setStateFormEditFile={setStateFormEditFile} />
         </>
