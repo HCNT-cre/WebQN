@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react"
 import FormAddFile from "../../../components/Form/AddFile"
-import EditFile from "../../../components/Form/EditFile"
+import DocCategory from "../../../components/Form/DocCategory"
+
 const AddFile = () => {
     const [files, setFiles] = useState([])
-    const [searchQuery, setSearchQuery] = useState('');
-
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
-    };
-
+    
     useEffect(() => {
         const fetchFileData = async () => {
             const response = await fetch('https://641e04a5945125fff3db0a63.mockapi.io/file');
@@ -27,7 +23,7 @@ const AddFile = () => {
 
 
     const [stateFormAddFile, setStateFormAddFile] = useState(false)
-    const [stateFormEditFile, setStateFormEditFile] = useState(false)
+    const [stateDocCategory, setStateDocCategory] = useState(false)
 
     return (
         <>
@@ -44,21 +40,21 @@ const AddFile = () => {
             </div>
             <div className="w-full my-[24px]">
                 <div className="mt-[16px] mx-[24px] flex ">
-                <div className="w-[12.5%] px-[5px]">
-                <input placeholder="Tiêu đề hồ sơ" className="bar-page-input"></input>
-            </div>
-            <div className="w-[12.5%] px-[5px]">
-                <input placeholder="Phông" className="bar-page-input"></input>
-            </div>
-            <div className="w-[12.5%] px-[5px]">
-                <input placeholder="Cơ quan" className="bar-page-input"></input>
-            </div>
-            <div className="w-[12.5%] px-[5px]">
-                <input placeholder="Trạng thái" className="bar-page-input"></input>
-            </div>
-            <div className="w-[12.5%] px-[5px]">
-                <input placeholder="Loại hồ sơ" className="bar-page-input"></input>
-            </div>
+                    <div className="w-[12.5%] px-[5px]">
+                        <input placeholder="Tiêu đề hồ sơ" className="bar-page-input"></input>
+                    </div>
+                    <div className="w-[12.5%] px-[5px]">
+                        <input placeholder="Phông" className="bar-page-input"></input>
+                    </div>
+                    <div className="w-[12.5%] px-[5px]">
+                        <input placeholder="Cơ quan" className="bar-page-input"></input>
+                    </div>
+                    <div className="w-[12.5%] px-[5px]">
+                        <input placeholder="Trạng thái" className="bar-page-input"></input>
+                    </div>
+                    <div className="w-[12.5%] px-[5px]">
+                        <input placeholder="Loại hồ sơ" className="bar-page-input"></input>
+                    </div>
                     <div className="w-[12.5%] text-white text-center px-[5px] flex">
                         <button className="flex justify-center bg-[#00f] w-full px-[16px] py-[6px] text-[14px] ">
                             <div className="mr-[8px]">
@@ -93,7 +89,7 @@ const AddFile = () => {
                                 <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Phông</th>
                                 <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Thời hạn bảo quản</th>
                                 <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Chế độ sử dụng</th>
-                                <th className="relative text-left px-[8px] py-[12px]" >Sửa </th>
+                                <th className="relative text-left px-[8px] py-[12px]" >Chức năng </th>
                             </tr></thead>
                         <tbody>{files.map((file, index) => {
                             return (
@@ -104,17 +100,27 @@ const AddFile = () => {
                                     <td className="px-[12px] py-[16px] overflow-hidden" >{file.Organld}</td>
                                     <td className="px-[12px] py-[16px] overflow-hidden" >{file.Maintenance}</td>
                                     <td className="px-[12px] py-[16px] overflow-hidden" >{file.Rights}</td>
-                                    <td className="px-[12px] py-[16px] overflow-hidden cursor-pointer" onClick={() => { setStateFormEditFile(!stateFormEditFile) }} ><i class="fa-regular fa-pen-to-square"></i></td>
+                                    <td className="px-[12px] py-[16px] overflow-hidden cursor-pointer"  >
+                                         {//<i class="fa-regular fa-pen-to-square"></i>
+                                         }
+                                        
+                                        <button className="block text-left text-[14px] hover:underline" onClick={() => { setStateDocCategory(!stateDocCategory) }}>Thêm văn bản</button>
+                                        <button className="block text-left text-[14px] hover:underline">Thêm tài liệu đa phương tiện</button>
+                                        <button className="block text-left text-[14px] hover:underline">Xem hồ sơ</button>
+                                        <button className="block text-left text-[14px] hover:underline" >Sửa hồ sơ</button>
+                                        <button className="block text-left text-[14px] hover:underline">Xóa hồ sơ</button>
+                                        <button className="block text-left text-[14px] hover:underline">Nhật ký hồ sơ</button>
+                                        <button className="block text-left text-[14px] hover:underline">Nộp lưu</button>
+                                        <button className="block text-left text-[14px] hover:underline">Phân quyền</button>
+                                    </td>
                                 </tr>
                             )
                         })}</tbody>
-
-
                     </table>
                 </div>
             </div>
             <FormAddFile stateFormAddFile={stateFormAddFile} setStateFormAddFile={setStateFormAddFile} />
-            <EditFile stateFormEditFile={stateFormEditFile} setStateFormEditFile={setStateFormEditFile} />
+            <DocCategory stateDocCategory={stateDocCategory} setStateDocCategory={setStateDocCategory} />
         </>
     )
 }
