@@ -9,9 +9,11 @@ import {
   Paper,
   Snackbar,
 } from "@material-ui/core";
-
+import { Link } from '@mui/material';
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import MuiAlert from "@material-ui/lab/Alert";
+import {InputAdornment} from '@material-ui/core';
+import { AccountCircle, Lock } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -100,8 +102,9 @@ const Login = () => {
             Đăng nhập
           </Typography>
           <form noValidate className={classes.form} onSubmit={handleSubmit}>
+            
             <TextField
-              variant="outlined"
+              variant="filled"
               margin="normal"
               required
               fullWidth
@@ -113,9 +116,16 @@ const Login = () => {
               value={username}
               onChange={handleUsernameChange}
               error={error}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}  
             />
             <TextField
-              variant="outlined"
+              variant="filled"
               margin="normal"
               required
               fullWidth
@@ -127,6 +137,13 @@ const Login = () => {
               value={password}
               onChange={handlePasswordChange}
               error={error}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Lock />
+                  </InputAdornment>
+                ),
+              }}
             />
             {error.length > 0 && (
               <Typography color="error" variant="subtitle2">
@@ -142,6 +159,29 @@ const Login = () => {
             >
               Đăng nhập
             </Button>
+            <Button
+              style={{marginTop:"0"}}
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+            >
+              Sử dụng SSO
+            </Button>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className={classes.forgotPassword}>
+              <Link href="#" variant="body2">
+                Hướng dẫn
+              </Link>
+            </div>
+            <div>
+              <Link href="#" variant="body2">
+                Quên mật khẩu
+              </Link>
+            </div>
+          </div>
+            
             <Snackbar
               open={success}
               autoHideDuration={3000}
