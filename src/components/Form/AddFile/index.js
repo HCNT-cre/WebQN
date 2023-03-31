@@ -129,10 +129,8 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     console.log(stateFormAddFile);
     return (
         <>
-            <Expand open={stateFormAddFile} transitions={["display"]} duration={200}>
-            </Expand>
 
-            {   
+            {
                 stateFormAddFile && <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-10 bg-[rgba(0,0,0,.45)]">
                     <div className="relative top-[50px] pb-[30px] ">
                         <div className="w-[1000px] max-w-[calc(100vw-80px)] my-0 mx-auto bg-white">

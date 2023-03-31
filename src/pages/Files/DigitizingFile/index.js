@@ -1,14 +1,8 @@
 import { useState, useEffect } from "react"
 import FormAddFile from "../../../components/Form/AddFile"
-import EditFile from "../../../components/Form/EditFile"
 
 const DigitizingFile = () => {
     const [files, setFiles] = useState([])
-    const [searchQuery, setSearchQuery] = useState('');
-
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
-    };
 
     useEffect(() => {
         const fetchFileData = async () => {
@@ -28,7 +22,6 @@ const DigitizingFile = () => {
 
 
     const [stateFormAddFile, setStateFormAddFile] = useState(false)
-    const [stateFormEditFile, setStateFormEditFile] = useState(false)
     return (
         <>
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
