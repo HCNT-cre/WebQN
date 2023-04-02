@@ -15,13 +15,13 @@ const CheckBox = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     );
 };
 
-const ConvertDataToArray = (data) => {
+const ConvertDataToArrayForRenderTableCell = (data) => {
     const dataTableRender = []
-    for (let fieldData in data) {
-        const data = []
+    for (let fieldData of data) {
+        const data = [] 
         for (const key in fieldData) {
-            if (Array.isArray(fieldData[key])) {
-                data.push(<td className="px-[12px] py-[16px] overflow-hidden" >{fieldData[key]}</td>)
+            if (!Array.isArray(fieldData[key])) {
+                data.push(<td className="px-[12px] py-[16px] break-words" >{fieldData[key]}</td>)
             } else {
                 data.push(<td className="px-[12px] py-[16px] overflow-hidden" >
                     {fieldData[key].map((childData) => {
@@ -36,10 +36,11 @@ const ConvertDataToArray = (data) => {
 }
 
 const Table = ({fieldNames, fieldDatas, isCheckBox, isLoading}) => {
+    console.log(fieldDatas);
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
-    const dataTableRender = ConvertDataToArray(fieldDatas)
-
+    const dataTableRenderForTableCell = ConvertDataToArrayForRenderTableCell(fieldDatas)
+    console.log(dataTableRenderForTableCell);
     const handleCheckBoxAll = e => {
         setIsCheckAll(!isCheckAll);
         setIsCheck(fieldDatas.map((file, index) => ("checkbox" + index)))
@@ -76,13 +77,15 @@ const Table = ({fieldNames, fieldDatas, isCheckBox, isLoading}) => {
                             />
                         </th>}
 
-
-
                         {fieldNames.map((field, index) => {
-                            const className = "text-[12px] relative text-center px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]"
+                            let className = "text-[12px] relative text-center px-[8px] py-[12px]"
+                            if(index < fieldNames.length - 1) {
+                                className += " before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]"
+                            }
                             return (
                                 <th style={{ width: field.width }} className={className}>{field.title}</th>
                             )
+
                         })}
                     </tr></thead>
 
@@ -102,10 +105,8 @@ const Table = ({fieldNames, fieldDatas, isCheckBox, isLoading}) => {
                             </td>
                         </tr>
                     }
-
-
                     {
-                        dataTableRender.map((dataRow, index) => {
+                        dataTableRenderForTableCell.map((dataRow, index) => {
                             return (
                                 <tr className="hover:bg-[#fafafa] bg-white border-t-[1px] border-solid border-[#e0e0e0] text-[13px]" key={index}>
                                     <td className="text-center px-[12px] py-[16px]"><span className="block w-[24px] h-[24px] rounded-[50%] bg-[#ccc]">{index + 1}</span></td>

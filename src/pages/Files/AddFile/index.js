@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react"
 import FormAddFile from "../../../components/Form/AddFile"
 import DocCategory from "../../../components/Form/DocCategory"
-import Loading from "../../../components/Loading"
 import axios from "axios"
-
-const API_GET_FILES = 'https://641e04a5945125fff3db0a63.mockapi.io/file'
+import Table from "../../../components/Table"
+const API_GET_FILES = 'https://6381f08c53081dd5498bea48.mockapi.io/api/v1/file'
 const API_SEARCH = 'https://641e04a5945125fff3db0a63.mockapi.io/file'
 
 const FIELDS_TABLE = [
     { title: "Mã hồ sơ", key: "FileCode", width: "70px" },
-    { title: "Tiêu đề hồ sơ", key: "FileCode", width: "100%" },
+    { title: "Tiêu đề hồ sơ", key: "Title", width: "100%" },
     { title: "Phông", key: "Organld", width: "100%" },
-    { title: "Hồ sơ số", key: "FileCode", width: "70px" },
+    { title: "Hồ sơ số", key: "DigitalDoc", width: "70px" },
     { title: "Số lượng tờ", key: "PhysicalNum", width: "70px" },
     { title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
     { title: "Thời gian (bắt đầu - kết thúc)", key: "Date", width: "100%" },
@@ -20,22 +19,6 @@ const FIELDS_TABLE = [
     { title: "Trạng thái", key: "Status", width: "100%" },
     { title: "Chức năng", key: "Function", width: "100%" },
 ]
-
-
-
-
-const CheckBox = ({ id, type, name, handleClick, isChecked }) => {
-    return (
-        <input
-            id={id}
-            name={name}
-            type={type}
-            onChange={handleClick}
-            checked={isChecked}
-            className="outline-none"
-        />
-    );
-};
 
 const AddFile = () => {
     const [files, setFiles] = useState([])
@@ -115,7 +98,17 @@ const AddFile = () => {
                     for (let i = 0; i < rawDatas.length; i++) {
                         const rawData = rawDatas[i]
                         filesArray.push({
-                            'Maintenance': rawData.Maintenance, 'Title': rawData.Title, 'Organld': rawData.Organld, 'Rights': rawData.Rights, 'FileCode': rawData.FileCode, 'Function': FUNCTIONS
+                            'FileCode': rawData.FileCode,
+                            'Title': rawData.Title,
+                            'Organld': rawData.Organld,
+                            'DigitalDoc': rawData.DigitalDoc,
+                            'PhysicalNum': rawData.PhysicalNum,
+                            'TotalDoc': rawData.TotalDoc,
+                            'Date': rawData.Date,
+                            'Maintenance': rawData.Maintenance,
+                            'Rights': rawData.Rights,
+                            'Status': rawData.Status,
+                            'Function': FUNCTIONS
                         })
                     }
                     setFiles(filesArray)
@@ -193,95 +186,7 @@ const AddFile = () => {
                     </div>
 
                 </div>
-                <div className="p-[24px] bg-[#f0f2f5] rounded-[2px]">
-                    <table className="table-fixed w-full">
-                        <colgroup></colgroup>
-                        <thead className="bg-[#fafafa]">
-                            <tr>
-                                <th className="text-[12px]  relative w-[40px] text-center px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]">TT</th>
-                                <th className="text-[12px]  relative w-[50px] text-center px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]">
-                                    Chọn
-                                    <CheckBox
-                                        type="checkbox"
-                                        name="selectAll"
-                                        id="selectAll"
-                                        handleClick={handleSelectAll}
-                                        isChecked={isCheckAll}
-                                    />
-                                </th>
-
-                                {FIELDS_TABLE.map((field, index) => {
-                                    const className = "text-[12px] relative text-center px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]"
-
-                                    return (
-
-                                        <th style={{ width: field.width }} className={className}>{field.title}</th>
-                                    )
-                                })}
-                                <th className="text-[12px] relative text-left px-[8px] py-[12px] w-[100px]" >Chức năng </th>
-                            </tr></thead>
-
-                        <tbody>
-                            {
-                                !files.length &&
-                                <tr className="hover:bg-[#fafafa] bg-white border-t-[1px] border-solid border-[#e0e0e0]">
-                                    <td colSpan={13}>
-                                        {isLoading ? <Loading /> :
-                                            <div className="w-full bg-white text-gray-400">
-                                                <div className="text-center p-[16px]">
-                                                    <div><i className="text-[50px] fa-solid fa-box-open"></i></div>
-                                                    <p>Không có dữ liệu</p>
-                                                </div>
-                                            </div>
-                                        }
-                                    </td>
-                                </tr>
-                            }
-
-
-                            {
-                                files.map((file, index) => {
-                                    return (
-                                        <tr className="hover:bg-[#fafafa] bg-white border-t-[1px] border-solid border-[#e0e0e0] text-[13px]" key={index}>
-                                            <td className="text-center px-[12px] py-[16px]"><span className="block w-[24px] h-[24px] rounded-[50%] bg-[#ccc]">{index + 1}</span></td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden text-center" >
-                                                <CheckBox
-                                                    key={index}
-                                                    type="checkbox"
-                                                    id={"checkbox" + index}
-                                                    handleClick={handleClick}
-                                                    isChecked={isCheck.includes("checkbox" + index)}
-                                                />
-                                            </td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden" >{file.FileCode}</td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden" >{file.Title}</td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden" >{file.Organld}</td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden" >{file.Maintenance}</td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden" >{file.Rights}</td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden" >{file.Rights}</td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden" >{file.Rights}</td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden" >{file.Rights}</td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden" >{file.Rights}</td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden" >{file.Rights}</td>
-                                            <td className="px-[12px] py-[16px] overflow-hidden cursor-pointer"  >
-                                                <button className="block text-left text-[10px] hover:underline" onClick={() => { setStateDocCategory(!stateDocCategory) }}>Thêm văn bản</button>
-                                                <button className="block text-left text-[10px] hover:underline">Thêm tài liệu đa phương tiện</button>
-                                                <button className="block text-left text-[10px] hover:underline">Xem hồ sơ</button>
-                                                <button className="block text-left text-[10px] hover:underline" >Sửa hồ sơ</button>
-                                                <button className="block text-left text-[10px] hover:underline">Xóa hồ sơ</button>
-                                                <button className="block text-left text-[10px] hover:underline">Nhật ký hồ sơ</button>
-                                                <button className="block text-left text-[10px] hover:underline">Nộp lưu</button>
-                                                <button className="block text-left text-[10px] hover:underline">Phân quyền</button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })
-                            }
-
-
-                        </tbody>
-                    </table>
-                </div>
+                <Table fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={true}/>
             </div>
 
             <FormAddFile stateFormAddFile={stateFormAddFile} setStateFormAddFile={setStateFormAddFile} />
