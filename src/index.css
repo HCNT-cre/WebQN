@@ -10,7 +10,7 @@
 
 @layer components {
     .sidebar-items--large {
-        @apply mx-[16px] text-[16px] leading-[40px] cursor-pointer  py-[4px];
+        @apply mx-[16px] text-[14px] leading-[40px] cursor-pointer  py-[4px];
     }
 
     .sidebar-items--small {

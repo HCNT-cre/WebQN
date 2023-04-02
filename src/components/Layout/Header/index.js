@@ -1,11 +1,11 @@
 const Header = ({ sideBarWidth, setSideBarWidth }) => {
     return (
         <>
-            <div className={`flex justify-between px-[16px] transition-all ${sideBarWidth === 300 ? "ml-[300px] w-[calc(100%-300px)]" : "ml-[80px] w-[calc(100%-80px)]"} fixed h-[60px] bg-blue-800 top-0`}>
+            <div className={`z-50 flex justify-between px-[16px] transition-all ${sideBarWidth === 250 ? "ml-[250px] w-[calc(100%-250px)]" : "ml-[80px] w-[calc(100%-80px)]"} fixed h-[60px] bg-blue-800 top-0`}>
                 <div className="flex justify-between items-center">
                     <button className="mr-[8px] text-white cursor-pointer" onClick={() => 
                     {
-                        sideBarWidth === 300 ? setSideBarWidth(50) : setSideBarWidth(300)
+                        sideBarWidth === 250 ? setSideBarWidth(50) : setSideBarWidth(250)
                     }}>
                         <i class="fa-solid fa-bars"></i>
                     </button>
