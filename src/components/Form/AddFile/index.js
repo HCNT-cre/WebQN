@@ -126,7 +126,6 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
         alert("Success")
     }
 
-    console.log(stateFormAddFile);
     return (
         <>
 
