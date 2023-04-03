@@ -3,8 +3,10 @@ import FormAddFile from "../../../components/Form/AddFile"
 import DocCategory from "../../../components/Form/DocCategory"
 import axios from "axios"
 import Table from "../../../components/Table"
+
 const API_GET_FILES = 'https://6381f08c53081dd5498bea48.mockapi.io/api/v1/file'
 const API_SEARCH = 'https://641e04a5945125fff3db0a63.mockapi.io/file'
+
 
 const FIELDS_TABLE = [
     { title: "Mã hồ sơ", key: "FileCode", width: "70px" },

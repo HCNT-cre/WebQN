@@ -342,7 +342,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
                                     <div className='pl-[4px] flex w-full h-[40px] bg-gray-400 items-center relative'>
                                         {files !== null && files.map((file, index) => {
                                             const width = 95 / files.length + "%"
-                                            const isActive = index === currentTab ? "#e5e7eb" : ""
+                                            const isActive = index === currentTab ? "white" : ""
                                             return (
                                                 <div onClick={() => handleChangeTab(index)} style={{ width: width}} className='max-w-[15%] pr-[4px]'>
                                                     <div style={{backgroundColor: isActive}} className='px-[4px] h-[30px] border-solid border-[1px] rounded-[5px] flex items-center cursor-pointer bg-gray-300 hover:bg-gray-200 justify-between pl-[6px]'>
