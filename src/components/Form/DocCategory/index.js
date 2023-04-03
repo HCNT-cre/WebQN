@@ -3,6 +3,7 @@ import AddDoc from "../AddDoc"
 const DocCategory = ({ stateDocCategory, setStateDocCategory }) => {
 
     const [stateAddDoc, setStateAddDoc] = useState(false)
+    const [evFilesUploaded, setEvFilesUploaded] = useState(null)
     return (
         <>
             {
@@ -44,9 +45,19 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory }) => {
                                     </div>
 
                                     <div className="w-[12.5%] text-white  text-center px-[5px]">
-                                        <button onClick={() => setStateAddDoc(true)} className="flex justify-center bg-[#00f] w-full px-[16px] py-[6px] text-[14px] ">
-                                            Thêm văn bản
-                                        </button>
+                                        
+                                        <form encType="multipart/form-data">
+
+                                            <label className='flex justify-center items-center cursor-pointer w-auto h-[30px] bg-[#2930ff] rounded-[5px] text-white hover:opacity-90' htmlFor="file-upload">
+                                                <i class="fa-solid fa-upload"></i>
+                                                <p className='ml-[8px]'>Thêm văn bản</p>
+                                            </label>
+                                            <input type='file' id="file-upload" name="file-upload" className="hidden" onChange={(ev) => {
+                                                setStateAddDoc(true)
+                                                setEvFilesUploaded(ev)
+                                            }} accept="application/pdf, image/jpeg, .avi, .wmv, .MPEG-4, audio/mp3, .vma" multiple></input>
+                                        </form>
+
                                     </div>
 
                                 </div>
@@ -73,7 +84,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory }) => {
                 </div>
 
             }
-            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} />
+            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded}/>
         </>
     )
 }

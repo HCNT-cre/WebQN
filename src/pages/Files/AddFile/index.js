@@ -181,7 +181,7 @@ const AddFile = () => {
                             <div className="mr-[8px]">
                                 <i class="fa-regular fa-file-excel"></i>
                             </div>
-                            Xuất Excel
+                            Tải lên xml
                         </button>
                     </div>
 

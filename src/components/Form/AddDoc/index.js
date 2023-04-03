@@ -51,8 +51,145 @@ const fieldsLeft = [
     { key: "Language", title: "Ngôn ngữ", require: false, type: "text" },
 ];
 
+const Tab = () => {
+    return (
+        <>
 
-const AddDoc = ({ stateAddDoc, setStateAddDoc }) => {
+        </>
+    )
+}
+
+// {stateAddDoc &&
+//     <div className="overflow-y-hidden fixed top-0 right-0 bottom-0 left-0 h-full w-full z-10 bg-[rgba(0,0,0,.45)]">
+//         <div className="relative  h-[calc(100vh)]  top-[20px] pb-[30px] ">
+//             <div className="h-full overflow-y-scroll w-[calc(100vw-80px)] my-0 mx-auto bg-white">
+//                 <div className=" h-full relative rounded-[2px] bg-white">
+//                     <button onClick={() => { setStateAddDoc(false) }} className="text-[20px] absolute right-0 w-[40px] h-[40px] bg-[#2f54eb] top-0 text-white ">x</button>
+//                     <div className="bg-[#2f54eb] text-white py-[16px] px-[24px]">
+//                         <p className='text-bold'>Thêm văn bản</p>
+//                     </div>
+//                     <div className="h-full flex pt-[8px]">
+//                         <div className='pl-[12px] w-[50%]'>
+//                             <form>
+//                                 <label className='flex justify-center items-center cursor-pointer w-[100px] h-[30px] bg-[#2930ff] rounded-[5px] text-white hover:opacity-90' htmlFor="file-upload">
+//                                     <i class="fa-solid fa-upload"></i>
+//                                     <p className='ml-[8px]'>Tải lên</p>
+//                                 </label>
+//                                 <input type='file' id="file-upload" name="file-upload" className="hidden" onChange={handleFile}></input>
+//                                 {pdfError && <span className='text-danger'>{pdfError}</span>}
+//                             </form>
+//                             <div className='flex mt-[24px]'>
+//                                 <div className="w-full h-[800px] overflow-y-auto bg-[#e4e4e4] flex justify-center items-center mt-[10px]">
+//                                     {pdfFile && (
+//                                         <Worker className="w-[60%]" workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.worker.min.js">
+//                                             <Viewer className="w-[60%]" fileUrl={pdfFile}
+//                                                 plugins={[defaultLayoutPluginInstance]}></Viewer>
+//                                         </Worker>
+//                                     )}
+
+//                                     {/* render this if we have pdfFile state null   */}
+//                                     {!pdfFile && <>No file is selected yet</>}
+
+//                                 </div>
+
+
+//                             </div>
+
+//                         </div>
+//                         <div className='w-[30%] pl-[12px] mr-[12px] '>
+
+//                             <div className='flex justify-center w-full'>
+//                                 <button className={`outline-none w-[50%] block ${stateForm === 1 ? "border-b-[1px] border-b-solid border-b-[#ccc]" : ""} text-[14px] font-bold h-[30px] text-center`} onClick={() => { setStateForm(1) }}>Kết quả OCR</button>
+
+//                                 <button className={`outline-none w-[50%] block ${stateForm === 2 ? "border-b-[1px] border-b-solid border-b-[#ccc]" : ""} text-[14px] font-bold h-[30px] text-center`} onClick={() => { setStateForm(2) }}>Danh sách các thuộc tính</button>
+//                             </div>
+//                             <div className='mt-[24px]'>
+//                                 {stateForm === 1 &&
+//                                     <div>
+//                                         <div className='text-[20px] font-bold'> Kết quả OCR </div>
+//                                         <div className='mt-[10px] border-solid border-[1px] rounded-[5px] bg-[#fbfbfb]'>
+//                                             <div className='ml-[12px] py-[12px]'>
+//                                                 <p className='text-[14px] font-[500]'>Số công văn: <span className='font-normal'>{docNo}</span></p>
+//                                                 <p className='text-[14px] font-[500]'>Thời gian ban hành: <span className='font-normal'>{docDate}</span></p>
+//                                                 <p className='text-[14px] font-[500]'>Người ký: <span className='font-normal'>{docSigner}</span></p>
+//                                             </div>
+//                                         </div>
+
+//                                         <div className='mt-[24px]'>
+//                                             <button onClick={handleCheck} className='h-[50px] w-[150px] rounded-[5px] hover:opacity-90 text-white bg-[#2f54eb]'>Thẩm định</button>
+//                                         </div>
+//                                     </div>
+//                                 }
+//                                 {stateForm === 2 &&
+//                                     <div>
+//                                         <form>
+//                                             <div className="flex justify-between">
+//                                                 <div className="w-full px-[10px]">
+//                                                     {fieldsLeft.map((field, index) => {
+//                                                         return (
+//                                                             <div
+//                                                                 key={field.key}
+//                                                                 className="mt-[8px] w-full mb-[24px]"
+//                                                             >
+//                                                                 <label
+//                                                                     className={`${field.require ? "after-form" : ""
+//                                                                         } text-[14px] font-[500]`}
+//                                                                     title={field.title}
+//                                                                 >
+//                                                                     {field.title}
+//                                                                 </label>
+
+//                                                                 {field.type === "select" ? (
+//                                                                     <select
+//                                                                         required={field.require}
+//                                                                         onChange={(ev) => handleChangeForm(ev)}
+//                                                                         name={field.key}
+//                                                                         placeholder={field.title}
+//                                                                         className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+//                                                                     >
+//                                                                         {field.options.map((option, index) => (
+//                                                                             <option
+//                                                                                 key={option.value}
+//                                                                                 value={option.value}
+//                                                                             >
+//                                                                                 {option.label}
+//                                                                             </option>
+//                                                                         ))}
+//                                                                     </select>
+//                                                                 ) : (
+//                                                                     <input
+//                                                                         required={field.require}
+//                                                                         onChange={(ev) => handleChangeForm(ev)}
+//                                                                         name={field.key}
+//                                                                         placeholder={field.title}
+//                                                                         type={field.type}
+//                                                                         min="0"
+//                                                                         className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+//                                                                     />
+//                                                                 )}
+//                                                             </div>
+//                                                         );
+//                                                     })}
+//                                                 </div>
+
+//                                             </div>
+//                                         </form>
+//                                     </div>
+//                                 }
+//                             </div>
+//                         </div>
+//                         <div className='w-[20%]'></div>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//     </div>
+// }
+
+const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
+    const files = evFilesUploaded === null ? null : evFilesUploaded.target.files;
+    console.log(files);
+    console.log("files: ", typeof(files));
     // creating new plugin instance
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [pdfFile, setPdfFile] = useState(null);
@@ -171,122 +308,32 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc }) => {
                                 <div className="bg-[#2f54eb] text-white py-[16px] px-[24px]">
                                     <p className='text-bold'>Thêm văn bản</p>
                                 </div>
-                                <div className="h-full flex pt-[8px]">
-                                    <div className='pl-[12px] w-[50%]'>
-                                        <form>
-                                            <label className='flex justify-center items-center cursor-pointer w-[100px] h-[30px] bg-[#2930ff] rounded-[5px] text-white hover:opacity-90' htmlFor="file-upload">
-                                                <i class="fa-solid fa-upload"></i>
-                                                <p className='ml-[8px]'>Tải lên</p>
-                                            </label>
-                                            <input type='file' id="file-upload" name="file-upload" className="hidden" onChange={handleFile}></input>
-                                            {pdfError && <span className='text-danger'>{pdfError}</span>}
-                                        </form>
-                                        <div className='flex mt-[24px]'>
-                                            <div className="w-full h-[800px] overflow-y-auto bg-[#e4e4e4] flex justify-center items-center mt-[10px]">
-                                                {pdfFile && (
-                                                    <Worker className="w-[60%]" workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.worker.min.js">
-                                                        <Viewer className="w-[60%]" fileUrl={pdfFile}
-                                                            plugins={[defaultLayoutPluginInstance]}></Viewer>
-                                                    </Worker>
-                                                )}
+                                {
+                                    // <div className="z-50">
+                                    //     <h1>Add Doc</h1>
+                                    //     <form
+                                    //         encType="multipart/form-data"
+                                    //     >
+                                    //         <input accept="application/pdf, image/jpeg, .avi, .wmv, .MPEG-4, audio/mp3, .vma" onChange={(ev) => { console.log(ev.target.files) }} type="file" id="file" multiple />
+                                    //     </form>
+                                    // </div>
+                                }
 
-                                                {/* render this if we have pdfFile state null   */}
-                                                {!pdfFile && <>No file is selected yet</>}
-
-                                            </div>
-
-
-                                        </div>
-
+                                <div>
+                                    <div className='flex w-full'>
+                                        {files !==  null && files.map((file, index) => {
+                                            return (
+                                                <div className='max-w-[20%] h-[40px] border-solid border-[1px] rounded-[5px]'> </div>
+                                            )
+                                        })}
                                     </div>
-                                    <div className='w-[30%] pl-[12px] mr-[12px] '>
-
-                                        <div className='flex justify-center w-full'>
-                                            <button className={`outline-none w-[50%] block ${stateForm === 1 ? "border-b-[1px] border-b-solid border-b-[#ccc]" : ""} text-[14px] font-bold h-[30px] text-center`} onClick={() => { setStateForm(1) }}>Kết quả OCR</button>
-
-                                            <button className={`outline-none w-[50%] block ${stateForm === 2 ? "border-b-[1px] border-b-solid border-b-[#ccc]" : ""} text-[14px] font-bold h-[30px] text-center`} onClick={() => { setStateForm(2) }}>Danh sách các thuộc tính</button>
-                                        </div>
-                                        <div className='mt-[24px]'>
-                                            {stateForm === 1 &&
-                                                <div>
-                                                    <div className='text-[20px] font-bold'> Kết quả OCR </div>
-                                                    <div className='mt-[10px] border-solid border-[1px] rounded-[5px] bg-[#fbfbfb]'>
-                                                        <div className='ml-[12px] py-[12px]'>
-                                                            <p className='text-[14px] font-[500]'>Số công văn: <span className='font-normal'>{docNo}</span></p>
-                                                            <p className='text-[14px] font-[500]'>Thời gian ban hành: <span className='font-normal'>{docDate}</span></p>
-                                                            <p className='text-[14px] font-[500]'>Người ký: <span className='font-normal'>{docSigner}</span></p>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div className='mt-[24px]'>
-                                                        <button onClick={handleCheck} className='h-[50px] w-[150px] rounded-[5px] hover:opacity-90 text-white bg-[#2f54eb]'>Thẩm định</button>
-                                                    </div>
-                                                </div>
-                                            }
-                                            {stateForm === 2 &&
-                                                <div>
-                                                    <form>
-                                                        <div className="flex justify-between">
-                                                            <div className="w-full px-[10px]">
-                                                                {fieldsLeft.map((field, index) => {
-                                                                    return (
-                                                                        <div
-                                                                            key={field.key}
-                                                                            className="mt-[8px] w-full mb-[24px]"
-                                                                        >
-                                                                            <label
-                                                                                className={`${field.require ? "after-form" : ""
-                                                                                    } text-[14px] font-[500]`}
-                                                                                title={field.title}
-                                                                            >
-                                                                                {field.title}
-                                                                            </label>
-
-                                                                            {field.type === "select" ? (
-                                                                                <select
-                                                                                    required={field.require}
-                                                                                    onChange={(ev) => handleChangeForm(ev)}
-                                                                                    name={field.key}
-                                                                                    placeholder={field.title}
-                                                                                    className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
-                                                                                >
-                                                                                    {field.options.map((option, index) => (
-                                                                                        <option
-                                                                                            key={option.value}
-                                                                                            value={option.value}
-                                                                                        >
-                                                                                            {option.label}
-                                                                                        </option>
-                                                                                    ))}
-                                                                                </select>
-                                                                            ) : (
-                                                                                <input
-                                                                                    required={field.require}
-                                                                                    onChange={(ev) => handleChangeForm(ev)}
-                                                                                    name={field.key}
-                                                                                    placeholder={field.title}
-                                                                                    type={field.type}
-                                                                                    min="0"
-                                                                                    className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
-                                                                                />
-                                                                            )}
-                                                                        </div>
-                                                                    );
-                                                                })}
-                                                            </div>
-
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            }
-                                        </div>
-                                    </div>
-                                    <div className='w-[20%]'></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
             }
         </>
     )

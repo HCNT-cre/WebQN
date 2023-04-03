@@ -36,11 +36,9 @@ const ConvertDataToArrayForRenderTableCell = (data) => {
 }
 
 const Table = ({fieldNames, fieldDatas, isCheckBox, isLoading}) => {
-    console.log(fieldDatas);
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
     const dataTableRenderForTableCell = ConvertDataToArrayForRenderTableCell(fieldDatas)
-    console.log(dataTableRenderForTableCell);
     const handleCheckBoxAll = e => {
         setIsCheckAll(!isCheckAll);
         setIsCheck(fieldDatas.map((file, index) => ("checkbox" + index)))
