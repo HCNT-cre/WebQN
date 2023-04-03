@@ -45,17 +45,18 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory }) => {
                                     </div>
 
                                     <div className="w-[12.5%] text-white  text-center px-[5px]">
-                                        
+
                                         <form encType="multipart/form-data">
 
                                             <label className='flex justify-center items-center cursor-pointer w-auto h-[30px] bg-[#2930ff] rounded-[5px] text-white hover:opacity-90' htmlFor="file-upload">
                                                 <i class="fa-solid fa-upload"></i>
                                                 <p className='ml-[8px]'>Thêm văn bản</p>
                                             </label>
-                                            <input type='file' id="file-upload" name="file-upload" className="hidden" onChange={(ev) => {
+                                            <input onClick={(ev) =>{ev.target.value = ''}} type='file' id="file-upload" name="file-upload" className="hidden" onChange={(ev) => {
+                                                console.log("upload file change");
                                                 setStateAddDoc(true)
-                                                setEvFilesUploaded(ev)
-                                            }} accept="application/pdf, image/jpeg, .avi, .wmv, .MPEG-4, audio/mp3, .vma" multiple></input>
+                                                setEvFilesUploaded(prev => ev)
+                                            }} accept="application/pdf" multiple></input>
                                         </form>
 
                                     </div>
@@ -84,7 +85,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory }) => {
                 </div>
 
             }
-            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded}/>
+            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} />
         </>
     )
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
@@ -78,22 +78,22 @@ const Tab = () => {
 //                                 <input type='file' id="file-upload" name="file-upload" className="hidden" onChange={handleFile}></input>
 //                                 {pdfError && <span className='text-danger'>{pdfError}</span>}
 //                             </form>
-//                             <div className='flex mt-[24px]'>
-//                                 <div className="w-full h-[800px] overflow-y-auto bg-[#e4e4e4] flex justify-center items-center mt-[10px]">
-//                                     {pdfFile && (
-//                                         <Worker className="w-[60%]" workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.worker.min.js">
-//                                             <Viewer className="w-[60%]" fileUrl={pdfFile}
-//                                                 plugins={[defaultLayoutPluginInstance]}></Viewer>
-//                                         </Worker>
-//                                     )}
+// <div className='flex mt-[24px]'>
+//     <div className="w-full h-[800px] overflow-y-auto bg-[#e4e4e4] flex justify-center items-center mt-[10px]">
+//         {pdfFile && (
+//             <Worker className="w-[60%]" workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.worker.min.js">
+//                 <Viewer className="w-[60%]" fileUrl={pdfFile}
+//                     plugins={[defaultLayoutPluginInstance]}></Viewer>
+//             </Worker>
+//         )}
 
-//                                     {/* render this if we have pdfFile state null   */}
-//                                     {!pdfFile && <>No file is selected yet</>}
+//         {/* render this if we have pdfFile state null   */}
+//         {!pdfFile && <>No file is selected yet</>}
 
-//                                 </div>
+//     </div>
 
 
-//                             </div>
+// </div>
 
 //                         </div>
 //                         <div className='w-[30%] pl-[12px] mr-[12px] '>
@@ -186,68 +186,83 @@ const Tab = () => {
 //     </div>
 // }
 
+
 const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
-    const files = evFilesUploaded === null ? null : evFilesUploaded.target.files;
-    console.log(files);
-    console.log("files: ", typeof(files));
-    // creating new plugin instance
+    const files = evFilesUploaded === null ? null : Array.from(evFilesUploaded.target.files);
+    const [currentTab, setCurrentTab] = useState(0)
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [pdfFile, setPdfFile] = useState(null);
+    const [pdfFiles, setPdfFiles] = useState([]);
+
     const [pdfError, setPdfError] = useState('');
     const allowedFiles = ['application/pdf'];
     const [docNo, setDocNo] = useState('')
     const [docDate, setDocDate] = useState('')
     const [docSigner, setDocSigner] = useState('')
     const [xmlRawData, setXmlRawData] = useState('')
-    const [stateForm, setStateForm] = useState(2)
 
-    const handleFile = async (e) => {
-        const selectedFile = e.target.files[0];
-        if (selectedFile) {
-            console.log("uploaded file:", selectedFile);
-            if (selectedFile && allowedFiles.includes(selectedFile.type)) {
-                const reader = new FileReader();
-                reader.readAsDataURL(selectedFile);
-                reader.onloadend = (e) => {
-                    setPdfError('');
-                    setPdfFile(e.target.result);
+
+    useEffect(() => {
+        console.log("in effect");
+        const handleFile = async (index) => {
+            if (files === null) return
+            const selectedFile = files[index];
+            if (selectedFile) {
+                console.log("uploaded file:", selectedFile);
+                if (selectedFile && allowedFiles.includes(selectedFile.type)) {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(selectedFile);
+                    reader.onloadend = (e) => {
+                        setPdfError('');
+                        setPdfFile(e.target.result);
+                    }
+                    // call API
+                    const formData = new FormData();
+                    formData.append('file', selectedFile);
+                    formData.append('ratio', '20,1');
+                    formData.append('threshold', '0.7');
+
+                    try {
+                        setDocNo('đang xử lý...');
+                        setDocDate('đang xử lý...');
+                        setDocSigner('đang xử lý...');
+                        const response = await axios.post('http://157.230.37.228:4444/extract', formData);
+
+                        setDocNo(response.data.no.join(' '));
+                        setDocDate(response.data.date.join(' '));
+                        setDocSigner(response.data.signer.join(' '));
+
+                        console.log(response.data.no.join(' '));
+                    } catch (error) {
+                        console.error(error);
+                    }
                 }
-                // call API
-                const formData = new FormData();
-                formData.append('file', selectedFile);
-                formData.append('ratio', '20,1');
-                formData.append('threshold', '0.7');
-
-                try {
-                    setDocNo('đang xử lý...');
-                    setDocDate('đang xử lý...');
-                    setDocSigner('đang xử lý...');
-                    const response = await axios.post('http://157.230.37.228:4444/extract', formData);
-
-                    setDocNo(response.data.no.join(' '));
-                    setDocDate(response.data.date.join(' '));
-                    setDocSigner(response.data.signer.join(' '));
-
-                    console.log(response.data.no.join(' '));
-                } catch (error) {
-                    console.error(error);
+                else {
+                    setPdfError('Chỉ hỗ trợ file PDF');
+                    setPdfFile('');
                 }
             }
             else {
-                setPdfError('Chỉ hỗ trợ file PDF');
-                setPdfFile('');
+                console.log('please select a PDF');
             }
         }
-        else {
-            console.log('please select a PDF');
-        }
-    }
+        handleFile(currentTab);
+    }, [currentTab, files, allowedFiles, setPdfError, setPdfFile, setDocNo, setDocDate, setDocSigner]);
+
+    const handleChangeTab = (index) => {
+        console.log("change tab", index);
+        setPdfFile(pdfFiles[index]);
+        setCurrentTab(index);
+    };
+
+
 
     const handleChangeXML = (ev) => {
         console.log(ev.target.value);
         setXmlRawData(ev.target.value)
     }
     const handleChangeForm = (ev) => { }
+
     const handleCheck = () => {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlRawData, "text/xml");
@@ -296,17 +311,21 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
         }
 
     }
-    console.log(stateAddDoc);
+
+    // setPdfFile(getPdfFileRender(currentTab))
     return (
         <>
             {stateAddDoc &&
                 <div className="overflow-y-hidden fixed top-0 right-0 bottom-0 left-0 h-full w-full z-10 bg-[rgba(0,0,0,.45)]">
                     <div className="relative  h-[calc(100vh)]  top-[20px] pb-[30px] ">
-                        <div className="h-full overflow-y-scroll w-[calc(100vw-80px)] my-0 mx-auto bg-white">
+                        <div className="h-full  w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className=" h-full relative rounded-[2px] bg-white">
-                                <button onClick={() => { setStateAddDoc(false) }} className="text-[20px] absolute right-0 w-[40px] h-[40px] bg-[#2f54eb] top-0 text-white ">x</button>
-                                <div className="bg-[#2f54eb] text-white py-[16px] px-[24px]">
+
+                                <div className="bg-[#2f54eb] text-white py-[8px] px-[24px] relative">
                                     <p className='text-bold'>Thêm văn bản</p>
+                                    <button onClick={() => { setStateAddDoc(false) }} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-[#2f54eb] top-0 text-white ">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
                                 </div>
                                 {
                                     // <div className="z-50">
@@ -319,14 +338,50 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
                                     // </div>
                                 }
 
-                                <div>
-                                    <div className='flex w-full'>
-                                        {files !==  null && files.map((file, index) => {
+                                <div className='w-full'>
+                                    <div className='pl-[4px] flex w-full h-[40px] bg-gray-400 items-center relative'>
+                                        {files !== null && files.map((file, index) => {
+                                            const width = 95 / files.length + "%"
+                                            const isActive = index === currentTab ? "#e5e7eb" : ""
                                             return (
-                                                <div className='max-w-[20%] h-[40px] border-solid border-[1px] rounded-[5px]'> </div>
+                                                <div onClick={() => handleChangeTab(index)} style={{ width: width}} className='max-w-[15%] pr-[4px]'>
+                                                    <div style={{backgroundColor: isActive}} className='px-[4px] h-[30px] border-solid border-[1px] rounded-[5px] flex items-center cursor-pointer bg-gray-300 hover:bg-gray-200 justify-between pl-[6px]'>
+                                                        <p className='leading-[20px] h-[20px] text-[10px] overflow-hidden '>{file.name}</p>
+                                                        <div className='text-[12px] w-[15px] h-[15px] rounded-[5px] hover:bg-white flex items-center justify-center'>
+                                                            <i class="fa-solid fa-xmark"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             )
                                         })}
+
+                                        <div className='w-[2%] absolute right-0 text-white h-full rounded-[5px] flex items-center justify-center'>
+                                            <button>
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                        </div>
+
                                     </div>
+
+
+                                    <div className="flex pt-[8px]">
+                                        <div className='h-full pl-[12px] w-[50%]'>
+                                            <div className='flex'>
+                                                <div className="w-full h-[80vh] overflow-x-hidden overflow-y-auto bg-[#e4e4e4] flex justify-center items-center">
+                                                    {pdfFile && (
+                                                        <Worker className="w-[60%]" workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.worker.min.js">
+                                                            <Viewer className="w-[60%]" fileUrl={pdfFile}
+                                                                plugins={[defaultLayoutPluginInstance]}></Viewer>
+                                                        </Worker>
+                                                    )}
+
+                                                    {/* render this if we have pdfFile state null   */}
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
