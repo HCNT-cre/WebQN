@@ -52,191 +52,48 @@ const formFields = [
 ];
 
 
-const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
-    
-    const [currentTab, setCurrentTab] = useState(0)
+const FixDoc = ({ pdfFile, setStateFixDoc, stateFixDoc, API_PDF }) => {
+
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
-    const [pdfFile, setPdfFile] = useState(null);
-    const [pdfError, setPdfError] = useState('');
-    
-    const allowedFiles = ['application/pdf'];
-    const [docNo, setDocNo] = useState('')
-    const [docDate, setDocDate] = useState('')
-    const [docSigner, setDocSigner] = useState('')
-    const [files, setFiles] = useState(null)
-
-    useEffect(() => {
-        if(evFilesUploaded !== null)
-            setFiles(Array.from(evFilesUploaded.target.files))
-    },[evFilesUploaded])
-
-    useEffect(() => {
-        console.log("files changed");
-        console.log("files: ", files);
-        if (files === null) return
-        const selectedFile = files[0];
-        console.log("selectedFile: ", selectedFile);
-        if (selectedFile) {
-            console.log("uploaded file:", selectedFile);
-            if (selectedFile && allowedFiles.includes(selectedFile.type)) {
-                const reader = new FileReader();
-                reader.readAsDataURL(selectedFile);
-                reader.onloadend = (e) => {
-                    setPdfError('');
-                    setPdfFile(e.target.result);
-                }
-            }
-            else {
-                setPdfError('Chỉ hỗ trợ file PDF');
-                setPdfFile('');
-            }
-        }
-        else {
-            console.log('please select a PDF');
-        }
-    }, [files])
-
-    const handleChangeTab = (index) => {
-        console.log("change tab", index);
-        if (files === null || files.length === 0) return
-        const selectedFile = files[index];
-        if (selectedFile) {
-            if (selectedFile && allowedFiles.includes(selectedFile.type)) {
-                const reader = new FileReader();
-                reader.readAsDataURL(selectedFile);
-                setCurrentTab(index);
-                reader.onloadend = (e) => {
-                    setPdfError('');
-                    setPdfFile(e.target.result);
-                }
-            }
-            else {
-                setPdfError('Chỉ hỗ trợ file PDF');
-                setPdfFile('');
-            }
-        }
-        else {
-            console.log('please select a PDF');
-        }
-    };
-
     const extractDataOCR = async () => {
         console.log("start fetch data...");
-        const selectedFile = files[currentTab]
+        const selectedFile = pdfFile
         const formData = new FormData();
         formData.append('file', selectedFile);
         formData.append('ratio', '20,1');
         formData.append('threshold', '0.7');
         try {
             console.log("start fetch API");
-            setDocNo('đang xử lý...');
-            setDocDate('đang xử lý...');
-            setDocSigner('đang xử lý...');
             const response = await axios.post('http://157.230.37.228:4444/extract', formData);
             console.log(response);
-            setDocNo(response.data.no.join(' '));
-            setDocDate(response.data.date.join(' '));
-            setDocSigner(response.data.signer.join(' '));
             console.log(response.data.no.join(' '));
-
         } catch (error) {
             console.error(error);
         }
     }
-
-    const handleCloseTabAllTab = () => {
-        setStateAddDoc(false)
-        setCurrentTab(0)
-        setPdfFile(null)
-    }
-
-    const handleCloseTab = (index) => {
-        console.log("close tab: ", index);
-        if (index >= files.length)
-            return
-        setFiles(preFiles =>{
-            const newFiles = [...preFiles]
-            newFiles.splice(index, 1)
-            return newFiles
-        })
-    }
-
-    const handleAddMoreFiles = (ev) => {
-        setFiles(preFiles =>{
-            let newFiles = [...preFiles]
-            let addFile = Array.from(ev.target.files)
-            newFiles = newFiles.concat(addFile)
-            return newFiles
-        })
-    }
-
     const handleChangeForm = (ev) => { }
 
     return (
         <>
-            {stateAddDoc &&
+            {stateFixDoc &&
                 <div className="overflow-y-scoll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-10 bg-[rgba(0,0,0,.45)]">
                     <div className="relative  h-[calc(100vh)]  top-[20px] pb-[30px] ">
                         <div className="h-full  w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className=" h-full relative rounded-[2px] bg-white">
-
                                 <div className="bg-[#2f54eb] text-white py-[8px] px-[24px] relative">
-                                    <p className='text-bold'>Thêm văn bản</p>
-                                    <button onClick={handleCloseTabAllTab} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-[#2f54eb] top-0 text-white ">
+                                    <p className='text-bold'>Xem và chỉnh sửa</p>
+                                    <button onClick={()=>{setStateFixDoc(false)}} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-[#2f54eb] top-0 text-white ">
                                         <i class="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
-                                {
-                                    // <div className="z-50">
-                                    //     <h1>Add Doc</h1>
-                                    //     <form
-                                    //         encType="multipart/form-data"
-                                    //     >
-                                    //         <input accept="application/pdf, image/jpeg, .avi, .wmv, .MPEG-4, audio/mp3, .vma" onChange={(ev) => { console.log(ev.target.files) }} type="file" id="file" multiple />
-                                    //     </form>
-                                    // </div>
-                                }
-
                                 <div className='w-full'>
-                                    <div className='pl-[4px] flex w-full h-[40px] bg-gray-400 items-center relative'>
-                                        {files !== null && files.map((file, index) => {
-                                            const width = 95 / files.length + "%"
-                                            const isActive = index === currentTab ? "white" : ""
-                                            return (
-                                                <div onClick={() => handleChangeTab(index)} style={{ width: width }} className='max-w-[15%] pr-[4px]'>
-                                                    <div style={{ backgroundColor: isActive }} className='px-[4px] h-[30px] border-solid border-[1px] rounded-[5px] flex items-center cursor-pointer bg-gray-300 hover:bg-gray-200 justify-between pl-[6px]'>
-                                                        <p className='leading-[20px] h-[20px] text-[10px] overflow-hidden '>{file.name}</p>
-                                                        <div onClick={() => handleCloseTab(index)} className='text-[12px] w-[15px] h-[15px] rounded-[5px] hover:bg-white flex items-center justify-center'>
-                                                            <i class="fa-solid fa-xmark"></i>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )
-                                        })}
-
-                                        <div className='w-[2%] absolute right-0 text-white h-full rounded-[5px] flex items-center justify-center cursor-pointer'>
-                                            <form encType="multipart/form-data">
-                                                <label className='cursor-pointer' htmlFor="file-add-upload">
-                                                    <i class="fa-solid fa-plus"></i>
-                                                </label>
-                                                <input onClick={(ev) => { ev.target.value = '' }} type='file' id="file-add-upload" name="file-upload" className="hidden" onChange={(ev) => {
-                                                    console.log("on change");
-                                                    handleAddMoreFiles(ev)
-                                                }
-                                                } accept="application/pdf" multiple></input>
-                                            </form>
-                                        </div>
-
-                                    </div>
-
-
                                     <div className="flex pt-[8px]">
                                         <div className='h-full pl-[12px] w-[50%]'>
                                             <div className='flex'>
-                                                <div className="w-full h-[80vh] overflow-x-hidden overflow-y-auto bg-[#e4e4e4] flex justify-center items-center">
+                                                <div className="w-full h-[85vh] overflow-x-hidden overflow-y-auto bg-[#e4e4e4] flex justify-center items-center">
                                                     {pdfFile && (
                                                         <Worker className="w-[60%]" workerUrl="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.3.122/pdf.worker.min.js">
-                                                            <Viewer className="w-[60%]" fileUrl={pdfFile}
+                                                            <Viewer className="w-[60%]" fileUrl="http://127.0.0.1:5500/src/assets/TTTT.pdf"
                                                                 plugins={[defaultLayoutPluginInstance]}></Viewer>
                                                         </Worker>
                                                     )}
@@ -252,9 +109,9 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
                                                 <button className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Lưu</button>
                                             </div>
                                             <div className='flex justify-center w-full'>
-                                                <button className={`outline-none w-[50%] block text-[14px] font-bold h-[30px] text-center`}>Danh sách các thuộc tính</button>
+                                                <p className={`outline-none w-[50%] block text-[14px] font-bold h-[30px] text-center`}>Danh sách các thuộc tính</p>
                                             </div>
-                                            <div className='h-[70vh] overflow-y-auto mt-[16px]'>
+                                            <div className='h-[75vh] overflow-y-auto mt-[16px]'>
                                                 {
                                                     <div>
                                                         <form>
@@ -311,8 +168,6 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
                                                         </form>
                                                     </div>
                                                 }
-
-
                                             </div>
                                         </div>
                                     </div>
@@ -329,4 +184,4 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
     )
 }
 
-export default AddDoc
+export default FixDoc

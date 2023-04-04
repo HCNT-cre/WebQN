@@ -1,6 +1,5 @@
 import Loading from "../Loading";
 import { useState } from "react";
-import axios from "axios";
 
 const CheckBox = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
@@ -21,7 +20,7 @@ const ConvertDataToArrayForRenderTableCell = (data) => {
         const data = [] 
         for (const key in fieldData) {
             if (!Array.isArray(fieldData[key])) {
-                data.push(<td className="px-[12px] py-[16px] break-words" >{fieldData[key]}</td>)
+                data.push(<td className="px-[12px] py-[16px] break-words text-center" >{fieldData[key]}</td>)
             } else {
                 data.push(<td className="px-[12px] py-[16px] overflow-hidden" >
                     {fieldData[key].map((childData) => {
@@ -106,7 +105,7 @@ const Table = ({fieldNames, fieldDatas, isCheckBox, isLoading}) => {
                     {
                         dataTableRenderForTableCell.map((dataRow, index) => {
                             return (
-                                <tr className="hover:bg-[#fafafa] bg-white border-t-[1px] border-solid border-[#e0e0e0] text-[13px]" key={index}>
+                                <tr className="hover:bg-[#ecebeb] bg-white border-t-[1px] border-solid border-[#e0e0e0] text-[13px]" key={index}>
                                     <td className="text-center px-[12px] py-[16px]"><span className="block w-[24px] h-[24px] rounded-[50%] bg-[#ccc]">{index + 1}</span></td>
                                     {
                                         isCheckBox && <td className="px-[12px] py-[16px] overflow-hidden text-center" >

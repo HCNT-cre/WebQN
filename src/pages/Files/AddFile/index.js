@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react"
 import FormAddFile from "../../../components/Form/AddFile"
-import DocCategory from "../../../components/Form/DocCategory"
+import DocCategory from "../../../components/Form/Document/DocCategory"
+import MultimediaCategory from "../../../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
 import Table from "../../../components/Table"
-
 const API_GET_FILES = 'https://6381f08c53081dd5498bea48.mockapi.io/api/v1/file'
 const API_SEARCH = 'https://641e04a5945125fff3db0a63.mockapi.io/file'
 
@@ -26,20 +26,22 @@ const AddFile = () => {
     const [files, setFiles] = useState([])
     const [stateFormAddFile, setStateFormAddFile] = useState(false)
     const [stateDocCategory, setStateDocCategory] = useState(false)
+    const [stateMultimediaCategory, setStateMultimediaCategory] = useState(false)
 
+    console.log(stateMultimediaCategory);
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
     const [isLoading, setIsLoading] = useState(true)
 
     const FUNCTIONS = [
-        <button className="block text-left text-[10px] hover:underline" onClick={() => { setStateDocCategory(!stateDocCategory) }}>Thêm văn bản</button>,
-        <button className="block text-left text-[10px] hover:underline">Thêm tài liệu đa phương tiện</button>,
-        <button className="block text-left text-[10px] hover:underline">Xem hồ sơ</button>,
-        <button className="block text-left text-[10px] hover:underline" >Sửa hồ sơ</button>,
-        <button className="block text-left text-[10px] hover:underline">Xóa hồ sơ</button>,
-        <button className="block text-left text-[10px] hover:underline">Nhật ký hồ sơ</button>,
-        <button className="block text-left text-[10px] hover:underline">Nộp lưu</button>,
-        <button className="block text-left text-[10px] hover:underline">Phân quyền</button>
+        <button className="font-bold italic block text-left text-[10px] hover:underline" onClick={() => { setStateDocCategory(!stateDocCategory) }}>Thêm văn bản</button>,
+        <button className="font-bold italic block text-left text-[10px] hover:underline" onClick={() => { setStateMultimediaCategory(true) }}>Thêm tài liệu đa phương tiện</button>,
+        <button className="font-bold italic block text-left text-[10px] hover:underline">Xem hồ sơ</button>,
+        <button className="font-bold italic block text-left text-[10px] hover:underline" >Sửa hồ sơ</button>,
+        <button className="font-bold italic block text-left text-[10px] hover:underline">Xóa hồ sơ</button>,
+        <button className="font-bold italic block text-left text-[10px] hover:underline">Nhật ký hồ sơ</button>,
+        <button className="font-bold italic block text-left text-[10px] hover:underline">Nộp lưu</button>,
+        <button className="font-bold italic block text-left text-[10px] hover:underline">Phân quyền</button>
     ]
 
     const [search, setSearch] = useState({
@@ -188,11 +190,11 @@ const AddFile = () => {
                     </div>
 
                 </div>
-                <Table fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={true}/>
-            </div>
-
+                <Table fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={true} />
+            </div>  
             <FormAddFile stateFormAddFile={stateFormAddFile} setStateFormAddFile={setStateFormAddFile} />
             <DocCategory stateDocCategory={stateDocCategory} setStateDocCategory={setStateDocCategory} />
+            <MultimediaCategory stateMultimediaCategory={stateMultimediaCategory} setStateMultimediaCategory={setStateMultimediaCategory} />
         </>
     )
 }
