@@ -104,7 +104,6 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
         const name = event.target.name;
         let cur = request;
         cur[name] = event.target.value;
-        console.log(cur);
         setRequest(cur);
     };
 

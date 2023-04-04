@@ -7,7 +7,7 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
                     {
                         sideBarWidth === 250 ? setSideBarWidth(50) : setSideBarWidth(250)
                     }}>
-                        <i class="fa-solid fa-bars"></i>
+                        <i className="fa-solid fa-bars"></i>
                     </button>
                     <p className="font-medium text-white text-[16px]">HỆ THỐNG QUẢN LÝ TÀI LIỆU LƯU TRỮ ĐIỆN TỬ TỈNH QUÃNG NGÃI</p>
                 </div>
