@@ -4,70 +4,74 @@ import Table from "../../../Table"
 import axios from "axios"
 import FixDoc from "../FixDoc"
 
-const API_DOCUMENT = "https://6381f08c53081dd5498bea48.mockapi.io/api/v1/document"
-const API_PDF = "http://127.0.0.1:5500/src/assets/TTTT.pdf"
-
-const FIELDS_TABLE = [
-    { title: "Tác giả", key: "OrganName", width: "100%" },
-    { title: "Số ký hiệu", key: "CodeNotation", width: "100%" },
-    { title: "Ngày văn bản", key: "IssuedDate", width: "100%" },
-    { title: "Trích yếu", key: "Subject", width: "100%" },
-    { title: "Số thứ tự VB trong hồ sơ", key: "PhysicalNum", width: "100%" },
-    { title: "File", key: "File", width: "100%" },
+const API_GET_DOCUMENT_OF_FILE = "http://127.0.0.1:8000/get_doc_by_gov_file_id/?gov_file_id="
+const TABLE_FIELDS = [
+    { title: "Ngày ban hành", key: "issued_date", width: "100%" },
+    { title: "Bút ký", key: "autograph", width: "100%" },
+    { title: "Mã văn bản", key: "code_number", width: "100%" },
+    { title: "Tên văn bản", key: "file_name", width: "100%" },
     { title: "Chức năng", key: "Function", width: "100px" },
 ]
 
-const DocCategory = ({ stateDocCategory, setStateDocCategory }) => {
+const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument }) => {
+    return (
+        <div>
+            <button onClick={(ev) => handleClickOnDocument(URL_PDF_FILE, pdfData)} className="font-bold italic block text-left text-[10px] hover:underline">Xem chi tiết</button>
+            <button className="font-bold italic block text-left text-[10px] hover:underline" >Xóa</button>
+            <button className="font-bold italic block text-left text-[10px] hover:underline">Phân quyền</button>
+        </div>
+    )
+}
+
+const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID}) => {
     const [stateAddDoc, setStateAddDoc] = useState(false)
     const [stateFixDoc, setStateFixDoc] = useState(false)
     const [evFilesUploaded, setEvFilesUploaded] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [files, setFiles] = useState([])
     const [pdfFile, setPdfFile] = useState(null)
+    const [pdfFileLink, setPdfFileLink] = useState(null)
+    const [pdfData, setPdfData] = useState(null)
 
-    const handleClick = async (ev) => {
-        await axios.get(API_PDF).then(res => {
-            console.log("pdf data: ", res.data);
+    const handleClickOnDocument = async (URL_PDF_FILE, pdfData) => {
+        setPdfFileLink(URL_PDF_FILE)
+        setPdfData(pdfData)
+        await axios.get(URL_PDF_FILE).then(res => {
             setPdfFile(res.data)
             setStateFixDoc(true)
         }).catch(err => console.log("errors:", err))
-
     }
-    const FUNCTIONS = [
-        <button onClick={handleClick} className="font-bold italic block text-left text-[10px] hover:underline">Xem chi tiết</button>,
-        <button className="font-bold italic block text-left text-[10px] hover:underline" >Xóa</button>,
-        <button className="font-bold italic block text-left text-[10px] hover:underline">Phân quyền</button>,
-    ]
+
+    const fetchDocumentsOfFile = async (govFileID) => {
+        const currentAPI = `${API_GET_DOCUMENT_OF_FILE}${govFileID}`;
+        try {
+            const response = await fetch(currentAPI);
+            if (response.ok) {
+                const rawDatas = await response.json();
+                const filesArray = []
+                for (const rawData of rawDatas) {
+                    filesArray.push({
+                        "issued_date": rawData.issued_date,
+                        "autograph": rawData.autograph,
+                        "code_number": rawData.code_number,
+                        "file_name": rawData.file_name,
+                        "Function": <ButtonFunctions pdfData={rawData} URL_PDF_FILE={rawData.url} handleClickOnDocument={handleClickOnDocument} />,
+                    })
+                }
+                setFiles(filesArray)
+            }
+        } catch (err) {
+            console.log(err)
+        }
+        setIsLoading(false);
+    };
 
     useEffect(() => {
-        const fetchFileData = async () => {
-            try {
-                const response = await fetch(API_DOCUMENT);
-                setIsLoading(false);
-                if (response.ok) {
-                    const rawDatas = await response.json();
-                    let filesArray = []
-                    for (let i = 0; i < rawDatas.length; i++) {
-                        const rawData = rawDatas[i]
-                        filesArray.push({
-                            "OrganName": rawData.OrganName,
-                            "CodeNotation": rawData.CodeNotation,
-                            "IssuedDate": rawData.IssuedDate,
-                            "Subject": rawData.Subject,
-                            "PhysicalNum": rawData.PhysicalNum,
-                            "File": rawData.File,
-                            "Function": FUNCTIONS,
-                        })
-                    }
-                    setFiles(filesArray)
-                }
-            } catch (err) {
-                console.log(err)
-            }
-        };
+        if (govFileID === -1)
+            return
+        fetchDocumentsOfFile(govFileID);
+    }, [govFileID])
 
-        fetchFileData();
-    }, [])
 
     return (
         <>
@@ -75,7 +79,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory }) => {
                 stateDocCategory &&
                 <div className="overflow-y-hidden fixed top-0 right-0 bottom-0 left-0 h-full w-full z-10 bg-[rgba(0,0,0,.45)]">
                     <div className="relative  h-[calc(100vh)] top-[20px] pb-[30px] ">
-                        <div className="h-full relative overflow-y-scroll w-[calc(100vw-80px)] my-0 mx-auto bg-white">
+                        <div className="h-full relative overflow-y-scroll w-[calc(100vw-80px)] my-0 mx-auto bg-[#f0f2f5]">
                             <div className="relative">
                                 <button onClick={() => { setStateDocCategory(false) }} className="text-[20px] absolute right-0 w-[40px] h-full bg-[#2f54eb] top-0 text-white ">
                                     <i class="fa-solid fa-xmark"></i>
@@ -85,7 +89,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory }) => {
 
                                 </div>
                             </div>
-                            <div className="w-full mb-[24px] bg-[#f0f2f5]">
+                            <div className="w-full pb-[24px] bg-[#f0f2f5]">
                                 <div className="pt-[16px] mx-[24px] flex ">
                                     <div className="w-[12.5%] px-[5px]">
                                         <input placeholder="Tác giả" className="bar-page-input"></input>
@@ -134,14 +138,15 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory }) => {
                                     </div>
 
                                 </div>
-                                <Table fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={true} />
+                                <Table fieldNames={TABLE_FIELDS} fieldDatas={files} isLoading={isLoading} isCheckBox={true} />
                             </div>
                         </div>
                     </div>
                 </div>
             }
-            <FixDoc pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={API_PDF} />
-            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} />
+
+            <FixDoc pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} />
+            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID}/>
         </>
     )
 }

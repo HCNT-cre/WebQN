@@ -17,11 +17,33 @@ const CheckBox = ({ id, type, name, handleClickCheckBox, isChecked }) => {
 const ConvertDataToArrayForRenderTableCell = (data) => {
     const dataTableRender = []
     for (let fieldData of data) {
-        const data = [] 
+        const data = []
         for (const key in fieldData) {
+            if (key==="gov_file_id" || key === "id") continue // Ignore id field
             if (!Array.isArray(fieldData[key])) {
-                data.push(<td className="px-[12px] py-[16px] break-words text-center" >{fieldData[key]}</td>)
+                if (key.includes("Status")) {
+                    // if fieldData[key] === "Đã duyệt" => color: "bg-green-500
+                    // if fieldData[key] === "Chưa duyệt" => color: "bg-red-500
+                    // if fieldData[key] === "Đang xử lý" => color: "bg-yellow-500
+                    
+                    let color = "bg-[#0984e3]"
+
+                    if (fieldData[key] === "Đóng") {
+                        color = "bg-[#d63031]"
+                    } else if (fieldData[key] === "Lưu trữ cơ quan") {
+                        color = "bg-[#e17055]"
+                    }
+
+                    data.push(<td className="text-white px-[12px] py-[16px] break-words text-center" >
+                        <span className={`px-[8px] py-[4px] rounded-md text-[12px] font-300 ${color}`}>
+                            {fieldData[key]}
+                        </span>
+                    </td>)
+                } else {
+                    data.push(<td className="px-[12px] py-[16px] break-words text-center" >{fieldData[key]}</td>)
+                }
             } else {
+                // This field is Button
                 data.push(<td className="px-[12px] py-[16px] overflow-hidden" >
                     {fieldData[key].map((childData) => {
                         return childData
@@ -34,10 +56,11 @@ const ConvertDataToArrayForRenderTableCell = (data) => {
     return dataTableRender
 }
 
-const Table = ({fieldNames, fieldDatas, isCheckBox, isLoading}) => {
+const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading }) => {
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
     const dataTableRenderForTableCell = ConvertDataToArrayForRenderTableCell(fieldDatas)
+
     const handleCheckBoxAll = e => {
         setIsCheckAll(!isCheckAll);
         setIsCheck(fieldDatas.map((file, index) => ("checkbox" + index)))
@@ -76,11 +99,11 @@ const Table = ({fieldNames, fieldDatas, isCheckBox, isLoading}) => {
 
                         {fieldNames.map((field, index) => {
                             let className = "text-[12px] relative text-center px-[8px] py-[12px]"
-                            if(index < fieldNames.length - 1) {
+                            if (index < fieldNames.length - 1) {
                                 className += " before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]"
                             }
                             return (
-                                <th style={{ width: field.width }} className={className}>{field.title}</th>
+                                <th key={index} style={{ width: field.width }} className={className}>{field.title}</th>
                             )
 
                         })}

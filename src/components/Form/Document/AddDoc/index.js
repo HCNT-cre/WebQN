@@ -1,148 +1,161 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { Worker } from '@react-pdf-viewer/core';
 import { Viewer } from '@react-pdf-viewer/core';
-import '@react-pdf-viewer/core/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axios from 'axios';
 
-const formFields = [
-    {
-        key: "Identifier",
-        title: "Mã cơ quan lưu trữ lịch sử",
-        require: false,
-        type: "text",
-    },
-    {
-        key: "Organld",
-        title: "Mã phông/công trình/sưu tập lưu trữ",
-        require: true,
-        type: "options",
-    },
-    {
-        key: "FileCatalog",
-        title: "Mục lục hoặc năm hình thành hồ sơ",
-        require: false,
-        type: "number",
-    },
-    {
-        key: "FileNotation",
-        title: "Số và ký hiệu hồ sơ",
-        require: false,
-        type: "text",
-    },
-    { key: "Title", title: "Tiêu đề hồ sơ", require: true, type: "text" },
-    {
-        key: "Maintenance",
-        title: "Thời hạn bảo quản",
-        require: true,
-        type: "options",
-    },
-    {
-        key: "Rights",
-        title: "Chế độ sử dụng",
-        require: true,
-        type: "select",
-        options: [
-            { value: "Công Khai", label: "Công Khai" },
-            { value: "Riêng tư", label: "Riêng tư" },
-        ],
-    },
-    { key: "Language", title: "Ngôn ngữ", require: false, type: "text" },
-];
+const API_EXTRACT_ORC = "http://157.230.37.228:4444/extract"
+const API_UPLOAD_DOCUMENT = 'http://127.0.0.1:8000/upload_document/'
 
+const FORM_FIELDS = [
+    { key: "doc_code", title: "Mã định danh văn bản", require: false, type: "text" },
+    { key: "identifier", title: "Mã cơ quan lưu trữ lịch sử", require: false, type: "text" },
+    { key: "organ_id", title: "Mã phông/công trình/sưu tập lưu trữ", require: false, type: "text" },
+    { key: "file_catalog", title: "Mục lục số hoặc năm hình thành hồ sơ", require: false, type: "number" },
+    { key: "file_notation", title: "Số và ký hiệu hồ sơ", require: false, type: "text" },
+    { key: "doc_ordinal", title: "Số thứ tự văn bản trong hồ sơ", require: false, type: "number" },
+    { key: "type_name", title: "Tên loại văn bản", require: false, type: "text" },
+    { key: "code_number", title: "Số của văn bản", require: false, type: "text" },
+    { key: "code_notation", title: "Ký hiệu của văn bản", require: false, type: "text" },
+    { key: "issued_date", title: "Ngày, tháng, năm văn bản", require: false, type: "text" },
+    { key: "organ_name", title: "Tên cơ quan, tổ chức ban hành văn bản", require: false, type: "text" },
+    { key: "subject", title: "Trích yếu nội dung", require: false, type: "text" },
+    { key: "language", title: "Ngôn ngữ", require: false, type: "text" },
+    { key: "page_amount", title: "Số lượng trang của văn bản", require: false, type: "number" },
+    { key: "description", title: "Ghi chú", require: false, type: "text" },
+    { key: "infor_sign", title: "Ký hiệu thông tin", require: false, type: "text" },
+    { key: "keyword", title: "Từ khóa", require: false, type: "text" },
+    { key: "mode", title: "Chế độ sử dụng", require: false, type: "text" },
+    { key: "confidence_level", title: "Mức độ tin cậy", require: false, type: "text" },
+    { key: "autograph", title: "Bút tích", require: false, type: "text" },
+    { key: "format", title: "Tình trạng vật lý", require: false, type: "text" },
 
-const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
+]
 
+const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOfFile, govFileID }) => {
+    const [formData, setFormData] = useState({
+        "gov_file_id": null,
+        "file": null,
+        "issued_date": null,
+        "autograph": null,
+        "code_number": null,
+    });
     const [currentTab, setCurrentTab] = useState(0)
-    const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [pdfFile, setPdfFile] = useState(null);
-    const [pdfError, setPdfError] = useState('');
-    const allowedFiles = ['application/pdf'];
     const [files, setFiles] = useState(null)
+    const [isSubmitFormSuccess, setIsSubmitFormSuccess] = useState(false)
+    const allowedFiles = ['application/pdf'];
+    const defaultLayoutPluginInstance = defaultLayoutPlugin();
+
+    useEffect(() => {
+        setFormData(prev => ({
+            ...prev,
+            "gov_file_id": govFileID
+        }))
+    }, [govFileID])
+
+
 
     useEffect(() => {
         if (evFilesUploaded !== null)
             setFiles(Array.from(evFilesUploaded.target.files))
     }, [evFilesUploaded])
 
-    useEffect(() => {
-        if (files === null || files.length === 0) return
-        const selectedFile = files[0];
-        if (selectedFile) {
-            if (selectedFile && allowedFiles.includes(selectedFile.type)) {
-                const reader = new FileReader();
-                reader.readAsDataURL(selectedFile);
-                reader.onloadend = (e) => {
-                    setPdfError('');
-                    setPdfFile(e.target.result);
-                }
-            }
-            else {
-                setPdfError('Chỉ hỗ trợ file PDF');
-                setPdfFile('');
-            }
-        }
-        else {
-            console.log('please select a PDF');
-        }
-    }, [files])
-
-    const handleChangeTab = (index) => {
-        console.log("change tab", index);
-        if (files === null || files.length === 0) return
+    const handleChangePdfFile = (index) => {
+        if (files === null || files.length === 0) return null
         const selectedFile = files[index];
         if (selectedFile) {
             if (selectedFile && allowedFiles.includes(selectedFile.type)) {
                 const reader = new FileReader();
                 reader.readAsDataURL(selectedFile);
-                setCurrentTab(index);
                 reader.onloadend = (e) => {
-                    setPdfError('');
                     setPdfFile(e.target.result);
                 }
-            }
-            else {
-                setPdfError('Chỉ hỗ trợ file PDF');
+            } else {
                 setPdfFile('');
             }
-        }
-        else {
+        } else {
             console.log('please select a PDF');
         }
+    }
+
+    useEffect(() => {
+        handleChangePdfFile(0)
+    }, [files])
+
+    const handleChangeTab = (index) => {
+        setFormData((prev) => ({
+            ...prev,
+            "file": null,
+            "issued_date": null,
+            "autograph": null,
+            "code_number": null,
+        }))
+        handleChangePdfFile(index)
+        setCurrentTab(index);
     };
 
     const extractDataOCR = async () => {
         const selectedFile = files[currentTab]
-        const formData = new FormData();
-        formData.append('file', selectedFile);
-        formData.append('ratio', '20,1');
-        formData.append('threshold', '0.7');
+        const dataExtract = new FormData();
+        dataExtract.append('file', selectedFile);
+        dataExtract.append('ratio', '20,1');
+        dataExtract.append('threshold', '0.7');
+
+        const changeFormWhenExtractOCR = (data) => {
+            for (const key in formData) {
+                if (key === "file" || key === "gov_file_id") continue
+                if (data === "Processing") {
+                    handleChangeForm(key, "Đang xử lý...")
+                }
+            }
+        }
+
         try {
-            console.log("start fetch API");
-            const response = await axios.post('http://157.230.37.228:4444/extract', formData);
-            console.log(response);
-            console.log(response.data.no.join(' '));
+            changeFormWhenExtractOCR("Processing")
+            const response = await axios.post(API_EXTRACT_ORC, dataExtract);
+            handleChangeForm("code_number", response.data.no.join(' '));
+            handleChangeForm("issued_date", response.data.date.join(' '));
+            if (response.data.signer.join(' ') === "")
+                handleChangeForm("autograph", null);
+            else handleChangeForm("autograph", response.data.signer.join(' '));
+
         } catch (error) {
-            console.error(error);
+            alert("Xử lý thất bại")
         }
     }
 
-    const handleCloseTabAllTab = () => {
+    const handleCloseAllTab = () => {
         setStateAddDoc(false)
         setCurrentTab(0)
         setPdfFile(null)
         setFiles(null)
+        setFormData(prev => ({
+            "file": null,
+            "gov_file_id": govFileID,
+            "issued_date": null,
+            "autograph": null,
+            "code_number": null,
+        }))
+        if (isSubmitFormSuccess === true) {
+            fetchDocumentsOfFile(govFileID)
+        }
     }
 
     const handleCloseTab = (index) => {
-        console.log("close tab: ", index);
+        setFormData({
+            "IssuedDate": "",
+            "Autograph": "",
+            "CodeNumber": "",
+        })
         if (index >= files.length)
             return
 
-        if (files.length === 1){
-            handleCloseTabAllTab()
-            return 
+        if (files.length === 1) {
+            handleCloseAllTab()
+            return
         }
 
         setFiles(preFiles => {
@@ -161,8 +174,32 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
         })
     }
 
-    const handleChangeForm = (ev) => { }
+    const handleChangeForm = (name, value) => {
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }))
+    }
 
+    const handleSubmitForm = async (ev) => {
+        ev.preventDefault()
+        formData["issued_date"] = "2022-01-01"
+        formData["code_number"] = "AAAAAAAAA"
+        formData["file"] = files[0]
+
+        console.log(formData);
+        try {
+            await axios.post(API_UPLOAD_DOCUMENT, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            setIsSubmitFormSuccess(true)
+            alert("Thêm văn bản thành công")
+        } catch (error) {
+            alert("Thêm văn bản thất bại")
+        }
+    }
     return (
         <>
             {stateAddDoc &&
@@ -172,7 +209,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
                             <div className=" h-full relative rounded-[2px] bg-white">
                                 <div className="bg-[#2f54eb] text-white py-[8px] px-[24px] relative">
                                     <p className='text-bold'>Thêm văn bản</p>
-                                    <button onClick={handleCloseTabAllTab} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-[#2f54eb] top-0 text-white ">
+                                    <button onClick={handleCloseAllTab} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-[#2f54eb] top-0 text-white ">
                                         <i class="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
@@ -199,7 +236,6 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
                                                     <i class="fa-solid fa-plus"></i>
                                                 </label>
                                                 <input onClick={(ev) => { ev.target.value = '' }} type='file' id="file-add-upload" name="file-upload" className="hidden" onChange={(ev) => {
-                                                    console.log("on change");
                                                     handleAddMoreFiles(ev)
                                                 }
                                                 } accept="application/pdf" multiple></input>
@@ -228,7 +264,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
                                         <div className='h-full w-[50%] pl-[12px] mr-[12px] '>
                                             <div className='w-full flex justify-end'>
                                                 <button onClick={extractDataOCR} className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Trích xuất thông tin</button>
-                                                <button className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Lưu</button>
+                                                <button type="submit" form="add-doc-form" className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Lưu</button>
                                             </div>
                                             <div className='flex justify-center w-full'>
                                                 <button className={`outline-none w-[50%] block text-[14px] font-bold h-[30px] text-center`}>Danh sách các thuộc tính</button>
@@ -236,10 +272,10 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
                                             <div className='h-[70vh] overflow-y-auto mt-[16px]'>
                                                 {
                                                     <div>
-                                                        <form>
+                                                        <form id="add-doc-form" onSubmit={handleSubmitForm}>
                                                             <div className="flex justify-between">
                                                                 <div className="w-full px-[10px]">
-                                                                    {formFields.map((field, index) => {
+                                                                    {FORM_FIELDS.map((field, index) => {
                                                                         return (
                                                                             <div
                                                                                 key={field.key}
@@ -256,7 +292,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
                                                                                 {field.type === "select" ? (
                                                                                     <select
                                                                                         required={field.require}
-                                                                                        onChange={(ev) => handleChangeForm(ev)}
+                                                                                        onChange={(ev) => handleChangeForm(ev.target.name, ev.target.value)}
                                                                                         name={field.key}
                                                                                         placeholder={field.title}
                                                                                         className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
@@ -273,7 +309,8 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded }) => {
                                                                                 ) : (
                                                                                     <input
                                                                                         required={field.require}
-                                                                                        onChange={(ev) => handleChangeForm(ev)}
+                                                                                        onChange={(ev) => handleChangeForm(ev.target.name, ev.target.value)}
+                                                                                        value={formData[field.key]}
                                                                                         name={field.key}
                                                                                         placeholder={field.title}
                                                                                         type={field.type}

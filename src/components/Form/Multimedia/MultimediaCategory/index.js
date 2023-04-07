@@ -84,7 +84,7 @@ const MultimediaCategory = ({stateMultimediaCategory, setStateMultimediaCategory
 
                                 </div>
                             </div>
-                            <div className="w-full mb-[24px] bg-[#f0f2f5]">
+                            <div className="w-full pb-[24px] bg-[#f0f2f5]">
                                 <div className="pt-[16px] mx-[24px] flex ">
                                     <div className="w-[12.5%] px-[5px]">
                                         <input placeholder="Tác giả" className="bar-page-input"></input>

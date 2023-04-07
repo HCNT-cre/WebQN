@@ -1,41 +1,47 @@
 import { useState } from "react"
-import Expand from "react-expand-animated";
 
-const API = 'https://641e04a5945125fff3db0a63.mockapi.io/file'
-const fieldsLeft = [
+const API_CREATE_GOV_FILE = 'http://127.0.0.1:8000/create_gov_file/'
+
+const FIELDS_LEFT = [
     {
-        key: "Identifier",
+        key: "gov_file_code",
+        title: "Mã định danh cơ quan",
+        require: true,
+        type: "text",
+    },
+    {
+        key: "identifier",
         title: "Mã cơ quan lưu trữ lịch sử",
         require: false,
         type: "text",
     },
     {
-        key: "Organld",
+        key: "organ_id",
         title: "Mã phông/công trình/sưu tập lưu trữ",
         require: true,
         type: "options",
     },
     {
-        key: "FileCatalog",
+        key: "file_catalog",
         title: "Mục lục hoặc năm hình thành hồ sơ",
         require: false,
         type: "number",
     },
     {
-        key: "FileNotation",
+        key: "file_notation",
         title: "Số và ký hiệu hồ sơ",
         require: false,
         type: "text",
     },
-    { key: "Title", title: "Tiêu đề hồ sơ", require: true, type: "text" },
+    { key: "title", title: "Tiêu đề hồ sơ", require: true, type: "text" },
     {
-        key: "Maintenance",
+        key: "maintenance",
         title: "Thời hạn bảo quản",
         require: true,
         type: "options",
     },
     {
-        key: "Rights",
+        key: "rights",
         title: "Chế độ sử dụng",
         require: true,
         type: "select",
@@ -44,59 +50,60 @@ const fieldsLeft = [
             { value: "Riêng tư", label: "Riêng tư" },
         ],
     },
-    { key: "Language", title: "Ngôn ngữ", require: false, type: "text" },
+    { key: "language", title: "Ngôn ngữ", require: false, type: "text" },
 ];
 
-const fieldsRight = [
+const FIELDS_RIGHT = [
     {
-        key: "StartDate",
+        key: "start_date",
         title: "Thời gian bắt đầu",
         require: false,
         type: "date",
     },
     {
-        key: "TotalDoc",
+        key: "total_doc",
         title: "Tổng số văn bản trong hồ sơ",
         require: false,
         type: "number",
     },
-    { key: "Description", title: "Chú giải", require: false, type: "options" },
+    { key: "description", title: "Chú giải", require: false, type: "options" },
     {
-        key: "InforSign",
+        key: "infor_sign",
         title: "Ký hiệu thông tin",
         require: false,
         type: "text",
     },
-    { key: "Keyword", title: "Từ khóa", require: false, type: "text" },
-    { key: "PhysicalNum", title: "Số lượng tờ", require: false, type: "number" },
+    { key: "keyword", title: "Từ khóa", require: false, type: "text" },
+    { key: "sheet_number", title: "Số lượng tờ", require: false, type: "number" },
     {
-        key: "PageNumber",
+        key: "page_number",
         title: "Số lượng trang",
         require: false,
         type: "number",
     },
-    { key: "Format", title: "Tình trạng vật lý", require: false, type: "text" },
+    { key: "format", title: "Tình trạng vật lý", require: false, type: "text" },
 ];
 
 const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     const [request, setRequest] = useState(
-        { 'Rights': 'Công khai' },
-        { 'Identifier': '' },
-        { 'Organld': '' },
-        { 'FileCatalog': '' },
-        { 'FileNotation': '' },
-        { 'Title': '' },
-        { 'Maintenance': '' },
-        { 'Language': '' },
-        { 'StartDate': '' },
-        { 'EndDate': '' },
-        { 'TotalDoc': '' },
-        { 'Description': '' },
-        { 'InforSign': '' },
-        { 'Keyword': '' },
-        { 'PhysicalNum': '' },
-        { 'PageNumber': '' },
-        { 'Format': '' }
+        { 'rights': 'Công khai' },
+        { 'gov_file_code': ''},
+        { 'identifier': '' },
+        { 'organ_id': '' },
+        { 'file_catalog': '' },
+        { 'file_notation': '' },
+        { 'title': '' },
+        { 'maintenance': '' },
+        { 'language': '' },
+        { 'start_date': '' },
+        { 'end_date': '' },
+        { 'total_doc': '' },
+        { 'description': '' },
+        { 'infor_sign': '' },
+        { 'keyword': '' },
+        { 'sheet_number': '' },
+        { 'page_number': '' },
+        { 'format': '' }
     )
 
 
@@ -110,16 +117,16 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const currentDate = new Date().toISOString().slice(0, 10);
-        request['EndDate'] = currentDate
+        request['end_date'] = currentDate
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(request)
         };
 
-        await fetch(API, requestOptions)
+        await fetch(API_CREATE_GOV_FILE, requestOptions)
             .then(response => response.json())
-            .then(data => { console.log(data); });
+            .then(data => { console.log("Data:", data); });
 
         setStateFormAddFile(false);
         alert("Success")
@@ -127,7 +134,6 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
 
     return (
         <>
-
             {
                 stateFormAddFile && <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-10 bg-[rgba(0,0,0,.45)]">
                     <div className="relative top-[50px] pb-[30px] ">
@@ -142,7 +148,7 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
                                     <form onSubmit={handleSubmit}>
                                         <div className="flex justify-between">
                                             <div className="w-[50%] px-[10px]">
-                                                {fieldsLeft.map((field, index) => {
+                                                {FIELDS_LEFT.map((field, index) => {
                                                     return (
                                                         <div
                                                             key={field.key}
@@ -189,7 +195,7 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
                                                 })}
                                             </div>
                                             <div className="w-[50%] px-[10px]">
-                                                {fieldsRight.map((field, index) => {
+                                                {FIELDS_RIGHT.map((field, index) => {
                                                     return (
                                                         <div
                                                             key={field.key}

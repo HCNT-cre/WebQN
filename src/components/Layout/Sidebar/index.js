@@ -11,7 +11,7 @@ const SideBar = ({ sideBarWidth }) => {
         {
             isExpand: false, icon: '<i class="fa-regular fa-file"></i>',
             title: "Hồ sơ tài liệu", numChildTabs: 3, childTabs: [
-                { title: "Tạo hồ sơ tài liệu", to: "/ho-so/tao-ho-so-dien-tu" },
+                { title: "Danh sách hồ sơ tài liệu", to: "/ho-so/tao-ho-so-dien-tu" },
                 { title: "Số hóa hồ sơ tài liệu", to: "/ho-so/so-hoa-ho-so-tai-lieu" },
                 { title: "HS đến hạn nộp lưu", to: "/ho-so/ho-so-den-han-nop-luu" }]
         },
