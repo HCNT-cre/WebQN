@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Loading from "../Loading";
 import { useState } from "react";
 
@@ -19,13 +20,13 @@ const ConvertDataToArrayForRenderTableCell = (data) => {
     for (let fieldData of data) {
         const data = []
         for (const key in fieldData) {
-            if (key==="gov_file_id" || key === "id") continue // Ignore id field
+            if (key === "gov_file_id" || key === "id") data.push(fieldData[key])
             if (!Array.isArray(fieldData[key])) {
                 if (key.includes("Status")) {
                     // if fieldData[key] === "Đã duyệt" => color: "bg-green-500
                     // if fieldData[key] === "Chưa duyệt" => color: "bg-red-500
                     // if fieldData[key] === "Đang xử lý" => color: "bg-yellow-500
-                    
+
                     let color = "bg-[#0984e3]"
 
                     if (fieldData[key] === "Đóng") {
@@ -56,14 +57,14 @@ const ConvertDataToArrayForRenderTableCell = (data) => {
     return dataTableRender
 }
 
-const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading }) => {
+const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateCheckBox }) => {
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
     const dataTableRenderForTableCell = ConvertDataToArrayForRenderTableCell(fieldDatas)
 
     const handleCheckBoxAll = e => {
         setIsCheckAll(!isCheckAll);
-        setIsCheck(fieldDatas.map((file, index) => ("checkbox" + index)))
+        setIsCheck(fieldDatas.map((file, index) => ("checkbox" + file["id"])))
         if (isCheckAll) {
             setIsCheck([]);
         }
@@ -76,6 +77,11 @@ const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading }) => {
             setIsCheck(isCheck.filter(item => item !== id));
         }
     };
+
+    useEffect( () => {
+        if(setStateCheckBox === undefined) return
+        setStateCheckBox(isCheck)
+    },[isCheck])
 
 
     return (
@@ -135,14 +141,14 @@ const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading }) => {
                                             <CheckBox
                                                 key={index}
                                                 type="checkbox"
-                                                id={"checkbox" + index}
+                                                id={"checkbox" + dataRow[0]}
                                                 handleClickCheckBox={handleClickCheckBox}
-                                                isChecked={isCheck.includes("checkbox" + index)}
+                                                isChecked={isCheck.includes("checkbox" + dataRow[0])}
                                             />
                                         </td>
                                     }
-                                    {
-                                        dataRow.map((dataCell) => {
+                                    {   // dataRow[0] is id
+                                        dataRow.splice(2).map((dataCell) => {
                                             return dataCell
                                         })
                                     }

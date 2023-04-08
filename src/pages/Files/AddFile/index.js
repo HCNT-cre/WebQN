@@ -4,11 +4,11 @@ import DocCategory from "../../../components/Form/Document/DocCategory"
 import MultimediaCategory from "../../../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
 import Table from "../../../components/Table"
-import { useSelector } from "react-redux"
+import { useSelector} from "react-redux"
 
 const API_GET_FILES = 'http://127.0.0.1:8000/get_gov_files/'
 const API_SEARCH = 'https://641e04a5945125fff3db0a63.mockapi.io/file'
-
+const API_UPDATE_STATE_GOV_FILE = "http://127.0.0.1:8000/update_gov_file_state_by_id/"
 
 const FIELDS_TABLE = [
     { title: "Mã hồ sơ", key: "gov_file_code", width: "70px" },
@@ -23,12 +23,14 @@ const FIELDS_TABLE = [
     { title: "Chức năng", key: "Function", width: "100%" },
 ]
 
+const STATE = ["", "Mở", "Đóng", "Nộp lưu cơ quan", "Lưu trữ cơ quan", "Nộp lưu lịch sử", "Lưu trữ lịch sử"]
+
 const ButtonFunctions = ({ handleClickOnFile, IDFile }) => {
     const [stateMoreFunction, setStateMoreFunction] = useState(false)
 
     return (
         <div className="flex flex-wrap">
-            <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#0984e3] px-[2px] font-bold italic block text-left text-[16px] hover:underline" onClick={() => { handleClickOnFile(IDFile) }} title="Thêm văn bản">
+            <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#537FE7] px-[2px] font-bold italic block text-left text-[16px] hover:underline" onClick={() => { handleClickOnFile(IDFile) }} title="Thêm văn bản">
                 <i className="fa-solid fa-upload"></i>
             </button>
             <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#19376D] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Thêm tài liệu đa phương tiện">
@@ -38,7 +40,7 @@ const ButtonFunctions = ({ handleClickOnFile, IDFile }) => {
                 <i class="fa-regular fa-folder-open"></i></button>
 
             <div className="relative">
-                <button onClick={() => setStateMoreFunction(!stateMoreFunction)} className="px-[2px] text-[#7d8183] cursor-pointer" title="Xem thêm">
+                <button onClick={() => setStateMoreFunction(!stateMoreFunction)} className="px-[2px] text-[#000] cursor-pointer" title="Xem thêm">
                     <i class="fa-solid fa-ellipsis"></i>
                 </button>
                 {stateMoreFunction &&
@@ -74,6 +76,9 @@ const AddFile = () => {
     const [IDFile, setIDFile] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [stateAction, setStateAction] = useState(false)
+    const [stateCheckBox, setStateCheckBox] = useState([])
+    const userPermissionId = useSelector(state => state.user.permission_id)
+    const userPermissions = useSelector(state => state.user.permissions)
 
     const [search, setSearch] = useState({
         "Title": "",
@@ -85,7 +90,6 @@ const AddFile = () => {
     })
 
     const handleClickOnFile = (IDFile) => {
-        console.log(IDFile);
         setIDFile(IDFile)
         setStateDocCategory(true)
     }
@@ -111,6 +115,35 @@ const AddFile = () => {
         }))
     }
 
+    const handleChangeStateFile = async (newState) => {
+        const listState = []
+
+        for (const state of stateCheckBox) {
+            const id = parseInt(state.substring(state.indexOf("checkbox") + "checkbox".length))
+            listState.push({
+                ...newState,
+                gov_file_id: id,
+                perm_token: userPermissionId
+            })
+        }
+
+
+        try {
+            await axios.patch(API_UPDATE_STATE_GOV_FILE, JSON.stringify(listState), {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            // console.log(response);
+            alert("Thay đổi trạng thái hồ sơ thành công")
+            document.location.reload()
+        }
+        catch (error) {
+            alert("Thay đổi trạng thái hồ sơ thất bại")
+            // console.log(error.response);
+        }
+    }
+
     useEffect(() => {
         const fetchFileData = async () => {
             try {
@@ -130,7 +163,7 @@ const AddFile = () => {
                             'start_date': rawData.start_date || 'test',
                             'maintenance': rawData.maintenance || 'test',
                             'rights': rawData.rights || 'test',
-                            'Status': rawData.state || 'test',
+                            'Status': STATE[rawData.state] || 'test',
                             'Function': <ButtonFunctions handleClickOnFile={handleClickOnFile} IDFile={rawData.id} />
                         }
                         filesArray.push(row)
@@ -208,16 +241,18 @@ const AddFile = () => {
                             </div>
                         </button>
                         {stateAction &&
-                            <div className="rounded-[5px] text-left top-[40px] absolute bg-[#00f] w-full px-[12px] py-[6px] text-[14px] z-50">
-                                <button>Đóng hồ sơ</button>
-                                <button>Nộp lưu cơ quan</button>
-                                <button>Nộp lưu lịch sử</button>
+                            <div className="rounded-[5px]  text-left top-[40px] absolute bg-[#00f] w-full  text-[14px] z-10">
+                                {userPermissions.map((permission, index) => {
+                                    return (
+                                        <button className="rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] hover:bg-[#2727aa]" onClick={() => handleChangeStateFile(permission.update_state)}>{permission.permission_title}</button>
+                                    )
+                                })}
                             </div>
                         }
                     </div>
 
                 </div>
-                <Table fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={true} />
+                <Table setStateCheckBox={setStateCheckBox} fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={true} />
             </div>
 
             <FormAddFile stateFormAddFile={stateFormAddFile} setStateFormAddFile={setStateFormAddFile} />

@@ -9,7 +9,7 @@ const TABLE_FIELDS = [
     { title: "Ngày ban hành", key: "issued_date", width: "100%" },
     { title: "Bút ký", key: "autograph", width: "100%" },
     { title: "Mã văn bản", key: "code_number", width: "100%" },
-    { title: "Tên văn bản", key: "file_name", width: "100%" },
+    { title: "Tên văn bản", key: "doc_name", width: "100%" },
     { title: "Chức năng", key: "Function", width: "100px" },
 ]
 
@@ -23,7 +23,7 @@ const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument }) => {
     )
 }
 
-const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID}) => {
+const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
     const [stateAddDoc, setStateAddDoc] = useState(false)
     const [stateFixDoc, setStateFixDoc] = useState(false)
     const [evFilesUploaded, setEvFilesUploaded] = useState(null)
@@ -48,15 +48,18 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID}) => {
             const response = await fetch(currentAPI);
             if (response.ok) {
                 const rawDatas = await response.json();
+                console.log(rawDatas);
                 const filesArray = []
                 for (const rawData of rawDatas) {
                     filesArray.push({
-                        "issued_date": rawData.issued_date,
-                        "autograph": rawData.autograph,
-                        "code_number": rawData.code_number,
-                        "file_name": rawData.file_name,
+                        "id": rawData.id,
+                        "issued_date": rawData.issued_date || "test",
+                        "autograph": rawData.autograph || "test",
+                        "code_number": rawData.code_number || "test",
+                        "doc_name": rawData.doc_name,
                         "Function": <ButtonFunctions pdfData={rawData} URL_PDF_FILE={rawData.url} handleClickOnDocument={handleClickOnDocument} />,
                     })
+                    console.log(filesArray)
                 }
                 setFiles(filesArray)
             }
@@ -77,7 +80,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID}) => {
         <>
             {
                 stateDocCategory &&
-                <div className="overflow-y-hidden fixed top-0 right-0 bottom-0 left-0 h-full w-full z-10 bg-[rgba(0,0,0,.45)]">
+                <div className="overflow-y-hidden fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[100] bg-[rgba(0,0,0,.45)]">
                     <div className="relative  h-[calc(100vh)] top-[20px] pb-[30px] ">
                         <div className="h-full relative overflow-y-scroll w-[calc(100vw-80px)] my-0 mx-auto bg-[#f0f2f5]">
                             <div className="relative">
@@ -146,7 +149,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID}) => {
             }
 
             <FixDoc pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} />
-            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID}/>
+            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />
         </>
     )
 }

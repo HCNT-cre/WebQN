@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react"
 
 const API_CREATE_GOV_FILE = 'http://127.0.0.1:8000/create_gov_file/'
@@ -118,18 +119,19 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
         event.preventDefault();
         const currentDate = new Date().toISOString().slice(0, 10);
         request['end_date'] = currentDate
-        const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(request)
-        };
 
-        await fetch(API_CREATE_GOV_FILE, requestOptions)
-            .then(response => response.json())
-            .then(data => { console.log("Data:", data); });
+        console.log(request);
 
-        setStateFormAddFile(false);
-        alert("Success")
+        try {
+            await axios.post(API_CREATE_GOV_FILE,request, {
+                'Content-Type': 'application/json'
+            })
+            alert("Thêm hồ sơ thành công!")
+            document.location.reload();
+        }catch(err){
+            alert("Thêm hồ sơ thất bại!")
+            console.log(err)
+        }
     }
 
     return (
