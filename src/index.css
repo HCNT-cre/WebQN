@@ -28,7 +28,7 @@
     }
 
     .bar-page-input {
-        @apply text-[12px] w-full outline-none px-[12px] py-[6px];
+        @apply text-[12px] w-full outline-none px-[12px] py-[6px] truncate;
     }
 
     .bar-page-button {
