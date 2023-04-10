@@ -3,6 +3,7 @@ import { useState } from "react"
 import * as userAction from '../../../actions/user'
 
 const USER_ROLES = ["Nhân viên nhập liệu", "Người duyệt đơn"]
+
 const Header = ({ sideBarWidth, setSideBarWidth }) => {
 
     const userRole = useSelector(state => state.user.role)
@@ -36,7 +37,7 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
                                     if (role !== userRole) {
                                         return (
                                             <div className="" onClick={() => {
-                                                if (role === "Người nộp đơn") {
+                                                if (role === "Nhân viên nhập liệu") {
                                                     dispatch(userAction.setRoleToApplicant())
                                                 }
                                                 else if (role === "Người duyệt đơn") {

@@ -1,11 +1,7 @@
 import { useState, useEffect } from "react"
 const Home = () => {
     const [files, setFiles] = useState([])
-    const [searchQuery, setSearchQuery] = useState('');
 
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
-    };
 
     useEffect(() => {
         const fetchFileData = async () => {

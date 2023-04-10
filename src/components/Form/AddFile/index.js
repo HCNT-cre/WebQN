@@ -1,15 +1,9 @@
 import axios from "axios";
 import { useState } from "react"
 
-const API_CREATE_GOV_FILE = 'http://127.0.0.1:8000/create_gov_file/'
+const API_GOV_FILE_CREATE = process.env.REACT_APP_API_GOV_FILE_CREATE
 
 const FIELDS_LEFT = [
-    {
-        key: "gov_file_code",
-        title: "Mã định danh cơ quan",
-        require: true,
-        type: "text",
-    },
     {
         key: "identifier",
         title: "Mã cơ quan lưu trữ lịch sử",
@@ -19,7 +13,7 @@ const FIELDS_LEFT = [
     {
         key: "organ_id",
         title: "Mã phông/công trình/sưu tập lưu trữ",
-        require: true,
+        require: false,
         type: "options",
     },
     {
@@ -34,17 +28,17 @@ const FIELDS_LEFT = [
         require: false,
         type: "text",
     },
-    { key: "title", title: "Tiêu đề hồ sơ", require: true, type: "text" },
+    { key: "title", title: "Tiêu đề hồ sơ", require: false, type: "text" },
     {
         key: "maintenance",
         title: "Thời hạn bảo quản",
-        require: true,
+        require: false,
         type: "options",
     },
     {
         key: "rights",
         title: "Chế độ sử dụng",
-        require: true,
+        require: false,
         type: "select",
         options: [
             { value: "Công Khai", label: "Công Khai" },
@@ -58,6 +52,12 @@ const FIELDS_RIGHT = [
     {
         key: "start_date",
         title: "Thời gian bắt đầu",
+        require: false,
+        type: "date",
+    },
+    {
+        key: "end_date",
+        title: "Thời gian kết thúc",
         require: false,
         type: "date",
     },
@@ -88,7 +88,6 @@ const FIELDS_RIGHT = [
 const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     const [request, setRequest] = useState(
         { 'rights': 'Công khai' },
-        { 'gov_file_code': ''},
         { 'identifier': '' },
         { 'organ_id': '' },
         { 'file_catalog': '' },
@@ -117,27 +116,26 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const currentDate = new Date().toISOString().slice(0, 10);
-        request['end_date'] = currentDate
 
-        console.log(request);
+        console.log(request)
 
         try {
-            await axios.post(API_CREATE_GOV_FILE,request, {
+            const response = await axios.post(API_GOV_FILE_CREATE,request, {
                 'Content-Type': 'application/json'
             })
+            console.log(response);
             alert("Thêm hồ sơ thành công!")
-            document.location.reload();
+            // document.location.reload();
         }catch(err){
-            alert("Thêm hồ sơ thất bại!")
-            console.log(err)
+            // alert("Thêm hồ sơ thất bại!")
+            // console.log(err)
         }
     }
 
     return (
         <>
             {
-                stateFormAddFile && <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-10 bg-[rgba(0,0,0,.45)]">
+                stateFormAddFile && <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[200] bg-[rgba(0,0,0,.45)]">
                     <div className="relative top-[50px] pb-[30px] ">
                         <div className="w-[1000px] max-w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className="relative rounded-[2px] bg-white">

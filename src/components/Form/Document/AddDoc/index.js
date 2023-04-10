@@ -6,8 +6,8 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axios from 'axios';
 
-const API_EXTRACT_ORC = "http://157.230.37.228:4444/extract"
-const API_UPLOAD_DOCUMENT = 'http://127.0.0.1:8000/upload_document/'
+const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
+const API_DOCUMENT_UPLOAD = process.env.REACT_APP_API_DOCUMENT_UPLOAD
 
 const FORM_FIELDS = [
     { key: "doc_code", title: "Mã định danh văn bản", require: false, type: "text" },
@@ -115,7 +115,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
 
         try {
             changeFormWhenExtractOCR("Processing")
-            const response = await axios.post(API_EXTRACT_ORC, dataExtract);
+            const response = await axios.post(API_EXTRACT_OCR, dataExtract);
             handleChangeForm("code_number", response.data.no.join(' '));
             handleChangeForm("issued_date", response.data.date.join(' '));
             if (response.data.signer.join(' ') === "")
@@ -189,7 +189,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
 
         console.log(formData);
         try {
-            await axios.post(API_UPLOAD_DOCUMENT, formData, {
+            await axios.post(API_DOCUMENT_UPLOAD, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

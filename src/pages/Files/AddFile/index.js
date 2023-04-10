@@ -4,14 +4,15 @@ import DocCategory from "../../../components/Form/Document/DocCategory"
 import MultimediaCategory from "../../../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
 import Table from "../../../components/Table"
-import { useSelector} from "react-redux"
+import { useSelector } from "react-redux"
+import { AutoFixOffSharp } from "@mui/icons-material"
 
-const API_GET_FILES = 'http://127.0.0.1:8000/get_gov_files/'
-const API_SEARCH = 'https://641e04a5945125fff3db0a63.mockapi.io/file'
-const API_UPDATE_STATE_GOV_FILE = "http://127.0.0.1:8000/update_gov_file_state_by_id/"
+const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
+const API_UPDATE_STATE_GOV_FILE = process.env.REACT_APP_API_GOV_FILE_UPDATE_STATE
+const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 
 const FIELDS_TABLE = [
-    { title: "Mã hồ sơ", key: "gov_file_code", width: "70px" },
+    { title: "Mã hồ sơ", key: "gov_file_code", width: "150px" },
     { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
     { title: "Phông", key: "organ_id", width: "100%" },
     { title: "Số lượng tờ", key: "sheet_number", width: "70px" },
@@ -81,12 +82,11 @@ const AddFile = () => {
     const userPermissions = useSelector(state => state.user.permissions)
 
     const [search, setSearch] = useState({
-        "Title": "",
-        "Organld": "",
-        "Office": "",
-        "Status": "",
-        "Type": ""
-
+        "title": "",
+        "organ_id": "",
+        "offce": "",
+        "state": "",
+        "type": ""
     })
 
     const handleClickOnFile = (IDFile) => {
@@ -94,14 +94,37 @@ const AddFile = () => {
         setStateDocCategory(true)
     }
 
+    const getFileFromResponse = (response) => {
+        const rawDatas = response.data
+        let filesArray = []
+        for (const rawData of rawDatas) {
+            const row = {
+                'id': rawData.id,
+                'gov_file_code': rawData.gov_file_code || 'test',
+                'title': rawData.title || 'test',
+                'organ_id': rawData.organ_id || 'test',
+                'sheet_number': rawData.sheet_number || 'test',
+                'total_doc': rawData.total_doc || 'test',
+                'start_date': rawData.start_date || 'test',
+                'maintenance': rawData.maintenance || 'test',
+                'rights': rawData.rights || 'test',
+                'Status': STATE[rawData.state] || 'test',
+                'Function': <ButtonFunctions handleClickOnFile={handleClickOnFile} IDFile={rawData.id} />
+            }
+            filesArray.push(row)
+        }
+        return filesArray
+    }
     const handleSearch = async (ev) => {
         try {
-            const response = await axios.post(API_SEARCH, search, {
+            setIsLoading(true)
+            const response = await axios.get(API_GOV_FILE_SEARCH + userPermissionId + "&state=" + search["state"], {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            setFiles(response.data)
+            setIsLoading(false)
+            setFiles(getFileFromResponse(response))
         } catch (error) {
             console.error(error);
         }
@@ -109,6 +132,7 @@ const AddFile = () => {
 
     const handleChangeSearch = (ev) => {
         const { name, value } = ev.target
+        console.log(name, value)
         setSearch((prev) => ({
             ...prev,
             [name]: value
@@ -147,36 +171,23 @@ const AddFile = () => {
     useEffect(() => {
         const fetchFileData = async () => {
             try {
-                const response = await fetch(API_GET_FILES);
-                setIsLoading(false);
-                if (response.ok) {
-                    const rawDatas = await response.json();
-                    let filesArray = []
-                    for (const rawData of rawDatas) {
-                        const row = {
-                            'id': rawData.id,
-                            'gov_file_code': rawData.gov_file_code || 'test',
-                            'title': rawData.title || 'test',
-                            'organ_id': rawData.organ_id || 'test',
-                            'sheet_number': rawData.sheet_number || 'test',
-                            'total_doc': rawData.total_doc || 'test',
-                            'start_date': rawData.start_date || 'test',
-                            'maintenance': rawData.maintenance || 'test',
-                            'rights': rawData.rights || 'test',
-                            'Status': STATE[rawData.state] || 'test',
-                            'Function': <ButtonFunctions handleClickOnFile={handleClickOnFile} IDFile={rawData.id} />
+                setIsLoading(true);
+                const response = await axios.get(API_GOV_FILE_GET_ALL + userPermissionId,
+                    {
+                        headers: {
+                            'Content-Type': 'application/json'
                         }
-                        filesArray.push(row)
                     }
-                    setFiles(filesArray)
-                }
+                );
+                setIsLoading(false);
+                setFiles(getFileFromResponse(response))
             } catch (err) {
                 console.log(err)
             }
         };
 
         fetchFileData();
-    }, [])
+    }, [userPermissionId])
 
 
     return (
@@ -185,13 +196,13 @@ const AddFile = () => {
                 <p className="text-[14px] font-300 cursor-pointer ">
                     <span className="text-[rgba(0,0,0,.45)]">Hồ sơ, tài liệu / </span>
                     <span>
-                        Danh sách hồ sơ tài liệu
+                        Danh sách hồ sơ
                     </span>
                 </p>
             </div>
 
             <div className="w-full px-[24px] pb-[16px] bg-white">
-                <p className="text-[20px] font-bold ">Danh sách hồ sơ tài liệu</p>
+                <p className="text-[20px] font-bold ">Danh sách hồ sơ</p>
             </div>
 
             <div className="w-full my-[24px]">
@@ -206,10 +217,15 @@ const AddFile = () => {
                         <input onChange={handleChangeSearch} name="Office" placeholder="Cơ quan" className="bar-page-input"></input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <input onChange={handleChangeSearch} name="Status" placeholder="Trạng thái" className="bar-page-input"></input>
-                    </div>
-                    <div className="w-[11.11111%] px-[5px]">
-                        <input onChange={handleChangeSearch} name="Type" placeholder="Loại hồ sơ" className="bar-page-input"></input>
+                        <select onChange={handleChangeSearch} id="state-file" className="bar-page-input" placeholder="Trạng thái" name="state" >
+                            <option value="0">Tất cả</option>
+                            <option value="1">Mở</option>
+                            <option value="2">Đóng</option>
+                            <option value="3">Nộp lưu cơ quan</option>
+                            <option value="4">Lưu trữ cơ quan</option>
+                            <option value="5">Nộp lưu lịch sử</option>
+                            <option value="6">Lưu trữ lịch sử</option>
+                        </select>
                     </div>
 
                     <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  flex">

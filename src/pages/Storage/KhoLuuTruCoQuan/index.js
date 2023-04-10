@@ -3,11 +3,6 @@ import FormAddFile from "../../../components/Form/AddFile"
 
 const KhoLuuTruCoQuan = () => {
     const [files, setFiles] = useState([])
-    const [searchQuery, setSearchQuery] = useState('');
-
-    const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
-    };
 
     useEffect(() => {
         const fetchFileData = async () => {
@@ -27,7 +22,6 @@ const KhoLuuTruCoQuan = () => {
 
 
     const [stateFormAddFile, setStateFormAddFile] = useState(false)
-    const [stateFormEditFile, setStateFormEditFile] = useState(false)
 
     return (
         <>
