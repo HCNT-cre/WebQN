@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react"
-import FormAddFile from "../../../components/Form/AddFile"
+import FormAddFile from "../../../components/Form/File/AddFile"
+import FormFixFile from "../../../components/Form/File/FixFile"
 import DocCategory from "../../../components/Form/Document/DocCategory"
 import MultimediaCategory from "../../../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
@@ -8,7 +9,7 @@ import Table from "../../../components/Table"
 import { useSelector } from "react-redux"
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Button, Select } from "antd"
+import { Button} from "antd"
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_UPDATE_STATE_GOV_FILE = process.env.REACT_APP_API_GOV_FILE_UPDATE_STATE
@@ -29,7 +30,7 @@ const FIELDS_TABLE = [
 
 const STATE = ["", "Mở", "Đóng", "Nộp lưu cơ quan", "Lưu trữ cơ quan", "Nộp lưu lịch sử", "Lưu trữ lịch sử"]
 
-const ButtonFunctions = ({ handleClickOnFile, IDFile }) => {
+const ButtonFunctions = ({ handleClickOnFile, IDFile, setStateFormFixFile, stateFormFixFile }) => {
     const [stateMoreFunction, setStateMoreFunction] = useState(false)
 
     return (
@@ -49,7 +50,7 @@ const ButtonFunctions = ({ handleClickOnFile, IDFile }) => {
                 </button>
                 {stateMoreFunction &&
                     <div className="absolute right-[0] top-[-25px] flex">
-                        <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#E7B10A] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Sửa hồ sơ">
+                        <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#E7B10A] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Sửa hồ sơ" onClick={() => { setStateFormFixFile(!stateFormFixFile) }} >
                             <i class="fa-solid fa-hammer"></i>
                         </button>
                         <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#20262E] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Xóa hồ sơ">
@@ -75,6 +76,7 @@ const ButtonFunctions = ({ handleClickOnFile, IDFile }) => {
 const AddFile = () => {
     const [files, setFiles] = useState([])
     const [stateFormAddFile, setStateFormAddFile] = useState(false)
+    const [stateFormFixFile, setStateFormFixFile] = useState(false)
     const [stateDocCategory, setStateDocCategory] = useState(false)
     const [stateMultimediaCategory, setStateMultimediaCategory] = useState(false)
     const [IDFile, setIDFile] = useState(null)
@@ -117,7 +119,7 @@ const AddFile = () => {
                 'maintenance': rawData.maintenance || 'test',
                 'rights': rawData.rights || 'test',
                 'Status': STATE[rawData.state] || 'test',
-                'Function': <ButtonFunctions handleClickOnFile={handleClickOnFile} IDFile={rawData.id} />
+                'Function': <ButtonFunctions handleClickOnFile={handleClickOnFile} IDFile={rawData.id} stateFormFixFile={stateFormFixFile} setStateFormFixFile={setStateFormFixFile}/>
             }
             filesArray.push(row)
         }
@@ -168,6 +170,7 @@ const AddFile = () => {
             })
         }
 
+        console.log(listState)
 
         try {
             const response = await axios.patch(API_UPDATE_STATE_GOV_FILE, listState, {
@@ -200,10 +203,17 @@ const AddFile = () => {
                     theme: "light",
                 });
             }
-
-
         }
         catch (error) {
+            toast.error('Thay đổi trạng thái thất bại', {
+                position: "top-center",
+                autoClose: 3000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                theme: "light",
+            });
             console.log(error)
         }
     }
@@ -251,50 +261,22 @@ const AddFile = () => {
                         <input onChange={handleChangeSearch} name="title" placeholder="Tiêu đề hồ sơ" className="bar-page-input"></input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <input onChange={handleChangeSearch} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="bar-page-input"></input>
+                        <input onChange={handleChangeSearch} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')}  onBlur={(e) => (e.target.type = 'text')} className="bar-page-input"></input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <input onChange={handleChangeSearch} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="bar-page-input"></input>
+                        <input onChange={handleChangeSearch} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')}  onBlur={(e) => (e.target.type = 'text')} className="bar-page-input"></input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
+                        <select onChange={handleChangeSearch} id="state-file" className="bar-page-input" placeholder="Trạng thái" name="state" >
+                            <option value="">Tất cả</option>
+                            <option value="1">Mở</option>
+                            <option value="2">Đóng</option>
+                            <option value="3">Nộp lưu cơ quan</option>
+                            <option value="4">Lưu trữ cơ quan</option>
+                            <option value="5">Nộp lưu lịch sử</option>
+                            <option value="6">Lưu trữ lịch sử</option>
+                        </select>
                         
-
-                        <Select
-                            showSearch
-                            className="bar-page-input"
-                            placeholder="Trạng thái"
-                            optionFilterProp="children"
-                            onChange={handleChangeSearch}
-                            filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                            options={[
-                                {
-                                    value: '1',
-                                    label: 'Mở',
-                                },
-                                {
-                                    value: '2',
-                                    label: 'Đóng',
-                                },
-                                {
-                                    value: '3',
-                                    label: 'Nộp lưu cơ quan',
-                                },
-                                {
-                                    value: '4',
-                                    label: 'Lưu trữ cơ quan',
-                                },
-                                {
-                                    value: '5',
-                                    label: 'Nộp lưu lịch sử',
-                                },
-                                {
-                                    value: '6',
-                                    label: 'Lưu trữ lịch sử',
-                                },
-                            ]}
-                        />
                     </div>
 
                     <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  flex">
@@ -326,10 +308,10 @@ const AddFile = () => {
                             </div>
                         </Button>
                         {stateAction &&
-                            <div className="rounded-[5px]  text-left top-[40px] absolute bg-[#00f] w-full  text-[14px] z-10">
+                            <div className="rounded-[5px]  text-left top-[40px] absolute bg-[#00f] w-full text-[14px] z-10 ">
                                 {userPermissions.map((permission, index) => {
                                     return (
-                                        <Button className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-white border-none" onClick={() => handleChangeStateFile(permission.update_state)}>{permission.permission_title}</Button>
+                                        <Button className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-white border-none truncate" onClick={() => handleChangeStateFile(permission.update_state)}>{permission.permission_title}</Button>
                                     )
                                 })}
                             </div>
@@ -354,6 +336,7 @@ const AddFile = () => {
 
             />
             <FormAddFile stateFormAddFile={stateFormAddFile} setStateFormAddFile={setStateFormAddFile} />
+            <FormFixFile stateFormFixFile={stateFormFixFile} setStateFormFixFile={setStateFormFixFile} />
             <DocCategory govFileID={IDFile} stateDocCategory={stateDocCategory} setStateDocCategory={setStateDocCategory} />
             <MultimediaCategory stateMultimediaCategory={stateMultimediaCategory} setStateMultimediaCategory={setStateMultimediaCategory} />
         </>

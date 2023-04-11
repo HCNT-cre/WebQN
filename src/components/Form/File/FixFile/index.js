@@ -52,7 +52,7 @@ const FIELDS_RIGHT = [
     {
         key: "start_date",
         title: "Thời gian bắt đầu",
-        require: false,
+        require: true,
         type: "date",
     },
     {
@@ -85,7 +85,7 @@ const FIELDS_RIGHT = [
     { key: "format", title: "Tình trạng vật lý", require: false, type: "text" },
 ];
 
-const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
+const FormFixFile = ({ stateFormFixFile, setStateFormFixFile }) => {
     const [request, setRequest] = useState(
         { 'rights': 'Công khai' },
         { 'identifier': '' },
@@ -120,13 +120,14 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
         console.log(request)
 
         try {
-            const response = await axios.post(API_GOV_FILE_CREATE,request, {
+            const response = await axios.post(API_GOV_FILE_CREATE, request, {
                 'Content-Type': 'application/json'
             })
+
             console.log(response);
-            alert("Thêm hồ sơ thành công!")
+            const error_code = response.data.error_code
             // document.location.reload();
-        }catch(err){
+        } catch (err) {
             // alert("Thêm hồ sơ thất bại!")
             // console.log(err)
         }
@@ -135,11 +136,14 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     return (
         <>
             {
-                stateFormAddFile && <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[200] bg-[rgba(0,0,0,.45)]">
+                stateFormFixFile && <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[200] bg-[rgba(0,0,0,.45)]">
                     <div className="relative top-[50px] pb-[30px] ">
                         <div className="w-[1000px] max-w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className="relative rounded-[2px] bg-white">
-                                <button onClick={() => { setStateFormAddFile(false) }} className="text-[20px] absolute right-0 w-[40px] h-[40px] bg-[#2f54eb] top-0 text-white ">x</button>
+                                <button onClick={() => { setStateFormFixFile(false) }} className="text-[20px] absolute right-0 w-[40px] h-[40px] bg-[#2f54eb] top-0 text-white ">
+                                    <i class="fa-solid fa-xmark"></i>
+
+                                </button>
                                 <div className="bg-[#2f54eb] text-white py-[16px] px-[24px]">
                                     <p>Tạo hồ sơ</p>
                                 </div>
@@ -244,7 +248,7 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
                                         </div>
                                         <div className="flex justify-center">
                                             <input className="mr-[12px] h-[32px] w-[60px] rounded-[2px] text-white bg-[#2f54eb] cursor-pointer" type="submit" value="Lưu" />
-                                            <button onClick={() => { setStateFormAddFile(false) }} className="h-[32px] w-[60px] border-[#2f54eb] border-solid border-[1px] rounded-[2px]">Đóng</button>
+                                            <button onClick={() => { setStateFormFixFile(false) }} className="h-[32px] w-[60px] border-[#2f54eb] border-solid border-[1px] rounded-[2px]">Đóng</button>
                                         </div>
 
                                     </form>
@@ -263,4 +267,4 @@ const FormAddFile = ({ stateFormAddFile, setStateFormAddFile }) => {
     );
 };
 
-export default FormAddFile;
+export default FormFixFile;

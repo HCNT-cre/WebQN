@@ -28,14 +28,13 @@
     }
 
     .bar-page-input {
-        @apply text-[12px] w-full outline-none px-[12px] py-[6px] truncate;
+        @apply text-[12px] w-full outline-none px-[12px] py-[6px] truncate h-[32px] bg-white;
     }
 
     .bar-page-button {
         @apply w-full flex justify-center bg-[#00f] py-[6px] text-[14px];
     }
 }
-
 
 /* loading animation */
 .lds-ring {
@@ -73,4 +72,24 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+.bar-page-input > .ant-select-selector {
+    height: 100% !important;
+    font-size: 12px !important;
+    border: none !important;
+    outline: none !important;
+}
+
+.ant-select-selection-search-input {
+    height: 100% !important;
+}
+
+.ant-select-selector {
+    padding: 0px !important;
+}
+
+.ant-select-selection-placeholder{
+    font-size: 13px !important;
+    list-style: 100% !important;
 }

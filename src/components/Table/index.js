@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import Loading from "../Loading";
 import { useState } from "react";
+import { Checkbox } from "antd";
 
 const CheckBox = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
-        <input
+        <Checkbox
             id={id}
             name={name}
             type={type}
@@ -23,10 +24,6 @@ const ConvertDataToArrayForRenderTableCell = (data) => {
             if (key === "gov_file_id" || key === "id") data.push(fieldData[key])
             if (!Array.isArray(fieldData[key])) {
                 if (key.includes("Status")) {
-                    // if fieldData[key] === "Đã duyệt" => color: "bg-green-500
-                    // if fieldData[key] === "Chưa duyệt" => color: "bg-red-500
-                    // if fieldData[key] === "Đang xử lý" => color: "bg-yellow-500
-
                     let color = "bg-[#0984e3]"
 
                     if (fieldData[key] === "Đóng") {
