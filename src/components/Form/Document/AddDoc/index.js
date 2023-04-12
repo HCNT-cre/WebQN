@@ -10,7 +10,7 @@ const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = process.env.REACT_APP_API_DOCUMENT_UPLOAD
 
 const FORM_FIELDS = [
-    { key: "order", title: "Số thứ tự", require: true, type: "number" },
+    { key: "doc_ordinal", title: "Số thứ tự", require: true, type: "number" },
     { key: "doc_code", title: "Mã định danh văn bản", require: false, type: "text" },
     { key: "identifier", title: "Mã cơ quan lưu trữ lịch sử", require: false, type: "text" },
     { key: "issued_date", title: "Ngày, tháng, năm văn bản", require: false, type: "text" },
@@ -19,7 +19,6 @@ const FORM_FIELDS = [
     { key: "organ_id", title: "Mã phông/công trình/sưu tập lưu trữ", require: false, type: "text" },
     { key: "file_catalog", title: "Mục lục số hoặc năm hình thành hồ sơ", require: false, type: "number" },
     { key: "file_notation", title: "Số và ký hiệu hồ sơ", require: false, type: "text" },
-    { key: "doc_ordinal", title: "Số thứ tự văn bản trong hồ sơ", require: false, type: "number" },
     { key: "type_name", title: "Tên loại văn bản", require: false, type: "text" },
     { key: "code_notation", title: "Ký hiệu của văn bản", require: false, type: "text" },
     { key: "organ_name", title: "Tên cơ quan, tổ chức ban hành văn bản", require: false, type: "text" },
@@ -42,7 +41,9 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         "issued_date": null,
         "autograph": null,
         "code_number": null,
+        "doc_ordinal": null,
     });
+        
     const [currentTab, setCurrentTab] = useState(0)
     const [pdfFile, setPdfFile] = useState(null);
     const [files, setFiles] = useState(null)
@@ -188,7 +189,6 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         formData["code_number"] = "AAAAAAAAA"
         formData["file"] = files[0]
 
-        console.log(formData);
         try {
             await axios.post(API_DOCUMENT_UPLOAD, formData, {
                 headers: {

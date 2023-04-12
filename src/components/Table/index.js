@@ -25,7 +25,6 @@ const ConvertDataToArrayForRenderTableCell = (data) => {
             if (!Array.isArray(fieldData[key])) {
                 if (key.includes("Status")) {
                     let color = "bg-[#0984e3]"
-
                     if (fieldData[key] === "Đóng") {
                         color = "bg-[#d63031]"
                     } else if (fieldData[key] === "Lưu trữ cơ quan") {

@@ -24,7 +24,7 @@
     }
 
     .after-form {
-        @apply after:content-['(*)'] after:text-[#f00] after:pl-[4px];
+        @apply after:content-['(*)'] after:text-[#f00] after:pl-[4px] after:text-[10px];
     }
 
     .bar-page-input {
@@ -92,4 +92,8 @@
 .ant-select-selection-placeholder{
     font-size: 13px !important;
     list-style: 100% !important;
+}
+
+.ant-select-selection-item{
+    padding-left: 10px;
 }

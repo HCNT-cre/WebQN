@@ -15,10 +15,10 @@ const TABLE_FIELDS = [
 
 const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument }) => {
     return (
-        <div>
-            <button onClick={(ev) => handleClickOnDocument(URL_PDF_FILE, pdfData)} className="font-bold italic block text-left text-[10px] hover:underline">Xem chi tiết</button>
-            <button className="font-bold italic block text-left text-[10px] hover:underline" >Xóa</button>
-            <button className="font-bold italic block text-left text-[10px] hover:underline">Phân quyền</button>
+        <div className="flex justify-between">
+            <button onClick={(ev) => handleClickOnDocument(URL_PDF_FILE, pdfData)} className="font-bold italic block text-left text-[16px] hover:underline text-[#537FE7]" title="Xem chi tiết"><i class="fa-regular fa-eye"></i></button>
+            <button className="font-bold italic block text-left text-[16px] hover:underline text-[#7d8183]" title="Xóa" ><i class="fa-solid fa-trash-can"></i></button>
+            <button className="font-bold italic block text-left text-[16px] hover:underline text-[#FF8400]" title="Phân quyền"><i class="fa-solid fa-user-doctor"></i></button>
         </div>
     )
 }
