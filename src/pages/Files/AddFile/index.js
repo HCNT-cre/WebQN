@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import DocCategory from "../../../components/Form/Document/DocCategory"
 import MultimediaCategory from "../../../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
-import Table from "../../../components/Table"
+import {Table} from "../../../custom/Components"
 import { useSelector, useDispatch } from "react-redux"
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
