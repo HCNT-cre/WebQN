@@ -21,13 +21,15 @@ const ConvertDataToArrayForRenderTableCell = (data) => {
     for (let fieldData of data) {
         const data = []
         for (const key in fieldData) {
+
             if (key === "gov_file_id" || key === "id") data.push(fieldData[key])
+
             if (!Array.isArray(fieldData[key])) {
-                if (key.includes("Status")) {
+                if (key.includes("state")) {
                     let color = "bg-[#0984e3]"
-                    if (fieldData[key] === "Đóng") {
+                    if (fieldData[key].props.children === "Đóng") {
                         color = "bg-[#d63031]"
-                    } else if (fieldData[key] === "Lưu trữ cơ quan") {
+                    } else if (fieldData[key].props.children === "Lưu trữ cơ quan") {
                         color = "bg-[#e17055]"
                     }
 
@@ -74,10 +76,10 @@ const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateCheckBox
         }
     };
 
-    useEffect( () => {
-        if(setStateCheckBox === undefined) return
+    useEffect(() => {
+        if (setStateCheckBox === undefined) return
         setStateCheckBox(isCheck)
-    },[isCheck])
+    }, [isCheck])
 
 
     return (
