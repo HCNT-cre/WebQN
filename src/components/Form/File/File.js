@@ -184,7 +184,7 @@ const File = () => {
 
             const error_code = response.data.error_code
             if (error_code === undefined) {
-                toast.success('Thêm hồ sơ thành công', {
+                toast.success(title + ' thành công', {
                     position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: true,
@@ -195,7 +195,7 @@ const File = () => {
                     onClose: reloadPage
                 });
             } else {
-                toast.error('Thêm hồ sơ thất bại', {
+                toast.error(title + ' thất bại', {
                     position: "top-center",
                     toastId: "error1",
                     autoClose: 3000,
@@ -207,7 +207,7 @@ const File = () => {
                 });
             }
         } catch (err) {
-            toast.error('Thêm hồ sơ thất bại', {
+            toast.error(title + 'thất bại', {
                 position: "top-center",
                 autoClose: 3000,
                 hideProgressBar: true,

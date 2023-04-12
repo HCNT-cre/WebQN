@@ -13,10 +13,10 @@ const TABLE_FIELDS = [
     { title: "Chức năng", key: "Function", width: "100px" },
 ]
 
-const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument }) => {
+const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID }) => {
     return (
         <div className="flex justify-between">
-            <button onClick={(ev) => handleClickOnDocument(URL_PDF_FILE, pdfData)} className="font-bold italic block text-left text-[16px] hover:underline text-[#537FE7]" title="Xem chi tiết"><i class="fa-regular fa-eye"></i></button>
+            <button onClick={(ev) => handleClickOnDocument(URL_PDF_FILE, pdfData, pdfID)} className="font-bold italic block text-left text-[16px] hover:underline text-[#537FE7]" title="Xem chi tiết"><i class="fa-regular fa-eye"></i></button>
             <button className="font-bold italic block text-left text-[16px] hover:underline text-[#7d8183]" title="Xóa" ><i class="fa-solid fa-trash-can"></i></button>
             <button className="font-bold italic block text-left text-[16px] hover:underline text-[#FF8400]" title="Phân quyền"><i class="fa-solid fa-user-doctor"></i></button>
         </div>
@@ -32,10 +32,11 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
     const [pdfFile, setPdfFile] = useState(null)
     const [pdfFileLink, setPdfFileLink] = useState(null)
     const [pdfData, setPdfData] = useState(null)
-
-    const handleClickOnDocument = async (URL_PDF_FILE, pdfData) => {
+    const [pdfID, setPdfID] = useState(null)
+    const handleClickOnDocument = async (URL_PDF_FILE, pdfData,pdfID) => {
         setPdfFileLink(URL_PDF_FILE)
         setPdfData(pdfData)
+        setPdfID(pdfID)
         await axios.get(URL_PDF_FILE).then(res => {
             setPdfFile(res.data)
             setStateFixDoc(true)
@@ -57,7 +58,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                         "autograph": rawData.autograph || "test",
                         "code_number": rawData.code_number || "test",
                         "doc_name": rawData.doc_name,
-                        "Function": <ButtonFunctions pdfData={rawData} URL_PDF_FILE={rawData.url} handleClickOnDocument={handleClickOnDocument} />,
+                        "Function": <ButtonFunctions pdfData={rawData} URL_PDF_FILE={rawData.url} handleClickOnDocument={handleClickOnDocument} pdfID={rawData.id}/>,
                     })
                     console.log(filesArray)
                 }
@@ -148,7 +149,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                 </div>
             }
 
-            <FixDoc pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} />
+            <FixDoc pdfID={pdfID} pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} />
             <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />
         </>
     )
