@@ -18,11 +18,11 @@ const FORM_FIELDS = [
 const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID }) => {
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [form, setForm] = useState(null)
-    
-    useEffect( () =>{
+
+    useEffect(() => {
         setForm(pdfData)
     }, [pdfData])
-        
+
     console.log(pdfData, form)
     console.log(pdfID)
 
@@ -45,9 +45,9 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
         alert('Lưu thành công')
         window.location.reload()
     }
-    const handleChangeForm = (ev) => { 
-        const {name, value} = ev.target
-        setForm(prev => ({...prev, [name]: value}))
+    const handleChangeForm = (ev) => {
+        const { name, value } = ev.target
+        setForm(prev => ({ ...prev, [name]: value }))
     }
 
     return (
