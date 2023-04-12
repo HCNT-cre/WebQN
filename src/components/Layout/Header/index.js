@@ -1,23 +1,57 @@
+import { useDispatch, useSelector } from "react-redux"
+import { useState } from "react"
+import * as userAction from '../../../actions/user'
+
+const USER_ROLES = ["Nhân viên nhập liệu", "Người duyệt đơn"]
+
 const Header = ({ sideBarWidth, setSideBarWidth }) => {
+
+    const userRole = useSelector(state => state.user.role)
+    const dispatch = useDispatch()
+    const [stateBoxUserRole, setStateBoxUserRole] = useState(false)
+
     return (
         <>
-            <div className={`flex justify-between px-[16px] transition-all ${sideBarWidth === 300 ? "ml-[300px] w-[calc(100%-300px)]" : "ml-[80px] w-[calc(100%-80px)]"} fixed h-[60px] bg-blue-800 top-0`}>
+            <div className={`z-50 flex justify-between px-[16px] transition-all ${sideBarWidth === 250 ? "ml-[250px] w-[calc(100%-250px)]" : "ml-[80px] w-[calc(100%-80px)]"} fixed h-[60px] bg-blue-800 top-0`}>
                 <div className="flex justify-between items-center">
-                    <button className="mr-[8px] text-white cursor-pointer" onClick={() => 
-                    {
-                        sideBarWidth === 300 ? setSideBarWidth(50) : setSideBarWidth(300)
+                    <button className="mr-[8px] text-white cursor-pointer" onClick={() => {
+                        sideBarWidth === 250 ? setSideBarWidth(50) : setSideBarWidth(250)
                     }}>
-                        <i class="fa-solid fa-bars"></i>
+                        <i className="fa-solid fa-bars"></i>
                     </button>
                     <p className="font-medium text-white text-[16px]">HỆ THỐNG QUẢN LÝ TÀI LIỆU LƯU TRỮ ĐIỆN TỬ TỈNH QUÃNG NGÃI</p>
                 </div>
-                <div className="flex justify-between items-center cursor-pointer">
+                <div onClick={()=>setStateBoxUserRole(!stateBoxUserRole)} className="flex justify-between items-center cursor-pointer relative select-none">
                     <div className="mr-[8px] flex items-center rounded-[50%] justify-center w-[36px] h-[36px] bg-white">
                         <i className="fa-regular fa-user"></i>
                     </div>
-                    <p className="text-white">
-                        Admin
+                    <p className="text-white ">
+                        {userRole}
                     </p>
+
+                    {
+                        stateBoxUserRole &&
+                        <div className="text-center absolute top-[45px] w-[calc(100%-36px)] bg-white rounded-[8px] p-[8px] mt-[8px] text-[12px] cursor-pointer border-solid border-[1px] border-[#ccc] shadow-sm ml-[36px]">
+                            {
+                                USER_ROLES.map((role, index) => {
+                                    if (role !== userRole) {
+                                        return (
+                                            <div className="" onClick={() => {
+                                                if (role === "Nhân viên nhập liệu") {
+                                                    dispatch(userAction.setRoleToApplicant())
+                                                }
+                                                else if (role === "Người duyệt đơn") {
+                                                    dispatch(userAction.setRoleToApplicationReviewer())
+                                                }
+                                            }}>
+                                                {role}
+                                            </div>
+                                        )
+                                    }
+                                })
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         </>

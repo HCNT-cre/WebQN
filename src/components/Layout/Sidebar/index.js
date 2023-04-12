@@ -11,7 +11,7 @@ const SideBar = ({ sideBarWidth }) => {
         {
             isExpand: false, icon: '<i class="fa-regular fa-file"></i>',
             title: "Hồ sơ tài liệu", numChildTabs: 3, childTabs: [
-                { title: "Tạo hồ sơ tài liệu", to: "/ho-so/tao-ho-so-dien-tu" },
+                { title: "Danh sách hồ sơ", to: "/ho-so/tao-ho-so-dien-tu" },
                 { title: "Số hóa hồ sơ tài liệu", to: "/ho-so/so-hoa-ho-so-tai-lieu" },
                 { title: "HS đến hạn nộp lưu", to: "/ho-so/ho-so-den-han-nop-luu" }]
         },
@@ -59,36 +59,36 @@ const SideBar = ({ sideBarWidth }) => {
 
     return (
         <>
-            <div className={`overflow-scroll overflow-x-hidden transition-all ${sideBarWidth === 300 ? "w-[300px]" : "w-[80px]"} fixed left-0 top-0 shadow h-full bg-[#dcdcdc] pb-[20px]`}>
-                <Link to='/' className={`${sideBarWidth === 300 ? 'mx-[16px]' : 'mx-[8px]'} border-[#b7b7b7] flex justify-center my-[16px] pb-[8px] border-b-[2px] border-solid `}>
+            <div className={`overflow-scroll overflow-x-hidden transition-all ${sideBarWidth === 250 ? "w-[250px]" : "w-[80px]"} fixed left-0 top-0 shadow h-full bg-[#dcdcdc] pb-[20px]`}>
+                <Link to='/' className={`${sideBarWidth === 250 ? 'mx-[16px]' : 'mx-[8px]'} border-[#b7b7b7] flex justify-center my-[16px] pb-[8px] border-b-[2px] border-solid `}>
                     <img className="w-[70px]" alt="Quoc Huy" src={QuocHuy} />
                 </Link>
 
                 {sidebarTabs.map((tab, idx) => {
                     return (
                         <Link to={tab.to} onClick={() => { setCurrentTab(idx) }} key={idx} className={`
-                        block ${sideBarWidth === 300 ? 'sidebar-items--large ' : 'sidebar-items--small '} 
+                        block ${sideBarWidth === 250 ? 'sidebar-items--large ' : 'sidebar-items--small '} 
                         `}>
-                            <div className={`${sideBarWidth !== 300 ? "justify-center" : ""} hover:bg-[#b9b9b9] rounded-[8px] flex relative ${idx === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(idx)}>
-                                <div className="mx-[20px] w-[16px]">
+                            <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#b9b9b9] rounded-[8px] flex relative ${idx === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(idx)}>
+                                <div className="mx-[10px] w-[16px]">
                                     <span dangerouslySetInnerHTML={{ __html: tab.icon }} />
                                 </div>
-                                {sideBarWidth === 300 && <p>{tab.title}</p>}
-                                {tab.numChildTabs > 1 && sideBarWidth === 300 &&
+                                {sideBarWidth === 250 && <p>{tab.title}</p>}
+                                {tab.numChildTabs > 1 && sideBarWidth === 250 &&
                                     <span className="absolute right-[8px] top-0">
                                         {tab.isExpand === false ? <i class="fa-solid fa-chevron-down"></i> : <i class="fa-solid fa-chevron-up"></i>}
                                     </span>
 
                                 }
                             </div>
-                            {sideBarWidth === 300 &&
+                            {sideBarWidth === 250 &&
                                 <Expand open={tab.isExpand} duration={200} transitions={transitions}>
                                     {tab.numChildTabs > 1 &&
-                                        <div className="flex mx-[30px] flex-col">
+                                        <div className="flex ml-[30px] flex-col">
                                             {tab.childTabs.map((child, index) => {
                                                 return (
-                                                    <Link className="px-[8px] hover:bg-[#b9b9b9] rounded-[8px] block mt-[8px]" to={child.to} >
-                                                        {sideBarWidth === 300 && <span>{child.title}</span>}
+                                                    <Link className="text-[14px] px-[8px] hover:bg-[#b9b9b9] rounded-[8px] block mt-[8px]" to={child.to} >
+                                                        {sideBarWidth === 250 && <span>{child.title}</span>}
                                                     </Link>
                                                 )
                                             })}
