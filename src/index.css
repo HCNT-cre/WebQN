@@ -81,12 +81,11 @@
     outline: none !important;
 }
 
+.ant-select-selector{
+    border-radius: 0px !important;
+}
 .ant-select-selection-search-input {
     height: 100% !important;
-}
-
-.ant-select-selector {
-    padding: 0px !important;
 }
 
 .ant-select-selection-placeholder{
