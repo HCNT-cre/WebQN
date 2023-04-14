@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect} from "react"
+import { useState, useEffect } from "react"
 import AddDoc from "../AddDoc"
 import { Table } from "../../../../custom/Components"
 import axios from "axios"
@@ -29,7 +29,7 @@ const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, 
 
     const handleConfirm = () => {
         DeleteData(API_DOCUMENT_DELETE, { id: pdfID }, "Xóa văn bản thành công")
-        setTimeout(async () =>{
+        setTimeout(async () => {
             await fetchDocumentsOfFile(govFileID)
         }, 500)
         setOpen(false)
@@ -95,6 +95,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
         const fetchData = async (govFileID) => {
             const currentAPI = `${API_DOCUMENT_GET}${govFileID}`;
             try {
+                setIsLoading(true)
                 const response = await fetch(currentAPI);
                 if (response.ok) {
                     const rawDatas = await response.json();
@@ -115,11 +116,11 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
             } catch (err) {
                 console.log(err)
             }
-            setIsLoading(false);
+            setIsLoading(false)
         }
         fetchData(govFileID)
     }
- 
+
 
     useEffect(() => {
         if (govFileID === -1)
