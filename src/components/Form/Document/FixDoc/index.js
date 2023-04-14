@@ -4,9 +4,13 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axios from 'axios';
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
+import { notifyError, notifySuccess } from '../../../../custom/Function';
+import { Button, Spin } from 'antd';
 
-const API_DOC_UPDATE = process.env.REACT_APP_API_DOC_UPDATE
+
+const API_DOCUMENT_UPDATE = process.env.REACT_APP_API_DOCUMENT_UPDATE
+const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 
 const FORM_FIELDS = [
     { key: "issued_date", title: "Ngày tháng năm văn bản", require: true, type: "text" },
@@ -17,35 +21,50 @@ const FORM_FIELDS = [
 
 const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID }) => {
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
-    const [form, setForm] = useState(null)
-    console.log(form)
-    
+    const [formData, setFormData] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+
+
     useEffect(() => {
-        setForm(pdfData)
+        setFormData(pdfData)
     }, [pdfData])
 
     const extractDataOCR = async () => {
-        const formData = new FormData();
-        formData.append('file', pdfFile);
-        formData.append('ratio', '20,1');
-        formData.append('threshold', '0.7');
+        const dataExtract = new FormData();
+        dataExtract.append('file', pdfFile);
+        dataExtract.append('ratio', '20,1');
+        dataExtract.append('threshold', '0.7');
+
         try {
-            console.log("start fetch API");
-            const response = await axios.post('http://157.230.37.228:4444/extract', formData);
-            console.log(response);
-            console.log(response.data.no.join(' '));
+            setIsLoading(true)
+            const response = await axios.post(API_EXTRACT_OCR, dataExtract, {
+                timeout: 20000
+            });
+
+            setIsLoading(false)
+
+            handleChangeForm("code_number", response.data.no.join(' '));
+            handleChangeForm("issued_date", response.data.date.join(' '));
+            handleChangeForm("autograph", response.data.signer.join(' '));
+
+            notifySuccess('Trích xuất thành công')
         } catch (error) {
-            console.error(error);
+            setIsLoading(false)
+            notifyError('Trích xuất thất bại')
         }
     }
-    const handleSubmit = async () => {
-        await axios.post(API_DOC_UPDATE + pdfID, form)
-        alert('Lưu thành công')
-        window.location.reload()
+
+    const handleSubmitForm = async (ev) => {
+        ev.preventDefault()
+        await axios.post(API_DOCUMENT_UPDATE, { ...formData, id: pdfID })
+        notifySuccess('Cập nhật thành công')
     }
-    const handleChangeForm = (ev) => {
-        const { name, value } = ev.target
-        setForm(prev => ({ ...prev, [name]: value }))
+
+    const handleChangeForm = (name, value) => {
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }))
     }
 
     return (
@@ -80,69 +99,71 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
                                         </div>
                                         <div className='h-full w-[50%] pl-[12px] mr-[12px] '>
                                             <div className='w-full flex justify-end'>
-                                                <button onClick={extractDataOCR} className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Trích xuất thông tin</button>
-                                                <button onClick={handleSubmit} className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Lưu</button>
+                                                <Button onClick={extractDataOCR} className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Trích xuất thông tin</Button>
+                                                <Button htmlType="submit" form="fix-doc-form" className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Lưu</Button>
                                             </div>
                                             <div className='flex justify-center w-full'>
                                                 <p className={`outline-none w-[50%] block text-[14px] font-bold h-[30px] text-center`}>Danh sách các thuộc tính</p>
                                             </div>
                                             <div className='h-[75vh] overflow-y-auto mt-[16px]'>
                                                 {
-                                                    <div>
-                                                        <form>
-                                                            <div className="flex justify-between">
-                                                                <div className="w-full px-[10px]">
-                                                                    {FORM_FIELDS.map((field, index) => {
-                                                                        return (
-                                                                            <div
-                                                                                key={field.key}
-                                                                                className="mt-[8px] w-full mb-[24px]"
-                                                                            >
-                                                                                <label
-                                                                                    className={`${field.require ? "after-form" : ""
-                                                                                        } text-[14px] font-[500]`}
-                                                                                    title={field.title}
+                                                    <Spin tip="Đang xử lý" spinning={isLoading} delay={0}>
+                                                        <div>
+                                                            <form id="fix-doc-form" onSubmit={handleSubmitForm}>
+                                                                <div className="flex justify-between">
+                                                                    <div className="w-full px-[10px]">
+                                                                        {FORM_FIELDS.map((field, index) => {
+                                                                            return (
+                                                                                <div
+                                                                                    key={field.key}
+                                                                                    className="mt-[8px] w-full mb-[24px]"
                                                                                 >
-                                                                                    {field.title}
-                                                                                </label>
-
-                                                                                {field.type === "select" ? (
-                                                                                    <select
-                                                                                        required={field.require}
-                                                                                        onChange={(ev) => handleChangeForm(ev)}
-                                                                                        name={field.key}
-                                                                                        placeholder={field.title}
-                                                                                        className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                                    <label
+                                                                                        className={`${field.require ? "after-form" : ""
+                                                                                            } text-[14px] font-[500]`}
+                                                                                        title={field.title}
                                                                                     >
-                                                                                        {field.options.map((option, index) => (
-                                                                                            <option
-                                                                                                key={option.value}
-                                                                                                value={option.value}
-                                                                                            >
-                                                                                                {option.label}
-                                                                                            </option>
-                                                                                        ))}
-                                                                                    </select>
-                                                                                ) : (
-                                                                                    <input
-                                                                                        required={field.require}
-                                                                                        onChange={(ev) => handleChangeForm(ev)}
-                                                                                        name={field.key}
-                                                                                        placeholder={field.title}
-                                                                                        type={field.type}
-                                                                                        min="0"
-                                                                                        value={form === null ? "" : form[field.key]}
-                                                                                        className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
-                                                                                    />
-                                                                                )}
-                                                                            </div>
-                                                                        );
-                                                                    })}
-                                                                </div>
+                                                                                        {field.title}
+                                                                                    </label>
 
-                                                            </div>
-                                                        </form>
-                                                    </div>
+                                                                                    {field.type === "select" ? (
+                                                                                        <select
+                                                                                            required={field.require}
+                                                                                            onChange={(ev) => handleChangeForm(ev)}
+                                                                                            name={field.key}
+                                                                                            placeholder={field.title}
+                                                                                            className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                                        >
+                                                                                            {field.options.map((option, index) => (
+                                                                                                <option
+                                                                                                    key={option.value}
+                                                                                                    value={option.value}
+                                                                                                >
+                                                                                                    {option.label}
+                                                                                                </option>
+                                                                                            ))}
+                                                                                        </select>
+                                                                                    ) : (
+                                                                                        <input
+                                                                                            required={field.require}
+                                                                                            onChange={(ev) => handleChangeForm(ev.target.name, ev.target.value)}
+                                                                                            name={field.key}
+                                                                                            placeholder={field.title}
+                                                                                            type={field.type}
+                                                                                            min="0"
+                                                                                            value={formData === null ? "" : formData[field.key]}
+                                                                                            className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                                        />
+                                                                                    )}
+                                                                                </div>
+                                                                            );
+                                                                        })}
+                                                                    </div>
+
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </Spin>
                                                 }
                                             </div>
                                         </div>
