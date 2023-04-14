@@ -1,98 +1,204 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react"
+import axios from "axios"
+import { useSelector} from "react-redux"
+import 'react-toastify/dist/ReactToastify.css';
+import { Button, Input, Select} from "antd"
+import { Table } from "../../custom/Components";
+import { FIELDS_TABLE } from "../../storage/HomeStorage"
+import { STATE } from "../../storage/Storage"
+
+
+const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
+const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
+
+
 const Home = () => {
     const [files, setFiles] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const userPermissionId = useSelector(state => state.user.permission_id)
+
+
+    const [search, setSearch] = useState({
+        "title": null,
+        "organ_id": null,
+        "offce": null,
+        "state": null,
+        "type": null
+    })
+
+
+    const getFileFromResponse = (response) => {
+        const rawDatas = response.data
+        let filesArray = []
+        for (const rawData of rawDatas) {
+            const row = {
+                'id': rawData.id,
+                'gov_file_code': rawData.gov_file_code || '',
+                'title': rawData.title || '',
+                'organ_id': rawData.organ_id || '',
+                'sheet_number': rawData.sheet_number || '',
+                'total_doc': rawData.total_doc || '',
+                'start_date': rawData.start_date || '',
+                'maintenance': rawData.maintenance || '',
+                'rights': rawData.rights || '',
+                'state': <button onClick={() => {
+                    search["state"] = rawData.state
+                    handleSearch()
+                }}>{STATE[rawData.state]}</button>,
+            }
+            filesArray.push(row)
+        }
+        return filesArray
+    }
+
+    const resetSearch = async () => {
+        let request = API_GOV_FILE_SEARCH + userPermissionId
+        const response = await axios.get(request)
+        setFiles(getFileFromResponse(response))
+        setSearch(prev => ({
+            "title": '',
+            "organ_id": '',
+            "offce": '',
+            "state": 'Tất cả',
+            "type": ''
+        }))
+    }
+
+    const reset = () => {
+        const fetchFileData = async () => {
+            try {
+                setIsLoading(true);
+                const response = await axios.get(API_GOV_FILE_GET_ALL + userPermissionId)
+                setIsLoading(false);
+                setFiles(getFileFromResponse(response))
+            } catch (err) {
+                console.log(err)
+            }
+        };
+        fetchFileData();
+    }
+
+    const handleSearch = async (ev) => {
+        try {
+
+            let request = API_GOV_FILE_SEARCH + userPermissionId
+            console.log(search)
+            Object.keys(search).forEach(key => {
+                const value = search[key]
+                if (value !== null & value !== '')
+                    request += ("&" + key + "=" + value)
+            })
+            console.log(request)
+            setIsLoading(true)
+            const response = await axios.get(request, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            setIsLoading(false)
+            setFiles(getFileFromResponse(response))
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleChangeSearch = (name, value) => {
+        setSearch((prev) => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
 
 
     useEffect(() => {
-        const fetchFileData = async () => {
-            const response = await fetch('https://641e04a5945125fff3db0a63.mockapi.io/file');
-            const rawDatas = await response.json();
-            let filesArray = []
-            for (let i = 0; i < rawDatas.length; i++) {
-                const rawData = rawDatas[i]
-                filesArray.push({
-                    'Maintenance': rawData.Maintenance, 'Title': rawData.Title, 'Organld': rawData.Organld, 'Rights': rawData.Rights, 'FileCode': rawData.FileCode
-                })
-            }
-            setFiles(filesArray)
-        };
-        fetchFileData();
-    }, [])
+        reset()
+    }, [userPermissionId])
+
+    const BUTTON_ACTIONS = [
+        { title: "Tìm kiếm", icon: <i className="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
+        { title: "Làm mới", icon: <i className="fa-solid fa-sync"></i>, onClick: resetSearch },
+    ]
 
     return (
         <>
-            <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
+            <div className="w-full px-[24px] pb-[16px] bg-white">
                 <p className="text-[20px] font-bold ">Trang chủ</p>
-                <div className="mt-[8px]">
-                    <p className="mb-[12px] font-[500]">Cơ sở dữ liệu tài liệu lưu trữ điện tử</p>
-                    <p className="mb-[12px]">Tổng số phông: <span className="text-[#ff0000]">12</span></p>
-                    <p className="mb-[12px]">Tổng số hồ sơ: <span className="text-[#ff0000]">1234</span></p>
-                    <p className="mb-[12px]">Tổng số văn bản: <span className="text-[#ff0000]">4567</span></p>
-                </div>
             </div>
+
             <div className="w-full my-[24px]">
-                <div className="mt-[16px] ml-[24px] flex ">
-                    <div className="w-[12.5%] px-[5px]">
-                        <input placeholder="Tiêu đề hồ sơ" className="bar-page-input"></input>
+                <div className="mt-[16px] mx-[24px] flex ">
+
+                    <div className="w-[11.11111%] px-[5px]">
+                        <Input allowClear onChange={(ev) => handleChangeSearch("title", ev.target.value)} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px] flex items-center"></Input>
                     </div>
-                    <div className="w-[12.5%] px-[5px]">
-                        <input placeholder="Phông" className="bar-page-input"></input>
+                    <div className="w-[11.11111%] px-[5px]">
+                        <Input onChange={(ev) => handleChangeSearch("start_date", ev.target.value)} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
                     </div>
-                    <div className="w-[12.5%] px-[5px]">
-                        <input placeholder="Cơ quan" className="bar-page-input"></input>
+                    <div className="w-[11.11111%] px-[5px]">
+                        <Input onChange={(ev) => handleChangeSearch("end_date", ev.target.value)} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
+                    </div>
+                    <div className="w-[11.11111%] px-[5px]">
+                        <Select
+                            name="state"
+                            className="w-full bg-white outline-none rounded-none"
+                            allowClear
+                            showSearch
+                            defaultValue="Tất cả"
+                            value={search["state"]}
+                            optionFilterProp="children"
+                            onChange={(value) => handleChangeSearch("state", value)}
+                            filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={[
+                                {
+                                    value: '1',
+                                    label: 'Mở',
+                                },
+                                {
+                                    value: '2',
+                                    label: 'Đóng',
+                                },
+                                {
+                                    value: '3',
+                                    label: 'Nộp lưu cơ quan',
+                                },
+                                {
+                                    value: '4',
+                                    label: 'Lưu trữ cơ quan',
+                                },
+                                {
+                                    value: '5',
+                                    label: 'Nộp lưu lịch sử',
+                                },
+                                {
+                                    value: '6',
+                                    label: 'Lưu trữ lịch sử',
+                                },
+                            ]}
+                        />
                     </div>
 
-                    <div className="w-[12.5%] px-[5px]">
-                        <select className="w-full py-[6px] px-[4px] text-[14px] outline-none">
-                            <option>Tất cả</option>
-                        </select>
-                    </div>
-                    <div className="w-[12.5%] text-white text-center px-[5px] flex">
-                        <button className="flex justify-center bg-[#00f] w-full px-[16px] py-[6px] text-[14px] ">
-                            <div className="mr-[8px]">
-                                <i class="fa-solid fa-magnifying-glass"></i>
+                    {BUTTON_ACTIONS.map((item, index) => {
+                        return (
+                            <div key={index} className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+                                <Button onClick={item.onClick} className="rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center">
+                                    <div className="mr-[8px]">
+                                        {item.icon}
+                                    </div>
+                                    {item.title}
+                                </Button>
                             </div>
-                            Tìm kiếm
-                        </button>
-                    </div>
-                    <div className="w-[12.5%] text-white  text-center px-[5px]">
-                        <button className="flex justify-center bg-[#00f] w-full px-[16px] py-[6px] text-[14px] ">
-                            <div className="mr-[8px]">
-                                <i class="fa-regular fa-file-excel"></i>
-                            </div>
-                            Xuất Excel
-                        </button>
-                    </div>
-                </div>
-                <div className="p-[24px] bg-[#f0f2f5] rounded-[2px]">
-                    <table className="table-fixed w-full">
-                        <colgroup></colgroup>
-                        <thead className="bg-[#fafafa]">
-                            <tr>
-                                <th className="relative w-[40px] text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]">TT</th>
-                                <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]   ">Mã hồ sơ</th>
-                                <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Tiêu đề hồ sơ</th>
-                                <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Phông</th>
-                                <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Thời hạn bảo quản</th>
-                                <th className="relative text-left px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]" >Chế độ sử dụng</th>
-                            </tr></thead>
-                        <tbody>{files.map((file, index) => {
-                            return (
-                                <tr className="hover:bg-[#fafafa] bg-white border-t-[1px] border-solid border-[#e0e0e0]" key={index}>
-                                    <td className="text-center px-[12px] py-[16px]"><span className="block w-[24px] h-[24px] rounded-[50%] bg-[#ccc]">{index + 1}</span></td>
-                                    <td className="px-[12px] py-[16px] overflow-hidden" >{file.FileCode}</td>
-                                    <td className="px-[12px] py-[16px] overflow-hidden" >{file.Title}</td>
-                                    <td className="px-[12px] py-[16px] overflow-hidden" >{file.Organld}</td>
-                                    <td className="px-[12px] py-[16px] overflow-hidden" >{file.Maintenance}</td>
-                                    <td className="px-[12px] py-[16px] overflow-hidden" >{file.Rights}</td>
-                                </tr>
-                            )
-                        })}</tbody>
+                        )
+                    }
+                    )}
 
-
-                    </table>
                 </div>
-            </div>
+                <Table fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading}  />
+            </div >
+
         </>
     )
 }
