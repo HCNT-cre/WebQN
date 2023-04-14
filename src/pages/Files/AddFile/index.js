@@ -12,7 +12,7 @@ import { OpenFile } from "../../../actions/formFile"
 import File from "../../../components/Form/File/File"
 import { FIELDS_TABLE } from "../../../storage/FileStorage"
 import { STATE } from "../../../storage/Storage"
-import { reloadPage, DeleteData } from "../../../custom/Function"
+import { reloadPage, DeleteData, GetKey } from "../../../custom/Function"
 import { useButtonClickOutside } from "../../../custom/Hook"
 
 
@@ -22,63 +22,71 @@ const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_GOV_FILE_DELETE = process.env.REACT_APP_API_GOV_FILE_DELETE
 
 const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
-    const [buttonRef, contentRef, toggleContent, showContent] = useButtonClickOutside(false);
+    const handleClose = () => {
+        setOpen(false)
+    }
+    const handleConfirm = async () => {
+        await DeleteData(API_GOV_FILE_DELETE, IDFile, "Xóa hồ sơ thành công")
+        await reset()
+
+    }
+    const [buttonRef, contentRef, toggleContent, showContent] = useButtonClickOutside(false, handleClose);
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        const button = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-primary")
-        if (button === undefined)
+        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1vtf12y.css-dev-only-do-not-override-1vtf12y.ant-popover-placement-top")[0]
+
+        if (popupContainer === undefined)
             return
-        for (let i = 0; i < button.length; i++) {
-            button[i].textContent = "Xóa"
-        }
-        const button2 = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-default ")
-        if (button2 === undefined)
-            return
-        for (let i = 0; i < button2.length; i++) {
-            button2[i].textContent = "Hủy"
-        }
-        // check if popup is hidden
-        const popupContainer = document.querySelectorAll(".ant-popover-hidden")[0]
+
         contentRef.current[0] = popupContainer
+
+        const buttonAccepts = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-primary")
+        buttonAccepts.forEach((buttonCancel) => {
+            buttonCancel.textContent = "Xóa"
+        })
+
+        const buttonCancels = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-default ")
+        buttonCancels.forEach((buttonAccept) => {
+            buttonAccept.textContent = "Hủy"
+        })
     }, [open])
+
 
     const BUTTON_DEFAULT = [
         { icon: <i className="fa-solid fa-upload"></i>, title: "Thêm văn bản", color: "text-[#537FE7]", onclick: () => { handleClickOnFile(IDFile) } },
-        { icon: <i class="fa-solid fa-photo-film"></i>, title: "Thêm tài liệu đa phương tiện", color: "text-[#19376D]", onclick: () => { } },
-        { icon: <i class="fa-regular fa-folder-open"></i>, title: "Xem hồ sơ", color: "text-[#FF8400]", onclick: () => { dispatch(OpenFile("watch_file", IDFile)) } }
+        { icon: <i className="fa-solid fa-photo-film"></i>, title: "Thêm tài liệu đa phương tiện", color: "text-[#19376D]", onclick: () => { } },
+        { icon: <i className="fa-regular fa-folder-open"></i>, title: "Xem hồ sơ", color: "text-[#FF8400]", onclick: () => { dispatch(OpenFile("watch_file", IDFile)) } }
     ]
 
     const BUTTON_MORE = [
-        { icon: <i class="fa-solid fa-hammer"></i>, title: "Sửa hồ sơ", color: "text-[#E7B10A]", onclick: () => { dispatch(OpenFile("update_file", IDFile)) } },
+        { icon: <i className="fa-solid fa-hammer"></i>, title: "Sửa hồ sơ", color: "text-[#E7B10A]", onclick: () => { dispatch(OpenFile("update_file", IDFile)) } },
         {
             popup: true,
             element:
                 <Popconfirm title="Xóa hồ sơ"
                     open={open}
                     description="Bạn có chắc chắn xóa?"
-                    onConfirm={async () => {
-                        await DeleteData(API_GOV_FILE_DELETE, IDFile, "Xóa hồ sơ thành công")
-                        await reset()
-                    }}
-                    onCancel={() => setOpen(false)}
+                    onConfirm={handleConfirm}
+                    onCancel={handleClose}
+                    key={GetKey()}
                 >
-                    <Button onClick={() => { setOpen(true) }} className={`cursor-pointer basis-1/4 max-w-[25%] text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} title="Xóa hồ sơ" ><i class="fa-solid fa-trash-can"></i></Button>
+                    <Button onClick={() => { setOpen(true) }} className={`cursor-pointer basis-1/4 max-w-[25%] text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} title="Xóa hồ sơ" ><i className="fa-solid fa-trash-can"></i></Button>
                 </Popconfirm>
         },
 
 
-        { icon: <i class="fa-solid fa-clipboard-list"></i>, title: "Xem lịch sử", color: "text-[#FF8400]", onclick: () => { } },
-        { icon: <i class="fa-solid fa-user-doctor"></i>, title: "Phân quyền", color: "text-[#0014FF]", onclick: () => { } },
+        { icon: <i className="fa-solid fa-clipboard-list"></i>, title: "Xem lịch sử", color: "text-[#FF8400]", onclick: () => { } },
+        { icon: <i className="fa-solid fa-user-doctor"></i>, title: "Phân quyền", color: "text-[#0014FF]", onclick: () => { } },
     ]
 
 
     return (
         <div className="flex flex-wrap">
-            {BUTTON_DEFAULT.map((item, index) => {
+            {BUTTON_DEFAULT.map((item) => {
                 return (
-                    <Button className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
+                    <Button key={GetKey()} className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
                         {item.icon}
                     </Button>
                 )
@@ -86,14 +94,14 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
 
             <div className="relative">
                 <Button ref={buttonRef} onClick={toggleContent} className="px-[2px] text-[#000] cursor-pointer border-none text-center" title="Xem thêm">
-                    <i class="fa-solid fa-ellipsis"></i>
+                    <i className="fa-solid fa-ellipsis"></i>
                 </Button>
                 {showContent &&
                     <div ref={el => { contentRef.current[1] = el }} className="absolute right-[0] top-[-25px] flex">
                         {BUTTON_MORE.map((item) => {
                             if (item.popup) return item.element
                             return (
-                                <Button className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
+                                <Button key={GetKey()} className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
                                     {item.icon}
                                 </Button>
                             )
@@ -142,6 +150,7 @@ const AddFile = () => {
         setIDFile(IDFile)
         setStateDocCategory(true)
     }
+
     const reset = () => {
         const fetchFileData = async () => {
             try {
@@ -277,10 +286,10 @@ const AddFile = () => {
     }, [userPermissionId])
 
     const BUTTON_ACTIONS = [
-        { title: "Tìm kiếm", icon: <i class="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
-        { title: "Làm mới", icon: <i class="fa-solid fa-sync"></i>, onClick: resetSearch },
-        { title: "Thêm hồ sơ mới", icon: <i class="fa-solid fa-plus"></i>, onClick: () => { dispatch(OpenFile("open_upload")) } },
-        { title: "Xuất Excel", icon: <i class="fa-solid fa-file-excel"></i>, onClick: () => { } },
+        { title: "Tìm kiếm", icon: <i className="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
+        { title: "Làm mới", icon: <i className="fa-solid fa-sync"></i>, onClick: resetSearch },
+        { title: "Thêm hồ sơ mới", icon: <i className="fa-solid fa-plus"></i>, onClick: () => { dispatch(OpenFile("open_upload")) } },
+        { title: "Xuất Excel", icon: <i className="fa-solid fa-file-excel"></i>, onClick: () => { } },
     ]
 
     return (
@@ -370,7 +379,7 @@ const AddFile = () => {
                         <Button disabled={!(stateCheckBox.length > 0)} onClick={toggleContent} ref={buttonRef} className=" disabled:opacity-60 rounded-[5px] flex justify-center items-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white">
                             Hành động
                             <div className="ml-[4px]">
-                                <i class="fa-solid fa-chevron-down"></i>
+                                <i className="fa-solid fa-chevron-down"></i>
                             </div>
                         </Button>
 

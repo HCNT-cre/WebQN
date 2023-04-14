@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Checkbox } from "antd";
 import { Spin } from "antd";
-// import { Table } from "antd";
+import { GetKey } from "../Function";
 
 const CheckBox = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
@@ -42,8 +42,8 @@ const ConvertDataToArrayForRenderTableCell = (table) => {
             } else {
                 // This field is Button
                 data.push(<td className="px-[12px] py-[16px] overflow-hidden" >
-                    {row[key].map((childData) => {
-                        return childData
+                    {row[key].map((ChildData, index) => {
+                        return <ChildData key={GetKey()} />
                     })}
                 </td>)
             }
@@ -60,7 +60,7 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateC
 
     const handleCheckBoxAll = e => {
         setIsCheckAll(!isCheckAll);
-        setIsCheck(fieldDatas.map((file, index) => ("checkbox" + file["id"])))
+        setIsCheck(fieldDatas.map((file) => ("checkbox" + file["id"])))
         if (isCheckAll) {
             setIsCheck([]);
         }
@@ -77,7 +77,7 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateC
     useEffect(() => {
         if (setStateCheckBox === undefined) return
         setStateCheckBox(isCheck)
-    }, [isCheck])
+    }, [isCheck, setStateCheckBox])
 
 
     return (
@@ -100,17 +100,14 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateC
                                 />
                             </th>}
 
-                            {fieldNames.map((field, index) => {
-                                if (field.key !== "doc_ordinal") {
-                                    let className = "text-[12px] relative text-center px-[8px] py-[12px]"
-                                    if (index < fieldNames.length - 1) {
-                                        className += " before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]"
-                                    }
-                                    return (
-                                        <th key={index} style={{ width: field.width }} className={className}>{field.title}</th>
-                                    )
+                            {fieldNames.filter(field => field.key === "doc_ordinal").map((field, index) => {
+                                let className = "text-[12px] relative text-center px-[8px] py-[12px]"
+                                if (index < fieldNames.length - 1) {
+                                    className += " before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]"
                                 }
-
+                                return (
+                                    <th key={GetKey()} style={{ width: field.width }} className={className}>{field.title}</th>
+                                )
                             })}
                         </tr></thead>
 
@@ -134,7 +131,7 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateC
                                 const key = fieldNames[0].key
                                 const startSlice = key === "doc_ordinal" ? 3 : 2
                                 return (
-                                    <tr className="hover:bg-[#ecebeb] bg-white border-t-[1px] border-solid border-[#e0e0e0] text-[13px]" key={index}>
+                                    <tr className="hover:bg-[#ecebeb] bg-white border-t-[1px] border-solid border-[#e0e0e0] text-[13px]" key={GetKey()}>
 
                                         {(key === undefined || dataRow[2].key !== "doc_ordinal") ?
                                             <td className="text-center px-[12px] py-[16px]"><span className="block w-[24px] h-[24px] rounded-[50%] bg-[#ccc]">{index + 1}</span></td> : dataRow[2]}
@@ -142,7 +139,7 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateC
                                         {
                                             isCheckBox && <td className="px-[12px] py-[16px] overflow-hidden text-center" >
                                                 <CheckBox
-                                                    key={index}
+                                                    key={GetKey()}
                                                     type="checkbox"
                                                     id={"checkbox" + dataRow[0]}
                                                     handleClickCheckBox={handleClickCheckBox}
@@ -151,8 +148,8 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateC
                                             </td>
                                         }
                                         {   // dataRow[0] is id
-                                            dataRow.splice(startSlice).map((dataCell) => {
-                                                return dataCell
+                                            dataRow.splice(startSlice).map((DataCell, index) => {
+                                                return DataCell
                                             })
                                         }
                                     </tr>

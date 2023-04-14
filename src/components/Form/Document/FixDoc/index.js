@@ -38,7 +38,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
         }
     }
     const handleSubmit = async () => {
-        const response = await axios.patch(API_DOC_UPDATE + pdfID, form)
+        await axios.patch(API_DOC_UPDATE + pdfID, form)
         alert('Lưu thành công')
         window.location.reload()
     }

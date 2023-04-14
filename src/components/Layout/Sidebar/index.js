@@ -40,7 +40,7 @@ const SideBar = ({ sideBarWidth }) => {
                                 {sideBarWidth === 250 && <p>{tab.title}</p>}
                                 {tab.numChildTabs > 1 && sideBarWidth === 250 &&
                                     <span className="absolute right-[8px] top-0">
-                                        {tab.isExpand === false ? <i class="fa-solid fa-chevron-down"></i> : <i class="fa-solid fa-chevron-up"></i>}
+                                        {tab.isExpand === false ? <i className="fa-solid fa-chevron-down"></i> : <i className="fa-solid fa-chevron-up"></i>}
                                     </span>
 
                                 }
@@ -51,7 +51,7 @@ const SideBar = ({ sideBarWidth }) => {
                                         <div className="flex ml-[30px] flex-col">
                                             {tab.childTabs.map((child, index) => {
                                                 return (
-                                                    <Link className="text-[14px] px-[8px] hover:bg-[#b9b9b9] rounded-[8px] block mt-[8px]" to={child.to} >
+                                                    <Link key={index} className="text-[14px] px-[8px] hover:bg-[#b9b9b9] rounded-[8px] block mt-[8px]" to={child.to} >
                                                         {sideBarWidth === 250 && <span>{child.title}</span>}
                                                     </Link>
                                                 )

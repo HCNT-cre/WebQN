@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
 import { useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
@@ -137,27 +138,23 @@ const File = ({ reset }) => {
 
     useEffect(() => {
         if (fileID === null) {
+            const updatedRequest = {}
             Object.keys(request).forEach(key => {
-                setRequest(prevState => ({
-                    ...prevState,
-                    [key]: null
-                }))
+                updatedRequest[key] = null
             })
-            setRequest(prevState => ({
-                ...prevState,
-                'rights': "Công khai"
-            }))
+            updatedRequest['rights'] = "Công khai"
+            setRequest(updatedRequest)
             return
         }
+
         const fetchData = async () => {
             const response = await axios.get(API_GOV_FILE_GET + "id=" + fileID + "&perm_token=" + userPermissionId)
-            console.log(response)
             const error_code = response.data.error_code
             if (error_code === undefined) {
-                const newRequest = response.data[0]
-                setRequest(newRequest)
+                setRequest(response.data[0])
             }
         }
+        
         fetchData()
 
     }, [fileID])
@@ -239,7 +236,7 @@ const File = ({ reset }) => {
                         <div className="w-[1000px] max-w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className="relative rounded-[2px] bg-white">
                                 <button onClick={() => { dispatch(actionFile.CloseFile()) }} className="text-[20px] absolute right-0 w-[40px] h-[40px] bg-[#2f54eb] top-0 text-white ">
-                                    <i class="fa-solid fa-xmark"></i>
+                                    <i className="fa-solid fa-xmark"></i>
 
                                 </button>
                                 <div className="bg-[#2f54eb] text-white py-[16px] px-[24px]">
