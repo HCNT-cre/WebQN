@@ -44,10 +44,14 @@ export const GetDateFromString = (dateString) => {
     return "2023-01-01"
 }
 
-export const DeleteData = async (API, id = null, message = "Xóa thành công") => {
-    const currentAPI = id ? `${API}${id}` : API;
-    await axios.delete(currentAPI)
-    notifySuccess(message)
+export const DeleteData = async (API, body, message = "Xóa thành công") => {
+    const Delete = async () =>{
+        const response = await axios.post(API, body)
+        if (response.data.error_code !== undefined) {
+            notifyError(response.data.description)
+        }else notifySuccess(message)
+    }
+    await Delete()
 }
 
 export const GetKey = () =>{
