@@ -1,9 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from "react-redux";
 import * as actionFile from "../../../actions/formFile";
+import { IDENTIFIER } from "../../../storage/FileStorage";
+import { Select, Input } from "antd";
+import { notifyError, notifySuccess } from "../../../custom/Function";
 
 const API_GOV_FILE_CREATE = process.env.REACT_APP_API_GOV_FILE_CREATE
 const API_GOV_FILE_GET = process.env.REACT_APP_API_GOV_FILE_GET
@@ -20,7 +22,8 @@ const FIELDS_LEFT = [
         key: "identifier",
         title: "Mã cơ quan lưu trữ lịch sử",
         require: true,
-        type: "text",
+        type: "select",
+        options: IDENTIFIER,
     },
     {
         key: "organ_id",
@@ -97,38 +100,40 @@ const FIELDS_RIGHT = [
     { key: "format", title: "Tình trạng vật lý", require: false, type: "text" },
 ];
 
-const File = () => {
+const File = ({ reset }) => {
     const userPermissionId = useSelector(state => state.user.permission_id)
+    const data = useSelector((state) => state.formFile.data)
+
     let stateForm = useSelector((state) => state.formFile.state);
     let title = "Tạo hồ sơ"
     let fileID = null
-    const data = useSelector((state) => state.formFile.data)
+
     if (data !== undefined && data.id !== null) {
         title = data.state === "watch_file" ? "Xem hồ sơ" : "Sửa hồ sơ"
         fileID = data.id
     }
-    const dispatch = useDispatch();
-    const [request, setRequest] = useState(
-        { 'rights': 'Công khai' },
-        { 'gov_file_code': null },
-        { 'identifier': null },
-        { 'organ_id': null },
-        { 'file_catalog': null },
-        { 'file_notation': null },
-        { 'title': null },
-        { 'maintenance': null },
-        { 'language': null },
-        { 'start_date': null },
-        { 'end_date': null },
-        { 'total_doc': null },
-        { 'description': null },
-        { 'infor_sign': null },
-        { 'keyword': null },
-        { 'sheet_number': null },
-        { 'page_number': null },
-        { 'format': null }
-    )
 
+    const dispatch = useDispatch();
+    const [request, setRequest] = useState({
+        rights: "Công khai",
+        gov_file_code: null,
+        identifier: null,
+        organ_id: null,
+        file_catalog: null,
+        file_notation: null,
+        title: null,
+        maintenance: null,
+        language: null,
+        start_date: null,
+        end_date: null,
+        total_doc: null,
+        description: null,
+        infor_sign: null,
+        keyword: null,
+        sheet_number: null,
+        page_number: null,
+        format: null
+    })
 
     useEffect(() => {
         if (fileID === null) {
@@ -157,24 +162,33 @@ const File = () => {
 
     }, [fileID])
 
-    const handleChangeForm = (event) => {
-        const { name, value } = event.target;
+    const handleChangeForm = (name, value) => {
         setRequest(prevState => ({
             ...prevState,
             [name]: value
         }))
     };
 
-    const reloadPage = () => {
-        document.location.reload();
-    }
-
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
+
+        for (let field of FIELDS_LEFT) {
+            if (field.require && (request[field.key] === null || request[field.key] === "")) {
+                notifyError("Vui lòng nhập " + field.title)
+                return
+            }
+        }
+
+        for (let field of FIELDS_RIGHT) {
+            if (field.require && (request[field.key] === null || request[field.key] === "")) {
+                notifyError("Vui lòng nhập " + field.title)
+                return
+            }
+        }
+
         try {
-            const gov_file_code = request["identifier"] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]    
-            const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : (API_GOV_FILE_UPDATE + userPermissionId)            
+            const gov_file_code = request["identifier"] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
+            const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : (API_GOV_FILE_UPDATE + userPermissionId)
             let response
             if (title === "Tạo hồ sơ") {
                 response = await axios.post(API, { ...request, gov_file_code: gov_file_code })
@@ -184,38 +198,36 @@ const File = () => {
 
             const error_code = response.data.error_code
             if (error_code === undefined) {
-                toast.success('Thêm hồ sơ thành công', {
-                    position: "top-center",
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: "light",
-                    onClose: reloadPage
-                });
+                notifySuccess(title + ' thành công');
+                setRequest((prev) => {
+                    return {
+                        ...prev,
+                        rights: "Công khai",
+                        gov_file_code: null,
+                        identifier: null,
+                        organ_id: null,
+                        file_catalog: null,
+                        file_notation: null,
+                        title: null,
+                        maintenance: null,
+                        language: null,
+                        start_date: null,
+                        end_date: null,
+                        total_doc: null,
+                        description: null,
+                        infor_sign: null,
+                        keyword: null,
+                        sheet_number: null,
+                        page_number: null,
+                        format: null
+                    }
+                })
+                reset()
             } else {
-                toast.error('Thêm hồ sơ thất bại', {
-                    position: "top-center",
-                    toastId: "error1",
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: "light",
-                });
+                notifyError(title + ' thất bại');
             }
         } catch (err) {
-            toast.error('Thêm hồ sơ thất bại', {
-                position: "top-center",
-                autoClose: 3000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: "light",
-            });
+            notifyError(title + ' thất bại');
         }
     }
 
@@ -253,32 +265,29 @@ const File = () => {
                                                             </label>
 
                                                             {field.type === "select" ? (
-                                                                <select
-                                                                    required={field.require}
-                                                                    onChange={(ev) => handleChangeForm(ev)}
-                                                                    name={field.key}
-                                                                    placeholder={field.title}
-                                                                    className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
-                                                                >
-                                                                    {field.options.map((option, index) => (
-                                                                        <option
-                                                                            key={option.value}
-                                                                            value={option.value}
-                                                                        >
-                                                                            {option.label}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
+                                                                field.key === 'identifier' ? (
+                                                                    <Select
+                                                                        onChange={(value) => handleChangeForm(field.key, value)}
+                                                                        className="block mt-[12px]"
+                                                                        options={field.options}
+                                                                    />
+                                                                ) : (
+                                                                    <Select
+                                                                        onChange={(value) => handleChangeForm(field.key, value)}
+                                                                        className="block mt-[12px]"
+                                                                        options={field.options}
+                                                                        defaultValue={field.options[0]}
+                                                                    />
+                                                                )
                                                             ) : (
-                                                                <input
-                                                                    required={field.require}
-                                                                    onChange={(ev) => handleChangeForm(ev)}
+                                                                <Input
+                                                                    onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
                                                                     name={field.key}
                                                                     placeholder={field.title}
                                                                     type={field.type}
                                                                     min="0"
                                                                     value={request[field.key] === null ? "" : request[field.key]}
-                                                                    className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
+                                                                    className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
                                                                 />
                                                             )}
                                                         </div>
@@ -301,32 +310,29 @@ const File = () => {
                                                             </label>
 
                                                             {field.type === "select" ? (
-                                                                <select
-                                                                    required={field.require}
-                                                                    onChange={(ev) => handleChangeForm(ev)}
-                                                                    name={field.key}
-                                                                    placeholder={field.title}
-                                                                    className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
-                                                                >
-                                                                    {field.options.map((option, index) => (
-                                                                        <option
-                                                                            key={option.value}
-                                                                            value={option.value}
-                                                                        >
-                                                                            {option.label}
-                                                                        </option>
-                                                                    ))}
-                                                                </select>
+                                                                field.key === 'identifier' ? (
+                                                                    <Select
+                                                                        onChange={(value) => handleChangeForm(field.key, value)}
+                                                                        className="block mt-[12px]"
+                                                                        options={field.options}
+                                                                    />
+                                                                ) : (
+                                                                    <Select
+                                                                        onChange={(value) => handleChangeForm(field.key, value)}
+                                                                        className="block mt-[12px]"
+                                                                        options={field.options}
+                                                                        defaultValue={field.options[0]}
+                                                                    />
+                                                                )
                                                             ) : (
-                                                                <input
-                                                                    required={field.require}
-                                                                    onChange={(ev) => handleChangeForm(ev)}
+                                                                <Input
+                                                                    onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
                                                                     name={field.key}
                                                                     placeholder={field.title}
                                                                     type={field.type}
                                                                     min="0"
                                                                     value={request[field.key] === null ? "" : request[field.key]}
-                                                                    className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
+                                                                    className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
                                                                 />
                                                             )}
                                                         </div>

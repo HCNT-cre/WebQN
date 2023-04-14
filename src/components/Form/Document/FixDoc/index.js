@@ -4,6 +4,9 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axios from 'axios';
+import {useState, useEffect} from 'react';
+
+const API_DOC_UPDATE = process.env.REACT_APP_API_DOC_UPDATE
 
 const FORM_FIELDS = [
     { key: "issued_date", title: "Ngày tháng năm văn bản", require: true, type: "text" },
@@ -12,8 +15,14 @@ const FORM_FIELDS = [
 ]
 
 
-const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF }) => {
+const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID }) => {
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
+    const [form, setForm] = useState(null)
+
+    useEffect(() => {
+        setForm(pdfData)
+    }, [pdfData])
+
     const extractDataOCR = async () => {
         const formData = new FormData();
         formData.append('file', pdfFile);
@@ -28,7 +37,15 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF }) => {
             console.error(error);
         }
     }
-    const handleChangeForm = (ev) => { }
+    const handleSubmit = async () => {
+        const response = await axios.patch(API_DOC_UPDATE + pdfID, form)
+        alert('Lưu thành công')
+        window.location.reload()
+    }
+    const handleChangeForm = (ev) => {
+        const { name, value } = ev.target
+        setForm(prev => ({ ...prev, [name]: value }))
+    }
 
     return (
         <>
@@ -63,7 +80,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF }) => {
                                         <div className='h-full w-[50%] pl-[12px] mr-[12px] '>
                                             <div className='w-full flex justify-end'>
                                                 <button onClick={extractDataOCR} className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Trích xuất thông tin</button>
-                                                <button className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Lưu</button>
+                                                <button onClick={handleSubmit} className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Lưu</button>
                                             </div>
                                             <div className='flex justify-center w-full'>
                                                 <p className={`outline-none w-[50%] block text-[14px] font-bold h-[30px] text-center`}>Danh sách các thuộc tính</p>
@@ -113,7 +130,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF }) => {
                                                                                         placeholder={field.title}
                                                                                         type={field.type}
                                                                                         min="0"
-                                                                                        value={pdfData[field.key]}
+                                                                                        value={form === null ? "" : form[field.key]}
                                                                                         className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
                                                                                     />
                                                                                 )}

@@ -6,7 +6,6 @@ import AddFile from "./pages/Files/AddFile";
 import { ToastContainer, toast, Zoom } from 'react-toastify';
 
 const App = () => {
-  console.log("re-render")
   const routes = [
     { path: "/", element: <Home /> },
     { path: "/ho-so/tao-ho-so-dien-tu", element: <AddFile /> },

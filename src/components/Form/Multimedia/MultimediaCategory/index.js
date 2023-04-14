@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import Table from "../../../Table"
+import { Table } from "../../../../custom/Components"
 import axios from "axios"
 
 const API_DOCUMENT = "https://6381f08c53081dd5498bea48.mockapi.io/api/v1/document"

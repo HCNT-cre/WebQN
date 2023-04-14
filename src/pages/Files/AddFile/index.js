@@ -3,69 +3,101 @@ import { useState, useEffect } from "react"
 import DocCategory from "../../../components/Form/Document/DocCategory"
 import MultimediaCategory from "../../../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
-import Table from "../../../components/Table"
+import { Table } from "../../../custom/Components"
 import { useSelector, useDispatch } from "react-redux"
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Button, Select } from "antd"
-import * as actionFile from "../../../actions/formFile"
+import { Button, Input, Select, Popconfirm } from "antd"
+import { OpenFile } from "../../../actions/formFile"
 import File from "../../../components/Form/File/File"
+import { FIELDS_TABLE } from "../../../storage/FileStorage"
+import { STATE } from "../../../storage/Storage"
+import { reloadPage, DeleteData } from "../../../custom/Function"
+import { useButtonClickOutside } from "../../../custom/Hook"
+
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_UPDATE_STATE_GOV_FILE = process.env.REACT_APP_API_GOV_FILE_UPDATE_STATE
 const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
+const API_GOV_FILE_DELETE = process.env.REACT_APP_API_GOV_FILE_DELETE
 
-const FIELDS_TABLE = [
-    { title: "Mã hồ sơ", key: "gov_file_code", width: "150px" },
-    { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
-    { title: "Phông", key: "organ_id", width: "100%" },
-    { title: "Số lượng tờ", key: "sheet_number", width: "70px" },
-    { title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
-    { title: "Thời gian (bắt đầu - kết thúc)", key: "start_date", width: "100%" },
-    { title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
-    { title: "Chế độ sử dụng", key: "rights", width: "100%" },
-    { title: "Trạng thái", key: "Status", width: "150%" },
-    { title: "Chức năng", key: "Function", width: "100%" },
-]
+const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
+    const [buttonRef, contentRef, toggleContent, showContent] = useButtonClickOutside(false);
+    const dispatch = useDispatch()
+    const [open, setOpen] = useState(false);
 
-const STATE = ["", "Mở", "Đóng", "Nộp lưu cơ quan", "Lưu trữ cơ quan", "Nộp lưu lịch sử", "Lưu trữ lịch sử"]
+    useEffect(() => {
+        const button = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-primary")
+        if (button === undefined)
+            return
+        for (let i = 0; i < button.length; i++) {
+            button[i].textContent = "Xóa"
+        }
+        const button2 = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-default ")
+        if (button2 === undefined)
+            return
+        for (let i = 0; i < button2.length; i++) {
+            button2[i].textContent = "Hủy"
+        }
+        // check if popup is hidden
+        const popupContainer = document.querySelectorAll(".ant-popover-hidden")[0]
+        contentRef.current[0] = popupContainer
+    }, [open])
 
-const ButtonFunctions = ({ handleClickOnFile, IDFile, dispatch }) => {
-    const [stateMoreFunction, setStateMoreFunction] = useState(false)
+    const BUTTON_DEFAULT = [
+        { icon: <i className="fa-solid fa-upload"></i>, title: "Thêm văn bản", color: "text-[#537FE7]", onclick: () => { handleClickOnFile(IDFile) } },
+        { icon: <i class="fa-solid fa-photo-film"></i>, title: "Thêm tài liệu đa phương tiện", color: "text-[#19376D]", onclick: () => { } },
+        { icon: <i class="fa-regular fa-folder-open"></i>, title: "Xem hồ sơ", color: "text-[#FF8400]", onclick: () => { dispatch(OpenFile("watch_file", IDFile)) } }
+    ]
+
+    const BUTTON_MORE = [
+        { icon: <i class="fa-solid fa-hammer"></i>, title: "Sửa hồ sơ", color: "text-[#E7B10A]", onclick: () => { dispatch(OpenFile("update_file", IDFile)) } },
+        {
+            popup: true,
+            element:
+                <Popconfirm title="Xóa hồ sơ"
+                    open={open}
+                    description="Bạn có chắc chắn xóa?"
+                    onConfirm={async () => {
+                        await DeleteData(API_GOV_FILE_DELETE, IDFile, "Xóa hồ sơ thành công")
+                        await reset()
+                    }}
+                    onCancel={() => setOpen(false)}
+                >
+                    <Button onClick={() => { setOpen(true) }} className={`cursor-pointer basis-1/4 max-w-[25%] text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} title="Xóa hồ sơ" ><i class="fa-solid fa-trash-can"></i></Button>
+                </Popconfirm>
+        },
+
+
+        { icon: <i class="fa-solid fa-clipboard-list"></i>, title: "Xem lịch sử", color: "text-[#FF8400]", onclick: () => { } },
+        { icon: <i class="fa-solid fa-user-doctor"></i>, title: "Phân quyền", color: "text-[#0014FF]", onclick: () => { } },
+    ]
+
 
     return (
         <div className="flex flex-wrap">
-            <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#537FE7] px-[2px] font-bold italic block text-left text-[16px] hover:underline" onClick={() => { handleClickOnFile(IDFile) }} title="Thêm văn bản">
-                <i className="fa-solid fa-upload"></i>
-            </button>
-            <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#19376D] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Thêm tài liệu đa phương tiện">
-                <i class="fa-solid fa-photo-film"></i>
-            </button>
-            <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#FF8400] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Xem hồ sơ" onClick={() => {
-                dispatch(actionFile.OpenFile("watch_file", IDFile))
-            }}>
-                <i class="fa-regular fa-folder-open"></i></button>
+            {BUTTON_DEFAULT.map((item, index) => {
+                return (
+                    <Button className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
+                        {item.icon}
+                    </Button>
+                )
+            })}
 
             <div className="relative">
-                <button onClick={() => setStateMoreFunction(!stateMoreFunction)} className="px-[2px] text-[#000] cursor-pointer" title="Xem thêm">
+                <Button ref={buttonRef} onClick={toggleContent} className="px-[2px] text-[#000] cursor-pointer border-none text-center" title="Xem thêm">
                     <i class="fa-solid fa-ellipsis"></i>
-                </button>
-                {stateMoreFunction &&
-                    <div className="absolute right-[0] top-[-25px] flex">
-                        <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#E7B10A] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Sửa hồ sơ" onClick={() => dispatch(actionFile.OpenFile("update_file", IDFile))}>
-                            <i class="fa-solid fa-hammer"></i>
-                        </button>
-                        <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#20262E] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Xóa hồ sơ">
-                            <i class="fa-sharp fa-solid fa-trash"></i></button>
-                        <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#FF8B13] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Nhật ký hồ sơ">
-                            <i class="fa-solid fa-book"></i>
-                        </button>
-                        <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#7d8183] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Nộp lưu">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                        </button>
-                        <button className="cursor-pointer basis-1/4 max-w-[25%] text-[#0014FF] px-[2px] font-bold italic block text-left text-[16px] hover:underline" title="Phân quyền">
-                            <i class="fa-solid fa-user-doctor"></i>
-                        </button>
+                </Button>
+                {showContent &&
+                    <div ref={el => { contentRef.current[1] = el }} className="absolute right-[0] top-[-25px] flex">
+                        {BUTTON_MORE.map((item) => {
+                            if (item.popup) return item.element
+                            return (
+                                <Button className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
+                                    {item.icon}
+                                </Button>
+                            )
+                        })}
                     </div>
                 }
             </div>
@@ -73,23 +105,17 @@ const ButtonFunctions = ({ handleClickOnFile, IDFile, dispatch }) => {
     )
 }
 
-
 const AddFile = () => {
-
     const dispatch = useDispatch();
     const [files, setFiles] = useState([])
     const [stateDocCategory, setStateDocCategory] = useState(false)
     const [stateMultimediaCategory, setStateMultimediaCategory] = useState(false)
     const [IDFile, setIDFile] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
-    const [stateAction, setStateAction] = useState(false)
     const [stateCheckBox, setStateCheckBox] = useState([])
     const userPermissionId = useSelector(state => state.user.permission_id)
     const userPermissions = useSelector(state => state.user.permissions)
-
-    const reloadPage = () => {
-        document.location.reload()
-    }
+    const [buttonRef, contentRef, toggleContent, showContent] = useButtonClickOutside(false);
 
     const [search, setSearch] = useState({
         "title": null,
@@ -107,16 +133,28 @@ const AddFile = () => {
             "title": '',
             "organ_id": '',
             "offce": '',
-            "state": '',
+            "state": 'Tất cả',
             "type": ''
         }))
     }
-    console.log(search)
+
     const handleClickOnFile = (IDFile) => {
         setIDFile(IDFile)
         setStateDocCategory(true)
     }
-
+    const reset = () => {
+        const fetchFileData = async () => {
+            try {
+                setIsLoading(true);
+                const response = await axios.get(API_GOV_FILE_GET_ALL + userPermissionId)
+                setIsLoading(false);
+                setFiles(getFileFromResponse(response))
+            } catch (err) {
+                console.log(err)
+            }
+        };
+        fetchFileData();
+    }
     const getFileFromResponse = (response) => {
         const rawDatas = response.data
         let filesArray = []
@@ -131,11 +169,11 @@ const AddFile = () => {
                 'start_date': rawData.start_date || '',
                 'maintenance': rawData.maintenance || '',
                 'rights': rawData.rights || '',
-                'Status': <button onClick={() => {
+                'state': <button onClick={() => {
                     search["state"] = rawData.state
                     handleSearch()
                 }}>{STATE[rawData.state]}</button>,
-                'Function': <ButtonFunctions handleClickOnFile={handleClickOnFile} IDFile={rawData.id} dispatch={dispatch} />
+                'Function': <ButtonFunctionOfEachFile handleClickOnFile={handleClickOnFile} IDFile={rawData.id} reset={reset} />
             }
             filesArray.push(row)
         }
@@ -166,9 +204,7 @@ const AddFile = () => {
         }
     }
 
-    const handleChangeSearch = (ev) => {
-        const { name, value } = ev.target
-        console.log(name, value)
+    const handleChangeSearch = (name, value) => {
         setSearch((prev) => ({
             ...prev,
             [name]: value
@@ -177,7 +213,6 @@ const AddFile = () => {
 
     const handleChangeStateFile = async (newState) => {
         const listState = []
-
         for (const state of stateCheckBox) {
             const id = parseInt(state.substring(state.indexOf("checkbox") + "checkbox".length))
             listState.push({
@@ -235,27 +270,18 @@ const AddFile = () => {
         }
     }
 
-    useEffect(() => {
-        const fetchFileData = async () => {
-            try {
-                setIsLoading(true);
-                const response = await axios.get(API_GOV_FILE_GET_ALL + userPermissionId,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
-                );
-                setIsLoading(false);
-                setFiles(getFileFromResponse(response))
-            } catch (err) {
-                console.log(err)
-            }
-        };
 
-        fetchFileData();
+
+    useEffect(() => {
+        reset()
     }, [userPermissionId])
 
+    const BUTTON_ACTIONS = [
+        { title: "Tìm kiếm", icon: <i class="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
+        { title: "Làm mới", icon: <i class="fa-solid fa-sync"></i>, onClick: resetSearch },
+        { title: "Thêm hồ sơ mới", icon: <i class="fa-solid fa-plus"></i>, onClick: () => { dispatch(OpenFile("open_upload")) } },
+        { title: "Xuất Excel", icon: <i class="fa-solid fa-file-excel"></i>, onClick: () => { } },
+    ]
 
     return (
         <>
@@ -274,62 +300,82 @@ const AddFile = () => {
 
             <div className="w-full my-[24px]">
                 <div className="mt-[16px] mx-[24px] flex ">
+
                     <div className="w-[11.11111%] px-[5px]">
-                        <input onChange={handleChangeSearch} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="bar-page-input"></input>
-                    </div>
-                    <div className="w-[11.11111%] px-[5px]">
-                        <input onChange={handleChangeSearch} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="bar-page-input"></input>
+                        <Input allowClear onChange={(ev) => handleChangeSearch("title", ev.target.value)} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px] flex items-center"></Input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <input onChange={handleChangeSearch} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="bar-page-input"></input>
+                        <Input onChange={(ev) => handleChangeSearch("start_date", ev.target.value)} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <select value={search["state"]} onChange={handleChangeSearch} id="state-file" className="bar-page-input" placeholder="Trạng thái" name="state" >
-                            <option value="">Tất cả</option>
-                            <option value="1">Mở</option>
-                            <option value="2">Đóng</option>
-                            <option value="3">Nộp lưu cơ quan</option>
-                            <option value="4">Lưu trữ cơ quan</option>
-                            <option value="5">Nộp lưu lịch sử</option>
-                            <option value="6">Lưu trữ lịch sử</option>
-                        </select>
+                        <Input onChange={(ev) => handleChangeSearch("end_date", ev.target.value)} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
                     </div>
-                    
-                    <div onClick={resetSearch} className="w-[11.11111%] text-white  text-center px-[5px] rounded-[5px]">
-                        <Button className="rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[14px] text-white items-center">
-                            Xóa tìm kiếm
-                        </Button>
+                    <div className="w-[11.11111%] px-[5px]">
+                        <Select
+                            name="state"
+                            className="w-full bg-white outline-none rounded-none"
+                            allowClear
+                            showSearch
+                            defaultValue="Tất cả"
+                            value={search["state"]}
+                            optionFilterProp="children"
+                            onChange={(value) => handleChangeSearch("state", value)}
+                            filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={[
+                                {
+                                    value: '1',
+                                    label: 'Mở',
+                                },
+                                {
+                                    value: '2',
+                                    label: 'Đóng',
+                                },
+                                {
+                                    value: '3',
+                                    label: 'Nộp lưu cơ quan',
+                                },
+                                {
+                                    value: '4',
+                                    label: 'Lưu trữ cơ quan',
+                                },
+                                {
+                                    value: '5',
+                                    label: 'Nộp lưu lịch sử',
+                                },
+                                {
+                                    value: '6',
+                                    label: 'Lưu trữ lịch sử',
+                                },
+                            ]}
+                        />
                     </div>
-                    <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  flex">
-                        <Button onClick={handleSearch} className="rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[14px] text-white items-center">
-                            <div className="mr-[8px]">
-                                <i class="fa-solid fa-magnifying-glass"></i>
+
+                    {BUTTON_ACTIONS.map((item, index) => {
+                        return (
+                            <div key={index} className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+                                <Button onClick={item.onClick} className="rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center">
+                                    <div className="mr-[8px]">
+                                        {item.icon}
+                                    </div>
+                                    {item.title}
+                                </Button>
                             </div>
-                            Tìm kiếm
-                        </Button>
-                    </div>
-                    <div className="w-[11.11111%] text-white  text-center px-[5px] rounded-[5px] ">
-                        <Button onClick={() => { dispatch(actionFile.OpenFile("open_upload")) }} className="rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[14px] text-white items-center">
-                            Thêm hồ sơ mới
-                        </Button>
-                    </div>
-                    <div className="w-[11.11111%] text-white  text-center px-[5px] rounded-[5px]  ">
-                        <Button className="rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[14px] text-white items-center">
-                            <div className="mr-[8px]">
-                                <i class="fa-regular fa-file-excel"></i>
-                            </div>
-                            Xuất Excel
-                        </Button>
-                    </div>
+                        )
+                    }
+                    )}
+
                     <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  relative">
-                        <Button onClick={() => { setStateAction(!stateAction) }} className="rounded-[5px] flex justify-center items-center bg-[#00f] w-full px-[12px] py-[6px] text-[14px] text-white">
+                        <Button disabled={!(stateCheckBox.length > 0)} onClick={toggleContent} ref={buttonRef} className=" disabled:opacity-60 rounded-[5px] flex justify-center items-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white">
                             Hành động
                             <div className="ml-[4px]">
                                 <i class="fa-solid fa-chevron-down"></i>
                             </div>
                         </Button>
-                        {stateAction &&
-                            <div className="rounded-[5px]  text-left top-[40px] absolute bg-[#00f] w-full text-[14px] z-10 ">
+
+                        {showContent &&
+                            <div ref={contentRef} className="rounded-[5px]  text-left top-[40px] absolute bg-[#00f] w-full text-[14px] z-10 ">
                                 {userPermissions.map((permission, index) => {
                                     return (
                                         <button className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-white border-none truncate" onClick={() => handleChangeStateFile(permission.update_state)}>{permission.permission_title}</button>
@@ -345,7 +391,7 @@ const AddFile = () => {
                 <Table setStateCheckBox={setStateCheckBox} fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={true} />
             </div >
 
-            <File />
+            <File reset={reset} />
             <DocCategory govFileID={IDFile} stateDocCategory={stateDocCategory} setStateDocCategory={setStateDocCategory} />
             <MultimediaCategory stateMultimediaCategory={stateMultimediaCategory} setStateMultimediaCategory={setStateMultimediaCategory} />
         </>
