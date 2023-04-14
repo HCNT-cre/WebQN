@@ -375,7 +375,7 @@ const AddFile = () => {
                         </Button>
 
                         {showContent &&
-                            <div ref={contentRef} className="rounded-[5px]  text-left top-[40px] absolute bg-[#00f] w-full text-[14px] z-10 ">
+                            <div ref={el => { contentRef.current[0] = el }} className="rounded-[5px]  text-left top-[40px] absolute bg-[#00f] w-full text-[14px] z-10 ">
                                 {userPermissions.map((permission, index) => {
                                     return (
                                         <button className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-white border-none truncate" onClick={() => handleChangeStateFile(permission.update_state)}>{permission.permission_title}</button>
