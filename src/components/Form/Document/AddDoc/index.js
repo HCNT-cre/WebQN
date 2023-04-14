@@ -191,6 +191,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
             setIsSubmitFormSuccess(true)
             notifySuccess("Thêm văn bản thành công")
         } catch (error) {
+            setIsLoading(false)
             notifyError("Thêm văn bản thất bại")
         }
     }
