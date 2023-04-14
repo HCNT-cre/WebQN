@@ -22,14 +22,17 @@ const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_GOV_FILE_DELETE = process.env.REACT_APP_API_GOV_FILE_DELETE
 
 const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
+    const userPermissionId = useSelector(state => state.user.permission_id)
     const handleClose = () => {
         setOpen(false)
     }
-    const handleConfirm = async () => {
-        await DeleteData(API_GOV_FILE_DELETE, IDFile, "Xóa hồ sơ thành công")
-        await reset()
 
+    const handleConfirm = async () => {
+        DeleteData(API_GOV_FILE_DELETE, { id: IDFile, perm_token: userPermissionId}, "Xóa thành công")
+        await reset()
+        setOpen(false)
     }
+
     const [buttonRef, contentRef, toggleContent, showContent] = useButtonClickOutside(false, handleClose);
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false);
@@ -83,31 +86,33 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
 
 
     return (
-        <div className="flex flex-wrap">
-            {BUTTON_DEFAULT.map((item) => {
-                return (
-                    <Button key={GetKey()} className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
-                        {item.icon}
-                    </Button>
-                )
-            })}
+        <div>
+            <div className="flex flex-wrap">
+                {BUTTON_DEFAULT.map((item) => {
+                    return (
+                        <Button key={GetKey()} className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
+                            {item.icon}
+                        </Button>
+                    )
+                })}
 
-            <div className="relative">
-                <Button ref={buttonRef} onClick={toggleContent} className="px-[2px] text-[#000] cursor-pointer border-none text-center" title="Xem thêm">
-                    <i className="fa-solid fa-ellipsis"></i>
-                </Button>
-                {showContent &&
-                    <div ref={el => { contentRef.current[1] = el }} className="absolute right-[0] top-[-25px] flex">
-                        {BUTTON_MORE.map((item) => {
-                            if (item.popup) return item.element
-                            return (
-                                <Button key={GetKey()} className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
-                                    {item.icon}
-                                </Button>
-                            )
-                        })}
-                    </div>
-                }
+                <div className="relative">
+                    <Button ref={buttonRef} onClick={toggleContent} className="px-[2px] text-[#000] cursor-pointer border-none text-center" title="Xem thêm">
+                        <i className="fa-solid fa-ellipsis"></i>
+                    </Button>
+                    {showContent &&
+                        <div ref={el => { contentRef.current[1] = el }} className="absolute right-[0] top-[-25px] flex">
+                            {BUTTON_MORE.map((item) => {
+                                if (item.popup) return item.element
+                                return (
+                                    <Button key={GetKey()} className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
+                                        {item.icon}
+                                    </Button>
+                                )
+                            })}
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     )
@@ -133,37 +138,11 @@ const AddFile = () => {
         "type": null
     })
 
-    const resetSearch = async () => {
-        let request = API_GOV_FILE_SEARCH + userPermissionId
-        const response = await axios.get(request)
-        setFiles(getFileFromResponse(response))
-        setSearch(prev => ({
-            "title": '',
-            "organ_id": '',
-            "offce": '',
-            "state": 'Tất cả',
-            "type": ''
-        }))
-    }
-
     const handleClickOnFile = (IDFile) => {
         setIDFile(IDFile)
         setStateDocCategory(true)
     }
 
-    const reset = () => {
-        const fetchFileData = async () => {
-            try {
-                setIsLoading(true);
-                const response = await axios.get(API_GOV_FILE_GET_ALL + userPermissionId)
-                setIsLoading(false);
-                setFiles(getFileFromResponse(response))
-            } catch (err) {
-                console.log(err)
-            }
-        };
-        fetchFileData();
-    }
     const getFileFromResponse = (response) => {
         const rawDatas = response.data
         let filesArray = []
@@ -188,6 +167,35 @@ const AddFile = () => {
         }
         return filesArray
     }
+    const resetSearch = async () => {
+        let request = API_GOV_FILE_SEARCH + userPermissionId
+        const response = await axios.get(request)
+        setFiles(getFileFromResponse(response))
+        setSearch(prev => ({
+            "title": '',
+            "organ_id": '',
+            "offce": '',
+            "state": 'Tất cả',
+            "type": ''
+        }))
+    }
+
+
+
+    const reset = () => {
+        const fetchFileData = async () => {
+            try {
+                setIsLoading(true);
+                const response = await axios.get(API_GOV_FILE_GET_ALL + userPermissionId)
+                setIsLoading(false);
+                setFiles(getFileFromResponse(response))
+            } catch (err) {
+                console.log(err)
+            }
+        };
+        fetchFileData();
+    }
+
 
     const handleSearch = async (ev) => {
         try {
