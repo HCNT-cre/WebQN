@@ -49,3 +49,7 @@ export const DeleteData = async (API, id = null, message = "Xóa thành công") 
     await axios.delete(currentAPI)
     notifySuccess(message)
 }
+
+export const GetKey = () =>{
+    return Math.random();
+}
