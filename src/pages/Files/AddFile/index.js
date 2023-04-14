@@ -151,8 +151,8 @@ const AddFile = () => {
         for (const rawData of rawDatas) {
             const row = {
                 'id': rawData.id,
-                'gov_file_code': rawData.gov_file_code || '',
-                'title': rawData.title || '',
+                'gov_file_code': <p className="cursor-pointer hover:underline" onClick={() => handleClickOnFile(rawData.id)}>{rawData.gov_file_code || ''}</p>,
+                'title': <p className="cursor-pointer hover:underline" onClick={() => handleClickOnFile(rawData.id)}>{rawData.title || ''}</p>,
                 'organ_id': rawData.organ_id || '',
                 'sheet_number': rawData.sheet_number || '',
                 'total_doc': rawData.total_doc || '',
@@ -169,6 +169,7 @@ const AddFile = () => {
         }
         return filesArray
     }
+
     const resetSearch = async () => {
         let request = API_GOV_FILE_SEARCH + userPermissionId
         const response = await axios.get(request)
@@ -181,8 +182,6 @@ const AddFile = () => {
             "type": ''
         }))
     }
-
-
 
     const reset = () => {
         const fetchFileData = async () => {
@@ -197,7 +196,6 @@ const AddFile = () => {
         };
         fetchFileData();
     }
-
 
     const handleSearch = async (ev) => {
         try {
@@ -283,8 +281,6 @@ const AddFile = () => {
             console.log(error)
         }
     }
-
-
 
     useEffect(() => {
         reset()
