@@ -23,9 +23,6 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
         setForm(pdfData)
     }, [pdfData])
 
-    console.log(pdfData, form)
-    console.log(pdfID)
-
     const extractDataOCR = async () => {
         const formData = new FormData();
         formData.append('file', pdfFile);

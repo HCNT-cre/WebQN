@@ -3,28 +3,46 @@ import { useState, useEffect } from "react"
 import DocCategory from "../../../components/Form/Document/DocCategory"
 import MultimediaCategory from "../../../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
-import {Table} from "../../../custom/Components"
+import { Table } from "../../../custom/Components"
 import { useSelector, useDispatch } from "react-redux"
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Button } from "antd"
+import { Button, Input, Select, Popconfirm } from "antd"
 import { OpenFile } from "../../../actions/formFile"
 import File from "../../../components/Form/File/File"
 import { FIELDS_TABLE } from "../../../storage/FileStorage"
 import { STATE } from "../../../storage/Storage"
-import { reloadPage } from "../../../custom/Function"
+import { reloadPage, DeleteData } from "../../../custom/Function"
 import { useButtonClickOutside } from "../../../custom/Hook"
 
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_UPDATE_STATE_GOV_FILE = process.env.REACT_APP_API_GOV_FILE_UPDATE_STATE
 const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
+const API_GOV_FILE_DELETE = process.env.REACT_APP_API_GOV_FILE_DELETE
 
-
-const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile }) => {
+const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     const [buttonRef, contentRef, toggleContent, showContent] = useButtonClickOutside(false);
     const dispatch = useDispatch()
+    const [open, setOpen] = useState(false);
 
+    useEffect(() => {
+        const button = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-primary")
+        if (button === undefined)
+            return
+        for (let i = 0; i < button.length; i++) {
+            button[i].textContent = "Xóa"
+        }
+        const button2 = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-default ")
+        if (button2 === undefined)
+            return
+        for (let i = 0; i < button2.length; i++) {
+            button2[i].textContent = "Hủy"
+        }
+        // check if popup is hidden
+        const popupContainer = document.querySelectorAll(".ant-popover-hidden")[0]
+        contentRef.current[0] = popupContainer
+    }, [open])
 
     const BUTTON_DEFAULT = [
         { icon: <i className="fa-solid fa-upload"></i>, title: "Thêm văn bản", color: "text-[#537FE7]", onclick: () => { handleClickOnFile(IDFile) } },
@@ -34,7 +52,23 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile }) => {
 
     const BUTTON_MORE = [
         { icon: <i class="fa-solid fa-hammer"></i>, title: "Sửa hồ sơ", color: "text-[#E7B10A]", onclick: () => { dispatch(OpenFile("update_file", IDFile)) } },
-        { icon: <i class="fa-solid fa-trash"></i>, title: "Xóa hồ sơ", color: "text-[#20262E]", onclick: () => { } },
+        {
+            popup: true,
+            element:
+                <Popconfirm title="Xóa hồ sơ"
+                    open={open}
+                    description="Bạn có chắc chắn xóa?"
+                    onConfirm={async () => {
+                        await DeleteData(API_GOV_FILE_DELETE, IDFile, "Xóa hồ sơ thành công")
+                        await reset()
+                    }}
+                    onCancel={() => setOpen(false)}
+                >
+                    <Button onClick={() => { setOpen(true) }} className={`cursor-pointer basis-1/4 max-w-[25%] text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} title="Xóa hồ sơ" ><i class="fa-solid fa-trash-can"></i></Button>
+                </Popconfirm>
+        },
+
+
         { icon: <i class="fa-solid fa-clipboard-list"></i>, title: "Xem lịch sử", color: "text-[#FF8400]", onclick: () => { } },
         { icon: <i class="fa-solid fa-user-doctor"></i>, title: "Phân quyền", color: "text-[#0014FF]", onclick: () => { } },
     ]
@@ -44,23 +78,24 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile }) => {
         <div className="flex flex-wrap">
             {BUTTON_DEFAULT.map((item, index) => {
                 return (
-                    <button className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-left text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
+                    <Button className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
                         {item.icon}
-                    </button>
+                    </Button>
                 )
             })}
 
             <div className="relative">
-                <button ref={buttonRef} onClick={toggleContent} className="px-[2px] text-[#000] cursor-pointer" title="Xem thêm">
+                <Button ref={buttonRef} onClick={toggleContent} className="px-[2px] text-[#000] cursor-pointer border-none text-center" title="Xem thêm">
                     <i class="fa-solid fa-ellipsis"></i>
-                </button>
+                </Button>
                 {showContent &&
-                    <div ref={contentRef} className="absolute right-[0] top-[-25px] flex">
+                    <div ref={el => { contentRef.current[1] = el }} className="absolute right-[0] top-[-25px] flex">
                         {BUTTON_MORE.map((item) => {
+                            if (item.popup) return item.element
                             return (
-                                <button className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-left text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
+                                <Button className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
                                     {item.icon}
-                                </button>
+                                </Button>
                             )
                         })}
                     </div>
@@ -69,7 +104,6 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile }) => {
         </div>
     )
 }
-
 
 const AddFile = () => {
     const dispatch = useDispatch();
@@ -82,6 +116,7 @@ const AddFile = () => {
     const userPermissionId = useSelector(state => state.user.permission_id)
     const userPermissions = useSelector(state => state.user.permissions)
     const [buttonRef, contentRef, toggleContent, showContent] = useButtonClickOutside(false);
+
     const [search, setSearch] = useState({
         "title": null,
         "organ_id": null,
@@ -98,7 +133,7 @@ const AddFile = () => {
             "title": '',
             "organ_id": '',
             "offce": '',
-            "state": '',
+            "state": 'Tất cả',
             "type": ''
         }))
     }
@@ -107,7 +142,19 @@ const AddFile = () => {
         setIDFile(IDFile)
         setStateDocCategory(true)
     }
-
+    const reset = () => {
+        const fetchFileData = async () => {
+            try {
+                setIsLoading(true);
+                const response = await axios.get(API_GOV_FILE_GET_ALL + userPermissionId)
+                setIsLoading(false);
+                setFiles(getFileFromResponse(response))
+            } catch (err) {
+                console.log(err)
+            }
+        };
+        fetchFileData();
+    }
     const getFileFromResponse = (response) => {
         const rawDatas = response.data
         let filesArray = []
@@ -126,7 +173,7 @@ const AddFile = () => {
                     search["state"] = rawData.state
                     handleSearch()
                 }}>{STATE[rawData.state]}</button>,
-                'Function': <ButtonFunctionOfEachFile handleClickOnFile={handleClickOnFile} IDFile={rawData.id} dispatch={dispatch} />
+                'Function': <ButtonFunctionOfEachFile handleClickOnFile={handleClickOnFile} IDFile={rawData.id} reset={reset} />
             }
             filesArray.push(row)
         }
@@ -157,9 +204,7 @@ const AddFile = () => {
         }
     }
 
-    const handleChangeSearch = (ev) => {
-        const { name, value } = ev.target
-        console.log(name, value)
+    const handleChangeSearch = (name, value) => {
         setSearch((prev) => ({
             ...prev,
             [name]: value
@@ -225,25 +270,10 @@ const AddFile = () => {
         }
     }
 
-    useEffect(() => {
-        const fetchFileData = async () => {
-            try {
-                setIsLoading(true);
-                const response = await axios.get(API_GOV_FILE_GET_ALL + userPermissionId,
-                    {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
-                    }
-                );
-                setIsLoading(false);
-                setFiles(getFileFromResponse(response))
-            } catch (err) {
-                console.log(err)
-            }
-        };
 
-        fetchFileData();
+
+    useEffect(() => {
+        reset()
     }, [userPermissionId])
 
     const BUTTON_ACTIONS = [
@@ -272,24 +302,54 @@ const AddFile = () => {
                 <div className="mt-[16px] mx-[24px] flex ">
 
                     <div className="w-[11.11111%] px-[5px]">
-                        <input onChange={handleChangeSearch} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="bar-page-input"></input>
+                        <Input allowClear onChange={(ev) => handleChangeSearch("title", ev.target.value)} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px] flex items-center"></Input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <input onChange={handleChangeSearch} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="bar-page-input"></input>
+                        <Input onChange={(ev) => handleChangeSearch("start_date", ev.target.value)} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <input onChange={handleChangeSearch} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="bar-page-input"></input>
+                        <Input onChange={(ev) => handleChangeSearch("end_date", ev.target.value)} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <select value={search["state"]} onChange={handleChangeSearch} id="state-file" className="bar-page-input" placeholder="Trạng thái" name="state" >
-                            <option value="">Tất cả</option>
-                            <option value="1">Mở</option>
-                            <option value="2">Đóng</option>
-                            <option value="3">Nộp lưu cơ quan</option>
-                            <option value="4">Lưu trữ cơ quan</option>
-                            <option value="5">Nộp lưu lịch sử</option>
-                            <option value="6">Lưu trữ lịch sử</option>
-                        </select>
+                        <Select
+                            name="state"
+                            className="w-full bg-white outline-none rounded-none"
+                            allowClear
+                            showSearch
+                            defaultValue="Tất cả"
+                            value={search["state"]}
+                            optionFilterProp="children"
+                            onChange={(value) => handleChangeSearch("state", value)}
+                            filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={[
+                                {
+                                    value: '1',
+                                    label: 'Mở',
+                                },
+                                {
+                                    value: '2',
+                                    label: 'Đóng',
+                                },
+                                {
+                                    value: '3',
+                                    label: 'Nộp lưu cơ quan',
+                                },
+                                {
+                                    value: '4',
+                                    label: 'Lưu trữ cơ quan',
+                                },
+                                {
+                                    value: '5',
+                                    label: 'Nộp lưu lịch sử',
+                                },
+                                {
+                                    value: '6',
+                                    label: 'Lưu trữ lịch sử',
+                                },
+                            ]}
+                        />
                     </div>
 
                     {BUTTON_ACTIONS.map((item, index) => {
@@ -331,7 +391,7 @@ const AddFile = () => {
                 <Table setStateCheckBox={setStateCheckBox} fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={true} />
             </div >
 
-            <File />
+            <File reset={reset} />
             <DocCategory govFileID={IDFile} stateDocCategory={stateDocCategory} setStateDocCategory={setStateDocCategory} />
             <MultimediaCategory stateMultimediaCategory={stateMultimediaCategory} setStateMultimediaCategory={setStateMultimediaCategory} />
         </>

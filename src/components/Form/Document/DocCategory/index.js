@@ -1,11 +1,19 @@
 import { useState, useEffect } from "react"
 import AddDoc from "../AddDoc"
-import Table from "../../../Table"
+import { Table } from "../../../../custom/Components"
 import axios from "axios"
 import FixDoc from "../FixDoc"
+import { DeleteData } from "../../../../custom/Function"
+import { PopupConfirm } from "../../../../custom/Components"
+import { Button, Popconfirm } from 'antd';
 
-const API_GET_DOCUMENT_OF_FILE = "http://127.0.0.1:8000/get_doc_by_gov_file_id/?gov_file_id="
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
+const API_DOCUMENT_GET = process.env.REACT_APP_API_DOCUMENT_GET
+const API_DOCUMENT_DELETE = process.env.REACT_APP_API_DOCUMENT_DELETE
+
 const TABLE_FIELDS = [
+    { title: "TT", key: "doc_ordinal", width: "50px" },
     { title: "Ngày ban hành", key: "issued_date", width: "100%" },
     { title: "Bút ký", key: "autograph", width: "100%" },
     { title: "Mã văn bản", key: "code_number", width: "100%" },
@@ -13,12 +21,41 @@ const TABLE_FIELDS = [
     { title: "Chức năng", key: "Function", width: "100px" },
 ]
 
-const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID }) => {
+const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, fetchDocumentsOfFile, govFileID }) => {
+    const [open, setOpen] = useState(false);
+    useEffect(() => {
+        const button = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-primary")
+        if (button === undefined)
+            return
+        for (let i = 0; i < button.length; i++) {
+            button[i].textContent = "Xóa"
+        }
+        const button2 = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-default ")
+        if (button2 === undefined)
+            return
+        for (let i = 0; i < button2.length; i++) {
+            button2[i].textContent = "Hủy"
+        }
+    }, [open])
+
     return (
         <div className="flex justify-between">
-            <button onClick={(ev) => handleClickOnDocument(URL_PDF_FILE, pdfData, pdfID)} className="font-bold italic block text-left text-[16px] hover:underline text-[#537FE7]" title="Xem chi tiết"><i class="fa-regular fa-eye"></i></button>
-            <button className="font-bold italic block text-left text-[16px] hover:underline text-[#7d8183]" title="Xóa" ><i class="fa-solid fa-trash-can"></i></button>
-            <button className="font-bold italic block text-left text-[16px] hover:underline text-[#FF8400]" title="Phân quyền"><i class="fa-solid fa-user-doctor"></i></button>
+            <Button onClick={(ev) => handleClickOnDocument(URL_PDF_FILE, pdfData, pdfID)} className="w-[33%] px-[2px] border-none font-bold italic block text-center text-[16px] hover:underline text-[#537FE7]" title="Xem chi tiết"><i class="fa-regular fa-eye"></i></Button>
+
+            <Popconfirm title="Xóa văn bản"
+                open={open}
+                description="Bạn có chắc chắn xóa?"
+                onConfirm={async () => {
+                    await DeleteData(API_DOCUMENT_DELETE, pdfID, "Xóa văn bản thành công")
+                    await fetchDocumentsOfFile(govFileID)
+                }}
+                onCancel={() => setOpen(false)}
+            >
+                <Button onClick={() => { setOpen(true) }} className="w-[33%] px-[2px] border-none font-bold italic block text-center text-[16px] hover:underline text-[#7d8183]" title="Xóa" ><i class="fa-solid fa-trash-can"></i></Button>
+            </Popconfirm>
+
+
+            <Button className="w-[33%] px-[2px] border-none font-bold italic block text-center text-[16px] hover:underline text-[#FF8400]" title="Phân quyền"><i class="fa-solid fa-user-doctor"></i></Button>
         </div>
     )
 }
@@ -33,7 +70,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
     const [pdfFileLink, setPdfFileLink] = useState(null)
     const [pdfData, setPdfData] = useState(null)
     const [pdfID, setPdfID] = useState(null)
-    const handleClickOnDocument = async (URL_PDF_FILE, pdfData,pdfID) => {
+    const handleClickOnDocument = async (URL_PDF_FILE, pdfData, pdfID) => {
         setPdfFileLink(URL_PDF_FILE)
         setPdfData(pdfData)
         setPdfID(pdfID)
@@ -44,23 +81,22 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
     }
 
     const fetchDocumentsOfFile = async (govFileID) => {
-        const currentAPI = `${API_GET_DOCUMENT_OF_FILE}${govFileID}`;
+        const currentAPI = `${API_DOCUMENT_GET}${govFileID}`;
         try {
             const response = await fetch(currentAPI);
             if (response.ok) {
                 const rawDatas = await response.json();
-                console.log(rawDatas);
                 const filesArray = []
                 for (const rawData of rawDatas) {
                     filesArray.push({
                         "id": rawData.id,
-                        "issued_date": rawData.issued_date || "test",
-                        "autograph": rawData.autograph || "test",
-                        "code_number": rawData.code_number || "test",
+                        "doc_ordinal": rawData.doc_ordinal,
+                        "issued_date": rawData.issued_date,
+                        "autograph": rawData.autograph,
+                        "code_number": rawData.code_number,
                         "doc_name": rawData.doc_name,
-                        "Function": <ButtonFunctions pdfData={rawData} URL_PDF_FILE={rawData.url} handleClickOnDocument={handleClickOnDocument} pdfID={rawData.id}/>,
+                        "Function": <ButtonFunctions pdfData={rawData} URL_PDF_FILE={rawData.url} handleClickOnDocument={handleClickOnDocument} pdfID={rawData.id} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />,
                     })
-                    console.log(filesArray)
                 }
                 setFiles(filesArray)
             }

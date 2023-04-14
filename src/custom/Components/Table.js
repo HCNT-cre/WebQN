@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { Loading } from "./Loading";
 import { useState } from "react";
 import { Checkbox } from "antd";
+import { Spin } from "antd";
+// import { Table } from "antd";
 
 const CheckBox = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
@@ -16,35 +17,32 @@ const CheckBox = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     );
 };
 
-const ConvertDataToArrayForRenderTableCell = (data) => {
+const ConvertDataToArrayForRenderTableCell = (table) => {
     const dataTableRender = []
-    for (let fieldData of data) {
+    for (let row of table) {
         const data = []
-        for (const key in fieldData) {
-
-            if (key === "gov_file_id" || key === "id") data.push(fieldData[key])
-
-            if (!Array.isArray(fieldData[key])) {
+        for (const key in row) {
+            if (key === "gov_file_id" || key === "id") data.push(row[key])
+            if (!Array.isArray(row[key])) {
                 if (key.includes("state")) {
                     let color = "bg-[#0984e3]"
-                    if (fieldData[key].props.children === "Đóng") {
+                    if (row[key].props.children === "Đóng") {
                         color = "bg-[#d63031]"
-                    } else if (fieldData[key].props.children === "Lưu trữ cơ quan") {
+                    } else if (row[key].props.children === "Lưu trữ cơ quan") {
                         color = "bg-[#e17055]"
                     }
-
                     data.push(<td className="text-white px-[12px] py-[16px] break-words text-center" >
                         <span className={`px-[8px] py-[4px] rounded-md text-[12px] font-300 ${color}`}>
-                            {fieldData[key]}
+                            {row[key]}
                         </span>
                     </td>)
                 } else {
-                    data.push(<td className="px-[12px] py-[16px] break-words text-center" >{fieldData[key]}</td>)
+                    data.push(<td className="px-[12px] py-[16px] break-words text-center" >{row[key]}</td>)
                 }
             } else {
                 // This field is Button
                 data.push(<td className="px-[12px] py-[16px] overflow-hidden" >
-                    {fieldData[key].map((childData) => {
+                    {row[key].map((childData) => {
                         return childData
                     })}
                 </td>)
@@ -83,80 +81,88 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateC
 
 
     return (
-        <div className="p-[24px] bg-[#f0f2f5] rounded-[2px]">
-            <table className="table-fixed w-full">
-                <colgroup></colgroup>
-                <thead className="bg-[#fafafa]">
-                    <tr>
-                        <th className="text-[12px]  relative w-[40px] text-center px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]">TT</th>
+        <Spin spinning={isLoading} delay={0}>
+            <div className="p-[24px] bg-[#f0f2f5] rounded-[2px]">
+                <table className="table-fixed w-full">
+                    <colgroup></colgroup>
+                    <thead className="bg-[#fafafa]">
+                        <tr>
+                            <th className="text-[12px]  relative w-[40px] text-center px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]">TT</th>
 
-                        {isCheckBox && <th className="text-[12px]  relative w-[50px] text-center px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]">
-                            Chọn
-                            <CheckBox
-                                type="checkbox"
-                                name="selectAll"
-                                id="selectAll"
-                                handleClickCheckBox={handleCheckBoxAll}
-                                isChecked={isCheckAll}
-                            />
-                        </th>}
+                            {isCheckBox && <th className="text-[12px]  relative w-[50px] text-center px-[8px] py-[12px] before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]">
+                                Chọn
+                                <CheckBox
+                                    type="checkbox"
+                                    name="selectAll"
+                                    id="selectAll"
+                                    handleClickCheckBox={handleCheckBoxAll}
+                                    isChecked={isCheckAll}
+                                />
+                            </th>}
 
-                        {fieldNames.map((field, index) => {
-                            let className = "text-[12px] relative text-center px-[8px] py-[12px]"
-                            if (index < fieldNames.length - 1) {
-                                className += " before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]"
-                            }
-                            return (
-                                <th key={index} style={{ width: field.width }} className={className}>{field.title}</th>
-                            )
+                            {fieldNames.map((field, index) => {
+                                if (field.key !== "doc_ordinal") {
+                                    let className = "text-[12px] relative text-center px-[8px] py-[12px]"
+                                    if (index < fieldNames.length - 1) {
+                                        className += " before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]"
+                                    }
+                                    return (
+                                        <th key={index} style={{ width: field.width }} className={className}>{field.title}</th>
+                                    )
+                                }
 
-                        })}
-                    </tr></thead>
+                            })}
+                        </tr></thead>
 
-                <tbody>
-                    {
-                        !fieldDatas.length &&
-                        <tr className="hover:bg-[#fafafa] bg-white border-t-[1px] border-solid border-[#e0e0e0]">
-                            <td colSpan={13}>
-                                {isLoading ? <Loading /> :
+                    <tbody>
+                        {
+                            !fieldDatas.length &&
+                            <tr className="hover:bg-[#fafafa] bg-white border-t-[1px] border-solid border-[#e0e0e0]">
+                                <td colSpan={13}>
                                     <div className="w-full bg-white text-gray-400">
                                         <div className="text-center p-[16px]">
                                             <div><i className="text-[50px] fa-solid fa-box-open"></i></div>
                                             <p>Không có dữ liệu</p>
                                         </div>
                                     </div>
-                                }
-                            </td>
-                        </tr>
-                    }
-                    {
-                        dataTableRenderForTableCell.map((dataRow, index) => {
-                            return (
-                                <tr className="hover:bg-[#ecebeb] bg-white border-t-[1px] border-solid border-[#e0e0e0] text-[13px]" key={index}>
-                                    <td className="text-center px-[12px] py-[16px]"><span className="block w-[24px] h-[24px] rounded-[50%] bg-[#ccc]">{index + 1}</span></td>
-                                    {
-                                        isCheckBox && <td className="px-[12px] py-[16px] overflow-hidden text-center" >
-                                            <CheckBox
-                                                key={index}
-                                                type="checkbox"
-                                                id={"checkbox" + dataRow[0]}
-                                                handleClickCheckBox={handleClickCheckBox}
-                                                isChecked={isCheck.includes("checkbox" + dataRow[0])}
-                                            />
-                                        </td>
-                                    }
-                                    {   // dataRow[0] is id
-                                        dataRow.splice(2).map((dataCell) => {
-                                            return dataCell
-                                        })
-                                    }
-                                </tr>
-                            )
-                        })
-                    }
-                </tbody>
-            </table>
-        </div>
+                                </td>
+                            </tr>
+                        }
+
+                        {
+                            dataTableRenderForTableCell.map((dataRow, index) => {
+                                const key = fieldNames[0].key
+                                const startSlice = key === "doc_ordinal" ? 3 : 2
+                                return (
+                                    <tr className="hover:bg-[#ecebeb] bg-white border-t-[1px] border-solid border-[#e0e0e0] text-[13px]" key={index}>
+
+                                        {(key === undefined || dataRow[2].key !== "doc_ordinal") ?
+                                            <td className="text-center px-[12px] py-[16px]"><span className="block w-[24px] h-[24px] rounded-[50%] bg-[#ccc]">{index + 1}</span></td> : dataRow[2]}
+
+                                        {
+                                            isCheckBox && <td className="px-[12px] py-[16px] overflow-hidden text-center" >
+                                                <CheckBox
+                                                    key={index}
+                                                    type="checkbox"
+                                                    id={"checkbox" + dataRow[0]}
+                                                    handleClickCheckBox={handleClickCheckBox}
+                                                    isChecked={isCheck.includes("checkbox" + dataRow[0])}
+                                                />
+                                            </td>
+                                        }
+                                        {   // dataRow[0] is id
+                                            dataRow.splice(startSlice).map((dataCell) => {
+                                                return dataCell
+                                            })
+                                        }
+                                    </tr>
+                                )
+                            })
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </Spin>
     )
 }
 

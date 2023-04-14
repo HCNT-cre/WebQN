@@ -1,55 +1,37 @@
 import { useEffect, useState } from 'react'
-import { Worker } from '@react-pdf-viewer/core';
-import { Viewer } from '@react-pdf-viewer/core';
+import { Worker, Viewer } from '@react-pdf-viewer/core';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axios from 'axios';
+import { Spin } from "antd"
+import { FORM_FIELDS } from '../../../../storage/DocumentStorage';
+import { notifyError, notifySuccess } from '../../../../custom/Function';
+import { Input, Button } from "antd"
+import { GetDateFromString } from '../../../../custom/Function';
 
 const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = process.env.REACT_APP_API_DOCUMENT_UPLOAD
 
-const FORM_FIELDS = [
-    { key: "doc_ordinal", title: "Số thứ tự", require: true, type: "number" },
-    { key: "doc_code", title: "Mã định danh văn bản", require: false, type: "text" },
-    { key: "identifier", title: "Mã cơ quan lưu trữ lịch sử", require: false, type: "text" },
-    { key: "issued_date", title: "Ngày, tháng, năm văn bản", require: false, type: "text" },
-    { key: "autograph", title: "Bút tích", require: false, type: "text" },
-    { key: "code_number", title: "Số của văn bản", require: false, type: "text" },
-    { key: "organ_id", title: "Mã phông/công trình/sưu tập lưu trữ", require: false, type: "text" },
-    { key: "file_catalog", title: "Mục lục số hoặc năm hình thành hồ sơ", require: false, type: "number" },
-    { key: "file_notation", title: "Số và ký hiệu hồ sơ", require: false, type: "text" },
-    { key: "type_name", title: "Tên loại văn bản", require: false, type: "text" },
-    { key: "code_notation", title: "Ký hiệu của văn bản", require: false, type: "text" },
-    { key: "organ_name", title: "Tên cơ quan, tổ chức ban hành văn bản", require: false, type: "text" },
-    { key: "subject", title: "Trích yếu nội dung", require: false, type: "text" },
-    { key: "language", title: "Ngôn ngữ", require: false, type: "text" },
-    { key: "page_amount", title: "Số lượng trang của văn bản", require: false, type: "number" },
-    { key: "description", title: "Ghi chú", require: false, type: "text" },
-    { key: "infor_sign", title: "Ký hiệu thông tin", require: false, type: "text" },
-    { key: "keyword", title: "Từ khóa", require: false, type: "text" },
-    { key: "mode", title: "Chế độ sử dụng", require: false, type: "text" },
-    { key: "confidence_level", title: "Mức độ tin cậy", require: false, type: "text" },
-    { key: "format", title: "Tình trạng vật lý", require: false, type: "text" },
-    
-]
 
 const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOfFile, govFileID }) => {
     const [formData, setFormData] = useState({
-        "gov_file_id": null,
-        "file": null,
-        "issued_date": null,
-        "autograph": null,
-        "code_number": null,
-        "doc_ordinal": null,
+        gov_file_id: null,
+        file: null,
+        issued_date: null,
+        autograph: null,
+        code_number: null,
+        doc_ordinal: null,
+        num_page: null,
     });
-        
+
     const [currentTab, setCurrentTab] = useState(0)
     const [pdfFile, setPdfFile] = useState(null);
     const [files, setFiles] = useState(null)
     const [isSubmitFormSuccess, setIsSubmitFormSuccess] = useState(false)
     const allowedFiles = ['application/pdf'];
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         setFormData(prev => ({
@@ -59,11 +41,16 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     }, [govFileID])
 
 
-
     useEffect(() => {
         if (evFilesUploaded !== null)
             setFiles(Array.from(evFilesUploaded.target.files))
     }, [evFilesUploaded])
+
+
+    useEffect(() => {
+        handleChangePdfFile(0)
+    }, [files])
+
 
     const handleChangePdfFile = (index) => {
         if (files === null || files.length === 0) return null
@@ -83,64 +70,39 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         }
     }
 
-    useEffect(() => {
-        handleChangePdfFile(0)
-    }, [files])
-
+    // tab operations
     const handleChangeTab = (index) => {
-        setFormData((prev) => ({
-            ...prev,
-            "file": null,
-            "issued_date": null,
-            "autograph": null,
-            "code_number": null,
-        }))
+        setFormData((prev) => {
+            return {
+                ...prev,
+                file: null,
+                issued_date: null,
+                autograph: null,
+                code_number: null,
+                doc_ordinal: null,
+                num_page: null,
+            }
+        })
         handleChangePdfFile(index)
         setCurrentTab(index);
     };
-
-    const extractDataOCR = async () => {
-        const selectedFile = files[currentTab]
-        const dataExtract = new FormData();
-        dataExtract.append('file', selectedFile);
-        dataExtract.append('ratio', '20,1');
-        dataExtract.append('threshold', '0.7');
-
-        const changeFormWhenExtractOCR = (data) => {
-            for (const key in formData) {
-                if (key === "file" || key === "gov_file_id") continue
-                if (data === "Processing") {
-                    handleChangeForm(key, "Đang xử lý...")
-                }
-            }
-        }
-
-        try {
-            changeFormWhenExtractOCR("Processing")
-            const response = await axios.post(API_EXTRACT_OCR, dataExtract);
-            handleChangeForm("code_number", response.data.no.join(' '));
-            handleChangeForm("issued_date", response.data.date.join(' '));
-            if (response.data.signer.join(' ') === "")
-                handleChangeForm("autograph", null);
-            else handleChangeForm("autograph", response.data.signer.join(' '));
-
-        } catch (error) {
-            alert("Xử lý thất bại")
-        }
-    }
 
     const handleCloseAllTab = () => {
         setStateAddDoc(false)
         setCurrentTab(0)
         setPdfFile(null)
         setFiles(null)
-        setFormData(prev => ({
-            "file": null,
-            "gov_file_id": govFileID,
-            "issued_date": null,
-            "autograph": null,
-            "code_number": null,
-        }))
+        setFormData(prev => {
+            return {
+                ...prev,
+                file: null,
+                issued_date: null,
+                autograph: null,
+                code_number: null,
+                doc_ordinal: null,
+                num_page: null,
+            }
+        })
         if (isSubmitFormSuccess === true) {
             fetchDocumentsOfFile(govFileID)
         }
@@ -176,6 +138,32 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         })
     }
 
+    const extractDataOCR = async () => {
+        const selectedFile = files[currentTab]
+        const dataExtract = new FormData();
+        dataExtract.append('file', selectedFile);
+        dataExtract.append('ratio', '20,1');
+        dataExtract.append('threshold', '0.7');
+
+        try {
+            setIsLoading(true)
+            const response = await axios.post(API_EXTRACT_OCR, dataExtract,{
+                timeout:20000
+            });
+            console.log(response)
+            setIsLoading(false)
+
+            handleChangeForm("code_number", response.data.no.join(' '));
+            handleChangeForm("issued_date", response.data.date.join(' '));
+            handleChangeForm("autograph", response.data.signer.join(' '));
+
+            notifySuccess('Trích xuất thành công')
+        } catch (error) {
+            setIsLoading(false)
+            notifyError('Trích xuất thất bại')
+        }
+    }
+
     const handleChangeForm = (name, value) => {
         setFormData(prevState => ({
             ...prevState,
@@ -185,22 +173,29 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
 
     const handleSubmitForm = async (ev) => {
         ev.preventDefault()
-        formData["issued_date"] = "2022-01-01"
-        formData["code_number"] = "AAAAAAAAA"
+
+        const num_page = Number(document.getElementsByClassName("rpv-toolbar__label")[0].textContent.split(" ")[1])
+        formData["num_page"] = num_page
+        formData["issued_date"] = GetDateFromString(formData["issued_date"])
+        if (formData["code_number"] !== null && formData["code_number"] !== undefined)
+            formData["code_number"] = formData["code_number"].split('').splice(0, Math.min(10, formData["code_number"].length)).join('');
         formData["file"] = files[0]
 
         try {
+            setIsLoading(true)
             await axios.post(API_DOCUMENT_UPLOAD, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
             });
+            setIsLoading(false)
             setIsSubmitFormSuccess(true)
-            alert("Thêm văn bản thành công")
+            notifySuccess("Thêm văn bản thành công")
         } catch (error) {
-            alert("Thêm văn bản thất bại")
+            notifyError("Thêm văn bản thất bại")
         }
     }
+
     return (
         <>
             {stateAddDoc &&
@@ -215,13 +210,13 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                     </button>
                                 </div>
                                 <div className='w-full'>
-                                    <div className='pl-[4px] flex w-full h-[40px] bg-gray-400 items-center relative'>
+                                    <div className='pl-[4px] flex w-full h-[40px] bg-gray-400 items-center relative cursor-pointer'>
                                         {files !== null && files.map((file, index) => {
                                             const width = 95 / files.length + "%"
-                                            const isActive = index === currentTab ? "white" : ""
+                                            const bgColor = index === currentTab ? "bg-white" : "bg-gray-300"
                                             return (
                                                 <div onClick={() => handleChangeTab(index)} style={{ width: width }} className='max-w-[15%] pr-[4px]'>
-                                                    <div style={{ backgroundColor: isActive }} className='px-[4px] h-[30px] border-solid border-[1px] rounded-[5px] flex items-center cursor-pointer bg-gray-300 hover:bg-gray-200 justify-between pl-[6px]'>
+                                                    <div className={` ${bgColor}  px-[4px] h-[30px] border-solid border-[1px] rounded-[5px] flex items-center cursor-pointe hover:bg-gray-200 justify-between pl-[6px]`}>
                                                         <p className='leading-[20px] h-[20px] text-[10px] overflow-hidden '>{file.name}</p>
                                                         <div onClick={() => handleCloseTab(index)} className='text-[12px] w-[15px] h-[15px] rounded-[5px] hover:bg-white flex items-center justify-center'>
                                                             <i class="fa-solid fa-xmark"></i>
@@ -264,14 +259,16 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                         </div>
                                         <div className='h-full w-[50%] pl-[12px] mr-[12px] '>
                                             <div className='w-full flex justify-end'>
-                                                <button onClick={extractDataOCR} className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Trích xuất thông tin</button>
-                                                <button type="submit" form="add-doc-form" className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Lưu</button>
+                                                <Button onClick={extractDataOCR} className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Trích xuất thông tin</Button>
+                                                <Button htmlType="submit" form="add-doc-form" className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Lưu</Button>
                                             </div>
                                             <div className='flex justify-center w-full'>
-                                                <button className={`outline-none w-[50%] block text-[14px] font-bold h-[30px] text-center`}>Danh sách các thuộc tính</button>
+                                                <div className={`outline-none w-[50%] block text-[14px] font-bold h-[30px] text-center`}>Danh sách các thuộc tính</div>
                                             </div>
+
                                             <div className='h-[70vh] overflow-y-auto mt-[16px]'>
-                                                {
+
+                                                <Spin tip="Đang xử lý" spinning={isLoading} delay={0}>
                                                     <div>
                                                         <form id="add-doc-form" onSubmit={handleSubmitForm}>
                                                             <div className="flex justify-between">
@@ -308,7 +305,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                                                                         ))}
                                                                                     </select>
                                                                                 ) : (
-                                                                                    <input
+                                                                                    <Input
                                                                                         required={field.require}
                                                                                         onChange={(ev) => handleChangeForm(ev.target.name, ev.target.value)}
                                                                                         value={formData[field.key]}
@@ -316,7 +313,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                                                                         placeholder={field.title}
                                                                                         type={field.type}
                                                                                         min="0"
-                                                                                        className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                                        className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
                                                                                     />
                                                                                 )}
                                                                             </div>
@@ -327,8 +324,10 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                                             </div>
                                                         </form>
                                                     </div>
-                                                }
+                                                </Spin>
                                             </div>
+
+
                                         </div>
                                     </div>
 

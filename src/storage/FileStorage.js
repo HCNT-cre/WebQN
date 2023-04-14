@@ -11,3 +11,9 @@ export const FIELDS_TABLE = [
     { title: "Chức năng", key: "Function", width: "120px" },
 ]
 
+export const IDENTIFIER = [
+    { label: "Sở tư pháp" , value: "000.00.39.H48"},
+    { label: "Sở giáo dục và đào tạo", value: "000.00.39.H01" },
+    { label: "Sở thông tin và truyền thông", value: "000.00.39.L08" },
+    { label: "UBND tỉnh Quảng Ngãi", value: "000.00.39.C02" },
+]
