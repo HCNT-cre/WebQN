@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback} from "react"
 import AddDoc from "../AddDoc"
 import { Table } from "../../../../custom/Components"
 import axios from "axios"
 import FixDoc from "../FixDoc"
 import { DeleteData } from "../../../../custom/Function"
-import { PopupConfirm } from "../../../../custom/Components"
 import { Button, Popconfirm } from 'antd';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -24,18 +23,20 @@ const TABLE_FIELDS = [
 const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, fetchDocumentsOfFile, govFileID }) => {
     const [open, setOpen] = useState(false);
     useEffect(() => {
-        const button = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-primary")
-        if (button === undefined)
+        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1vtf12y.css-dev-only-do-not-override-1vtf12y.ant-popover-placement-top")[0]
+
+        if (popupContainer === undefined)
             return
-        for (let i = 0; i < button.length; i++) {
-            button[i].textContent = "Xóa"
-        }
-        const button2 = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-default ")
-        if (button2 === undefined)
-            return
-        for (let i = 0; i < button2.length; i++) {
-            button2[i].textContent = "Hủy"
-        }
+
+        const buttonAccepts = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-primary")
+        buttonAccepts.forEach((buttonCancel) => {
+            buttonCancel.textContent = "Xóa"
+        })
+
+        const buttonCancels = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-default ")
+        buttonCancels.forEach((buttonAccept) => {
+            buttonAccept.textContent = "Hủy"
+        })
     }, [open])
 
     return (
@@ -80,7 +81,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
         }).catch(err => console.log("errors:", err))
     }
 
-    const fetchDocumentsOfFile = async (govFileID) => {
+    const fetchDocumentsOfFile = useCallback(async (govFileID) => {
         const currentAPI = `${API_DOCUMENT_GET}${govFileID}`;
         try {
             const response = await fetch(currentAPI);
@@ -104,13 +105,13 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
             console.log(err)
         }
         setIsLoading(false);
-    };
+    }, []);
 
     useEffect(() => {
         if (govFileID === -1)
             return
         fetchDocumentsOfFile(govFileID);
-    }, [govFileID])
+    }, [govFileID, fetchDocumentsOfFile])
 
 
     return (

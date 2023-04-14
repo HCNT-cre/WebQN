@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react'
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
@@ -29,7 +30,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     const [pdfFile, setPdfFile] = useState(null);
     const [files, setFiles] = useState(null)
     const [isSubmitFormSuccess, setIsSubmitFormSuccess] = useState(false)
-    const allowedFiles = ['application/pdf'];
+    const allowedFiles = ['application/pdf']
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [isLoading, setIsLoading] = useState(false)
 
@@ -45,12 +46,6 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         if (evFilesUploaded !== null)
             setFiles(Array.from(evFilesUploaded.target.files))
     }, [evFilesUploaded])
-
-
-    useEffect(() => {
-        handleChangePdfFile(0)
-    }, [files])
-
 
     const handleChangePdfFile = (index) => {
         if (files === null || files.length === 0) return null
@@ -69,6 +64,10 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
             console.log('please select a PDF');
         }
     }
+
+    useEffect(() => {
+        handleChangePdfFile(0)
+    }, [files])
 
     // tab operations
     const handleChangeTab = (index) => {
@@ -147,8 +146,8 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
 
         try {
             setIsLoading(true)
-            const response = await axios.post(API_EXTRACT_OCR, dataExtract,{
-                timeout:20000
+            const response = await axios.post(API_EXTRACT_OCR, dataExtract, {
+                timeout: 20000
             });
             console.log(response)
             setIsLoading(false)
@@ -215,7 +214,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                             const width = 95 / files.length + "%"
                                             const bgColor = index === currentTab ? "bg-white" : "bg-gray-300"
                                             return (
-                                                <div onClick={() => handleChangeTab(index)} style={{ width: width }} className='max-w-[15%] pr-[4px]'>
+                                                <div key={index} onClick={() => handleChangeTab(index)} style={{ width: width }} className='max-w-[15%] pr-[4px]'>
                                                     <div className={` ${bgColor}  px-[4px] h-[30px] border-solid border-[1px] rounded-[5px] flex items-center cursor-pointe hover:bg-gray-200 justify-between pl-[6px]`}>
                                                         <p className='leading-[20px] h-[20px] text-[10px] overflow-hidden '>{file.name}</p>
                                                         <div onClick={() => handleCloseTab(index)} className='text-[12px] w-[15px] h-[15px] rounded-[5px] hover:bg-white flex items-center justify-center'>

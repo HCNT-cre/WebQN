@@ -3,7 +3,7 @@ import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AddFile from "./pages/Files/AddFile";
-import { ToastContainer, toast, Zoom } from 'react-toastify';
+import { ToastContainer, Zoom } from 'react-toastify';
 
 const App = () => {
   const routes = [
@@ -70,7 +70,7 @@ const App = () => {
           <Route path="/Login" element={<Login />} />
           {routes.map((route, index) => {
             return (
-              <Route
+              <Route key={index}
                 path={route.path}
                 element={
                   <Layout>
