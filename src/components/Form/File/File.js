@@ -154,7 +154,7 @@ const File = ({ reset }) => {
                 setRequest(response.data[0])
             }
         }
-        
+
         fetchData()
 
     }, [fileID])
@@ -185,13 +185,10 @@ const File = ({ reset }) => {
 
         try {
             const gov_file_code = request["identifier"] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
-            const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : (API_GOV_FILE_UPDATE + userPermissionId)
+            const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : API_GOV_FILE_UPDATE
             let response
-            if (title === "Tạo hồ sơ") {
-                response = await axios.post(API, { ...request, gov_file_code: gov_file_code })
-            } else {
-                response = await axios.patch(API, { ...request, gov_file_code: gov_file_code })
-            }
+            response = await axios.post(API, { ...request, gov_file_code: gov_file_code, perm_token: userPermissionId})
+
 
             const error_code = response.data.error_code
             if (error_code === undefined) {

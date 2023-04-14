@@ -18,7 +18,8 @@ const FORM_FIELDS = [
 const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID }) => {
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [form, setForm] = useState(null)
-
+    console.log(form)
+    
     useEffect(() => {
         setForm(pdfData)
     }, [pdfData])
@@ -38,7 +39,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
         }
     }
     const handleSubmit = async () => {
-        await axios.patch(API_DOC_UPDATE + pdfID, form)
+        await axios.post(API_DOC_UPDATE + pdfID, form)
         alert('Lưu thành công')
         window.location.reload()
     }

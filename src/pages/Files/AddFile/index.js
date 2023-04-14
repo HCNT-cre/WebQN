@@ -242,12 +242,7 @@ const AddFile = () => {
         }
 
         try {
-            const response = await axios.patch(API_UPDATE_STATE_GOV_FILE, listState, {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-
+            const response = await axios.post(API_UPDATE_STATE_GOV_FILE, listState)
             const error_code = response.data.error_code
             if (error_code === undefined) {
                 toast.success('Thay đổi trạng thái thành công', {
