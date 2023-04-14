@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback} from "react"
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, useCallback } from "react"
 import AddDoc from "../AddDoc"
 import { Table } from "../../../../custom/Components"
 import axios from "axios"
@@ -22,6 +23,16 @@ const TABLE_FIELDS = [
 
 const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, fetchDocumentsOfFile, govFileID }) => {
     const [open, setOpen] = useState(false);
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const handleConfirm = async () => {
+        DeleteData(API_DOCUMENT_DELETE, { id: pdfID }, "Xóa văn bản thành công")
+        await fetchDocumentsOfFile(govFileID)
+        setOpen(false)
+    }
+
     useEffect(() => {
         const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1vtf12y.css-dev-only-do-not-override-1vtf12y.ant-popover-placement-top")[0]
 
@@ -46,11 +57,8 @@ const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, 
             <Popconfirm title="Xóa văn bản"
                 open={open}
                 description="Bạn có chắc chắn xóa?"
-                onConfirm={async () => {
-                    await DeleteData(API_DOCUMENT_DELETE, pdfID, "Xóa văn bản thành công")
-                    await fetchDocumentsOfFile(govFileID)
-                }}
-                onCancel={() => setOpen(false)}
+                onConfirm={handleConfirm}
+                onCancel={handleClose}
             >
                 <Button onClick={() => { setOpen(true) }} className="w-[33%] px-[2px] border-none font-bold italic block text-center text-[16px] hover:underline text-[#7d8183]" title="Xóa" ><i class="fa-solid fa-trash-can"></i></Button>
             </Popconfirm>
@@ -81,37 +89,41 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
         }).catch(err => console.log("errors:", err))
     }
 
-    const fetchDocumentsOfFile = useCallback(async (govFileID) => {
-        const currentAPI = `${API_DOCUMENT_GET}${govFileID}`;
-        try {
-            const response = await fetch(currentAPI);
-            if (response.ok) {
-                const rawDatas = await response.json();
-                const filesArray = []
-                for (const rawData of rawDatas) {
-                    filesArray.push({
-                        "id": rawData.id,
-                        "doc_ordinal": rawData.doc_ordinal,
-                        "issued_date": rawData.issued_date,
-                        "autograph": rawData.autograph,
-                        "code_number": rawData.code_number,
-                        "doc_name": rawData.doc_name,
-                        "Function": <ButtonFunctions pdfData={rawData} URL_PDF_FILE={rawData.url} handleClickOnDocument={handleClickOnDocument} pdfID={rawData.id} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />,
-                    })
+    const fetchDocumentsOfFile = (govFileID) => {
+        const fetchData = async (govFileID) => {
+            const currentAPI = `${API_DOCUMENT_GET}${govFileID}`;
+            try {
+                const response = await fetch(currentAPI);
+                if (response.ok) {
+                    const rawDatas = await response.json();
+                    const filesArray = []
+                    for (const rawData of rawDatas) {
+                        filesArray.push({
+                            "id": rawData.id,
+                            "doc_ordinal": rawData.doc_ordinal,
+                            "issued_date": rawData.issued_date,
+                            "autograph": rawData.autograph,
+                            "code_number": rawData.code_number,
+                            "doc_name": rawData.doc_name,
+                            "Function": <ButtonFunctions pdfData={rawData} URL_PDF_FILE={rawData.url} handleClickOnDocument={handleClickOnDocument} pdfID={rawData.id} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />,
+                        })
+                    }
+                    setFiles(filesArray)
                 }
-                setFiles(filesArray)
+            } catch (err) {
+                console.log(err)
             }
-        } catch (err) {
-            console.log(err)
+            setIsLoading(false);
         }
-        setIsLoading(false);
-    }, []);
+        fetchData(govFileID)
+    }
+ 
 
     useEffect(() => {
         if (govFileID === -1)
             return
         fetchDocumentsOfFile(govFileID);
-    }, [govFileID, fetchDocumentsOfFile])
+    }, [govFileID])
 
 
     return (

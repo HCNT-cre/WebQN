@@ -100,7 +100,7 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateC
                                 />
                             </th>}
 
-                            {fieldNames.filter(field => field.key === "doc_ordinal").map((field, index) => {
+                            {fieldNames.filter(field => field.key !== "doc_ordinal").map((field, index) => {
                                 let className = "text-[12px] relative text-center px-[8px] py-[12px]"
                                 if (index < fieldNames.length - 1) {
                                     className += " before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]"

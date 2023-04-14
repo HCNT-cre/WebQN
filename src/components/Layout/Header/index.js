@@ -34,7 +34,7 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
                         stateBoxUserRole &&
                         <div className="text-center absolute top-[45px] w-[calc(100%-36px)] bg-white rounded-[8px] p-[8px] mt-[8px] text-[12px] cursor-pointer border-solid border-[1px] border-[#ccc] shadow-sm ml-[36px]">
                             {
-                                USER_ROLES.filter(role => role === userRole).map((role, index) => {
+                                USER_ROLES.filter(role => role !== userRole).map((role, index) => {
                                     return (
                                         <div key={GetKey()} className="" onClick={() => {
                                             if (role === "Nhân viên nhập liệu") {
