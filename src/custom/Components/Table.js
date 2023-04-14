@@ -53,7 +53,7 @@ const ConvertDataToArrayForRenderTableCell = (table) => {
     return dataTableRender
 }
 
-export const Table = ({ fieldNames, fieldDatas, isCheckBox, isLoading, setStateCheckBox }) => {
+export const Table = ({ fieldNames, fieldDatas, isCheckBox=false, isLoading, setStateCheckBox }) => {
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
     const dataTableRenderForTableCell = ConvertDataToArrayForRenderTableCell(fieldDatas)
