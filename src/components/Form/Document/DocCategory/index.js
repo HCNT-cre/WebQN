@@ -27,9 +27,11 @@ const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, 
         setOpen(false)
     }
 
-    const handleConfirm = async () => {
+    const handleConfirm = () => {
         DeleteData(API_DOCUMENT_DELETE, { id: pdfID }, "Xóa văn bản thành công")
-        await fetchDocumentsOfFile(govFileID)
+        setTimeout(async () =>{
+            await fetchDocumentsOfFile(govFileID)
+        }, 500)
         setOpen(false)
     }
 

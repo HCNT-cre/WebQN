@@ -27,9 +27,11 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
         setOpen(false)
     }
 
-    const handleConfirm = async () => {
+    const handleConfirm =   () => {
         DeleteData(API_GOV_FILE_DELETE, { id: IDFile, perm_token: userPermissionId}, "Xóa thành công")
-        await reset()
+        setTimeout(async() => {
+            await reset()
+        }, 500)
         setOpen(false)
     }
 
