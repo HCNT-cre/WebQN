@@ -10,7 +10,7 @@ import { FORM_FIELDS } from '../../../../storage/DocumentStorage';
 import { notifyError, notifySuccess } from '../../../../custom/Function';
 import { Input, Button } from "antd"
 import { GetDateFromString } from '../../../../custom/Function';
-
+import { ValidateFormDoc } from '../../../../custom/Function';
 const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = process.env.REACT_APP_API_DOCUMENT_UPLOAD
 
@@ -173,16 +173,17 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     const handleSubmitForm = async (ev) => {
         ev.preventDefault()
 
+
+
         const num_page = Number(document.getElementsByClassName("rpv-toolbar__label")[0].textContent.split(" ")[1])
         formData["num_page"] = num_page
-        formData["issued_date"] = GetDateFromString(formData["issued_date"])
-        if (formData["code_number"] !== null && formData["code_number"] !== undefined)
-            formData["code_number"] = formData["code_number"].split('').splice(0, Math.min(10, formData["code_number"].length)).join('');
         formData["file"] = files[0]
+        
+        const formDataValidated = ValidateFormDoc(formData)
 
         try {
             setIsLoading(true)
-            await axios.post(API_DOCUMENT_UPLOAD, formData, {
+            await axios.post(API_DOCUMENT_UPLOAD, formDataValidated, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 },
