@@ -9,11 +9,11 @@ import { notifyError, notifySuccess } from '../../../../custom/Function';
 import { Button, Spin } from 'antd';
 import { GetDateFromString } from '../../../../custom/Function';
 import { FORM_FIELDS } from '../../../../storage/DocumentStorage';
+import { ValidateFormDoc } from '../../../../custom/Function';
+
 
 const API_DOCUMENT_UPDATE = process.env.REACT_APP_API_DOCUMENT_UPDATE
 const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
-
-
 
 
 const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID }) => {
@@ -41,7 +41,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
             const response = await axios.post(API_EXTRACT_OCR, dataExtract, {
                 timeout: 20000
             });
-            
+
             handleChangeForm("code_number", response.data.no.join(' '));
             handleChangeForm("issued_date", response.data.date.join(' '));
             handleChangeForm("autograph", response.data.signer.join(' '));
@@ -60,9 +60,10 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
         if (formData["code_number"] !== null && formData["code_number"] !== undefined)
             formData["code_number"] = formData["code_number"].split('').splice(0, Math.min(10, formData["code_number"].length)).join('');
 
+        const formDataValidated = ValidateFormDoc(formData)
         try {
             setIsLoading(true)
-            await axios.post(API_DOCUMENT_UPDATE, { ...formData, id: pdfID })
+            await axios.post(API_DOCUMENT_UPDATE, { ...formDataValidated, id: pdfID })
             setIsLoading(false)
             notifySuccess('Cập nhật thành công')
         } catch (error) {
