@@ -27,9 +27,9 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
         setOpen(false)
     }
 
-    const handleConfirm =   () => {
-        DeleteData(API_GOV_FILE_DELETE, { id: IDFile, perm_token: userPermissionId}, "Xóa thành công")
-        setTimeout(async() => {
+    const handleConfirm = () => {
+        DeleteData(API_GOV_FILE_DELETE, { id: IDFile, perm_token: userPermissionId }, "Xóa thành công")
+        setTimeout(async () => {
             await reset()
         }, 500)
         setOpen(false)
@@ -136,7 +136,7 @@ const AddFile = () => {
         "title": null,
         "organ_id": null,
         "offce": null,
-        "state": null,
+        "state": 0,
         "type": null
     })
 
@@ -203,8 +203,8 @@ const AddFile = () => {
         try {
 
             let request = API_GOV_FILE_SEARCH + userPermissionId
-            console.log(search)
             Object.keys(search).forEach(key => {
+                if(key === 'state' && search[key] === 'Tất cả') return
                 const value = search[key]
                 if (value !== null & value !== '')
                     request += ("&" + key + "=" + value)
@@ -290,7 +290,7 @@ const AddFile = () => {
 
     const BUTTON_ACTIONS = [
         { title: "Tìm kiếm", icon: <i className="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
-        { title: "Làm mới", icon: <i className="fa-solid fa-sync"></i>, onClick: resetSearch },
+        { title: "Xóa bộ lọc", icon: <i className="fa-solid fa-sync"></i>, onClick: resetSearch },
         { title: "Thêm hồ sơ mới", icon: <i className="fa-solid fa-plus"></i>, onClick: () => { dispatch(OpenFile("open_upload")) } },
         { title: "Xuất Excel", icon: <i className="fa-solid fa-file-excel"></i>, onClick: () => { } },
     ]
@@ -326,7 +326,6 @@ const AddFile = () => {
                         <Select
                             name="state"
                             className="w-full bg-white outline-none rounded-none"
-                            allowClear
                             showSearch
                             defaultValue="Tất cả"
                             value={search["state"]}
@@ -336,28 +335,29 @@ const AddFile = () => {
                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                             }
                             options={[
+                                { value: 0, label: "Tất cả" },
                                 {
-                                    value: '1',
+                                    value: 1,
                                     label: 'Mở',
                                 },
                                 {
-                                    value: '2',
+                                    value: 2,
                                     label: 'Đóng',
                                 },
                                 {
-                                    value: '3',
+                                    value: 3,
                                     label: 'Nộp lưu cơ quan',
                                 },
                                 {
-                                    value: '4',
+                                    value: 4,
                                     label: 'Lưu trữ cơ quan',
                                 },
                                 {
-                                    value: '5',
+                                    value: 5,
                                     label: 'Nộp lưu lịch sử',
                                 },
                                 {
-                                    value: '6',
+                                    value: 6,
                                     label: 'Lưu trữ lịch sử',
                                 },
                             ]}

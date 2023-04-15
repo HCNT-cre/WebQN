@@ -54,7 +54,7 @@ const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, 
 
     return (
         <div className="flex justify-between">
-            <Button onClick={(ev) => handleClickOnDocument(URL_PDF_FILE, pdfData, pdfID)} className="w-[33%] px-[2px] border-none font-bold italic block text-center text-[16px] hover:underline text-[#537FE7]" title="Xem chi tiết"><i class="fa-regular fa-eye"></i></Button>
+            <Button onClick={(ev) => handleClickOnDocument(URL_PDF_FILE, pdfData, pdfID)} className="w-[33%] px-[2px] border-none font-bold italic block text-center text-[16px] hover:underline text-[#537FE7]" title="Xem chi tiết"><i className="fa-regular fa-eye"></i></Button>
 
             <Popconfirm title="Xóa văn bản"
                 open={open}
@@ -62,11 +62,11 @@ const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, 
                 onConfirm={handleConfirm}
                 onCancel={handleClose}
             >
-                <Button onClick={() => { setOpen(true) }} className="w-[33%] px-[2px] border-none font-bold italic block text-center text-[16px] hover:underline text-[#7d8183]" title="Xóa" ><i class="fa-solid fa-trash-can"></i></Button>
+                <Button onClick={() => { setOpen(true) }} className="w-[33%] px-[2px] border-none font-bold italic block text-center text-[16px] hover:underline text-[#7d8183]" title="Xóa" ><i className="fa-solid fa-trash-can"></i></Button>
             </Popconfirm>
 
 
-            <Button className="w-[33%] px-[2px] border-none font-bold italic block text-center text-[16px] hover:underline text-[#FF8400]" title="Phân quyền"><i class="fa-solid fa-user-doctor"></i></Button>
+            <Button className="w-[33%] px-[2px] border-none font-bold italic block text-center text-[16px] hover:underline text-[#FF8400]" title="Phân quyền"><i className="fa-solid fa-user-doctor"></i></Button>
         </div>
     )
 }
@@ -138,7 +138,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                         <div className="h-full relative overflow-y-scroll w-[calc(100vw-80px)] my-0 mx-auto bg-[#f0f2f5]">
                             <div className="relative">
                                 <button onClick={() => { setStateDocCategory(false) }} className="text-[20px] absolute right-0 w-[40px] h-full bg-[#2f54eb] top-0 text-white ">
-                                    <i class="fa-solid fa-xmark"></i>
+                                    <i className="fa-solid fa-xmark"></i>
                                 </button>
                                 <div className="bg-[#2f54eb] text-white py-[8px] px-[24px]">
                                     <p className='text-bold'>Mục lục văn bản</p>
@@ -162,7 +162,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                                     <div className="w-[12.5%] text-white text-center px-[5px] flex">
                                         <button className="rounded-[5px] h-[30px] flex justify-center bg-[#00f] w-full px-[16px] items-center text-[12px] ">
                                             <div className="mr-[8px]">
-                                                <i class="fa-solid fa-magnifying-glass"></i>
+                                                <i className="fa-solid fa-magnifying-glass"></i>
                                             </div>
                                             Tìm kiếm
                                         </button>
@@ -172,7 +172,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                                     <div className="w-[12.5%] text-white  text-center px-[5px]">
                                         <form encType="multipart/form-data">
                                             <label className='flex justify-center items-center cursor-pointer w-auto h-[30px] bg-[#00f] rounded-[5px] text-white hover:opacity-90 text-[12px]' htmlFor="file-upload">
-                                                <i class="fa-solid fa-upload"></i>
+                                                <i className="fa-solid fa-upload"></i>
                                                 <p className='ml-[8px]'>Thêm văn bản</p>
                                             </label>
                                             <input onClick={(ev) => { ev.target.value = '' }} type='file' id="file-upload" name="file-upload" className="hidden" onChange={(ev) => {
@@ -186,7 +186,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
 
                                         <button className="rounded-[5px] h-[30px] flex justify-center bg-[#00f] w-full px-[4px] items-center text-[12px] ">
                                             <div className="mr-[8px]">
-                                                <i class="fa-solid fa-magnifying-glass"></i>
+                                                <i className="fa-solid fa-magnifying-glass"></i>
                                             </div>
                                             Thêm VB từ EOFFICE
                                         </button>
@@ -201,7 +201,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                 </div>
             }
 
-            <FixDoc pdfID={pdfID} pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} />
+            <FixDoc pdfID={pdfID} pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID}/>
             <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />
         </>
     )

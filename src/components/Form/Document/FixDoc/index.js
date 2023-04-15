@@ -7,7 +7,6 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { notifyError, notifySuccess } from '../../../../custom/Function';
 import { Button, Spin } from 'antd';
-import { GetDateFromString } from '../../../../custom/Function';
 import { FORM_FIELDS } from '../../../../storage/DocumentStorage';
 import { ValidateFormDoc } from '../../../../custom/Function';
 
@@ -16,11 +15,10 @@ const API_DOCUMENT_UPDATE = process.env.REACT_APP_API_DOCUMENT_UPDATE
 const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 
 
-const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID }) => {
+const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID, fetchDocumentsOfFile, govFileID }) => {
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [formData, setFormData] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-
 
     useEffect(() => {
         setFormData(pdfData)
@@ -56,10 +54,6 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
 
     const handleSubmitForm = async (ev) => {
         ev.preventDefault()
-        formData["issued_date"] = GetDateFromString(formData["issued_date"])
-        if (formData["code_number"] !== null && formData["code_number"] !== undefined)
-            formData["code_number"] = formData["code_number"].split('').splice(0, Math.min(10, formData["code_number"].length)).join('');
-
         const formDataValidated = ValidateFormDoc(formData)
         try {
             setIsLoading(true)
@@ -79,6 +73,11 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
         }))
     }
 
+    const handleClose = () => {
+        fetchDocumentsOfFile(govFileID)
+        setStateFixDoc(false)
+    }
+
     return (
         <>
             {stateFixDoc &&
@@ -88,7 +87,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
                             <div className=" h-full relative rounded-[2px] bg-white">
                                 <div className="bg-[#2f54eb] text-white py-[8px] px-[24px] relative">
                                     <p className='text-bold'>Xem và chỉnh sửa</p>
-                                    <button onClick={() => { setStateFixDoc(false) }} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-[#2f54eb] top-0 text-white ">
+                                    <button onClick={handleClose} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-[#2f54eb] top-0 text-white ">
                                         <i class="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
