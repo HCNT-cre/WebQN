@@ -63,10 +63,9 @@ export const ValidateFormDoc = (form) => {
     if (form["code_number"] !== null && form["code_number"] !== undefined)
         form["code_number"] = form["code_number"].split('').splice(0, Math.min(10, form["code_number"].length)).join('');
 
-    for (const key in form) {
-        if (form[key] === null || form[key] === undefined || !form[key].replace(/\s/g, '').length)
+    Object.keys(form).forEach(key => {
+        if (form[key] === null || form[key] === undefined || (typeof form[key] === 'string' && !form[key].replace(/\s/g, '').length))
             form[key] = null
-    }
-
+    })
     return form
 }
