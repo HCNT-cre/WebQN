@@ -20,7 +20,7 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
                     }}>
                         <i className="fa-solid fa-bars"></i>
                     </button>
-                    <p className="font-medium text-white text-[16px]">HỆ THỐNG QUẢN LÝ TÀI LIỆU LƯU TRỮ ĐIỆN TỬ TỈNH QUÃNG NGÃI</p>
+                    <p className="font-medium text-white text-[16px]">ISTORAGE - HỆ THỐNG QUẢN LÝ TÀI LIỆU LƯU TRỮ ĐIỆN TỬ TỈNH QUẢNG NGÃI</p>
                 </div>
                 <div onClick={() => setStateBoxUserRole(!stateBoxUserRole)} className="flex justify-between items-center cursor-pointer relative select-none">
                     <div className="mr-[8px] flex items-center rounded-[50%] justify-center w-[36px] h-[36px] bg-white">
