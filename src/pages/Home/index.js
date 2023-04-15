@@ -60,7 +60,7 @@ const Home = () => {
             "title": '',
             "organ_id": '',
             "offce": '',
-            "state": 'Tất cả',
+            "state": 0,
             "type": ''
         }))
     }
@@ -153,24 +153,28 @@ const Home = () => {
                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                             }
                             options={[
-                                {
-                                    value: '1',
+                                {   
+                                    value: 0,
+                                    label: 'Tất cả',
+                                },
+                                {   
+                                    value: 1,
                                     label: 'Mở',
                                 },
                                 {
-                                    value: '2',
+                                    value: 2,
                                     label: 'Đóng',
                                 },
                                 {
-                                    value: '3',
+                                    value: 3,
                                     label: 'Nộp lưu cơ quan',
                                 },
                                 {
-                                    value: '4',
+                                    value: 4,
                                     label: 'Lưu trữ cơ quan',
                                 },
                                 {
-                                    value: '5',
+                                    value: 5,
                                     label: 'Nộp lưu lịch sử',
                                 },
                                 {
