@@ -27,23 +27,26 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
     }, [pdfData])
 
     const extractDataOCR = async () => {
-        const dataExtract = new FormData();
-        dataExtract.append('file', pdfFile);
-        dataExtract.append('ratio', '20,1');
-        dataExtract.append('threshold', '0.7');
-
         try {
             setIsLoading(true)
+
+            const dataExtract = new FormData();
+            await axios.get(API_PDF, {
+                responseType: 'blob',
+            }).then(res => {
+                dataExtract.append('file', res.data);
+            })
+            dataExtract.append('ratio', '20,1');
+            dataExtract.append('threshold', '0.7');
             const response = await axios.post(API_EXTRACT_OCR, dataExtract, {
                 timeout: 20000
             });
-
-            setIsLoading(false)
-
+            
             handleChangeForm("code_number", response.data.no.join(' '));
             handleChangeForm("issued_date", response.data.date.join(' '));
             handleChangeForm("autograph", response.data.signer.join(' '));
 
+            setIsLoading(false)
             notifySuccess('Trích xuất thành công')
         } catch (error) {
             setIsLoading(false)
@@ -57,12 +60,12 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID 
         if (formData["code_number"] !== null && formData["code_number"] !== undefined)
             formData["code_number"] = formData["code_number"].split('').splice(0, Math.min(10, formData["code_number"].length)).join('');
 
-        try{
+        try {
             setIsLoading(true)
             await axios.post(API_DOCUMENT_UPDATE, { ...formData, id: pdfID })
             setIsLoading(false)
             notifySuccess('Cập nhật thành công')
-        }catch(error){
+        } catch (error) {
             setIsLoading(false)
             notifyError('Cập nhật thất bại')
         }
