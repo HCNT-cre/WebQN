@@ -9,7 +9,6 @@ import { Spin } from "antd"
 import { FORM_FIELDS } from '../../../../storage/DocumentStorage';
 import { notifyError, notifySuccess } from '../../../../custom/Function';
 import { Input, Button } from "antd"
-import { GetDateFromString } from '../../../../custom/Function';
 import { ValidateFormDoc } from '../../../../custom/Function';
 const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = process.env.REACT_APP_API_DOCUMENT_UPLOAD
@@ -172,8 +171,6 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
 
     const handleSubmitForm = async (ev) => {
         ev.preventDefault()
-
-
 
         const num_page = Number(document.getElementsByClassName("rpv-toolbar__label")[0].textContent.split(" ")[1])
         formData["num_page"] = num_page
