@@ -12,8 +12,45 @@ export const FIELDS_TABLE = [
 ]
 
 export const IDENTIFIER = [
-    { label: "Sở tư pháp" , value: "000.00.39.H48"},
+    { label: "Trung tâm lưu trữ lịch sử" , value: "000.00.39.H48"},
     { label: "Sở giáo dục và đào tạo", value: "000.00.39.H01" },
     { label: "Sở thông tin và truyền thông", value: "000.00.39.L08" },
     { label: "UBND tỉnh Quảng Ngãi", value: "000.00.39.C02" },
+]
+
+export const ORGAN_ID = [
+    { label: "Phông trung tâm lưu trữ lịch sử" , value: "Phông trung tâm lưu trữ lịch sử"},
+    { label: "Phông sở thông tin và truyền thông", value: "Phông sở thông tin và truyền thông" },
+    { label: "Phông sở giáo dục và đào tạo", value: "Phông sở giáo dục và đào tạo" },
+]
+
+export const MAINTENANCE = [
+    { label: "5 năm", value: "5 năm" },
+    { label: "10 năm", value: "10 năm" },
+    { label: "20 năm", value: "20 năm" },
+    { label: "30 năm", value: "30 năm" },
+    { label: "40 năm", value: "40 năm" },
+    { label: "50 năm", value: "50 năm" },
+    { label: "Vĩnh viễn", value: "60 năm" },
+]
+
+export const LANGUAGE = [
+    { label: "Tiếng Việt", value: "Tiếng Việt" },
+    { label: "Tiếng Anh", value: "Tiếng Anh" },
+    { label: "Tiếng Trung", value: "Tiếng Trung" },
+    { label: "Tiếng Pháp", value: "Tiếng Pháp" },
+    { label: "Tiếng Nga", value: "Tiếng Nga" },
+    { label: "Tiếng Nhật", value: "Tiếng Nhật" },
+]
+
+export const FORMAT = [
+    { label: "Bình thường", value: "Bình thường" },
+    { label: "Khó đọc", value: "Khó đọc" },
+    { label: "Nhiều tài liệu thủng", value: "Nhiều tài liệu thủng" },
+]
+
+export const RIGHTS = [
+    { value: "Công Khai", label: "Công Khai" },
+    { value: "Không công khai", label: "Không công khai" },
+    { value: "Riêng tư", label: "Riêng tư" },
 ]
