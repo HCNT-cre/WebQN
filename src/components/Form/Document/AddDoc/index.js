@@ -5,17 +5,20 @@ import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axios from 'axios';
-import { Spin } from "antd"
+import { Spin, Select } from "antd"
 import { FORM_FIELDS } from '../../../../storage/DocumentStorage';
 import { notifyError, notifySuccess } from '../../../../custom/Function';
 import { Input, Button } from "antd"
 import { ValidateFormDoc } from '../../../../custom/Function';
+import { FirstLower } from '../../../../custom/Function';
+import { SetNull } from '../../../../custom/Function';
+
 const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = process.env.REACT_APP_API_DOCUMENT_UPLOAD
 
 
 const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOfFile, govFileID }) => {
-    const [formData, setFormData] = useState({
+    const [request, setRequest] = useState({
         gov_file_id: null,
         file: null,
         issued_date: null,
@@ -23,6 +26,24 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         code_number: null,
         doc_ordinal: null,
         num_page: null,
+
+        doc_code: null,
+        identifier: null,
+        organ_id: null,
+        file_catalog: null,
+        file_notation: null,
+        type_name: null,
+        code_notation: null,
+        organ_name: null,
+        subject: null,
+        language: null,
+        page_amount: null,
+        description: null,
+        infor_sign: null,
+        keyword: null,
+        mode: null,
+        confidence_level: null,
+        format: null,
     });
 
     const [currentTab, setCurrentTab] = useState(0)
@@ -34,7 +55,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        setFormData(prev => ({
+        setRequest(prev => ({
             ...prev,
             "gov_file_id": govFileID
         }))
@@ -70,16 +91,8 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
 
     // tab operations
     const handleChangeTab = (index) => {
-        setFormData((prev) => {
-            return {
-                ...prev,
-                file: null,
-                issued_date: null,
-                autograph: null,
-                code_number: null,
-                doc_ordinal: null,
-                num_page: null,
-            }
+        setRequest((prev) => {
+            return SetNull(prev)
         })
         handleChangePdfFile(index)
         setCurrentTab(index);
@@ -90,16 +103,8 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         setCurrentTab(0)
         setPdfFile(null)
         setFiles(null)
-        setFormData(prev => {
-            return {
-                ...prev,
-                file: null,
-                issued_date: null,
-                autograph: null,
-                code_number: null,
-                doc_ordinal: null,
-                num_page: null,
-            }
+        setRequest(prev => {
+            return SetNull(prev)
         })
         if (isSubmitFormSuccess === true) {
             fetchDocumentsOfFile(govFileID)
@@ -107,11 +112,10 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     }
 
     const handleCloseTab = (index) => {
-        setFormData({
-            "IssuedDate": "",
-            "Autograph": "",
-            "CodeNumber": "",
+        setRequest(prev => {
+            return SetNull(prev)
         })
+
         if (index >= files.length)
             return
 
@@ -163,7 +167,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     }
 
     const handleChangeForm = (name, value) => {
-        setFormData(prevState => ({
+        setRequest(prevState => ({
             ...prevState,
             [name]: value
         }))
@@ -172,11 +176,17 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     const handleSubmitForm = async (ev) => {
         ev.preventDefault()
 
+        for (const field of FORM_FIELDS) {
+            if (field.require && (request[field.key] === null || request[field.key] === "")) {
+                notifyError("Vui lòng nhập " + FirstLower(field.title))
+                return
+            }
+        }
+
         const num_page = Number(document.getElementsByClassName("rpv-toolbar__label")[0].textContent.split(" ")[1])
-        formData["num_page"] = num_page
-        formData["file"] = files[0]
-        
-        const formDataValidated = ValidateFormDoc(formData)
+        request["num_page"] = num_page
+        request["file"] = files[0]
+        const formDataValidated = ValidateFormDoc(request)
 
         try {
             setIsLoading(true)
@@ -249,8 +259,6 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                                                 plugins={[defaultLayoutPluginInstance]}></Viewer>
                                                         </Worker>
                                                     )}
-
-                                                    {/* render this if we have pdfFile state null   */}
                                                 </div>
 
                                             </div>
@@ -286,27 +294,27 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                                                                 </label>
 
                                                                                 {field.type === "select" ? (
-                                                                                    <select
-                                                                                        required={field.require}
-                                                                                        onChange={(ev) => handleChangeForm(ev.target.name, ev.target.value)}
-                                                                                        name={field.key}
-                                                                                        placeholder={field.title}
-                                                                                        className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
-                                                                                    >
-                                                                                        {field.options.map((option, index) => (
-                                                                                            <option
-                                                                                                key={option.value}
-                                                                                                value={option.value}
-                                                                                            >
-                                                                                                {option.label}
-                                                                                            </option>
-                                                                                        ))}
-                                                                                    </select>
+                                                                                    field.default === true ? (
+                                                                                        <Select
+                                                                                            onChange={(value) => handleChangeForm(field.key, value)}
+                                                                                            options={field.options}
+                                                                                            className="w-full mt-[12px]"
+                                                                                            defaultValue={field.options[0]}
+                                                                                        >
+                                                                                        </Select>
+                                                                                    ) : (
+                                                                                        <Select
+                                                                                            onChange={(value) => handleChangeForm(field.key, value)}
+                                                                                            options={field.options}
+                                                                                            className="w-full mt-[12px]"
+                                                                                        >
+                                                                                        </Select>
+                                                                                    )
                                                                                 ) : (
                                                                                     <Input
                                                                                         required={field.require}
                                                                                         onChange={(ev) => handleChangeForm(ev.target.name, ev.target.value)}
-                                                                                        value={formData[field.key]}
+                                                                                        value={request[field.key]}
                                                                                         name={field.key}
                                                                                         placeholder={field.title}
                                                                                         type={field.type}
@@ -342,3 +350,4 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
 }
 
 export default AddDoc
+

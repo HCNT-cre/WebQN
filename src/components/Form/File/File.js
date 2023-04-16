@@ -4,9 +4,9 @@ import { useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from "react-redux";
 import * as actionFile from "../../../actions/formFile";
-import { IDENTIFIER } from "../../../storage/FileStorage";
+import { FORMAT, IDENTIFIER, LANGUAGE, MAINTENANCE, ORGAN_ID, RIGHTS } from "../../../storage/FileStorage";
 import { Select, Input } from "antd";
-import { notifyError, notifySuccess } from "../../../custom/Function";
+import { FirstLower, notifyError, notifySuccess } from "../../../custom/Function";
 
 const API_GOV_FILE_CREATE = process.env.REACT_APP_API_GOV_FILE_CREATE
 const API_GOV_FILE_GET = process.env.REACT_APP_API_GOV_FILE_GET
@@ -25,12 +25,14 @@ const FIELDS_LEFT = [
         require: true,
         type: "select",
         options: IDENTIFIER,
+        default: true
     },
     {
         key: "organ_id",
         title: "Mã phông/công trình/sưu tập lưu trữ",
-        require: false,
-        type: "options",
+        require: true,
+        type: "select",
+        options: ORGAN_ID
     },
     {
         key: "file_catalog",
@@ -48,20 +50,24 @@ const FIELDS_LEFT = [
     {
         key: "maintenance",
         title: "Thời hạn bảo quản",
-        require: false,
-        type: "options",
+        require: true,
+        type: "select",
+        options: MAINTENANCE
     },
     {
         key: "rights",
         title: "Chế độ sử dụng",
-        require: false,
+        require: true,
         type: "select",
-        options: [
-            { value: "Công Khai", label: "Công Khai" },
-            { value: "Riêng tư", label: "Riêng tư" },
-        ],
+        options: RIGHTS
     },
-    { key: "language", title: "Ngôn ngữ", require: false, type: "text" },
+    {
+        key: "language",
+        title: "Ngôn ngữ",
+        require: true,
+        type: "select",
+        options: LANGUAGE
+    },
 ];
 
 const FIELDS_RIGHT = [
@@ -98,7 +104,13 @@ const FIELDS_RIGHT = [
         require: false,
         type: "number",
     },
-    { key: "format", title: "Tình trạng vật lý", require: false, type: "text" },
+    {
+        key: "format",
+        title: "Tình trạng vật lý",
+        require: true,
+        type: "select",
+        options: FORMAT
+    },
 ];
 
 const File = ({ reset }) => {
@@ -116,7 +128,7 @@ const File = ({ reset }) => {
 
     const dispatch = useDispatch();
     const [request, setRequest] = useState({
-        rights: "Công khai",
+        rights: null,
         gov_file_code: null,
         identifier: null,
         organ_id: null,
@@ -142,8 +154,8 @@ const File = ({ reset }) => {
             Object.keys(request).forEach(key => {
                 updatedRequest[key] = null
             })
-            updatedRequest['rights'] = "Công khai"
-            setRequest(updatedRequest)
+            updatedRequest['identifier'] = "000.00.39.H48"
+            setRequest(prev => updatedRequest)
             return
         }
 
@@ -169,9 +181,9 @@ const File = ({ reset }) => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        for (let field of FIELDS_LEFT) {
+        for (const field of FIELDS_LEFT) {
             if (field.require && (request[field.key] === null || request[field.key] === "")) {
-                notifyError("Vui lòng nhập " + field.title)
+                notifyError("Vui lòng nhập " + FirstLower(field.title))
                 return
             }
         }
@@ -183,20 +195,18 @@ const File = ({ reset }) => {
             }
         }
 
+        const gov_file_code = request["identifier"] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
+        const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : API_GOV_FILE_UPDATE
+        
         try {
-            const gov_file_code = request["identifier"] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
-            const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : API_GOV_FILE_UPDATE
-            let response
-            response = await axios.post(API, { ...request, gov_file_code: gov_file_code, perm_token: userPermissionId})
-
-
+            const response = await axios.post(API, { ...request, gov_file_code: gov_file_code, perm_token: userPermissionId })
             const error_code = response.data.error_code
             if (error_code === undefined) {
                 notifySuccess(title + ' thành công');
                 setRequest((prev) => {
                     return {
                         ...prev,
-                        rights: "Công khai",
+                        rights: null,
                         gov_file_code: null,
                         identifier: null,
                         organ_id: null,
@@ -259,20 +269,21 @@ const File = ({ reset }) => {
                                                             </label>
 
                                                             {field.type === "select" ? (
-                                                                field.key === 'identifier' ? (
-                                                                    <Select
-                                                                        onChange={(value) => handleChangeForm(field.key, value)}
-                                                                        className="block mt-[12px]"
-                                                                        options={field.options}
-                                                                    />
-                                                                ) : (
+                                                                field.default === true ? (
                                                                     <Select
                                                                         onChange={(value) => handleChangeForm(field.key, value)}
                                                                         className="block mt-[12px]"
                                                                         options={field.options}
                                                                         defaultValue={field.options[0]}
                                                                     />
+                                                                ) : (
+                                                                    <Select
+                                                                        onChange={(value) => handleChangeForm(field.key, value)}
+                                                                        className="block mt-[12px]"
+                                                                        options={field.options}
+                                                                    />
                                                                 )
+
                                                             ) : (
                                                                 <Input
                                                                     onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
@@ -304,20 +315,21 @@ const File = ({ reset }) => {
                                                             </label>
 
                                                             {field.type === "select" ? (
-                                                                field.key === 'identifier' ? (
-                                                                    <Select
-                                                                        onChange={(value) => handleChangeForm(field.key, value)}
-                                                                        className="block mt-[12px]"
-                                                                        options={field.options}
-                                                                    />
-                                                                ) : (
+                                                                field.default === true ? (
                                                                     <Select
                                                                         onChange={(value) => handleChangeForm(field.key, value)}
                                                                         className="block mt-[12px]"
                                                                         options={field.options}
                                                                         defaultValue={field.options[0]}
                                                                     />
+                                                                ) : (
+                                                                    <Select
+                                                                        onChange={(value) => handleChangeForm(field.key, value)}
+                                                                        className="block mt-[12px]"
+                                                                        options={field.options}
+                                                                    />
                                                                 )
+
                                                             ) : (
                                                                 <Input
                                                                     onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
