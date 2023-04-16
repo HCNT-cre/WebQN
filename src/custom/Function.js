@@ -69,3 +69,18 @@ export const ValidateFormDoc = (form) => {
     })
     return form
 }
+
+export const FirstLower = (lower) => {
+    return lower && (lower[0].toLowerCase() + lower.slice(1) || lower);
+}
+
+export const SetVal = (obj, val) => {
+    Object.keys(obj).forEach(function (index) {
+        obj[index] = val
+    });
+    return obj
+}
+
+export const SetNull = (obj) => {
+    return SetVal(obj, null)
+}
