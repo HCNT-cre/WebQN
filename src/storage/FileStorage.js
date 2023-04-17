@@ -11,11 +11,18 @@ export const FIELDS_TABLE = [
     { title: "Chức năng", key: "Function", width: "120px" },
 ]
 
+export const IDENTIFIER_CODE = {
+    "Trung tâm lưu trữ lịch sử": "001.03.34.H48",
+    "Sở giáo dục và đào tạo": "001.03.34.J09",
+    "Sở thông tin và truyền thông": "001.09.34.K21",
+    "UBND tỉnh Quảng Ngãi": "020.03.34.H01",
+}
+
 export const IDENTIFIER = [
-    { label: "Trung tâm lưu trữ lịch sử" , value: "000.00.39.H48"},
-    { label: "Sở giáo dục và đào tạo", value: "000.00.39.H01" },
-    { label: "Sở thông tin và truyền thông", value: "000.00.39.L08" },
-    { label: "UBND tỉnh Quảng Ngãi", value: "000.00.39.C02" },
+    { label: "Trung tâm lưu trữ lịch sử" , value: "Trung tâm lưu trữ lịch sử"},
+    { label: "Sở giáo dục và đào tạo", value: "Sở giáo dục và đào tạo" },
+    { label: "Sở thông tin và truyền thông", value: "Sở thông tin và truyền thông" },
+    { label: "UBND tỉnh Quảng Ngãi", value: "UBND tỉnh Quảng Ngãi" },
 ]
 
 export const ORGAN_ID = [
