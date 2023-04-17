@@ -120,7 +120,7 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     )
 }
 
-const BaoCaoThongKe = () => {
+const HSdenhannopluuLS = () => {
     const dispatch = useDispatch();
     const [files, setFiles] = useState([])
     const [stateDocCategory, setStateDocCategory] = useState(false)
@@ -300,13 +300,15 @@ const BaoCaoThongKe = () => {
         <>
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
                 <p className="text-[14px] font-300 cursor-pointer ">
-                    <span className="text-[rgba(0,0,0,.45)]">Báo cáo và thống kê </span>
-                    
+                    <span className="text-[rgba(0,0,0,.45)]">Lưu trữ cơ quan / </span>
+                    <span>
+                        Hồ sơ đến hạn nộp lưu
+                    </span>
                 </p>
             </div>
 
             <div className="w-full px-[24px] pb-[16px] bg-white">
-                <p className="text-[20px] font-bold ">Báo cáo và thống kê</p>
+                <p className="text-[20px] font-bold ">Hồ sơ đến hạn nộp lưu</p>
             </div>
 
             <div className="w-full my-[24px]">
@@ -409,4 +411,4 @@ const BaoCaoThongKe = () => {
     )
 }
 
-export default BaoCaoThongKe
+export default HSdenhannopluuLS

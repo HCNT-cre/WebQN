@@ -1,19 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react"
-import DocCategory from "../../../components/Form/Document/DocCategory"
-import MultimediaCategory from "../../../components/Form/Multimedia/MultimediaCategory"
+import DocCategory from "../../components/Form/Document/DocCategory"
+import MultimediaCategory from "../../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
-import { Table } from "../../../custom/Components"
+import { Table } from "../../custom/Components"
 import { useSelector, useDispatch } from "react-redux"
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Input, Select, Popconfirm } from "antd"
-import { OpenFile } from "../../../actions/formFile"
-import File from "../../../components/Form/File/File"
-import { FIELDS_TABLE } from "../../../storage/FileStorage"
-import { STATE } from "../../../storage/Storage"
-import { reloadPage, DeleteData, GetKey } from "../../../custom/Function"
-import { useButtonClickOutside } from "../../../custom/Hook"
+import { OpenFile } from "../../actions/formFile"
+import File from "../../components/Form/File/File"
+import { FIELDS_TABLE } from "../../storage/FileStorage"
+import { STATE } from "../../storage/Storage"
+import { reloadPage, DeleteData, GetKey } from "../../custom/Function"
+import { useButtonClickOutside } from "../../custom/Hook"
 
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
@@ -120,7 +120,7 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     )
 }
 
-const AddFile = () => {
+const User = () => {
     const dispatch = useDispatch();
     const [files, setFiles] = useState([])
     const [stateDocCategory, setStateDocCategory] = useState(false)
@@ -140,9 +140,10 @@ const AddFile = () => {
         "type": null
     })
 
-    const handleClickOnFile = (IDFile) => {
+    const handleClickOnFile = async (IDFile) => {
         setIDFile(IDFile)
         setStateDocCategory(true)
+        
     }
 
     const getFileFromResponse = (response) => {
@@ -204,7 +205,7 @@ const AddFile = () => {
 
             let request = API_GOV_FILE_SEARCH + userPermissionId
             Object.keys(search).forEach(key => {
-                if(key === 'state' && search[key] === 'Tất cả') return
+                if (key === 'state' && search[key] === 'Tất cả') return
                 const value = search[key]
                 if (value !== null & value !== '')
                     request += ("&" + key + "=" + value)
@@ -299,15 +300,13 @@ const AddFile = () => {
         <>
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
                 <p className="text-[14px] font-300 cursor-pointer ">
-                    <span className="text-[rgba(0,0,0,.45)]">Hồ sơ, tài liệu / </span>
-                    <span>
-                        Danh sách hồ sơ
-                    </span>
+                    <span className="text-[rgba(0,0,0,.45)]">Người dùng</span>
+                    
                 </p>
             </div>
 
             <div className="w-full px-[24px] pb-[16px] bg-white">
-                <p className="text-[20px] font-bold ">Danh sách hồ sơ</p>
+                <p className="text-[20px] font-bold ">Người dùng</p>
             </div>
 
             <div className="w-full my-[24px]">
@@ -410,4 +409,4 @@ const AddFile = () => {
     )
 }
 
-export default AddFile
+export default User

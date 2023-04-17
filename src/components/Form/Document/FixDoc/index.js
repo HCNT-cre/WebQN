@@ -6,7 +6,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { notifyError, notifySuccess } from '../../../../custom/Function';
-import { Button, Spin } from 'antd';
+import { Button, Spin, Input, Select } from 'antd';
 import { FORM_FIELDS } from '../../../../storage/DocumentStorage';
 import { ValidateFormDoc } from '../../../../custom/Function';
 
@@ -15,13 +15,13 @@ const API_DOCUMENT_UPDATE = process.env.REACT_APP_API_DOCUMENT_UPDATE
 const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 
 
-const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID, fetchDocumentsOfFile, govFileID }) => {
+const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID, fetchDocumentsOfFile, govFileID, fileData }) => {
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
-    const [formData, setFormData] = useState(null)
+    const [request, setRequest] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        setFormData(pdfData)
+        setRequest(pdfData)
     }, [pdfData])
 
     const extractDataOCR = async () => {
@@ -54,7 +54,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
 
     const handleSubmitForm = async (ev) => {
         ev.preventDefault()
-        const formDataValidated = ValidateFormDoc(formData)
+        const formDataValidated = ValidateFormDoc(request)
         try {
             setIsLoading(true)
             await axios.post(API_DOCUMENT_UPDATE, { ...formDataValidated, id: pdfID })
@@ -67,7 +67,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
     }
 
     const handleChangeForm = (name, value) => {
-        setFormData(prevState => ({
+        setRequest(prevState => ({
             ...prevState,
             [name]: value
         }))
@@ -78,6 +78,9 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
         setStateFixDoc(false)
     }
 
+    const handleExtract = (name) => {
+        handleChangeForm(name, fileData[name])
+    }
     return (
         <>
             {stateFixDoc &&
@@ -135,35 +138,41 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
                                                                                         title={field.title}
                                                                                     >
                                                                                         {field.title}
+                                                                                        {field.extract === true &&
+                                                                                            <span className='ml-[8px] cursor-pointer' title='Trích xuất từ hồ sơ' onClick={() => handleExtract(field.key)}>
+                                                                                                <i className="fa-regular fa-clipboard"></i>
+                                                                                            </span>
+                                                                                        }
                                                                                     </label>
 
                                                                                     {field.type === "select" ? (
-                                                                                        <select
-                                                                                            required={field.require}
-                                                                                            onChange={(ev) => handleChangeForm(ev)}
-                                                                                            name={field.key}
-                                                                                            placeholder={field.title}
-                                                                                            className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
-                                                                                        >
-                                                                                            {field.options.map((option, index) => (
-                                                                                                <option
-                                                                                                    key={option.value}
-                                                                                                    value={option.value}
-                                                                                                >
-                                                                                                    {option.label}
-                                                                                                </option>
-                                                                                            ))}
-                                                                                        </select>
+                                                                                        field.default === true ? (
+                                                                                            <Select
+                                                                                                onChange={(value) => handleChangeForm(field.key, value)}
+                                                                                                options={field.options}
+                                                                                                className="w-full mt-[12px]"
+                                                                                                defaultValue={field.options[0]}
+                                                                                                value={request[field.key]}
+                                                                                            >
+                                                                                            </Select>
+                                                                                        ) : (
+                                                                                            <Select
+                                                                                                onChange={(value) => handleChangeForm(field.key, value)}
+                                                                                                options={field.options}
+                                                                                                className="w-full mt-[12px]"
+                                                                                                value={request[field.key]}
+                                                                                            >
+                                                                                            </Select>
+                                                                                        )
                                                                                     ) : (
-                                                                                        <input
-                                                                                            required={field.require}
-                                                                                            onChange={(ev) => handleChangeForm(ev.target.name, ev.target.value)}
+                                                                                        <Input
+                                                                                            onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
                                                                                             name={field.key}
                                                                                             placeholder={field.title}
                                                                                             type={field.type}
                                                                                             min="0"
-                                                                                            value={formData === null ? "" : formData[field.key]}
-                                                                                            className="focus:shadow-[0_0_0_2px_rgba(0,0,255,.2)] focus:outline-none focus:border-[#2930ff] hover:border-[#2930ff] hover:border-r-[1px] w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                                            value={request[field.key]}
+                                                                                            className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
                                                                                         />
                                                                                     )}
                                                                                 </div>

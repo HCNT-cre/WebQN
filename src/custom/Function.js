@@ -2,6 +2,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
+const API_GOV_FILE_GET = process.env.REACT_APP_API_GOV_FILE_GET
+
 export const reloadPage = () => {
     document.location.reload()
 }
@@ -59,14 +61,18 @@ export const GetKey = () => {
 }
 
 export const ValidateFormDoc = (form) => {
-    form["issued_date"] = GetDateFromString(form["issued_date"])
+    console.log(form)
+    form["issued_date"] = GetDateFromString(form["issued_date"]) === null ? form["issued_date"] : GetDateFromString(form["issued_date"])
     if (form["code_number"] !== null && form["code_number"] !== undefined)
         form["code_number"] = form["code_number"].split('').splice(0, Math.min(10, form["code_number"].length)).join('');
 
+
     Object.keys(form).forEach(key => {
-        if (form[key] === null || form[key] === undefined || (typeof form[key] === 'string' && !form[key].replace(/\s/g, '').length))
+        if (form[key] === undefined || (typeof form[key] === 'string' && !form[key].replace(/\s/g, '').length)) {
             form[key] = null
+        }
     })
+
     return form
 }
 
@@ -83,4 +89,13 @@ export const SetVal = (obj, val) => {
 
 export const SetNull = (obj) => {
     return SetVal(obj, null)
+}
+
+export const GetDataFromIDFile = async (IDFile, userPermissionId) => {
+    const response = await axios.get(API_GOV_FILE_GET + "id=" + IDFile + "&perm_token=" + userPermissionId)
+    const error_code = response.data.error_code
+    if (error_code === undefined) {
+        return response.data[0]
+    }
+    return null
 }

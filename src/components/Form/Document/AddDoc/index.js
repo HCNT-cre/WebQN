@@ -17,9 +17,9 @@ const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = process.env.REACT_APP_API_DOCUMENT_UPLOAD
 
 
-const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOfFile, govFileID }) => {
+const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOfFile, govFileID, fileData }) => {
     const [request, setRequest] = useState({
-        gov_file_id: null,
+        gov_file_id: govFileID,
         file: null,
         issued_date: null,
         autograph: null,
@@ -53,11 +53,12 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     const allowedFiles = ['application/pdf']
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [isLoading, setIsLoading] = useState(false)
+    
 
     useEffect(() => {
         setRequest(prev => ({
             ...prev,
-            "gov_file_id": govFileID
+            gov_file_id: govFileID
         }))
     }, [govFileID])
 
@@ -167,6 +168,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     }
 
     const handleChangeForm = (name, value) => {
+        console.log(name, value)
         setRequest(prevState => ({
             ...prevState,
             [name]: value
@@ -186,10 +188,11 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         const num_page = Number(document.getElementsByClassName("rpv-toolbar__label")[0].textContent.split(" ")[1])
         request["num_page"] = num_page
         request["file"] = files[0]
-        const formDataValidated = ValidateFormDoc(request)
 
+        const formDataValidated = ValidateFormDoc(request)
         try {
             setIsLoading(true)
+            console.log(formDataValidated)
             await axios.post(API_DOCUMENT_UPLOAD, formDataValidated, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -204,6 +207,9 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         }
     }
 
+    const handleExtract = (name) =>{
+        handleChangeForm(name, fileData[name])
+    }
     return (
         <>
             {stateAddDoc &&
@@ -214,7 +220,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                 <div className="bg-[#2f54eb] text-white py-[8px] px-[24px] relative">
                                     <p className='text-bold'>Thêm văn bản</p>
                                     <button onClick={handleCloseAllTab} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-[#2f54eb] top-0 text-white ">
-                                        <i class="fa-solid fa-xmark"></i>
+                                        <i className="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
                                 <div className='w-full'>
@@ -227,7 +233,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                                     <div className={` ${bgColor}  px-[4px] h-[30px] border-solid border-[1px] rounded-[5px] flex items-center cursor-pointe hover:bg-gray-200 justify-between pl-[6px]`}>
                                                         <p className='leading-[20px] h-[20px] text-[10px] overflow-hidden '>{file.name}</p>
                                                         <div onClick={() => handleCloseTab(index)} className='text-[12px] w-[15px] h-[15px] rounded-[5px] hover:bg-white flex items-center justify-center'>
-                                                            <i class="fa-solid fa-xmark"></i>
+                                                            <i className="fa-solid fa-xmark"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -237,7 +243,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                         <div className='w-[2%] absolute right-0 text-white h-full rounded-[5px] flex items-center justify-center cursor-pointer'>
                                             <form encType="multipart/form-data">
                                                 <label className='cursor-pointer' htmlFor="file-add-upload">
-                                                    <i class="fa-solid fa-plus"></i>
+                                                    <i className="fa-solid fa-plus"></i>
                                                 </label>
                                                 <input onClick={(ev) => { ev.target.value = '' }} type='file' id="file-add-upload" name="file-upload" className="hidden" onChange={(ev) => {
                                                     handleAddMoreFiles(ev)
@@ -291,6 +297,11 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                                                                     title={field.title}
                                                                                 >
                                                                                     {field.title}
+                                                                                    {field.extract === true &&
+                                                                                        <span className='ml-[8px] cursor-pointer' title='Trích xuất từ hồ sơ' onClick={() => handleExtract(field.key)}>
+                                                                                            <i className="fa-regular fa-clipboard"></i>
+                                                                                        </span>
+                                                                                    }
                                                                                 </label>
 
                                                                                 {field.type === "select" ? (
@@ -300,6 +311,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                                                                             options={field.options}
                                                                                             className="w-full mt-[12px]"
                                                                                             defaultValue={field.options[0]}
+                                                                                            value={request[field.key]}
                                                                                         >
                                                                                         </Select>
                                                                                     ) : (
@@ -307,18 +319,18 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                                                                             onChange={(value) => handleChangeForm(field.key, value)}
                                                                                             options={field.options}
                                                                                             className="w-full mt-[12px]"
+                                                                                            value={request[field.key]}
                                                                                         >
                                                                                         </Select>
                                                                                     )
                                                                                 ) : (
                                                                                     <Input
-                                                                                        required={field.require}
-                                                                                        onChange={(ev) => handleChangeForm(ev.target.name, ev.target.value)}
-                                                                                        value={request[field.key]}
+                                                                                        onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
                                                                                         name={field.key}
                                                                                         placeholder={field.title}
                                                                                         type={field.type}
                                                                                         min="0"
+                                                                                        value={request[field.key]}
                                                                                         className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
                                                                                     />
                                                                                 )}

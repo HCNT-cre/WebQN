@@ -4,10 +4,11 @@ import AddDoc from "../AddDoc"
 import { Table } from "../../../../custom/Components"
 import axios from "axios"
 import FixDoc from "../FixDoc"
-import { DeleteData } from "../../../../custom/Function"
+import { DeleteData, GetDataFromIDFile } from "../../../../custom/Function"
 import { Button, Popconfirm } from 'antd';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { useSelector } from "react-redux"
 
 const API_DOCUMENT_GET = process.env.REACT_APP_API_DOCUMENT_GET
 const API_DOCUMENT_DELETE = process.env.REACT_APP_API_DOCUMENT_DELETE
@@ -81,6 +82,8 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
     const [pdfFileLink, setPdfFileLink] = useState(null)
     const [pdfData, setPdfData] = useState(null)
     const [pdfID, setPdfID] = useState(null)
+    const [fileData, setFileData] = useState(null)
+    const userPermissionId = useSelector(state => state.user.permission_id)
     const handleClickOnDocument = async (URL_PDF_FILE, pdfData, pdfID) => {
         setPdfFileLink(URL_PDF_FILE)
         setPdfData(pdfData)
@@ -123,9 +126,16 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
 
 
     useEffect(() => {
-        if (govFileID === -1)
+        const fetchData = async () => {
+            fetchDocumentsOfFile(govFileID);
+            const data = await GetDataFromIDFile(govFileID, userPermissionId)
+            setFileData(data)
+        }
+
+        if (govFileID === -1 || govFileID === null)
             return
-        fetchDocumentsOfFile(govFileID);
+
+        fetchData()
     }, [govFileID])
 
 
@@ -201,8 +211,8 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                 </div>
             }
 
-            <FixDoc pdfID={pdfID} pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />
-            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />
+            <FixDoc pdfID={pdfID} pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} fileData={fileData} />
+            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} fileData={fileData} />
         </>
     )
 }
