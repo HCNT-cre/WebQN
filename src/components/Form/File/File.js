@@ -197,7 +197,7 @@ const File = ({ reset }) => {
 
         const gov_file_code = IDENTIFIER_CODE[request["identifier"]] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
         const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : API_GOV_FILE_UPDATE
-        
+
         try {
             const response = await axios.post(API, { ...request, gov_file_code: gov_file_code, perm_token: userPermissionId })
             const error_code = response.data.error_code
@@ -255,6 +255,7 @@ const File = ({ reset }) => {
                                         <div className="flex justify-between">
                                             <div className="w-[50%] px-[10px]">
                                                 {FIELDS_LEFT.map((field, index) => {
+                                                    const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
                                                     return (
                                                         <div
                                                             key={field.key}
@@ -288,11 +289,11 @@ const File = ({ reset }) => {
                                                                 <Input
                                                                     onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
                                                                     name={field.key}
-                                                                    placeholder={field.title}
+                                                                    placeholder={placeholder}
                                                                     type={field.type}
                                                                     min="0"
                                                                     value={request[field.key] === null ? "" : request[field.key]}
-                                                                    className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
+                                                                    className={`w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px] ${field.key === 'gov_file_code' ? "bg-[#ccc]" : ""} `}
                                                                 />
                                                             )}
                                                         </div>
@@ -301,6 +302,7 @@ const File = ({ reset }) => {
                                             </div>
                                             <div className="w-[50%] px-[10px]">
                                                 {FIELDS_RIGHT.map((field, index) => {
+                                                    const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
                                                     return (
                                                         <div
                                                             key={field.key}
@@ -334,7 +336,7 @@ const File = ({ reset }) => {
                                                                 <Input
                                                                     onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
                                                                     name={field.key}
-                                                                    placeholder={field.title}
+                                                                    placeholder={placeholder}
                                                                     type={field.type}
                                                                     min="0"
                                                                     value={request[field.key] === null ? "" : request[field.key]}
