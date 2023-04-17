@@ -5,7 +5,7 @@ import { Table } from "../../../../custom/Components"
 import axios from "axios"
 import FixDoc from "../FixDoc"
 import { DeleteData, GetDataFromIDFile } from "../../../../custom/Function"
-import { Button, Popconfirm } from 'antd';
+import { Button, Popconfirm, Input } from 'antd';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useSelector } from "react-redux"
@@ -158,16 +158,16 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                             <div className="w-full pb-[24px] bg-[#f0f2f5]">
                                 <div className="pt-[16px] mx-[24px] flex ">
                                     <div className="w-[12.5%] px-[5px]">
-                                        <input placeholder="Tác giả" className="bar-page-input"></input>
+                                        <Input placeholder="Tác giả" className="text-[12px] rounded-none"></Input>
                                     </div>
                                     <div className="w-[12.5%] px-[5px]">
-                                        <input placeholder="Số ký hiệu VB" className="bar-page-input"></input>
+                                        <Input placeholder="Số ký hiệu VB" className="text-[12px] rounded-none"></Input>
                                     </div>
                                     <div className="w-[12.5%] px-[5px]">
-                                        <input placeholder="Trích yếu VB" className="bar-page-input"></input>
+                                        <Input placeholder="Trích yếu VB" className="text-[12px] rounded-none"></Input>
                                     </div>
                                     <div className="w-[12.5%] px-[5px]">
-                                        <input placeholder="Ngày VB" className="bar-page-input"></input>
+                                        <Input placeholder="Ngày VB" className="text-[12px] rounded-none"></Input>
                                     </div>
                                     <div className="w-[12.5%] text-white text-center px-[5px] flex">
                                         <button className="rounded-[5px] h-[30px] flex justify-center bg-[#00f] w-full px-[16px] items-center text-[12px] ">
