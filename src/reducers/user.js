@@ -4,6 +4,7 @@ const APPLICANT = {
     permissions: [
         {
             permission_title: "Đóng hồ sơ",
+            icon_class: "fa-solid fa-lock mr-2",
             update_state: {
                 current_state: 1,
                 new_state: 2
@@ -11,6 +12,7 @@ const APPLICANT = {
         },
         {
             permission_title: "Mở hồ sơ",
+            icon_class: "fa-solid fa-lock-open mr-2",
             update_state: {
                 current_state: 2,
                 new_state: 1
@@ -18,6 +20,7 @@ const APPLICANT = {
         },
         {
             permission_title: "Nộp lưu cơ quan",
+            icon_class: "fa-solid fa-box-archive mr-2",
             update_state: {
                 current_state: 2,
                 new_state: 3
@@ -32,6 +35,7 @@ const APPLICATION_REVIEWER = {
     permissions: [
         {
             permission_title: "Duyệt nộp lưu cơ quan",
+            icon_class: "fa-solid fa-check mr-2",
             update_state: {
                 current_state: 3,
                 new_state: 4
@@ -39,6 +43,7 @@ const APPLICATION_REVIEWER = {
         },
         {
             permission_title: "Từ chối hồ sơ nộp lưu cơ quan",
+            icon_class: "fa-solid fa-xmark mr-2",
             update_state: {
                 current_state: 3,
                 new_state: 1
@@ -46,6 +51,7 @@ const APPLICATION_REVIEWER = {
         },
         {
             permission_title: "Nộp lưu lịch sử",
+            icon_class: "fa-solid fa-book mr-2",
             update_state: {
                 current_state: 4,
                 new_state: 5

@@ -77,7 +77,7 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
                     onCancel={handleClose}
                     key={GetKey()}
                 >
-                    <Button onClick={() => { setOpen(true) }} className={`cursor-pointer basis-1/4 max-w-[25%] text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} title="Xóa hồ sơ" ><i className="fa-solid fa-trash-can"></i></Button>
+                    <Button onClick={() => { setOpen(true) }} className={`cursor-pointer basis-1/4 max-w-[25%] text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`} title="Xóa hồ sơ" ><i className="fa-solid fa-trash-can"></i></Button>
                 </Popconfirm>
         },
 
@@ -92,14 +92,14 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
             <div className="flex flex-wrap">
                 {BUTTON_DEFAULT.map((item) => {
                     return (
-                        <Button key={GetKey()} className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
+                        <Button key={GetKey()} className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`} onClick={item.onclick} title={item.title}>
                             {item.icon}
                         </Button>
                     )
                 })}
 
                 <div className="relative">
-                    <Button ref={buttonRef} onClick={toggleContent} className="px-[2px] text-[#000] cursor-pointer border-none text-center" title="Xem thêm">
+                    <Button ref={buttonRef} onClick={toggleContent} className="px-[2px] text-[#000] cursor-pointer border-none text-center icon-button" title="Xem thêm">
                         <i className="fa-solid fa-ellipsis"></i>
                     </Button>
                     {showContent &&
@@ -107,7 +107,7 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
                             {BUTTON_MORE.map((item) => {
                                 if (item.popup) return item.element
                                 return (
-                                    <Button key={GetKey()} className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline`} onClick={item.onclick} title={item.title}>
+                                    <Button key={GetKey()} className={`cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`} onClick={item.onclick} title={item.title}>
                                         {item.icon}
                                     </Button>
                                 )
@@ -290,10 +290,10 @@ const AddFile = () => {
     }, [userPermissionId])
 
     const BUTTON_ACTIONS = [
-        { title: "Tìm kiếm", icon: <i className="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
-        { title: "Xóa bộ lọc", icon: <i className="fa-solid fa-sync"></i>, onClick: resetSearch },
-        { title: "Thêm hồ sơ mới", icon: <i className="fa-solid fa-plus"></i>, onClick: () => { dispatch(OpenFile("open_upload")) } },
-        { title: "Xuất Excel", icon: <i className="fa-solid fa-file-excel"></i>, onClick: () => { } },
+        { title: "Tìm kiếm", btn_class_name: "custom-btn-search", icon: <i className="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
+        { title: "Xóa bộ lọc", btn_class_name: "custom-btn-clear-filter", icon: <i className="fa-solid fa-sync"></i>, onClick: resetSearch },
+        { title: "Thêm hồ sơ mới", btn_class_name: "custom-btn-add-file", icon: <i className="fa-solid fa-plus"></i>, onClick: () => { dispatch(OpenFile("open_upload")) } },
+        { title: "Xuất Excel", btn_class_name: "custom-btn-export-excel", icon: <i className="fa-solid fa-file-excel"></i>, onClick: () => { } },
     ]
 
     return (
@@ -315,18 +315,18 @@ const AddFile = () => {
                 <div className="mt-[16px] mx-[24px] flex ">
 
                     <div className="w-[11.11111%] px-[5px]">
-                        <Input allowClear onChange={(ev) => handleChangeSearch("title", ev.target.value)} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px] flex items-center"></Input>
+                        <Input allowClear onChange={(ev) => handleChangeSearch("title", ev.target.value)} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px] flex items-center"></Input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <Input value={search["start_date"]} onChange={(ev) => handleChangeSearch("start_date", ev.target.value)} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
+                        <Input value={search["start_date"]} onChange={(ev) => handleChangeSearch("start_date", ev.target.value)} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <Input value={search["end_date"]} onChange={(ev) => handleChangeSearch("end_date", ev.target.value)} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
+                        <Input value={search["end_date"]} onChange={(ev) => handleChangeSearch("end_date", ev.target.value)} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
                     </div>
-                    <div className="w-[11.11111%] px-[5px]">
+                    <div className="w-[11.11111%] px-[5px] rounded-none">
                         <Select
                             name="state"
-                            className="w-full bg-white outline-none rounded-none"
+                            className="w-full bg-white outline-none rounded-md"
                             showSearch
                             defaultValue="Tất cả"
                             value={search["state"]}
@@ -368,7 +368,7 @@ const AddFile = () => {
                     {BUTTON_ACTIONS.map((item, index) => {
                         return (
                             <div key={index} className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
-                                <Button onClick={item.onClick} className="rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center">
+                                <Button onClick={item.onClick} className={`rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center ${item.btn_class_name}`}>
                                     <div className="mr-[8px]">
                                         {item.icon}
                                     </div>
@@ -380,7 +380,7 @@ const AddFile = () => {
                     )}
 
                     <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  relative">
-                        <Button disabled={!(stateCheckBox.length > 0)} onClick={toggleContent} ref={buttonRef} className=" disabled:opacity-60 rounded-[5px] flex justify-center items-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white">
+                        <Button disabled={!(stateCheckBox.length > 0)} onClick={toggleContent} ref={buttonRef} className=" disabled:opacity-30 rounded-[5px] flex justify-center items-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] custom-btn-show-action ">
                             Hành động
                             <div className="ml-[4px]">
                                 <i className="fa-solid fa-chevron-down"></i>
@@ -388,10 +388,14 @@ const AddFile = () => {
                         </Button>
 
                         {showContent &&
-                            <div ref={el => { contentRef.current[0] = el }} className="rounded-[5px]  text-left top-[40px] absolute bg-[#00f] w-full text-[14px] z-10 ">
+                            <div ref={el => { contentRef.current[0] = el }} className="rounded-[5px]  text-left top-[40px] absolute bg-purple-400 w-full text-[14px] z-10">
                                 {userPermissions.map((permission, index) => {
                                     return (
-                                        <button className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-white border-none truncate" onClick={() => handleChangeStateFile(permission.update_state)}>{permission.permission_title}</button>
+                                        <button className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-black font-medium border-none truncate" onClick={() => handleChangeStateFile(permission.update_state)}>
+                                            <i class=
+                                            {permission.icon_class}
+                                            ></i>
+                                            {permission.permission_title}</button>
                                     )
                                 })}
                             </div>
