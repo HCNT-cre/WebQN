@@ -10,17 +10,17 @@
 
 @layer components {
     .sidebar-items--large {
-        @apply mx-[16px] text-[14px] leading-[40px] cursor-pointer  py-[4px];
+        @apply mx-[16px] text-[14p] font-medium text-zinc-300 leading-[40px] cursor-pointer  py-[4px];
     }
 
     .sidebar-items--small {
-        @apply mx-[8px] text-[16px] leading-[40px] cursor-pointer  py-[4px];
+        @apply mx-[8px] text-[16px] font-medium text-zinc-300 leading-[40px] cursor-pointer  py-[4px];
     }
     .sidebar-items--active {
-        @apply bg-[#b6b6b6] rounded-[8px];
+        @apply bg-[#6f6f6f] rounded-[8px];
     }
     .sidebar-items:hover {
-        @apply bg-[#b9b9b9];
+        @apply bg-[#b9b9b9] !important;
     }
 
     .after-form {
@@ -33,6 +33,10 @@
 
     .bar-page-button {
         @apply w-full flex justify-center bg-[#00f] py-[6px] text-[14px];
+    }
+
+    .toggle-side-bar-button:hover {
+        @apply text-white !important;
     }
 }
 
