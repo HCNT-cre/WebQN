@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector } from "react-redux";
 import * as actionFile from "../../../actions/formFile";
-import { FORMAT, IDENTIFIER, LANGUAGE, MAINTENANCE, ORGAN_ID, RIGHTS } from "../../../storage/FileStorage";
+import { FORMAT, IDENTIFIER, LANGUAGE, MAINTENANCE, ORGAN_ID, RIGHTS, IDENTIFIER_CODE } from "../../../storage/FileStorage";
 import { Select, Input } from "antd";
 import { FirstLower, notifyError, notifySuccess } from "../../../custom/Function";
 
@@ -130,7 +130,7 @@ const File = ({ reset }) => {
     const [request, setRequest] = useState({
         rights: null,
         gov_file_code: null,
-        identifier: null,
+        identifier: "Trung tâm lưu trữ lịch sử",
         organ_id: null,
         file_catalog: null,
         file_notation: null,
@@ -154,7 +154,7 @@ const File = ({ reset }) => {
             Object.keys(request).forEach(key => {
                 updatedRequest[key] = null
             })
-            updatedRequest['identifier'] = "000.00.39.H48"
+            updatedRequest['identifier'] = "Trung tâm lưu trữ lịch sử"
             setRequest(prev => updatedRequest)
             return
         }
@@ -195,7 +195,7 @@ const File = ({ reset }) => {
             }
         }
 
-        const gov_file_code = request["identifier"] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
+        const gov_file_code = IDENTIFIER_CODE[request["identifier"]] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
         const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : API_GOV_FILE_UPDATE
         
         try {
@@ -362,7 +362,6 @@ const File = ({ reset }) => {
                         </div>
                     </div>
                 </div>
-
             }
 
         </>
