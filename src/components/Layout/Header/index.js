@@ -13,20 +13,20 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
 
     return (
         <>
-            <div className={`z-50 flex justify-between px-[16px] transition-all ${sideBarWidth === 250 ? "ml-[250px] w-[calc(100%-250px)]" : "ml-[80px] w-[calc(100%-80px)]"} fixed h-[60px] bg-blue-800 top-0`}>
+            <div className={`z-50 flex justify-between px-[16px] transition-all ${sideBarWidth === 250 ? "ml-[250px] w-[calc(100%-250px)]" : "ml-[80px] w-[calc(100%-80px)]"} h-[75px] border-[2px] border-blue-700 rounded-md bg-blue-300 top-0`}>
                 <div className="flex justify-between items-center">
-                    <button className="mr-[8px] text-white cursor-pointer" onClick={() => {
+                    <button className="mr-[20px] text-[25px] font-bold text-black cursor-pointer toggle-side-bar-button" onClick={() => {
                         sideBarWidth === 250 ? setSideBarWidth(50) : setSideBarWidth(250)
                     }}>
                         <i className="fa-solid fa-bars"></i>
                     </button>
-                    <p className="font-medium text-white text-[16px]">ISTORAGE - HỆ THỐNG QUẢN LÝ TÀI LIỆU LƯU TRỮ ĐIỆN TỬ TỈNH QUẢNG NGÃI</p>
+                    <p className="font-bold text-black text-[16px]">ISTORAGE - HỆ THỐNG QUẢN LÝ TÀI LIỆU LƯU TRỮ ĐIỆN TỬ TỈNH QUẢNG NGÃI</p>
                 </div>
                 <div onClick={() => setStateBoxUserRole(!stateBoxUserRole)} className="flex justify-between items-center cursor-pointer relative select-none">
-                    <div className="mr-[8px] flex items-center rounded-[50%] justify-center w-[36px] h-[36px] bg-white">
+                    <div className="mr-[8px] flex items-center rounded-[50%] justify-center w-[36px] h-[36px] bg-lime-100 border-amber-500 border-[0.5px] text-black">
                         <i className="fa-regular fa-user"></i>
                     </div>
-                    <p className="text-white ">
+                    <p className="text-black font-medium ">
                         {userRole}
                     </p>
 

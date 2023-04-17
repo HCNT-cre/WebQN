@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
             <Header sideBarWidth={sideBarWidth} setSideBarWidth={setSideBarWidth} />
             <SideBar sideBarWidth={sideBarWidth} />
 
-            <div className={`${sideBarWidth === 250 ? "ml-[250px] w-[calc(100%-250px)]" : "ml-[80px] w-[calc(100%-80px)]"} mt-[60px] flex`}>
+            <div className={`${sideBarWidth === 250 ? "ml-[250px] w-[calc(100%-250px)]" : "ml-[80px] w-[calc(100%-80px)]"} mt-[20px] flex`}>
                 <div>
                     {children}
                 </div>
