@@ -194,14 +194,14 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                                     </div>
 
                                 </div>
-                                <Table fieldNames={TABLE_FIELDS} fieldDatas={files} isLoading={isLoading} isCheckBox={true} />
+                                <Table fieldNames={TABLE_FIELDS} fieldDatas={files} isLoading={isLoading} />
                             </div>
                         </div>
                     </div>
                 </div>
             }
 
-            <FixDoc pdfID={pdfID} pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID}/>
+            <FixDoc pdfID={pdfID} pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />
             <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />
         </>
     )
