@@ -124,8 +124,8 @@ const Home = () => {
     }, [userPermissionId])
 
     const BUTTON_ACTIONS = [
-        { title: "Tìm kiếm", icon: <i className="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
-        { title: "Làm mới", icon: <i className="fa-solid fa-sync"></i>, onClick: resetSearch },
+        { title: "Tìm kiếm", btn_class_name: "custom-btn-search", icon: <i className="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
+        { title: "Xóa bộ lọc", btn_class_name: "custom-btn-clear-filter", icon: <i className="fa-solid fa-sync"></i>, onClick: resetSearch },
     ]
 
     return (
@@ -137,20 +137,19 @@ const Home = () => {
             <div className="w-full my-[24px]">
                 <div className="mt-[16px] mx-[24px] flex ">
 
-                    <div className="w-[11.11111%] px-[5px]">
-                        <Input allowClear onChange={(ev) => handleChangeSearch("title", ev.target.value)} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px] flex items-center"></Input>
+                <div className="w-[11.11111%] px-[5px]">
+                        <Input allowClear onChange={(ev) => handleChangeSearch("title", ev.target.value)} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px] flex items-center"></Input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <Input onChange={(ev) => handleChangeSearch("start_date", ev.target.value)} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
+                        <Input value={search["start_date"]} onChange={(ev) => handleChangeSearch("start_date", ev.target.value)} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
                     </div>
                     <div className="w-[11.11111%] px-[5px]">
-                        <Input onChange={(ev) => handleChangeSearch("end_date", ev.target.value)} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-none text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
+                        <Input value={search["end_date"]} onChange={(ev) => handleChangeSearch("end_date", ev.target.value)} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
                     </div>
-                    <div className="w-[11.11111%] px-[5px]">
+                    <div className="w-[11.11111%] px-[5px] rounded-none">
                         <Select
                             name="state"
-                            className="w-full bg-white outline-none rounded-none"
-                            allowClear
+                            className="w-full bg-white outline-none rounded-md"
                             showSearch
                             defaultValue="Tất cả"
                             value={search["state"]}
@@ -160,10 +159,7 @@ const Home = () => {
                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                             }
                             options={[
-                                {
-                                    value: 0,
-                                    label: 'Tất cả',
-                                },
+                                { value: 0, label: "Tất cả" },
                                 {
                                     value: 1,
                                     label: 'Mở',
@@ -185,7 +181,7 @@ const Home = () => {
                                     label: 'Nộp lưu lịch sử',
                                 },
                                 {
-                                    value: '6',
+                                    value: 6,
                                     label: 'Lưu trữ lịch sử',
                                 },
                             ]}
@@ -195,7 +191,7 @@ const Home = () => {
                     {BUTTON_ACTIONS.map((item, index) => {
                         return (
                             <div key={index} className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
-                                <Button onClick={item.onClick} className="rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center">
+                               <Button onClick={item.onClick} className={`rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center ${item.btn_class_name}`}>
                                     <div className="mr-[8px]">
                                         {item.icon}
                                     </div>
