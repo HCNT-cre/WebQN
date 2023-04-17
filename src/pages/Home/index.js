@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react"
 import axios from "axios"
-import { useSelector} from "react-redux"
+import { useSelector } from "react-redux"
 import 'react-toastify/dist/ReactToastify.css';
-import { Button, Input, Select} from "antd"
+import { Button, Input, Select } from "antd"
 import { Table } from "../../custom/Components";
 import { FIELDS_TABLE } from "../../storage/HomeStorage"
 import { STATE } from "../../storage/Storage"
-
+import DocCategory from "../../components/Form/Document/DocCategory";
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
@@ -16,6 +16,9 @@ const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const Home = () => {
     const [files, setFiles] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [IDFile, setIDFile] = useState(null)
+    const [stateDocCategory, setStateDocCategory] = useState(false)
+
     const userPermissionId = useSelector(state => state.user.permission_id)
 
 
@@ -26,7 +29,11 @@ const Home = () => {
         "state": null,
         "type": null
     })
-
+    
+    const handleClickOnFile = (IDFile) => {
+        setIDFile(IDFile)
+        setStateDocCategory(true)
+    }
 
     const getFileFromResponse = (response) => {
         const rawDatas = response.data
@@ -34,8 +41,8 @@ const Home = () => {
         for (const rawData of rawDatas) {
             const row = {
                 'id': rawData.id,
-                'gov_file_code': rawData.gov_file_code || '',
-                'title': rawData.title || '',
+                'gov_file_code': <p className="cursor-pointer hover:underline" onClick={() => handleClickOnFile(rawData.id)}>{rawData.gov_file_code || ''}</p>,
+                'title': <p className="cursor-pointer hover:underline" onClick={() => handleClickOnFile(rawData.id)}>{rawData.title || ''}</p>,
                 'organ_id': rawData.organ_id || '',
                 'sheet_number': rawData.sheet_number || '',
                 'total_doc': rawData.total_doc || '',
@@ -153,11 +160,11 @@ const Home = () => {
                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                             }
                             options={[
-                                {   
+                                {
                                     value: 0,
                                     label: 'Tất cả',
                                 },
-                                {   
+                                {
                                     value: 1,
                                     label: 'Mở',
                                 },
@@ -200,9 +207,9 @@ const Home = () => {
                     )}
 
                 </div>
-                <Table fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading}  />
+                <Table fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} />
             </div >
-
+            <DocCategory govFileID={IDFile} stateDocCategory={stateDocCategory} setStateDocCategory={setStateDocCategory} />
         </>
     )
 }
