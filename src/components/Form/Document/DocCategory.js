@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react"
-import AddDoc from "../AddDoc"
-import { Table } from "../../../../custom/Components"
+import AddDoc from "./AddDoc"
+import { Table } from "../../../custom/Components"
 import axios from "axios"
-import FixDoc from "../FixDoc"
-import { DeleteData, GetDataFromIDFile } from "../../../../custom/Function"
+import FixDoc from "./FixDoc"
+import { DeleteData, GetDataFromIDFile } from "../../../custom/Function"
 import { Button, Popconfirm, Input } from 'antd';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';

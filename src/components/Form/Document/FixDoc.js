@@ -5,10 +5,10 @@ import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { notifyError, notifySuccess } from '../../../../custom/Function';
+import { notifyError, notifySuccess } from '../../../custom/Function';
 import { Button, Spin, Input, Select } from 'antd';
-import { FORM_FIELDS } from '../../../../storage/DocumentStorage';
-import { ValidateFormDoc } from '../../../../custom/Function';
+import { FORM_FIELDS } from '../../../storage/DocumentStorage';
+import { ValidateFormDoc } from '../../../custom/Function';
 
 
 const API_DOCUMENT_UPDATE = process.env.REACT_APP_API_DOCUMENT_UPDATE

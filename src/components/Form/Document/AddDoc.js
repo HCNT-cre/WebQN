@@ -6,12 +6,12 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axios from 'axios';
 import { Spin, Select } from "antd"
-import { FORM_FIELDS } from '../../../../storage/DocumentStorage';
-import { notifyError, notifySuccess } from '../../../../custom/Function';
+import { FORM_FIELDS } from '../../../storage/DocumentStorage';
+import { notifyError, notifySuccess } from '../../../custom/Function';
 import { Input, Button } from "antd"
-import { ValidateFormDoc } from '../../../../custom/Function';
-import { FirstLower } from '../../../../custom/Function';
-import { SetNull } from '../../../../custom/Function';
+import { ValidateFormDoc } from '../../../custom/Function';
+import { FirstLower } from '../../../custom/Function';
+import { SetNull } from '../../../custom/Function';
 
 const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = process.env.REACT_APP_API_DOCUMENT_UPLOAD
