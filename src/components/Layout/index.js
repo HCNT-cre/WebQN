@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
             <SideBar sideBarWidth={sideBarWidth} />
 
             <div className={` transition-all duration-300 ${sideBarWidth === 250 ? "ml-[250px] w-[calc(100%-250px)]" : "ml-[80px] w-[calc(100%-80px)]"} mt-[20px] flex`}>
-                <div>
+                <div className='w-full'>
                     {children}
                 </div>
             </div>

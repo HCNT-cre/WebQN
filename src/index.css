@@ -10,7 +10,7 @@
 
 @layer components {
     .sidebar-items--large {
-        @apply mx-[16px] text-[14p] font-medium text-zinc-300 leading-[40px] cursor-pointer  py-[4px] overflow-hidden truncate;
+        @apply mx-[16px] text-[14px] font-medium text-zinc-300 leading-[40px] cursor-pointer  py-[4px] overflow-hidden truncate;
     }
 
     .sidebar-items--small {
@@ -145,4 +145,10 @@
 
 .custom-btn-show-action {
     @apply font-medium text-black bg-purple-300 hover:bg-purple-400 !important;
+}
+
+.ant-input-search-button{
+    background-color: #00f !important;
+    display: flex;
+    align-items: center;
 }

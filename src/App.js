@@ -15,6 +15,7 @@ import Search from "./pages/Search";
 import BaoCaoThongKe from "./pages/BaoCaoThongKe";
 import Decentralization from "./pages/SystemManagement/Decentralization";
 import User from "./pages/SystemManagement/User";
+import WareHouse from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouse";
 const App = () => {
   const routes = [
     { path: "/", element: <Home /> },
@@ -56,6 +57,10 @@ const App = () => {
     {
       path: "/quan-ly-he-thong/phan-quyen-he-thong",
       element: <Decentralization />
+    },
+    {
+      path:"/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho",
+      element: <WareHouse />
     }
   ];
 
