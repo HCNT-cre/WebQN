@@ -179,7 +179,7 @@ const AddFile = () => {
             "title": '',
             "organ_id": '',
             "offce": '',
-            "state": 'Tất cả',
+            "state": 0,
             "type": '',
             "end_date": '',
             "start_date": '',
@@ -205,7 +205,8 @@ const AddFile = () => {
 
             let request = API_GOV_FILE_SEARCH + userPermissionId
             Object.keys(search).forEach(key => {
-                if (key === 'state' && search[key] === 'Tất cả') return
+                console.log(search[key])
+                if (key === 'state' && (search[key] === 0 || search[key] === 'Tất cả')) return
                 const value = search[key]
                 if (value !== null & value !== '')
                     request += ("&" + key + "=" + value)

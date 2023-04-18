@@ -8,7 +8,6 @@ const ChildTabs = ({tab, setCurrentTab, currentTab}) => {
     const transitions = ["height"];
     const children = []
 
-
     for (let i = 0; i < tab.numChildTabs; i++) {
         const childTab = tab.childTabs[i]
         if (childTab.numChildTabs > 0) {
@@ -58,7 +57,6 @@ const SideBar = ({ sideBarWidth }) => {
                         <Link to={tab.to} onClick={() => { setCurrentTab(tab.key) }} key={tab.key} className={`
                         block ${sideBarWidth === 250 ? 'sidebar-items--large ' : 'sidebar-items--small '} 
                         `}>
-
                             <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] flex relative ${tab.key === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(idx)}>
                                 <div className="mx-[10px] w-[16px]">
                                     <span dangerouslySetInnerHTML={{ __html: tab.icon }} />
