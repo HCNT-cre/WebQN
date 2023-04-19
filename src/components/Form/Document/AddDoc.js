@@ -7,7 +7,7 @@ import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axios from 'axios';
 import { Spin, Select } from "antd"
 import { FORM_FIELDS } from '../../../storage/DocumentStorage';
-import { notifyError, notifySuccess } from '../../../custom/Function';
+import { GetDateFromString, notifyError, notifySuccess } from '../../../custom/Function';
 import { Input, Button } from "antd"
 import { ValidateFormDoc } from '../../../custom/Function';
 import { FirstLower } from '../../../custom/Function';
@@ -159,11 +159,11 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
             const response = await axios.post(API_EXTRACT_OCR, dataExtract, {
                 timeout: 20000
             });
-            console.log(response)
+
             setIsLoading(false)
 
             handleChangeForm("code_number", response.data.no.join(' '));
-            handleChangeForm("issued_date", response.data.date.join(' '));
+            handleChangeForm("issued_date", GetDateFromString(response.data.date.join(' ')));
             handleChangeForm("autograph", response.data.signer.join(' '));
 
             notifySuccess('Trích xuất thành công')
@@ -198,7 +198,6 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         const formDataValidated = ValidateFormDoc(request)
         try {
             setIsLoading(true)
-            console.log(formDataValidated)
             await axios.post(API_DOCUMENT_UPLOAD, formDataValidated, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -216,6 +215,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     const handleExtract = (name) => {
         handleChangeForm(name, fileData[name])
     }
+
     return (
         <>
             {stateAddDoc &&
@@ -277,7 +277,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                         </div>
                                         <div className='h-full w-[50%] pl-[12px] mr-[12px] '>
                                             <div className='w-full flex justify-end'>
-                                                <Button onClick={extractDataOCR} className=' h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px] custom-btn-search '>Trích xuất thông tin</Button>
+                                                <Button onClick={extractDataOCR} className=' h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px] custom-btn-search'>Trích xuất thông tin</Button>
                                                 <Button htmlType="submit" form="add-doc-form" className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px] custom-btn'>Lưu</Button>
                                             </div>
                                             <div className='flex justify-center w-full'>
