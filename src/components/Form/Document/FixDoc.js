@@ -88,9 +88,9 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
                     <div className="relative  h-[calc(100vh)]  top-[20px] pb-[30px] ">
                         <div className="h-full  w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className=" h-full relative rounded-[2px] bg-white">
-                                <div className="bg-[#2f54eb] text-white py-[8px] px-[24px] relative">
+                                <div className="bg-blue-300 text-black py-[8px] px-[24px] relative font-bold">
                                     <p className='text-bold'>Xem và chỉnh sửa</p>
-                                    <button onClick={handleClose} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-[#2f54eb] top-0 text-white ">
+                                    <button onClick={handleClose} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-blue-300 top-0 text-black ">
                                         <i class="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
@@ -113,8 +113,8 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
                                         </div>
                                         <div className='h-full w-[50%] pl-[12px] mr-[12px] '>
                                             <div className='w-full flex justify-end'>
-                                                <Button onClick={extractDataOCR} className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Trích xuất thông tin</Button>
-                                                <Button htmlType="submit" form="fix-doc-form" className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px]'>Lưu</Button>
+                                                <Button onClick={extractDataOCR} className=' h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px] custom-btn-search'>Trích xuất thông tin</Button>
+                                                <Button htmlType="submit" form="fix-doc-form" className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px] custom-btn'>Lưu</Button>
                                             </div>
                                             <div className='flex justify-center w-full'>
                                                 <p className={`outline-none w-[50%] block text-[14px] font-bold h-[30px] text-center`}>Danh sách các thuộc tính</p>
