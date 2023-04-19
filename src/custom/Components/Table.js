@@ -60,7 +60,6 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox = false, isLoading, s
 
     let doesNeedOrder = true
     for (let i = 0; i < fieldNames.length; i++) {
-        console.log(fieldNames[i].key)
         if (fieldNames[i].key === "doc_ordinal") {
             doesNeedOrder = false
             break
@@ -141,7 +140,6 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox = false, isLoading, s
 
                             {
                                 dataTableRenderForTableCell.map((dataRow, index) => {
-                                    console.log("Datarow", dataRow)
                                     return (
                                         <tr className="hover:bg-[#ecebeb] bg-white border-t-[1px] border-solid border-[#e0e0e0] text-[13px]" key={GetKey()}>
 
