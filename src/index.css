@@ -38,6 +38,8 @@
     .toggle-side-bar-button:hover {
         @apply text-white !important;
     }
+
+  
 }
 
 /* loading animation */
@@ -151,4 +153,47 @@
     background-color: #00f !important;
     display: flex;
     align-items: center;
+}
+
+.ant-modal-close{
+    top: 0!important;
+    right: 0 !important;
+    color: white !important;
+    font-weight: 700;
+    width: 30px;
+    height: 30px;
+}
+
+.ant-modal-title{
+    color: white !important;
+}
+
+.ant-modal-header{
+    display: flex;
+    align-items: center;
+    background-color: #00f !important;
+    width: 100%;
+    height: 40px;
+    padding: 24px;
+}
+
+
+.ant-modal-content{
+    padding: 0 !important;
+}
+
+.ant-modal-body{
+    padding: 12px 24px;
+}
+
+.ant-btn.css-dev-only-do-not-override-1vtf12y.ant-btn-primary{
+   background-color: #00f;
+   color: white; 
+}
+
+.ant-modal-footer{
+    display: flex;
+    justify-content: space-between;
+    padding: 0 24px;
+    padding-bottom: 16px;
 }

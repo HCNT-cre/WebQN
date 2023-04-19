@@ -2,11 +2,70 @@ import { useEffect, useState } from "react";
 import DanhMucKhoLuuTru from ".";
 import axios from "axios";
 import { WARE_HOUSE } from "../../../storage/StorageStorage";
-import { Input, Select } from "antd";
+import { Input, Select, Modal } from "antd";
 const API_STORAGE_GET_WAREHOUSE_ALL = process.env.REACT_APP_API_STORAGE_GET_WAREHOUSE_ALL
+const API_STORAGE_GET_ORGAN_ALL = process.env.REACT_APP_API_STORAGE_GET_ORGAN_ALL
+
 const Search = Input.Search
 
-const SearchBar = () => {
+const ModalC = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
+    const [request, setRequest] = useState({
+        name: '',
+        organ: '',
+        state: false
+    })
+
+
+    const handleChangeRequest = (name, value) => {
+        return setRequest({
+            ...request,
+            [name]: value
+        })
+    }
+
+    const handleOk = async () => {
+        await axios.post(API_STORAGE_GET_WAREHOUSE_ALL, request)
+        setModalOpen(false)
+        reFetchData()
+    }
+
+    return (
+        <Modal
+            title="Tạo kho mới"
+            style={{
+                top: 20,
+            }}
+            open={modalOpen}
+            onOk={handleOk}
+            onCancel={() => setModalOpen(false)}
+        >
+            <div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Tên</span>
+                    <Input name="name" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="text" className="w-[70%]" />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Cơ quan</span>
+                    <Select
+                        name="organ"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn cơ quan"
+                        optionFilterProp="children"
+                        onChange={(value) => handleChangeRequest('organ', value)}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionOrgan}
+                    />
+                </div>
+            </div>
+        </Modal>
+    )
+}
+
+const SearchBar = ({ optionOrgan }) => {
     return (
         <div className="ml-[24px] mt-[8px] flex">
 
@@ -16,7 +75,7 @@ const SearchBar = () => {
             </div>
 
             <div className="bg-white p-[12px] w-[300px] ml-[20px]">
-            <p className="mb-[12px]">Cơ quan</p>
+                <p className="mb-[12px]">Cơ quan</p>
 
                 <Select
                     name="state"
@@ -29,33 +88,7 @@ const SearchBar = () => {
                     filterOption={(input, option) =>
                         (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                     }
-                    options={[
-                        { value: 0, label: "Tất cả" },
-                        {
-                            value: 1,
-                            label: 'Mở',
-                        },
-                        {
-                            value: 2,
-                            label: 'Đóng',
-                        },
-                        {
-                            value: 3,
-                            label: 'Nộp lưu cơ quan',
-                        },
-                        {
-                            value: 4,
-                            label: 'Lưu trữ cơ quan',
-                        },
-                        {
-                            value: 5,
-                            label: 'Nộp lưu lịch sử',
-                        },
-                        {
-                            value: 6,
-                            label: 'Lưu trữ lịch sử',
-                        },
-                    ]}
+                    options={optionOrgan}
                 />
             </div>
 
@@ -64,18 +97,48 @@ const SearchBar = () => {
     )
 }
 
+const Action = () => {
+    const [modalOpen, setModalOpen] = useState(false)
+    useEffect(() => { 
+        
+    }, [modalOpen])
+
+    const handleClick = () => {
+        setModalOpen(true)
+    }
+    const handleOk = () => {
+        setModalOpen(false)
+    }
+
+    const handleCancle = () => {
+        setModalOpen(false)
+    }
+
+    return (
+        <div>
+            <button onClick={handleClick}>Sửa</button>
+            <Modal open={modalOpen}
+                title="Sửa Kho"
+                onOk={handleOk}
+                onCancel={handleCancle}>
+                <div>
+                    hello mn
+                </div>
+            </Modal>
+        </div>
+    )
+}
+
 const WareHouse = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [wareHouse, setWareHouse] = useState([])
+    const [optionOrgan, setOptionOrgan] = useState([])
 
-    useEffect(() => {
-        const fetchData = async () => {
+    const reFetchData = () => {
+        const fetchWarehouse = async () => {
             setIsLoading(true)
             const response = await axios.get(API_STORAGE_GET_WAREHOUSE_ALL)
-
             const rawDatas = response.data
-            console.log("response:", response)
-            console.log(rawDatas);
             let filesArray = []
             for (const rawData of rawDatas) {
                 const row = {
@@ -85,20 +148,42 @@ const WareHouse = () => {
                     'state': <button>{
                         rawData['state'] === true ? "Mở" : "Đóng"
                     }</button>,
+                    'action': <Action />
                 }
                 filesArray.push(row)
             }
             setWareHouse(filesArray)
             setIsLoading(false)
+
         }
-        fetchData()
+
+        const fetchOrgan = async () => {
+            setIsLoading(true)
+
+            const response = await axios.get(API_STORAGE_GET_ORGAN_ALL)
+            const raws = []
+
+            for (const data of response.data) {
+                const raw = {}
+                raw["value"] = data["name"]
+                raw["label"] = data["name"]
+                raws.push(raw)
+            }
+
+            setOptionOrgan(raws)
+            setIsLoading(false)
+
+        }
+        fetchWarehouse()
+        fetchOrgan()
+    }
+
+    useEffect(() => {
+        reFetchData()
     }, [])
 
-    console.log(wareHouse)
-
     return (
-        <DanhMucKhoLuuTru title="Kho" fieldNames={WARE_HOUSE} fieldDatas={wareHouse} isLoading={isLoading} SearchBar={SearchBar} />
-
+        <DanhMucKhoLuuTru title="Kho" fieldNames={WARE_HOUSE} fieldDatas={wareHouse} isLoading={isLoading} SearchBar={<SearchBar optionOrgan={optionOrgan} />} ModalC={<ModalC optionOrgan={optionOrgan} reFetchData={reFetchData} />} />
     )
 }
 

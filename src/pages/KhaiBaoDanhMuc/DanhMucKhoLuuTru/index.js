@@ -1,7 +1,11 @@
 import { Button } from "antd"
 import { Table } from "../../../custom/Components/Table"
+import { useState } from "react"
+import { cloneElement } from "react"
 
-const DanhMucKhoLuuTru = ({ fieldNames, fieldDatas, title, isLoading, SearchBar }) => {
+const DanhMucKhoLuuTru = ({ fieldNames, fieldDatas, title, isLoading, SearchBar, ModalC }) => {
+    const [modalOpen, setModalOpen] = useState(false)
+    ModalC = cloneElement( ModalC, { modalOpen: modalOpen, setModalOpen: setModalOpen })
 
     return (
         <div className="w-full">
@@ -16,9 +20,10 @@ const DanhMucKhoLuuTru = ({ fieldNames, fieldDatas, title, isLoading, SearchBar 
             </div>
             <div className="w-full px-[24px] pb-[16px] bg-white flex justify-between">
                 <p className="text-[20px] font-bold ">{title}</p>
-                <Button className="text-white bg-[#00f]">Tạo mới</Button>
+                <Button onClick={() => setModalOpen(true)} className="text-white bg-[#00f]">Tạo mới</Button>
+                {ModalC}
             </div>
-            <SearchBar/>
+            {SearchBar}
             <Table fieldNames={fieldNames} fieldDatas={fieldDatas} isLoading={isLoading} isCheckBox={false} />
 
         </div>
