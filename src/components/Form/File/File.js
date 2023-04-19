@@ -242,11 +242,11 @@ const File = ({ reset }) => {
                     <div className="relative top-[50px] pb-[30px] ">
                         <div className="w-[1000px] max-w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className="relative rounded-[2px] bg-white">
-                                <button onClick={() => { dispatch(actionFile.CloseFile()) }} className="text-[20px] absolute right-0 w-[40px] h-[40px] bg-[#2f54eb] top-0 text-white ">
+                                <button onClick={() => { dispatch(actionFile.CloseFile()) }} className="text-[20px] absolute right-0 w-[40px] h-[40px] bg-blue-300top-0 text-black font-bold ">
                                     <i className="fa-solid fa-xmark"></i>
 
                                 </button>
-                                <div className="bg-[#2f54eb] text-white py-[16px] px-[24px]">
+                                <div className="bg-blue-300 text-black font-bold py-[16px] px-[24px]">
                                     <p>{title}</p>
                                 </div>
 
@@ -349,8 +349,8 @@ const File = ({ reset }) => {
                                             </div>
                                         </div>
                                         <div className="flex justify-center">
-                                            <input className="mr-[12px] h-[32px] w-[60px] rounded-[2px] text-white bg-[#2f54eb] cursor-pointer" type="submit" value="Lưu" />
-                                            <button onClick={() => { dispatch(actionFile.CloseFile()) }} className="h-[32px] w-[60px] border-[#2f54eb] border-solid border-[1px] rounded-[2px]">Đóng</button>
+                                            <input className="mr-[12px] h-[32px] w-[60px] rounded-[5px] text-white font-medium bg-blue-500 cursor-pointer" type="submit" value="Lưu" />
+                                            <button onClick={() => { dispatch(actionFile.CloseFile()) }} className="h-[32px] w-[60px] bg-gray-300 border-solid border-[1px] rounded-[5px]">Đóng</button>
                                         </div>
 
                                     </form>

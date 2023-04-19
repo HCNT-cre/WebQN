@@ -223,21 +223,21 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                     <div className="relative  h-[calc(100vh)]  top-[20px] pb-[30px] ">
                         <div className="h-full  w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className=" h-full relative rounded-[2px] bg-white">
-                                <div className="bg-blue-300 text-black py-[8px] px-[24px] relative font-bold">
+                                <div className="bg-blue-300 text-black  py-[8px] px-[24px] relative font-bold">
                                     <p className='text-bold'>Thêm văn bản</p>
                                     <button onClick={handleCloseAllTab} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-blue-300 top-0 text-black ">
                                         <i className="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
                                 <div className='w-full'>
-                                    <div className='pl-[4px] flex w-full h-[40px] bg-gray-400 items-center relative cursor-pointer'>
+                                    <div className='pl-[4px] flex w-full h-[45px] border-[2px] border-solid border-white bg-blue-200 items-center relative cursor-pointer'>
                                         {files !== null && files.map((file, index) => {
                                             const width = 95 / files.length + "%"
                                             const bgColor = index === currentTab ? "bg-white" : "bg-gray-300"
                                             return (
                                                 <div key={index} onClick={() => handleChangeTab(index)} style={{ width: width }} className='max-w-[15%] pr-[4px]'>
                                                     <div className={` ${bgColor}  px-[4px] h-[30px] border-solid border-[1px] rounded-[5px] flex items-center cursor-pointe hover:bg-gray-200 justify-between pl-[6px]`}>
-                                                        <p className='leading-[20px] h-[20px] text-[10px] overflow-hidden '>{file.name}</p>
+                                                        <p className='leading-[20px] h-[20px] font-medium text-[15px] overflow-hidden '>{file.name}</p>
                                                         <div onClick={() => handleCloseTab(index)} className='text-[12px] w-[15px] h-[15px] rounded-[5px] hover:bg-white flex items-center justify-center'>
                                                             <i className="fa-solid fa-xmark"></i>
                                                         </div>
@@ -249,7 +249,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                         <div className='w-[2%] absolute right-0 text-white h-full rounded-[5px] flex items-center justify-center cursor-pointer'>
                                             <form encType="multipart/form-data">
                                                 <label className='cursor-pointer' htmlFor="file-add-upload">
-                                                    <i className="fa-solid fa-plus"></i>
+                                                    <i className="fa-solid fa-plus text-blue-700 rounded-[1px] "></i>
                                                 </label>
                                                 <input onClick={(ev) => { ev.target.value = '' }} type='file' id="file-add-upload" name="file-upload" className="hidden" onChange={(ev) => {
                                                     handleAddMoreFiles(ev)
@@ -278,7 +278,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                                         <div className='h-full w-[50%] pl-[12px] mr-[12px] '>
                                             <div className='w-full flex justify-end'>
                                                 <Button onClick={extractDataOCR} className=' h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px] custom-btn-search '>Trích xuất thông tin</Button>
-                                                <Button htmlType="submit" form="add-doc-form" className='bg-[#2f54eb] h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px] custom-btn'>Lưu</Button>
+                                                <Button htmlType="submit" form="add-doc-form" className='bg-green-400 h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-black font-medium text-[12px] '>Lưu</Button>
                                             </div>
                                             <div className='flex justify-center w-full'>
                                                 <div className={`outline-none w-[50%] block text-[18px] font-bold h-[30px] text-center`}>Danh sách các thuộc tính</div>
