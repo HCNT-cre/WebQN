@@ -82,7 +82,9 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox=false, isLoading, set
 
     return (
         <Spin spinning={isLoading} delay={0}>
-            <div className="p-[24px] bg-[#f0f2f5] rounded-[2px]">
+            <div className="p-[24px]">
+
+            <div className="bg-[#f0f2f5] rounded-[2px] border-[2px] border-solid border-[#ccc]">
                 <table className="table-fixed w-full">
                     <colgroup></colgroup>
                     <thead className="bg-[#fafafa]">
@@ -101,6 +103,7 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox=false, isLoading, set
                             </th>}
 
                             {fieldNames.filter(field => field.key !== "doc_ordinal").map((field, index) => {
+                                console.log(index, fieldNames.length, field.title)
                                 let className = "text-[12px] relative text-center px-[8px] py-[12px]"
                                 if (index < fieldNames.length - 1) {
                                     className += " before:content-[''] before:w-[2px] before:absolute before:right-0 before:h-[20px] before:bg-[#e0e0e0] before:top-[50%] before:translate-y-[-50%]"
@@ -159,6 +162,8 @@ export const Table = ({ fieldNames, fieldDatas, isCheckBox=false, isLoading, set
                     </tbody>
                 </table>
             </div>
+            </div>
+
         </Spin>
     )
 }

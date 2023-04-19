@@ -217,9 +217,9 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
                     <div className="relative  h-[calc(100vh)]  top-[20px] pb-[30px] ">
                         <div className="h-full  w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className=" h-full relative rounded-[2px] bg-white">
-                                <div className="bg-[#2f54eb] text-white py-[8px] px-[24px] relative">
+                                <div className="bg-blue-300 text-black py-[8px] px-[24px] relative font-bold">
                                     <p className='text-bold'>Thêm văn bản</p>
-                                    <button onClick={handleCloseAllTab} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-[#2f54eb] top-0 text-white ">
+                                    <button onClick={handleCloseAllTab} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-blue-300 top-0 text-black ">
                                         <i className="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
