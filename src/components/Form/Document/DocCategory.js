@@ -147,10 +147,10 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                     <div className="relative  h-[calc(100vh)] top-[20px] pb-[30px] ">
                         <div className="h-full relative overflow-y-scroll w-[calc(100vw-80px)] my-0 mx-auto bg-[#f0f2f5]">
                             <div className="relative">
-                                <button onClick={() => { setStateDocCategory(false) }} className="text-[20px] absolute right-0 w-[40px] h-full bg-[#2f54eb] top-0 text-white ">
+                                <button onClick={() => { setStateDocCategory(false) }} className="text-[20px] absolute right-0 w-[40px] h-full bg-blue-300 top-0 text-black ">
                                     <i className="fa-solid fa-xmark"></i>
                                 </button>
-                                <div className="bg-[#2f54eb] text-white py-[8px] px-[24px]">
+                                <div className="bg-blue-300 text-black font-bold py-[8px] px-[24px]">
                                     <p className='text-bold'>Mục lục văn bản</p>
 
                                 </div>
@@ -158,19 +158,19 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                             <div className="w-full pb-[24px] bg-[#f0f2f5]">
                                 <div className="pt-[16px] mx-[24px] flex ">
                                     <div className="w-[12.5%] px-[5px]">
-                                        <Input placeholder="Tác giả" className="text-[12px] rounded-none"></Input>
+                                        <Input placeholder="Tác giả" className="text-[12px] rounded-[8px] border-[2px]"></Input>
                                     </div>
                                     <div className="w-[12.5%] px-[5px]">
-                                        <Input placeholder="Số ký hiệu VB" className="text-[12px] rounded-none"></Input>
+                                        <Input placeholder="Số ký hiệu VB" className="text-[12px] rounded-[8px] border-[2px]"></Input>
                                     </div>
                                     <div className="w-[12.5%] px-[5px]">
-                                        <Input placeholder="Trích yếu VB" className="text-[12px] rounded-none"></Input>
+                                        <Input placeholder="Trích yếu VB" className="text-[12px] rounded-[8px] border-[2px]"></Input>
                                     </div>
                                     <div className="w-[12.5%] px-[5px]">
-                                        <Input placeholder="Ngày VB" className="text-[12px] rounded-none"></Input>
+                                        <Input placeholder="Ngày VB" className="text-[12px] rounded-[8px] border-[2px]"></Input>
                                     </div>
-                                    <div className="w-[12.5%] text-white text-center px-[5px] flex">
-                                        <button className="rounded-[5px] h-[30px] flex justify-center bg-[#00f] w-full px-[16px] items-center text-[12px] ">
+                                    <div className="w-[12.5%] text-center px-[5px] flex">
+                                        <button className="rounded-[5px] h-[30px] flex justify-center w-full px-[16px] items-center text-[12px] font-medium custom-btn-search">
                                             <div className="mr-[8px]">
                                                 <i className="fa-solid fa-magnifying-glass"></i>
                                             </div>
@@ -181,7 +181,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
 
                                     <div className="w-[12.5%] text-white  text-center px-[5px]">
                                         <form encType="multipart/form-data">
-                                            <label className='flex justify-center items-center cursor-pointer w-auto h-[30px] bg-[#00f] rounded-[5px] text-white hover:opacity-90 text-[12px]' htmlFor="file-upload">
+                                            <label className='flex justify-center items-center cursor-pointer w-auto h-[30px] bg-[#00f] custom-btn-add-file rounded-[5px] text-white hover:opacity-90 text-[12px]' htmlFor="file-upload">
                                                 <i className="fa-solid fa-upload"></i>
                                                 <p className='ml-[8px]'>Thêm văn bản</p>
                                             </label>
@@ -194,7 +194,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
                                     </div>
                                     <div className="w-[12.5%] text-white text-center px-[5px] flex">
 
-                                        <button className="rounded-[5px] h-[30px] flex justify-center bg-[#00f] w-full px-[4px] items-center text-[12px] ">
+                                        <button className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px] ">
                                             <div className="mr-[8px]">
                                                 <i className="fa-solid fa-magnifying-glass"></i>
                                             </div>
