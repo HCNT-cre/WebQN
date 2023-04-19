@@ -16,6 +16,8 @@ import BaoCaoThongKe from "./pages/BaoCaoThongKe";
 import Decentralization from "./pages/SystemManagement/Decentralization";
 import User from "./pages/SystemManagement/User";
 import WareHouse from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouse";
+import WareHouseRoom from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouseRoom";
+import Shelf from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Shelf";
 const App = () => {
   const routes = [
     { path: "/", element: <Home /> },
@@ -61,6 +63,14 @@ const App = () => {
     {
       path:"/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho",
       element: <WareHouse />
+    },
+    {
+      path:"/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho",
+      element: <WareHouseRoom />
+    },
+    {
+      path:"/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke",
+      element: <Shelf />
     }
   ];
 

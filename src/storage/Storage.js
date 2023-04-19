@@ -29,16 +29,17 @@ export const TABS_SIDEBAR = [
     {
         key: "/khai-bao-danh-muc/", isExpand: false, icon: '<i class="fa-solid fa-list"></i>',
         title: "Khai báo danh mục", numChildTabs: 3, childTabs: [
-            { title: "Danh mục hồ sơ", to: "/khai-bao-danh-muc/danh-muc-ho-so", key: "/khai-bao-danh-muc/danh-muc-ho-so" },
+            // { title: "Danh mục hồ sơ", to: "/khai-bao-danh-muc/danh-muc-ho-so", key: "/khai-bao-danh-muc/danh-muc-ho-so" },
+            // { title: "Danh mục cơ quan", to: "/khai-bao-danh-muc/danh-muc-co-quan", key: "/khai-bao-danh-muc/danh-muc-co-quan" },
             {
                 title: "Danh mục kho lưu trữ", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru", isExpand: false, numChildTabs: 3, childTabs: [
                     { title: "Kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", numChildTabs: 0 },
                     { title: "Phòng kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", numChildTabs: 0 },
                     { title: "Kệ", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", numChildTabs: 0 },
-                    { title: "Hộp", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", numChildTabs: 0 },
+                    // { title: "Hộp", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", numChildTabs: 0 },
                 ]
             },
-            { title: "Danh mục cơ quan", to: "/khai-bao-danh-muc/danh-muc-co-quan", key: "/khai-bao-danh-muc/danh-muc-co-quan" },
+
         ]
     },
     {

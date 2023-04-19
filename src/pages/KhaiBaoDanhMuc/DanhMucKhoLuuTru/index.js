@@ -3,9 +3,9 @@ import { Table } from "../../../custom/Components/Table"
 import { useState } from "react"
 import { cloneElement } from "react"
 
-const DanhMucKhoLuuTru = ({ fieldNames, fieldDatas, title, isLoading, SearchBar, ModalC }) => {
+const DanhMucKhoLuuTru = ({ fieldNames, fieldDatas, title, isLoading, SearchBar, Create }) => {
     const [modalOpen, setModalOpen] = useState(false)
-    ModalC = cloneElement( ModalC, { modalOpen: modalOpen, setModalOpen: setModalOpen })
+    Create = cloneElement(Create, { modalOpen: modalOpen, setModalOpen: setModalOpen })
 
     return (
         <div className="w-full">
@@ -21,7 +21,7 @@ const DanhMucKhoLuuTru = ({ fieldNames, fieldDatas, title, isLoading, SearchBar,
             <div className="w-full px-[24px] pb-[16px] bg-white flex justify-between">
                 <p className="text-[20px] font-bold ">{title}</p>
                 <Button onClick={() => setModalOpen(true)} className="text-white bg-[#00f]">Tạo mới</Button>
-                {ModalC}
+                {Create}
             </div>
             {SearchBar}
             <Table fieldNames={fieldNames} fieldDatas={fieldDatas} isLoading={isLoading} isCheckBox={false} />
