@@ -53,7 +53,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     const allowedFiles = ['application/pdf']
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [isLoading, setIsLoading] = useState(false)
-    
+
 
     useEffect(() => {
         setRequest(prev => ({
@@ -93,7 +93,9 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     // tab operations
     const handleChangeTab = (index) => {
         setRequest((prev) => {
-            return SetNull(prev)
+            const cur = SetNull(prev)
+            cur['gov_file_id'] = govFileID
+            return cur
         })
         handleChangePdfFile(index)
         setCurrentTab(index);
@@ -105,7 +107,9 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         setPdfFile(null)
         setFiles(null)
         setRequest(prev => {
-            return SetNull(prev)
+            const cur = SetNull(prev)
+            cur['gov_file_id'] = govFileID
+            return cur
         })
         if (isSubmitFormSuccess === true) {
             fetchDocumentsOfFile(govFileID)
@@ -114,7 +118,9 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
 
     const handleCloseTab = (index) => {
         setRequest(prev => {
-            return SetNull(prev)
+            const cur = SetNull(prev)
+            cur['gov_file_id'] = govFileID
+            return cur
         })
 
         if (index >= files.length)
@@ -207,7 +213,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
         }
     }
 
-    const handleExtract = (name) =>{
+    const handleExtract = (name) => {
         handleChangeForm(name, fileData[name])
     }
     return (
