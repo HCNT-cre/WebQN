@@ -34,15 +34,21 @@ export const notifyError = (message) => {
 
 export const GetDateFromString = (dateString) => {
     if (!dateString) return null;
-    const regex = /ngày\s+(\d{2})\s+tháng\s+(\d{2})\s+năm\s+(\d{4})/;
-    const match = dateString.match(regex);
 
-    if (match) {
-        const day = match[1];
-        const month = match[2];
-        const year = match[3];
-        return `${year}-${month}-${day}`;
+    try {
+        const regex = /ngày\s+(\d{2})\s+tháng\s+(\d{2})\s+năm\s+(\d{4})/;
+        const match = dateString.match(regex);
+
+        if (match) {
+            const day = match[1];
+            const month = match[2];
+            const year = match[3];
+            return `${year}-${month}-${day}`;
+        }
+    } catch (err) {
+        console.log(err)
     }
+
     return null
 }
 
@@ -61,7 +67,6 @@ export const GetKey = () => {
 }
 
 export const ValidateFormDoc = (form) => {
-    console.log(form)
     form["issued_date"] = GetDateFromString(form["issued_date"]) === null ? form["issued_date"] : GetDateFromString(form["issued_date"])
     if (form["code_number"] !== null && form["code_number"] !== undefined)
         form["code_number"] = form["code_number"].split('').splice(0, Math.min(10, form["code_number"].length)).join('');
