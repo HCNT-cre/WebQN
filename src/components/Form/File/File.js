@@ -253,53 +253,57 @@ const File = ({ reset }) => {
                                 <div className="p-[24px] text-[14px] ">
                                     <form onSubmit={handleSubmit}>
                                         <div className="flex justify-between">
-                                            <div className="w-[50%] px-[10px]">
-                                                {FIELDS_LEFT.map((field, index) => {
-                                                    const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
-                                                    return (
-                                                        <div
-                                                            key={field.key}
-                                                            className="mt-[8px] w-full mb-[24px] h-[65px]"
-                                                        >
-                                                            <label
-                                                                className={`${field.require ? "after-form" : ""
-                                                                    } text-[14px]`}
-                                                                title={field.title}
-                                                            >
-                                                                {field.title}
-                                                            </label>
+                                        <div className="w-[50%] px-[10px]">
+                                        {FIELDS_LEFT.map((field, index) => {
+                                            const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
+                                            return (
+                                                <div
+                                                    key={field.key}
+                                                    className="mt-[8px] w-full mb-[24px] h-[65px]"
+                                                >
+                                                    <label
+                                                        className={`${field.require ? "after-form" : ""
+                                                            } text-[14px]`}
+                                                        title={field.title}
+                                                    >
+                                                        {field.title}
+                                                    </label>
 
-                                                            {field.type === "select" ? (
-                                                                field.default === true ? (
-                                                                    <Select
-                                                                        onChange={(value) => handleChangeForm(field.key, value)}
-                                                                        className="block mt-[12px]"
-                                                                        options={field.options}
-                                                                        defaultValue={field.options[0]}
-                                                                    />
-                                                                ) : (
-                                                                    <Select
-                                                                        onChange={(value) => handleChangeForm(field.key, value)}
-                                                                        className="block mt-[12px]"
-                                                                        options={field.options}
-                                                                    />
-                                                                )
+                                                    {field.type === "select" ? (
+                                                        field.default === true ? (
+                                                            <Select
+                                                                onChange={(value) => handleChangeForm(field.key, value)}
+                                                                className="block mt-[12px]"
+                                                                options={field.options}
+                                                                defaultValue={field.options[0]}
+                                                                value={request[field.key] === null ? "" : request[field.key]}
 
-                                                            ) : (
-                                                                <Input
-                                                                    onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
-                                                                    name={field.key}
-                                                                    placeholder={placeholder}
-                                                                    type={field.type}
-                                                                    min="0"
-                                                                    value={request[field.key] === null ? "" : request[field.key]}
-                                                                    className={`w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px] ${field.key === 'gov_file_code' ? "bg-[#ccc]" : ""} `}
-                                                                />
-                                                            )}
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
+                                                            />
+                                                        ) : (
+                                                            <Select
+                                                                onChange={(value) => handleChangeForm(field.key, value)}
+                                                                className="block mt-[12px]"
+                                                                options={field.options}
+                                                                value={request[field.key] === null ? "" : request[field.key]}
+
+                                                            />
+                                                        )
+
+                                                    ) : (
+                                                        <Input
+                                                            onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
+                                                            name={field.key}
+                                                            placeholder={placeholder}
+                                                            type={field.type}
+                                                            min="0"
+                                                            value={request[field.key] === null ? "" : request[field.key]}
+                                                            className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
+                                                        />
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
                                             <div className="w-[50%] px-[10px]">
                                                 {FIELDS_RIGHT.map((field, index) => {
                                                     const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
@@ -323,12 +327,16 @@ const File = ({ reset }) => {
                                                                         className="block mt-[12px]"
                                                                         options={field.options}
                                                                         defaultValue={field.options[0]}
+                                                                        value={request[field.key] === null ? "" : request[field.key]}
+
                                                                     />
                                                                 ) : (
                                                                     <Select
                                                                         onChange={(value) => handleChangeForm(field.key, value)}
                                                                         className="block mt-[12px]"
                                                                         options={field.options}
+                                                                        value={request[field.key] === null ? "" : request[field.key]}
+
                                                                     />
                                                                 )
 
