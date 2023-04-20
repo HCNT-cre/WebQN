@@ -1,21 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react"
+import { useState, useEffect, cloneElement } from "react"
 import DocCategory from "../components/Form/Document/DocCategory"
 import MultimediaCategory from "../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
 import { Table } from "../custom/Components"
 import { useSelector, useDispatch } from "react-redux"
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Input, Select, Popconfirm } from "antd"
 import { OpenFile } from "../actions/formFile"
 import File from "../components/Form/File/File"
 import { FIELDS_TABLE } from "../storage/FileStorage"
 import { STATE } from "../storage/Storage"
-import { reloadPage, DeleteData, GetKey } from "../custom/Function"
+import { DeleteData, GetKey } from "../custom/Function"
 import { useButtonClickOutside } from "../custom/Hook"
 import { Link } from "react-router-dom"
 import { notifyError, notifySuccess } from "../custom/Function"
+import { ModalCensorship } from "./Modals"
+
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_UPDATE_STATE_GOV_FILE = process.env.REACT_APP_API_GOV_FILE_UPDATE_STATE
@@ -121,19 +122,16 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     )
 }
 
-const BasePage = ({ parent, current, filter = null }) => {
+const BasePage = ({ parent, current, filter = null, addNewFile = false, newButtons = null, isCheckBox = true, buttonFuctions = null }) => {
     const dispatch = useDispatch();
     const [files, setFiles] = useState([])
     const [doesFilter, setDoesFilter] = useState(true)
-    const [stateDocCategory, setStateDocCategory] = useState(false)
     const [stateMultimediaCategory, setStateMultimediaCategory] = useState(false)
-    const [IDFile, setIDFile] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [stateCheckBox, setStateCheckBox] = useState([])
     const userPermissionId = useSelector(state => state.user.permission_id)
     const userPermissions = useSelector(state => state.user.permissions)
     const [buttonRef, contentRef, toggleContent, showContent] = useButtonClickOutside(false);
-
     const [search, setSearch] = useState({
         "title": null,
         "organ_id": null,
@@ -142,16 +140,26 @@ const BasePage = ({ parent, current, filter = null }) => {
         "type": null
     })
 
-    const handleClickOnFile = async (IDFile) => {
-        setIDFile(IDFile)
-        setStateDocCategory(true)
-
+    const handleClickOnFile = (IDFile) => {
+        dispatch({ type: "open", id: IDFile })
     }
+
 
     const getFileFromResponse = (response) => {
         const rawDatas = response.data
         let filesArray = []
         for (const rawData of rawDatas) {
+            let newButton = null;
+
+            if (buttonFuctions != null) {
+                newButton = cloneElement(buttonFuctions, {
+                    clickFunction: () => {
+                        console.log(rawData.id)
+                        dispatch({type:"open_modal", id: rawData.id})
+                    }
+                })
+            }
+
             const row = {
                 'id': rawData.id,
                 'gov_file_code': <p className="cursor-pointer hover:underline" onClick={() => handleClickOnFile(rawData.id)}>{rawData.gov_file_code || ''}</p>,
@@ -167,7 +175,7 @@ const BasePage = ({ parent, current, filter = null }) => {
                     search["state"] = rawData.state
                     handleSearch()
                 }}>{STATE[rawData.state]}</button>,
-                'Function': <ButtonFunctionOfEachFile handleClickOnFile={handleClickOnFile} IDFile={rawData.id} reset={reset} />
+                'Function': newButton || <ButtonFunctionOfEachFile handleClickOnFile={handleClickOnFile} IDFile={rawData.id} reset={reset} />
             }
             filesArray.push(row)
         }
@@ -242,6 +250,9 @@ const BasePage = ({ parent, current, filter = null }) => {
 
     const handleChangeStateFile = async (newState) => {
         const listState = []
+        if (stateCheckBox.length > 1 && newState.new_state === 3) {
+            // notifySuccess
+        }
         for (const state of stateCheckBox) {
             const id = parseInt(state.substring(state.indexOf("checkbox") + "checkbox".length))
             listState.push({
@@ -260,7 +271,7 @@ const BasePage = ({ parent, current, filter = null }) => {
             } else {
                 const description = response.data.description
                 notifyError(description)
-                
+
             }
         }
         catch (error) {
@@ -287,6 +298,17 @@ const BasePage = ({ parent, current, filter = null }) => {
         { title: "Thêm hồ sơ mới", btn_class_name: "custom-btn-add-file", icon: <i className="fa-solid fa-plus"></i>, onClick: () => { dispatch(OpenFile("open_upload")) } },
         { title: "Xuất Excel", btn_class_name: "custom-btn-export-excel", icon: <i className="fa-solid fa-file-excel"></i>, onClick: () => { } },
     ]
+
+    if (!addNewFile) {
+        BUTTON_ACTIONS.pop()
+        BUTTON_ACTIONS.pop()
+    }
+
+    if (newButtons !== null) {
+        for (const button of newButtons) {
+            BUTTON_ACTIONS.push(button)
+        }
+    }
 
     return (
         <>
@@ -401,12 +423,13 @@ const BasePage = ({ parent, current, filter = null }) => {
 
 
                 </div>
-                <Table setStateCheckBox={setStateCheckBox} fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={true} />
+                <Table setStateCheckBox={setStateCheckBox} fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={isCheckBox} />
             </div >
 
             <File reset={reset} />
-            <DocCategory govFileID={IDFile} stateDocCategory={stateDocCategory} setStateDocCategory={setStateDocCategory} />
+            <DocCategory />
             <MultimediaCategory stateMultimediaCategory={stateMultimediaCategory} setStateMultimediaCategory={setStateMultimediaCategory} />
+            <ModalCensorship/>
         </>
     )
 }

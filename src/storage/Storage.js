@@ -1,5 +1,5 @@
 export const STATE = [
-    "Tất cả", "Mở", "Đóng", "Nộp lưu cơ quan", "Lưu trữ cơ quan", "Nộp lưu lịch sử", "Lưu trữ lịch sử"
+    "Tất cả", "Mở", "Đóng", "Nộp lưu cơ quan", "Lưu trữ cơ quan", "Nộp lưu lịch sử", "Lưu trữ lịch sử", "Trả về"
 ]
 
 export const TABS_SIDEBAR = [
@@ -9,7 +9,8 @@ export const TABS_SIDEBAR = [
         title: "Hồ sơ tài liệu", numChildTabs: 3, childTabs: [
             { title: "Danh sách hồ sơ", to: "/ho-so/tao-ho-so-dien-tu", key: "/ho-so/tao-ho-so-dien-tu" },
             { title: "Số hóa hồ sơ tài liệu", to: "/ho-so/so-hoa-ho-so-tai-lieu", key: "/ho-so/so-hoa-ho-so-tai-lieu" },
-            { title: "HS đến hạn nộp lưu", to: "/ho-so/ho-so-den-han-nop-luu", key: "/ho-so/ho-so-den-han-nop-luu" }]
+            { title: "HS đến hạn nộp lưu", to: "/ho-so/ho-so-den-han-nop-luu", key: "/ho-so/ho-so-den-han-nop-luu" },
+            { title: "Hồ sơ bị trả về", to: "/ho-so/ho-so-bi-tra-ve", key: "/ho-so/ho-so-bi-tra-ve" },]
     },
     {
         key: "/luu-tru-co-quan/", isExpand: false, icon: '<i class="fa-regular fa-building"></i>',
@@ -36,7 +37,7 @@ export const TABS_SIDEBAR = [
                     { title: "Kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", numChildTabs: 0 },
                     { title: "Phòng kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", numChildTabs: 0 },
                     { title: "Kệ", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", numChildTabs: 0 },
-                    { title: "Hộp", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", numChildTabs: 0 },
+
                 ]
             },
 

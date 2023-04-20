@@ -7,6 +7,19 @@ const DanhMucKhoLuuTru = ({ fieldNames, fieldDatas, title, isLoading, SearchBar,
     const [modalOpen, setModalOpen] = useState(false)
     Create = cloneElement(Create, { modalOpen: modalOpen, setModalOpen: setModalOpen })
 
+    const newFieldData = []
+
+    console.log(fieldDatas)
+    for(const data of fieldDatas) {
+        let temp = {}
+        Object.keys(data).forEach(key => {
+            if(key === 'organId' || key === 'warehouseId' || key === 'warehouseroomId' || key === 'shelfId')
+                return 
+            temp[key] = data[key]
+        })
+        newFieldData.push(temp)
+    }
+
     return (
         <div className="w-full">
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
@@ -24,7 +37,7 @@ const DanhMucKhoLuuTru = ({ fieldNames, fieldDatas, title, isLoading, SearchBar,
                 {Create}
             </div>
             {SearchBar}
-            <Table fieldNames={fieldNames} fieldDatas={fieldDatas} isLoading={isLoading} isCheckBox={false} />
+            <Table fieldNames={fieldNames} fieldDatas={newFieldData} isLoading={isLoading} isCheckBox={false} />
 
         </div>
     )

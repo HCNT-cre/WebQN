@@ -219,7 +219,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
     return (
         <>
             {stateAddDoc &&
-                <div className="overflow-y-scoll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[200] bg-[rgba(0,0,0,.45)]">
+                <div className="overflow-y-scoll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[9999] bg-[rgba(0,0,0,.45)]">
                     <div className="relative  h-[calc(100vh)]  top-[20px] pb-[30px] ">
                         <div className="h-full  w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className=" h-full relative rounded-[2px] bg-white">

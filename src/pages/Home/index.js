@@ -8,6 +8,7 @@ import { Table } from "../../custom/Components";
 import { FIELDS_TABLE } from "../../storage/HomeStorage"
 import { STATE } from "../../storage/Storage"
 import DocCategory from "../../components/Form/Document/DocCategory";
+import { useDispatch } from "react-redux";
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
@@ -16,9 +17,7 @@ const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const Home = () => {
     const [files, setFiles] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [IDFile, setIDFile] = useState(null)
-    const [stateDocCategory, setStateDocCategory] = useState(false)
-
+        const dispatch = useDispatch()    
     const userPermissionId = useSelector(state => state.user.permission_id)
 
 
@@ -29,10 +28,8 @@ const Home = () => {
         "state": null,
         "type": null
     })
-    
     const handleClickOnFile = (IDFile) => {
-        setIDFile(IDFile)
-        setStateDocCategory(true)
+        dispatch({type: "open", id: IDFile})
     }
 
     const getFileFromResponse = (response) => {
@@ -191,13 +188,13 @@ const Home = () => {
                     {BUTTON_ACTIONS.map((item, index) => {
                         return (
                             <div key={index} className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
-                            <Button onClick={item.onClick} className={`rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center ${item.btn_class_name}`}>
-                                <div className="mr-[8px]">
-                                    {item.icon}
-                                </div>
-                                {item.title}
-                            </Button>
-                        </div>
+                                <Button onClick={item.onClick} className={`rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center ${item.btn_class_name}`}>
+                                    <div className="mr-[8px]">
+                                        {item.icon}
+                                    </div>
+                                    {item.title}
+                                </Button>
+                            </div>
                         )
                     }
                     )}
@@ -205,7 +202,7 @@ const Home = () => {
                 </div>
                 <Table fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} />
             </div >
-            <DocCategory govFileID={IDFile} stateDocCategory={stateDocCategory} setStateDocCategory={setStateDocCategory} />
+            <DocCategory />
         </>
     )
 }

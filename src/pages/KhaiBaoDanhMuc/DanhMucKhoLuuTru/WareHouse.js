@@ -18,6 +18,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
     const [request, setRequest] = useState({
         name: null,
         organ: null,
+        organId: null,
         state: false
     })
 
@@ -29,11 +30,11 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
         })
     }
 
+
     const handleOk = async () => {
         await axios.post(API_STORAGE_GET_WAREHOUSE_ALL, request)
         setModalOpen(false)
         reFetchData()
-
     }
 
     const handleCancle = () => {
@@ -64,7 +65,10 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
                         allowClear
                         placeholder="Chọn cơ quan"
                         optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('organ', value)}
+                        onChange={(value, ev) => {
+                            handleChangeRequest('organId', value)
+                            handleChangeRequest('organ', ev.label)
+                        }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
@@ -124,7 +128,7 @@ const Update = ({ reFetchData, id }) => {
         setModalOpen(true)
     }
     const handleOk = async () => {
-        if(request.name !== null)
+        if (request.name !== null)
             await axios.put(API_STORAGE_PUT_WAREHOUSE + id, request)
         setModalOpen(false)
         reFetchData()
@@ -223,7 +227,7 @@ const WareHouse = () => {
                     'state': <button>{
                         rawData['state'] === true ? "Mở" : "Đóng"
                     }</button>,
-                    'update': <Update id={rawData.id} reFetchData={reFetchData}/>,
+                    'update': <Update id={rawData.id} reFetchData={reFetchData} />,
                     'delete': <Delete id={rawData.id} reFetchData={reFetchData} />
                 }
                 filesArray.push(row)
@@ -240,7 +244,7 @@ const WareHouse = () => {
 
             for (const data of response.data) {
                 const raw = {}
-                raw["value"] = data["name"]
+                raw["value"] = data["id"]
                 raw["label"] = data["name"]
                 raws.push(raw)
             }

@@ -19,12 +19,14 @@ import WareHouse from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouse";
 import WareHouseRoom from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouseRoom";
 import Shelf from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Shelf";
 import Drawers from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Drawers";
+import ReturnFile from "./pages/Files/ReturnFile";
 const App = () => {
   const routes = [
     { path: "/", element: <Home /> },
     { path: "/ho-so/tao-ho-so-dien-tu", element: <AddFile /> },
     { path: "/ho-so/so-hoa-ho-so-tai-lieu", element: <DigitizingFile /> },
     { path: "/ho-so/ho-so-den-han-nop-luu", element: <DueFile /> },
+    { path: "/ho-so/ho-so-bi-tra-ve", element: <ReturnFile /> },
     {
       path: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
       element: <HoSoTaiLieuGiaoNop />,

@@ -8,7 +8,7 @@ import { DeleteData, GetDataFromIDFile } from "../../../custom/Function"
 import { Button, Popconfirm, Input } from 'antd';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 
 const API_DOCUMENT_GET = process.env.REACT_APP_API_DOCUMENT_GET
 const API_DOCUMENT_DELETE = process.env.REACT_APP_API_DOCUMENT_DELETE
@@ -72,7 +72,7 @@ const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, 
     )
 }
 
-const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
+const DocCategory = () => {
     const [stateAddDoc, setStateAddDoc] = useState(false)
     const [stateFixDoc, setStateFixDoc] = useState(false)
     const [evFilesUploaded, setEvFilesUploaded] = useState(null)
@@ -84,6 +84,9 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
     const [pdfID, setPdfID] = useState(null)
     const [fileData, setFileData] = useState(null)
     const userPermissionId = useSelector(state => state.user.permission_id)
+    const stateDocCategory = useSelector(state => state.docCategory.state)
+    const govFileID = useSelector(state => state.docCategory.id)
+    const dispatch = useDispatch()
     const handleClickOnDocument = async (URL_PDF_FILE, pdfData, pdfID) => {
         setPdfFileLink(URL_PDF_FILE)
         setPdfData(pdfData)
@@ -132,7 +135,7 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
             setFileData(data)
         }
 
-        if (govFileID === -1 || govFileID === null)
+        if (govFileID === -1 || govFileID === null || govFileID === undefined)
             return
 
         fetchData()
@@ -143,11 +146,11 @@ const DocCategory = ({ stateDocCategory, setStateDocCategory, govFileID }) => {
         <>
             {
                 stateDocCategory &&
-                <div className="overflow-y-hidden fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[100] bg-[rgba(0,0,0,.45)]">
+                <div className="overflow-y-hidden fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[1001] bg-[rgba(0,0,0,.45)]">
                     <div className="relative  h-[calc(100vh)] top-[20px] pb-[30px] ">
                         <div className="h-full relative overflow-y-scroll w-[calc(100vw-80px)] my-0 mx-auto bg-[#f0f2f5]">
                             <div className="relative">
-                                <button onClick={() => { setStateDocCategory(false) }} className="text-[20px] absolute right-0 w-[40px] h-full bg-blue-300 top-0 text-black ">
+                                <button onClick={() => { dispatch({ type: "close", id:govFileID }) }} className="text-[20px] absolute right-0 w-[40px] h-full bg-blue-300 top-0 text-black ">
                                     <i className="fa-solid fa-xmark"></i>
                                 </button>
                                 <div className="bg-blue-300 text-black font-bold py-[8px] px-[24px]">

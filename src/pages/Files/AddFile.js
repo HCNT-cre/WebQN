@@ -10,7 +10,7 @@ const AddFile = ()=>{
         title: "Danh sách hồ sơ"
     }
 
-    return <BasePage parent={parent} current={current}/>
+    return <BasePage parent={parent} current={current} addNewFile={true}/>
 }
 
 export default AddFile;
