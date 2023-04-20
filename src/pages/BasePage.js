@@ -15,7 +15,7 @@ import { STATE } from "../storage/Storage"
 import { reloadPage, DeleteData, GetKey } from "../custom/Function"
 import { useButtonClickOutside } from "../custom/Hook"
 import { Link } from "react-router-dom"
-
+import { notifyError, notifySuccess } from "../custom/Function"
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_UPDATE_STATE_GOV_FILE = process.env.REACT_APP_API_GOV_FILE_UPDATE_STATE
@@ -255,42 +255,16 @@ const BasePage = ({ parent, current, filter = null }) => {
             const response = await axios.post(API_UPDATE_STATE_GOV_FILE, listState)
             const error_code = response.data.error_code
             if (error_code === undefined) {
-                toast.success('Thay đổi trạng thái thành công', {
-                    toastId: "success1",
-                    position: "top-center",
-                    autoClose: 5000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: "light",
-                    onClose: reloadPage
-                });
+                notifySuccess('Thay đổi trạng thái thành công')
+                reset()
             } else {
                 const description = response.data.description
-                toast.error(description, {
-                    position: "top-center",
-                    toastId: "error1",
-                    autoClose: 5000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    theme: "light",
-                });
+                notifyError(description)
+                
             }
         }
         catch (error) {
-            toast.error('Thay đổi trạng thái thất bại', {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                theme: "light",
-            });
-            console.log(error)
+            notifyError('Thay đổi trạng thái thất bại')
         }
     }
 
