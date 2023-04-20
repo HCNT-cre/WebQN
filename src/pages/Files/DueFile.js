@@ -21,17 +21,16 @@ const DueFile = () => {
         today = new Date(`${y}-${m}-${d}`)
         const dateDiff = (start_date, end_date = today) => {
             start_date = new Date(start_date)
-            const diffTime = Math.abs(end_date - start_date);
+            const diffTime = end_date - start_date
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
             return diffDays / 365
         }
 
         for (const file of files) {
-            console.log(file)
-            if (file.end_date === null || file.end_date === undefined || (file.state.props.children !== 'Mở' && file.state.props.children !== 'Đóng') ) continue
+            if (file.end_date === null || file.end_date === undefined || ( file.state.props.children !== 'Đóng') ) continue
 
-            if (dateDiff(file.end_date) < 1)
+            if (dateDiff(file.end_date) >= 1)
                 newFiles.push(file)
         }
 
