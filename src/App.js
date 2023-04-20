@@ -18,6 +18,7 @@ import User from "./pages/SystemManagement/User";
 import WareHouse from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouse";
 import WareHouseRoom from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouseRoom";
 import Shelf from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Shelf";
+import Drawers from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Drawers";
 const App = () => {
   const routes = [
     { path: "/", element: <Home /> },
@@ -71,6 +72,10 @@ const App = () => {
     {
       path:"/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke",
       element: <Shelf />
+    },
+    {
+      path:"/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop",
+      element: <Drawers />
     }
   ];
 

@@ -5,7 +5,7 @@ export const STATE = [
 export const TABS_SIDEBAR = [
     { isExpand: false, icon: `<i class="fa-solid fa-house"></i>`, title: "Trang chủ", to: "/", numChildTabs: 0, key: "/" },
     {
-        key: "/ho-so/", isExpand: false, icon: '<i class="fa-regular fa-file"></i>',
+        key: "/ho-so/tao-ho-so-dien-tu", isExpand: false, icon: '<i class="fa-regular fa-file"></i>',
         title: "Hồ sơ tài liệu", numChildTabs: 3, childTabs: [
             { title: "Danh sách hồ sơ", to: "/ho-so/tao-ho-so-dien-tu", key: "/ho-so/tao-ho-so-dien-tu" },
             { title: "Số hóa hồ sơ tài liệu", to: "/ho-so/so-hoa-ho-so-tai-lieu", key: "/ho-so/so-hoa-ho-so-tai-lieu" },
@@ -36,7 +36,7 @@ export const TABS_SIDEBAR = [
                     { title: "Kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", numChildTabs: 0 },
                     { title: "Phòng kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", numChildTabs: 0 },
                     { title: "Kệ", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", numChildTabs: 0 },
-                    // { title: "Hộp", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", numChildTabs: 0 },
+                    { title: "Hộp", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", numChildTabs: 0 },
                 ]
             },
 
