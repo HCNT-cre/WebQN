@@ -78,7 +78,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
 
 const SearchBar = ({ optionOrgan }) => {
     return (
-        <div className="ml-[24px] mt-[8px] flex">
+        <div className="mx-[24px] mt-[8px] flex">
 
             <div className="bg-white p-[12px] w-[300px] max-w-[20%]">
                 <p className="mb-[12px]">Tìm kiếm</p>
