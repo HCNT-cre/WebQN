@@ -116,8 +116,9 @@ const FIELDS_RIGHT = [
 const File = ({ reset }) => {
     const userPermissionId = useSelector(state => state.user.permission_id)
     const data = useSelector((state) => state.formFile.data)
-
     let stateForm = useSelector((state) => state.formFile.state);
+    
+    
     let title = "Tạo hồ sơ"
     let fileID = null
 
