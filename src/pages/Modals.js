@@ -3,6 +3,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { OpenFile } from "../actions/formFile";
 import axios from "axios";
+import { notifyError, notifySuccess } from "../custom/Function";
+
+
+const API_GOV_FILE_UPDATE_STATE = process.env.REACT_APP_API_GOV_FILE_UPDATE_STATE
+
 const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
         <Checkbox
@@ -17,21 +22,20 @@ const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
 };
 
 const API_STORAGE_GET_SHELF_ALL = process.env.REACT_APP_API_STORAGE_GET_SHELF_ALL
-const API_STORAGE_GET_DRAWERS_ALL = process.env.REACT_APP_API_STORAGE_GET_DRAWERS_ALL
 const API_STORAGE_GET_WAREHOUSEROOM_ALL = process.env.REACT_APP_API_STORAGE_GET_WAREHOUSEROOM_ALL
 const API_STORAGE_GET_WAREHOUSE_ALL = process.env.REACT_APP_API_STORAGE_GET_WAREHOUSE_ALL
 const API_STORAGE_GET_ORGAN_ALL = process.env.REACT_APP_API_STORAGE_GET_ORGAN_ALL
-
+const API_STORAGE_POST_FILE_ORGAN_STORAGE = process.env.REACT_APP_API_STORAGE_POST_FILE_ORGAN_STORAGE
 
 const ModalApprove = ({ open, setOpenModal }) => {
     const [request, setRequest] = useState({
-        name: null,
         organ: null,
         warehouse: null,
         warehouseroom: null,
         shelf: null,
-        state: false
     })
+    const IDFile = useSelector(state => state.modalCensorship.id)
+
     const [optionShelf, setOptionShelf] = useState([])
     const [optionOrgan, setOptionOrgan] = useState([])
     const [optionWarehouse, setOptionWarehouse] = useState([])
@@ -73,7 +77,6 @@ const ModalApprove = ({ open, setOpenModal }) => {
         const fetchWarehouse = async () => {
 
             const response = await axios.get(API_STORAGE_GET_WAREHOUSE_ALL)
-            console.log("response", response)
             const raws = []
             for (const data of response.data) {
                 const raw = {}
@@ -89,7 +92,6 @@ const ModalApprove = ({ open, setOpenModal }) => {
         const fetchWareHouseRoom = async () => {
 
             const response = await axios.get(API_STORAGE_GET_WAREHOUSEROOM_ALL)
-            console.log("response", response)
             const raws = []
             for (const data of response.data) {
                 const raw = {}
@@ -113,11 +115,12 @@ const ModalApprove = ({ open, setOpenModal }) => {
     }, [])
 
     const handleChangeRequest = (name, value) => {
-        return setRequest({
-            ...request,
+        return setRequest((prev) => ({
+            ...prev,
             [name]: value
-        })
+        }))
     }
+
     const handleCancle = () => {
         setOpenModal(false)
     }
@@ -126,9 +129,27 @@ const ModalApprove = ({ open, setOpenModal }) => {
         setOpenModal(false)
     }
 
+    const handleClickApprove = async () => {
+        for (const key in request) {
+            if (request[key] === null) {
+                notifyError("Vui lòng chọn đủ thông tin")
+                return
+            }
+        }
+
+        await axios.post(API_GOV_FILE_UPDATE_STATE, [{
+            id: IDFile, current_state: 3,
+            new_state: 4
+        }])
+        await axios.post(API_STORAGE_POST_FILE_ORGAN_STORAGE, { ...request, file_id: IDFile })
+        notifySuccess("Duyệt thành công")
+        setOpenModal(false)
+    }
+
     return (
         <Modal
             title="Duyệt hồ sơ vào kho"
+            footer={null}
             style={{
                 top: 200,
             }}
@@ -200,6 +221,10 @@ const ModalApprove = ({ open, setOpenModal }) => {
                     options={optionShelf}
                 />
             </div>
+
+            <div className="flex justify-center">
+                <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
+            </div>
         </Modal>
     )
 }
@@ -217,8 +242,6 @@ export const ModalCensorship = () => {
     useEffect(() => {
         setModalOpen(open)
     }, [open])
-
-
 
     const handleClickCheckBox = e => {
         const { id, checked } = e.target;
@@ -249,15 +272,17 @@ export const ModalCensorship = () => {
     }
 
     const handleClickApprove = () => {
-        console.log("click")
         setModalApprove(true)
+    }
+
+    const handleClickReject = () => {
+        axios.post(API_GOV_FILE_UPDATE_STATE, [
+            { id: IDFile, current_state: 3, new_state: 7 }])
     }
 
     return (
         <>
             <Modal
-                // transitionName="none"
-                // maskTransitionName="none"
                 footer={null}
                 title="Duyệt hồ sơ"
                 style={{
@@ -291,7 +316,7 @@ export const ModalCensorship = () => {
                 </div>
                 <div className="flex justify-center">
                     <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
-                    <Button className="mx-[8px] bg-red-500 text-white font-medium">Từ chối</Button>
+                    <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
                 </div>
             </Modal>
 

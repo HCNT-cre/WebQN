@@ -1,24 +1,43 @@
 import React, { useRef, useState } from "react";
-import { Input, Spin } from "antd";
+import { Spin } from "antd";
 import { FaSearch } from "react-icons/fa";
 import "./searchbar.css";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { OpenFile } from "../../actions/formFile";
+
 const API_SEARCH = process.env.REACT_APP_API_SEARCH;
+const API_GOV_FILE_GET = process.env.REACT_APP_API_GOV_FILE_GET
 
 const Searchbar = () => {
   const refInput = useRef();
   const [searching, setSearching] = useState(false);
   const [completeGetAPI, setCompleteGetAPI] = useState(false);
   const [searchedFile, setSearchedFile] = useState([]);
+  const [textSearch, setTextSearch] = useState("");
   const dispatch = useDispatch();
+  const userPermissionId = useSelector(state => state.user.permission_id)
+
+  const getFileName = async (items) => {
+    const searchedFileWithFileName = []
+    for (const item of items) {
+      const response = await axios.get(API_GOV_FILE_GET + "id=" + item.gov_file_id + "&perm_token=" + userPermissionId)
+      searchedFileWithFileName.push({
+        ...item,
+        file_name: response.data[0].title
+      })
+    }
+
+    setSearchedFile(searchedFileWithFileName)
+  }
+
+  console.log(searchedFile)
   const handleSearch = (e) => {
-    const query = e.target.value;
+    const query = refInput.current.value;
+    setTextSearch(query)
 
     const fetchData = () => {
       setSearching(true);
-
       setTimeout(async () => {
         const response = await axios.post(API_SEARCH, {
           query: query,
@@ -26,27 +45,26 @@ const Searchbar = () => {
         setCompleteGetAPI(true);
         setSearching(false);
         setTimeout(() => {
-          setSearchedFile(response.data.items);
+          getFileName(response.data.items)
         }, 320);
       }, 2000);
     };
 
-    if (e.key === "Enter" || e.type === "click") {
+    if (e.key === "Enter" || e.type === "click")
       fetchData();
-    }
+
+
   };
 
   const viewFile = (id) => {
-    dispatch(OpenFile("watch_file", parseInt(id)));
+    dispatch(OpenFile("watch_file", id));
   };
 
-  console.log(searchedFile);
   return (
     <div className="bg-white h-[80vh] relative">
       <div
-        className={`w-full flex justify-center flex-col items-center absolute transition-all top-[150px] duration-300 ${
-          completeGetAPI === true ? "search-bar-after-search" : ""
-        }`}
+        className={`w-full flex justify-center flex-col items-center absolute transition-all top-[150px] duration-300 ${completeGetAPI === true ? "search-bar-after-search" : ""
+          }`}
       >
         <h1 className="text-[25px] font-bold pb-[20px] duration-300 transition-all">
           Tìm kiếm văn bản theo nội dung
@@ -80,13 +98,13 @@ const Searchbar = () => {
                       onClick={() => viewFile(file.gov_file_id)}
                       className="cursor-pointer text-[rgba(0,0,0,.45)]"
                     >
-                      {file.doc_code}
+                      {file.file_name}
                     </span>
                     &nbsp;/ &nbsp;
-                    <span>{file.doc_name}</span>
+                    <span className="cursor-pointer" onClick={() => { }}>{file.doc_name}</span>
                   </div>
                   <div className="font-bold">
-                    Nội dung văn bản tìm kiếm được
+                    {textSearch}
                   </div>
                 </div>
               );

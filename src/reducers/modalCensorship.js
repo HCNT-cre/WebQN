@@ -1,5 +1,4 @@
 const modalCensorshipReducer = (state = { state: false, id: null }, action) => {
-    console.log(action)
     switch (action.type) {
         case "open_modal":
             return {

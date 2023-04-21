@@ -37,7 +37,7 @@ const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, 
     }
 
     useEffect(() => {
-        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1vtf12y.css-dev-only-do-not-override-1vtf12y.ant-popover-placement-top")[0]
+        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1fviqcj.css-dev-only-do-not-override-1fviqcj.ant-popover-placement-top")[0]
 
         if (popupContainer === undefined)
             return

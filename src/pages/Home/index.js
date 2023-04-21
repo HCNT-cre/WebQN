@@ -9,17 +9,16 @@ import { FIELDS_TABLE } from "../../storage/HomeStorage"
 import { STATE } from "../../storage/Storage"
 import DocCategory from "../../components/Form/Document/DocCategory";
 import { useDispatch } from "react-redux";
-
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 
 
 const Home = () => {
+
     const [files, setFiles] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-        const dispatch = useDispatch()    
+    const dispatch = useDispatch()
     const userPermissionId = useSelector(state => state.user.permission_id)
-
 
     const [search, setSearch] = useState({
         "title": null,
@@ -29,8 +28,10 @@ const Home = () => {
         "type": null
     })
     const handleClickOnFile = (IDFile) => {
-        dispatch({type: "open", id: IDFile})
+        dispatch({ type: "open", id: IDFile })
     }
+
+
 
     const getFileFromResponse = (response) => {
         const rawDatas = response.data
@@ -51,6 +52,7 @@ const Home = () => {
                     handleSearch()
                 }}>{STATE[rawData.state]}</button>,
             }
+
             filesArray.push(row)
         }
         return filesArray

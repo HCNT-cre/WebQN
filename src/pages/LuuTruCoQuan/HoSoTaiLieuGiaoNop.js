@@ -22,7 +22,7 @@ const HoSoTaiLieuGiaoNop = () => {
     }
 
 
-    return <BasePage parent={parent} current={current} filter={filter} isCheckBox={false} buttonFuctions={<ButtonFuctions/>} />
+    return <BasePage parent={parent} current={current} filter={filter} isCheckBox={false} buttonFuctions={<ButtonFuctions />} />
 }
 
 export default HoSoTaiLieuGiaoNop;

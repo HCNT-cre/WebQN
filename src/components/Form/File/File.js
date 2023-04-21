@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector, } from "react-redux";
 import * as actionFile from "../../../actions/formFile";
 import { FORMAT, IDENTIFIER, LANGUAGE, MAINTENANCE, ORGAN_ID, RIGHTS, IDENTIFIER_CODE } from "../../../storage/FileStorage";
 import { Select, Input } from "antd";
@@ -117,11 +117,10 @@ const File = ({ reset }) => {
     const userPermissionId = useSelector(state => state.user.permission_id)
     const data = useSelector((state) => state.formFile.data)
     let stateForm = useSelector((state) => state.formFile.state);
-    
+
+    let fileID = null
     
     let title = "Tạo hồ sơ"
-    let fileID = null
-
     if (data !== undefined && data.id !== null) {
         title = data.state === "watch_file" ? "Xem hồ sơ" : "Sửa hồ sơ"
         fileID = data.id

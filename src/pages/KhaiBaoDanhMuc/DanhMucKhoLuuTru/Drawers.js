@@ -18,22 +18,27 @@ const API_STORAGE_GET_WAREHOUSE_ALL = process.env.REACT_APP_API_STORAGE_GET_WARE
 const Search = Input.Search
 
 
-const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, optionWarehouse, optionWarehouseRoom, optionShelf }) => {
+const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehouse, allWarehouseRoom, allShelf }) => {
     const [request, setRequest] = useState({
         name: null,
         organ: null,
         warehouse: null,
         warehouseroom: null,
         shelf: null,
+        shelfId: null,
+        drawers: null,
         state: false
     })
 
+    const [optionWarehouse, setOptionWarehouse] = useState([])
+    const [optionWarehouseroom, setOptionWarehouseroom] = useState([])
+    const [optionShelf, setOptionShelf] = useState([])
 
     const handleChangeRequest = (name, value) => {
-        return setRequest({
-            ...request,
+        return setRequest((prev) => ({
+            ...prev,
             [name]: value
-        })
+        }))
     }
 
     const handleOk = async () => {
@@ -41,6 +46,44 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, optionWareh
         setModalOpen(false)
         reFetchData()
 
+    }
+
+    const handleChangeOptionWarehouseroom = (value) => {
+        const optionShelf = []
+        for (const shelf of allShelf) {
+            if (shelf.par === value)
+                optionShelf.push({
+                    value: shelf.value,
+                    label: shelf.label
+                })
+        }
+        setOptionShelf(optionShelf)
+    }
+
+    const handleChangeOptionWarehouse = (value) => {
+        const optionWarehouseroom = []
+        for (const warehouseroom of allWarehouseRoom) {
+            if (warehouseroom.par === value)
+                optionWarehouseroom.push({
+                    value: warehouseroom.value,
+                    label: warehouseroom.label
+                })
+        }
+        setOptionWarehouseroom(optionWarehouseroom)
+        handleChangeOptionWarehouseroom(-1)
+    }
+
+    const handleChangeOptionOrgan = (value) => {
+        const optionWarehouse = []
+        for (const warehouse of allWarehouse) {
+            if (warehouse.par === value)
+                optionWarehouse.push({
+                    value: warehouse.value,
+                    label: warehouse.label
+                })
+        }
+        setOptionWarehouse(optionWarehouse)
+        handleChangeOptionWarehouse(-1)
     }
 
     const handleCancle = () => {
@@ -71,7 +114,10 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, optionWareh
                         allowClear
                         placeholder="Chọn cơ quan"
                         optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('organ', value)}
+                        onChange={(value, ev) => {
+                            handleChangeOptionOrgan(value)
+                            handleChangeRequest('organ', ev.label)
+                        }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
@@ -87,7 +133,10 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, optionWareh
                         allowClear
                         placeholder="Chọn kho"
                         optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('warehouse', value)}
+                        onChange={(value, ev) => {
+                            handleChangeOptionWarehouse(value)
+                            handleChangeRequest('warehouse', ev.label)
+                        }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
@@ -103,15 +152,19 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, optionWareh
                         allowClear
                         placeholder="Chọn phòng kho"
                         optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('warehouseroom', value)}
+                        onChange={(value, ev) => {
+                            handleChangeOptionWarehouseroom(value)
+                            handleChangeRequest('warehouseroom', ev.label)
+                        }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
-                        options={optionWarehouseRoom}
+                        options={optionWarehouseroom}
                     />
                 </div>
+
                 <div className="flex justify-between py-[12px]">
-                    <span>Kệ</span>
+                    <span>Tầng</span>
                     <Select
                         name="warehouseroom"
                         className="w-[70%] bg-white outline-none rounded-md"
@@ -119,7 +172,26 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, optionWareh
                         allowClear
                         placeholder="Chọn phòng kho"
                         optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('shelf', value)}
+                        onChange={(value, ev) => {
+                            handleChangeRequest('shelfId', value)
+                            handleChangeRequest('shelf', ev.label)
+                        }}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionWarehouseroom}
+                    />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Hộp</span>
+                    <Select
+                        name="warehouseroom"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn phòng hộp"
+                        optionFilterProp="children"
+                        onChange={(value) => handleChangeRequest('drawers', value)}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
@@ -131,7 +203,55 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, optionWareh
     )
 }
 
-const SearchBar = ({ optionOrgan, optionWarehouse, optionWarehouseRoom, optionShelf }) => {
+const SearchBar = ({ optionOrgan, allWarehouse, allWarehouseRoom, allShelf }) => {
+
+    const [optionWarehouse, setOptionWarehouse] = useState([])
+    const [optionWarehouseroom, setOptionWarehouseroom] = useState([])
+    const [optionShelf, setOptionShelf] = useState([])
+
+    const handleChangeOptionWarehouseroom = (value) => {
+
+        const optionShelf = []
+        for (const shelf of allShelf) {
+            if (shelf.par === value)
+                optionShelf.push({
+                    value: shelf.value,
+                    label: shelf.label
+                })
+        }
+        setOptionShelf(optionShelf)
+    }
+
+    const handleChangeOptionWarehouse = (value) => {
+        const optionWarehouseroom = []
+        for (const warehouseroom of allWarehouseRoom) {
+            if (warehouseroom.par === value) {
+                optionWarehouseroom.push({
+                    value: warehouseroom.value,
+                    label: warehouseroom.label
+                })
+            }
+        }
+        setOptionWarehouseroom(optionWarehouseroom)
+        handleChangeOptionWarehouseroom(-1)
+
+    }
+
+    const handleChangeOptionOrgan = (value) => {
+        const optionWarehouse = []
+        for (const warehouse of allWarehouse) {
+            if (warehouse.par === value)
+                optionWarehouse.push({
+                    value: warehouse.value,
+                    label: warehouse.label
+                })
+        }
+        setOptionWarehouse(optionWarehouse)
+        handleChangeOptionWarehouse(-1)
+    }
+
+
+
     return (
         <div className="mx-[24px] mt-[8px] flex">
 
@@ -150,7 +270,7 @@ const SearchBar = ({ optionOrgan, optionWarehouse, optionWarehouseRoom, optionSh
                         allowClear
                         placeholder="Chọn cơ quan"
                         optionFilterProp="children"
-                        onChange={(value) => console.log(value)}
+                        onChange={(value) => handleChangeOptionOrgan(value)}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
@@ -169,7 +289,7 @@ const SearchBar = ({ optionOrgan, optionWarehouse, optionWarehouseRoom, optionSh
                         allowClear
                         placeholder="Chọn kho"
                         optionFilterProp="children"
-                        onChange={(value) => console.log(value)}
+                        onChange={(value) => handleChangeOptionWarehouse(value)}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
@@ -188,11 +308,11 @@ const SearchBar = ({ optionOrgan, optionWarehouse, optionWarehouseRoom, optionSh
                         allowClear
                         placeholder="Chọn kho"
                         optionFilterProp="children"
-                        onChange={(value) => console.log(value)}
+                        onChange={(value) => handleChangeOptionWarehouseroom(value)}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
-                        options={optionWarehouseRoom}
+                        options={optionWarehouseroom}
                     ></Select>
                 </div>
             </div>
@@ -319,6 +439,7 @@ const Drawers = () => {
     const [isLoading, setIsLoading] = useState(true)
 
     const [drawers, setDrawers] = useState([])
+
     const [optionShelf, setOptionShelf] = useState([])
     const [optionOrgan, setOptionOrgan] = useState([])
     const [optionWarehouse, setOptionWarehouse] = useState([])
@@ -338,6 +459,7 @@ const Drawers = () => {
                     'warehouse': rawData.warehouse,
                     'warehouseroom': rawData.warehouseroom,
                     'shelf': rawData.shelf,
+                    'shelfId': rawData.shelfId,
                     'state': <button>{
                         rawData['state'] === true ? "Mở" : "Đóng"
                     }</button>,
@@ -359,7 +481,7 @@ const Drawers = () => {
 
             for (const data of response.data) {
                 const raw = {}
-                raw["value"] = data["name"]
+                raw["value"] = data["id"]
                 raw["label"] = data["name"]
                 raws.push(raw)
             }
@@ -376,7 +498,7 @@ const Drawers = () => {
 
             for (const data of response.data) {
                 const raw = {}
-                raw["value"] = data["name"]
+                raw["value"] = data["id"]
                 raw["label"] = data["name"]
                 raws.push(raw)
             }
@@ -392,7 +514,7 @@ const Drawers = () => {
             const raws = []
             for (const data of response.data) {
                 const raw = {}
-                raw["value"] = data["name"]
+                raw["value"] = data["id"]
                 raw["label"] = data["name"]
                 raws.push(raw)
             }
@@ -408,7 +530,7 @@ const Drawers = () => {
             const raws = []
             for (const data of response.data) {
                 const raw = {}
-                raw["value"] = data["name"]
+                raw["value"] = data["id"]
                 raw["label"] = data["name"]
                 raws.push(raw)
             }
@@ -429,8 +551,8 @@ const Drawers = () => {
     }, [])
 
     return (
-        <DanhMucKhoLuuTru title="Hộp" fieldNames={DRAWERS} fieldDatas={drawers} isLoading={isLoading} SearchBar={<SearchBar optionOrgan={optionOrgan} optionWarehouse={optionWarehouse} optionWarehouseRoom={optionWarehouseRoom} optionShelf={optionShelf} />}
-            Create={<Create optionOrgan={optionOrgan} reFetchData={reFetchData} optionWarehouse={optionWarehouse} optionWarehouseRoom={optionWarehouseRoom} optionShelf={optionShelf} />} />
+        <DanhMucKhoLuuTru title="Hộp" fieldNames={DRAWERS} fieldDatas={drawers} isLoading={isLoading} SearchBar={<SearchBar optionOrgan={optionOrgan} allWarehouse={optionWarehouse} allWarehouseRoom={optionWarehouseRoom} allShelf={optionShelf} />}
+            Create={<Create optionOrgan={optionOrgan} reFetchData={reFetchData} allWarehouse={optionWarehouse} allWarehouseRoom={optionWarehouseRoom} allShelf={optionShelf} />} />
     )
 }
 

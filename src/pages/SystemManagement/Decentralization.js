@@ -1,8 +1,7 @@
 import BasePage from "../BasePage";
-
-const Decentralization = ()=>{
+const Decentralization = () => {
     const parent = [
-        {title: "Quản lý hệ thống", link: "/quan-ly-he-thong/nguoi-dung"},
+        { title: "Quản lý hệ thống", link: "/quan-ly-he-thong/nguoi-dung" },
     ]
 
     const current = {
@@ -10,7 +9,9 @@ const Decentralization = ()=>{
         title: "Phân quyền hệ thống"
     }
 
-    return <BasePage parent={parent} current={current}/>
+
+
+    return <BasePage parent={parent} current={current} />
 }
 
 export default Decentralization;

@@ -42,7 +42,7 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1vtf12y.css-dev-only-do-not-override-1vtf12y.ant-popover-placement-top")[0]
+        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1fviqcj.css-dev-only-do-not-override-1fviqcj.ant-popover-placement-top")[0]
 
         if (popupContainer === undefined)
             return
@@ -140,6 +140,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
         "type": null
     })
 
+    
     const handleClickOnFile = (IDFile) => {
         dispatch({ type: "open", id: IDFile })
     }
@@ -154,8 +155,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
             if (buttonFuctions != null) {
                 newButton = cloneElement(buttonFuctions, {
                     clickFunction: () => {
-                        console.log(rawData.id)
-                        dispatch({type:"open_modal", id: rawData.id})
+                        dispatch({ type: "open_modal", id: rawData.id })
                     }
                 })
             }
@@ -219,13 +219,11 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
 
             let request = API_GOV_FILE_SEARCH + userPermissionId
             Object.keys(search).forEach(key => {
-                console.log(search[key])
                 if (key === 'state' && (search[key] === 0 || search[key] === 'Tất cả')) return
                 const value = search[key]
                 if (value !== null & value !== '')
                     request += ("&" + key + "=" + value)
             })
-            console.log(request)
             setIsLoading(true)
             const response = await axios.get(request, {
                 headers: {
@@ -429,7 +427,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
             <File reset={reset} />
             <DocCategory />
             <MultimediaCategory stateMultimediaCategory={stateMultimediaCategory} setStateMultimediaCategory={setStateMultimediaCategory} />
-            <ModalCensorship/>
+            <ModalCensorship />
         </>
     )
 }

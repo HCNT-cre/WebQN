@@ -25,7 +25,6 @@ const SideBar = ({ sideBarWidth }) => {
                 })
             return tab
         })
-        console.log(cur)
         setSidebarTabs(cur)
     }
 

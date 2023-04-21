@@ -352,6 +352,7 @@ const Delete = ({ id, reFetchData }) => {
 const Shelf = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [shelf, setShelf] = useState([])
+    
     const [optionOrgan, setOptionOrgan] = useState([])
     const [optionWarehouse, setOptionWarehouse] = useState([])
     const [optionWarehouseRoom, setOptionWarehouseRoom] = useState([])
