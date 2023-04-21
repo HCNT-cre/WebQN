@@ -24,13 +24,15 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
 
 
     const handleChangeRequest = (name, value) => {
-        return setRequest({
-            ...request,
+        console.log(name, value)
+        return setRequest((prev) => ({
+            ...prev,
             [name]: value
-        })
+        }))
     }
 
 
+    console.log(request)
     const handleOk = async () => {
         await axios.post(API_STORAGE_GET_WAREHOUSE_ALL, request)
         setModalOpen(false)
@@ -66,8 +68,8 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
                         placeholder="Chọn cơ quan"
                         optionFilterProp="children"
                         onChange={(value, ev) => {
-                            handleChangeRequest('organId', value)
                             handleChangeRequest('organ', ev.label)
+                            handleChangeRequest('organId', value)
                         }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())

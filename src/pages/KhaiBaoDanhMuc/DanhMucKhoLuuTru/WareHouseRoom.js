@@ -21,7 +21,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
     const [request, setRequest] = useState({
         name: null,
         organ: null,
-        oraganId: null,
+        warehouseId: null,
         warehouse: null,
         state: false
     })
@@ -30,7 +30,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
 
         const optionWarehouse = []
         for (const warehouse of allWarehouse) {
-            if (warehouse.value === value)
+            if (warehouse.par === value)
                 optionWarehouse.push({
                     value: warehouse.value,
                     label: warehouse.label
@@ -38,12 +38,12 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
         }
         setOptionWarehouse(optionWarehouse)
     }
-    
+
     const handleChangeRequest = (name, value) => {
-        return setRequest({
-            ...request,
+        return setRequest((prev) => ({
+            ...prev,
             [name]: value
-        })
+        }))
     }
 
     const handleOk = async () => {
@@ -122,11 +122,12 @@ const SearchBar = ({ optionOrgan, allWarehouse }) => {
 
         const optionWarehouse = []
         for (const warehouse of allWarehouse) {
-            if (warehouse.value === value)
+            if (warehouse.par === value) {
                 optionWarehouse.push({
                     value: warehouse.value,
                     label: warehouse.label
                 })
+            }
         }
         setOptionWarehouse(optionWarehouse)
     }
@@ -334,6 +335,7 @@ const WareHouseRoom = () => {
                 const raw = {}
                 raw["value"] = data["id"]
                 raw["label"] = data["name"]
+                raw["par"] = data["organId"]
                 raws.push(raw)
             }
 
