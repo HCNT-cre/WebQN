@@ -118,7 +118,7 @@ const Doc = ({ setStateFixDoc, stateFixDoc, id, govFileId }) => {
                                                                                             type={field.type}
                                                                                             min="0"
                                                                                             value={pdfData[field.key]}
-                                                                                            className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                                            className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
                                                                                         />
                                                                                     )}
                                                                                 </div>

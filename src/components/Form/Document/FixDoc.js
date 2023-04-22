@@ -172,7 +172,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
                                                                                             type={field.type}
                                                                                             min="0"
                                                                                             value={request[field.key]}
-                                                                                            className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px]"
+                                                                                            className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
                                                                                         />
                                                                                     )}
                                                                                 </div>
