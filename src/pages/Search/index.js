@@ -24,14 +24,18 @@ const Searchbar = () => {
 
 	const getFileName = async (items) => {
 		const searchedFileWithFileName = []
-		for (const item of items) {
-			console.log(item)
-			const response = await axios.get(API_GOV_FILE_GET + "id=" + item.gov_file_id + "&perm_token=" + userPermissionId)
-			console.log(response.data)
-			searchedFileWithFileName.push({
-				...item,
-				file_name: response.data[0].title
-			})
+		try {
+			for (const item of items) {
+				console.log(item)
+				const response = await axios.get(API_GOV_FILE_GET + "id=" + item.gov_file_id + "&perm_token=" + userPermissionId)
+				console.log(response.data)
+				searchedFileWithFileName.push({
+					...item,
+					file_name: response.data[0].title
+				})
+			}
+		} catch (err) {
+			console.log(err)
 		}
 		setSearchedFile(searchedFileWithFileName)
 		setNumberOfData(searchedFileWithFileName.length);
