@@ -87,6 +87,7 @@ const DocCategory = () => {
     const stateDocCategory = useSelector(state => state.docCategory.state)
     const govFileID = useSelector(state => state.docCategory.id)
     const dispatch = useDispatch()
+    
     const handleClickOnDocument = async (URL_PDF_FILE, pdfData, pdfID) => {
         setPdfFileLink(URL_PDF_FILE)
         setPdfData(pdfData)

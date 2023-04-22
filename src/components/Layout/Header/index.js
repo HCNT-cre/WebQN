@@ -2,14 +2,18 @@ import { useDispatch, useSelector } from "react-redux"
 import { useState } from "react"
 import * as userAction from '../../../actions/user'
 import { GetKey } from "../../../custom/Function"
-
 const USER_ROLES = ["Nhân viên nhập liệu", "Người duyệt đơn"]
 
 const Header = ({ sideBarWidth, setSideBarWidth }) => {
 
-    const userRole = useSelector(state => state.user.role)
     const dispatch = useDispatch()
+    const userRole = useSelector(state => state.user.role)
     const [stateBoxUserRole, setStateBoxUserRole] = useState(false)
+
+    const handleLogOut = () =>{
+
+        dispatch({type: "LOGOUT"})
+    }
 
     return (
         <>
@@ -32,25 +36,30 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
 
                     {
                         stateBoxUserRole &&
-                        <div className="text-center absolute top-[45px] w-[calc(100%-36px)] bg-white rounded-[8px] p-[8px] mt-[8px] text-[12px] cursor-pointer border-solid border-[1px] border-[#ccc] shadow-sm ml-[36px]">
-                            {
-                                USER_ROLES.filter(role => role !== userRole).map((role, index) => {
-                                    return (
-                                        <div key={GetKey()} className="" onClick={() => {
-                                            if (role === "Nhân viên nhập liệu") {
-                                                dispatch(userAction.setRoleToApplicant())
-                                            }
-                                            else if (role === "Người duyệt đơn") {
-                                                dispatch(userAction.setRoleToApplicationReviewer())
-                                            }
-                                        }}>
-                                            {role}
-                                        </div>
-                                    )
+                        <div className="absolute top-[45px] w-[calc(100%-36px)] ">
+                            <div className="text-center w-full  bg-white rounded-[8px] p-[8px] mt-[8px] text-[12px] cursor-pointer border-solid border-[1px] border-[#ccc] shadow-sm ml-[36px]">
+                                {
+                                    USER_ROLES.filter(role => role !== userRole).map((role, index) => {
+                                        return (
+                                            <div key={GetKey()} className="" onClick={() => {
+                                                if (role === "Nhân viên nhập liệu") {
+                                                    dispatch(userAction.setRoleToApplicant())
+                                                }
+                                                else if (role === "Người duyệt đơn") {
+                                                    dispatch(userAction.setRoleToApplicationReviewer())
+                                                }
+                                            }}>
+                                                {role}
+                                            </div>
+                                        )
 
-                                })
-                            }
+                                    })
+                                }
+                            </div>
+
+                            <div onClick={handleLogOut} className="text-center w-full  bg-white rounded-[8px] p-[8px] text-[12px] cursor-pointer border-solid border-[1px] border-[#ccc] shadow-sm ml-[36px]">Đăng xuất</div>
                         </div>
+
                     }
                 </div>
             </div>

@@ -25,7 +25,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
         warehouse: null,
         warehouseroom: null,
         warehouseroomId: null,
-        state: false
+        state: true
     })
 
     const [optionWarehouse, setOptionWarehouse] = useState([])
@@ -238,7 +238,7 @@ const SearchBar = ({ optionOrgan, allWarehouse, allWarehouseRoom }) => {
                         className="w-full bg-white outline-none rounded-md"
                         showSearch
                         allowClear
-                        placeholder="Chọn kho"
+                        placeholder="Chọn phòng kho"
                         optionFilterProp="children"
                         onChange={(value) => console.log(value)}
                         filterOption={(input, option) =>
@@ -319,7 +319,7 @@ const Delete = ({ id, reFetchData }) => {
     }
 
     useEffect(() => {
-        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1vtf12y.css-dev-only-do-not-override-1vtf12y.ant-popover-placement-top")[0]
+        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1fviqcj.css-dev-only-do-not-override-1fviqcj.ant-popover-placement-top")[0]
 
         if (popupContainer === undefined)
             return

@@ -1,8 +1,8 @@
 import BasePage from "../BasePage";
 
-const ReturnFile = ()=>{
+const ReturnFile = () => {
     const parent = [
-        {title: "Hồ sơ tài liệu", link: "/ho-so/tao-ho-so-dien-tu"},
+        { title: "Hồ sơ tài liệu", link: "/ho-so/tao-ho-so-dien-tu" },
     ]
 
     const current = {
@@ -10,7 +10,25 @@ const ReturnFile = ()=>{
         title: "Hồ sơ bị trả về"
     }
 
-    return <BasePage parent={parent} current={current}/>
+    const filter = (files) => {
+
+        // console.log(allOrganStorageFiles)
+        const newFiles = []
+        for (const file of files) {
+            console.log(file)
+            if (file.state.props.children === "Trả về") {
+                newFiles.push(file)
+                // for (const fileS of allOrganStorageFiles) {
+                //     console.log(fileS)
+                //     if (fileS.file_id === file.id)
+
+                // }
+            }
+        }
+
+        return newFiles
+    }
+    return <BasePage parent={parent} current={current} filter={filter}/>
 }
 
 export default ReturnFile;

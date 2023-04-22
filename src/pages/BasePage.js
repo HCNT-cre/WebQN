@@ -16,6 +16,7 @@ import { useButtonClickOutside } from "../custom/Hook"
 import { Link } from "react-router-dom"
 import { notifyError, notifySuccess } from "../custom/Function"
 import { ModalCensorship } from "./Modals"
+import { FORM_FIELDS } from "../storage/DocumentStorage"
 
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
@@ -122,8 +123,9 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     )
 }
 
-const BasePage = ({ parent, current, filter = null, addNewFile = false, newButtons = null, isCheckBox = true, buttonFuctions = null }) => {
+const BasePage = ({ parent, current, filter = null, addNewFile = false, newButtons = null, isCheckBox = true, buttonFuctions = null, fieldsTableCustom = null }) => {
     const dispatch = useDispatch();
+    const [fieldsTable, setFieldsTable] = useState(FIELDS_TABLE)
     const [files, setFiles] = useState([])
     const [doesFilter, setDoesFilter] = useState(true)
     const [stateMultimediaCategory, setStateMultimediaCategory] = useState(false)
@@ -140,11 +142,10 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
         "type": null
     })
 
-    
+
     const handleClickOnFile = (IDFile) => {
         dispatch({ type: "open", id: IDFile })
     }
-
 
     const getFileFromResponse = (response) => {
         const rawDatas = response.data
@@ -278,17 +279,26 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
     }
 
     useEffect(() => {
-        if (!filter || !doesFilter)
-            return
+        if (filter === null)
+            return 
+        
         setFiles(prev => {
             return filter(files)
         })
+        
         setDoesFilter(false)
-    }, [doesFilter])
+    }, [doesFilter, filter])
 
     useEffect(() => {
         reset()
     }, [userPermissionId])
+
+    useEffect(() => {
+        if (fieldsTableCustom === null)
+            setFieldsTable(FIELDS_TABLE)
+        else
+            setFieldsTable(fieldsTableCustom)
+    }, [fieldsTableCustom])
 
     const BUTTON_ACTIONS = [
         { title: "Tìm kiếm", btn_class_name: "custom-btn-search", icon: <i className="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
@@ -421,7 +431,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
 
 
                 </div>
-                <Table setStateCheckBox={setStateCheckBox} fieldNames={FIELDS_TABLE} fieldDatas={files} isLoading={isLoading} isCheckBox={isCheckBox} />
+                <Table setStateCheckBox={setStateCheckBox} fieldNames={fieldsTable} fieldDatas={files} isLoading={isLoading} isCheckBox={isCheckBox} />
             </div >
 
             <File reset={reset} />

@@ -1,11 +1,26 @@
-// import axios from "axios";
+import axios from "axios";
 import BasePage from "../BasePage";
-// import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-// const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL = process.env.REACT_APP_API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL
+const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL = process.env.REACT_APP_API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL
+
+export const FIELDS_TABLE = [
+    { title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
+    { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
+    { title: "Phông", key: "organ_id", width: "100%" },
+    { title: "Kho", key: "warehouse", width: "100%" },
+    { title: "Phòng kho", key: "warehouseroom", width: "100%" },
+    { title: "Kệ", key: "shelf", width: "100%" },
+    { title: "Tầng", key: "drawers", width: "100%" },
+    { title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
+    { title: "Chế độ sử dụng", key: "rights", width: "100%" },
+    { title: "Trạng thái", key: "state", width: "130%" },
+    { title: "Chức năng", key: "Function", width: "120px" },
+]
+
 
 const KhoLuuTruCoQuan = () => {
-    // const [allOrganStorageFiles, setAllOrganStorageFiles] = useState([])
+    const [allOrganStorageFiles, setAllOrganStorageFiles] = useState([])
     const parent = [
         { title: "Lưu trữ cơ quan", link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop" },
     ]
@@ -15,35 +30,56 @@ const KhoLuuTruCoQuan = () => {
         title: "Kho lưu trữ cơ quan"
     }
 
-    // const fetchAllOrganStorageFiles = async () => {
-    //     const res = await axios.get(API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL)
-    //     setAllOrganStorageFiles(res.data)
-    // }
+    const fetchAllOrganStorageFiles = async () => {
+        const res = await axios.get(API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL)
+        setAllOrganStorageFiles(res.data)
+    }
 
-    // useEffect(() => {
-    //     fetchAllOrganStorageFiles()
-    // }, [])
+    useEffect(() => {
+        fetchAllOrganStorageFiles()
+    }, [])
 
+    const mergeTwoFile = (file, fileS) => {
+        const newFile = {
+            'id': file.id,
+            'gov_file_code': file.gov_file_code,
+            'title': file.title,
+            'organ_id': file.organ_id,
+            'warehouse': fileS.warehouse,
+            'warehouseroom': fileS.warehouseroom,
+            'shelf': fileS.shelf,
+            'drawers': fileS.drawers,
+            'maintenance': file.maintenance,
+            'rights': file.rights,
+            'state': file.state,
+            'Function': file.Function
+        }
 
-    const filter = (files) => {
+        return newFile
+    }
 
-        // console.log(allOrganStorageFiles)
+    console.log(allOrganStorageFiles)
+
+    const filter = useCallback((files) => {
+        if (!allOrganStorageFiles.length) return files
+        console.log("update", allOrganStorageFiles)
+        console.log("test", files)
         const newFiles = []
         for (const file of files) {
             if (file.state.props.children === "Lưu trữ cơ quan") {
-                newFiles.push(file)
-                // for (const fileS of allOrganStorageFiles) {
-                //     console.log(fileS)
-                //     if (fileS.file_id === file.id)
 
-                // }
+                for (const fileS of allOrganStorageFiles) {
+                    console.log(fileS)
+                    if (fileS.file_id === file.id)
+                        newFiles.push(mergeTwoFile(file, fileS))
+                }
             }
         }
-
         return newFiles
-    }
+    }, [allOrganStorageFiles]);
 
-    return <BasePage parent={parent} current={current} filter={filter} />
+
+    return <BasePage parent={parent} current={current} filter={filter} fieldsTableCustom={FIELDS_TABLE} />
 }
 
 export default KhoLuuTruCoQuan;

@@ -8,6 +8,7 @@ import { Input, Select, Modal, Button, Popconfirm } from "antd";
 const API_STORAGE_DELETE_DRAWERS = process.env.REACT_APP_API_STORAGE_DELETE_DRAWERS
 const API_STORAGE_PUT_DRAWERS = process.env.REACT_APP_API_STORAGE_PUT_DRAWERS
 const API_STORAGE_GET_DRAWERS_ALL = process.env.REACT_APP_API_STORAGE_GET_DRAWERS_ALL
+const API_STORAGE_POST_DRAWERS = process.env.REACT_APP_API_STORAGE_POST_DRAWERS
 
 const API_STORAGE_GET_SHELF_ALL = process.env.REACT_APP_API_STORAGE_GET_SHELF_ALL
 const API_STORAGE_GET_ORGAN_ALL = process.env.REACT_APP_API_STORAGE_GET_ORGAN_ALL
@@ -27,7 +28,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
         shelf: null,
         shelfId: null,
         drawers: null,
-        state: false
+        state: true
     })
 
     const [optionWarehouse, setOptionWarehouse] = useState([])
@@ -42,7 +43,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
     }
 
     const handleOk = async () => {
-        await axios.post(API_STORAGE_GET_SHELF_ALL, request)
+        await axios.post(API_STORAGE_POST_DRAWERS, request)
         setModalOpen(false)
         reFetchData()
 
@@ -164,13 +165,13 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
                 </div>
 
                 <div className="flex justify-between py-[12px]">
-                    <span>Tầng</span>
+                    <span>Kệ</span>
                     <Select
                         name="warehouseroom"
                         className="w-[70%] bg-white outline-none rounded-md"
                         showSearch
                         allowClear
-                        placeholder="Chọn phòng kho"
+                        placeholder="Chọn kệ"
                         optionFilterProp="children"
                         onChange={(value, ev) => {
                             handleChangeRequest('shelfId', value)
@@ -179,25 +180,10 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
-                        options={optionWarehouseroom}
-                    />
-                </div>
-                <div className="flex justify-between py-[12px]">
-                    <span>Hộp</span>
-                    <Select
-                        name="warehouseroom"
-                        className="w-[70%] bg-white outline-none rounded-md"
-                        showSearch
-                        allowClear
-                        placeholder="Chọn phòng hộp"
-                        optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('drawers', value)}
-                        filterOption={(input, option) =>
-                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                        }
                         options={optionShelf}
                     />
                 </div>
+
             </div>
         </Modal>
     )
@@ -405,7 +391,7 @@ const Delete = ({ id, reFetchData }) => {
     }
 
     useEffect(() => {
-        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1vtf12y.css-dev-only-do-not-override-1vtf12y.ant-popover-placement-top")[0]
+        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1fviqcj.css-dev-only-do-not-override-1fviqcj.ant-popover-placement-top")[0]
 
         if (popupContainer === undefined)
             return
@@ -483,6 +469,7 @@ const Drawers = () => {
                 const raw = {}
                 raw["value"] = data["id"]
                 raw["label"] = data["name"]
+                raw["par"] = data["warehouseroomId"]
                 raws.push(raw)
             }
 
@@ -516,6 +503,7 @@ const Drawers = () => {
                 const raw = {}
                 raw["value"] = data["id"]
                 raw["label"] = data["name"]
+                raw["par"] = data["organId"]
                 raws.push(raw)
             }
 
@@ -532,6 +520,7 @@ const Drawers = () => {
                 const raw = {}
                 raw["value"] = data["id"]
                 raw["label"] = data["name"]
+                raw["par"] = data["warehouseId"]
                 raws.push(raw)
             }
 
@@ -550,6 +539,10 @@ const Drawers = () => {
         reFetchData()
     }, [])
 
+    console.log("shelf", optionShelf)
+    console.log("room", optionWarehouseRoom)
+    console.log("house", optionWarehouse)
+    console.log("organ", optionOrgan)
     return (
         <DanhMucKhoLuuTru title="Hộp" fieldNames={DRAWERS} fieldDatas={drawers} isLoading={isLoading} SearchBar={<SearchBar optionOrgan={optionOrgan} allWarehouse={optionWarehouse} allWarehouseRoom={optionWarehouseRoom} allShelf={optionShelf} />}
             Create={<Create optionOrgan={optionOrgan} reFetchData={reFetchData} allWarehouse={optionWarehouse} allWarehouseRoom={optionWarehouseRoom} allShelf={optionShelf} />} />

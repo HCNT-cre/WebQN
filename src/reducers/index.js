@@ -5,6 +5,7 @@ import sideBarReducer from './sidebar'
 import govfileReducer from './govfile'
 import docCategoryReducer from './docCategory'
 import modalCensorshipReducer from './modalCensorship'
+import loginReducer from './login'
 
 const rootReducer = combineReducers({
     user: userReducer,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     sideBar: sideBarReducer,
     govfile: govfileReducer,
     docCategory: docCategoryReducer, 
-    modalCensorship: modalCensorshipReducer
+    modalCensorship: modalCensorshipReducer,
+    login: loginReducer
 })
 
 export default rootReducer

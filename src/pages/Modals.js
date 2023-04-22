@@ -25,8 +25,9 @@ const API_STORAGE_GET_SHELF_ALL = process.env.REACT_APP_API_STORAGE_GET_SHELF_AL
 const API_STORAGE_GET_WAREHOUSEROOM_ALL = process.env.REACT_APP_API_STORAGE_GET_WAREHOUSEROOM_ALL
 const API_STORAGE_GET_WAREHOUSE_ALL = process.env.REACT_APP_API_STORAGE_GET_WAREHOUSE_ALL
 const API_STORAGE_GET_ORGAN_ALL = process.env.REACT_APP_API_STORAGE_GET_ORGAN_ALL
-const API_STORAGE_POST_FILE_ORGAN_STORAGE = process.env.REACT_APP_API_STORAGE_POST_FILE_ORGAN_STORAGE
+const API_STORAGE_GET_DRAWERS_ALL = process.env.REACT_APP_API_STORAGE_GET_DRAWERS_ALL
 
+const API_STORAGE_POST_FILE_ORGAN_STORAGE = process.env.REACT_APP_API_STORAGE_POST_FILE_ORGAN_STORAGE
 const ModalApprove = ({ open, setOpenModal }) => {
     const [request, setRequest] = useState({
         organ: null,
@@ -40,7 +41,9 @@ const ModalApprove = ({ open, setOpenModal }) => {
     const [optionOrgan, setOptionOrgan] = useState([])
     const [optionWarehouse, setOptionWarehouse] = useState([])
     const [optionWarehouseRoom, setOptionWarehouseRoom] = useState([])
+    const [optionDrawers, setOptionDrawers] = useState([])
     const reFetchData = () => {
+
         const fetchShelf = async () => {
 
             const response = await axios.get(API_STORAGE_GET_SHELF_ALL)
@@ -103,7 +106,21 @@ const ModalApprove = ({ open, setOpenModal }) => {
             setOptionWarehouseRoom(raws)
 
         }
+        const fetchDrawers = async () => {
 
+            const response = await axios.get(API_STORAGE_GET_DRAWERS_ALL)
+            const raws = []
+            for (const data of response.data) {
+                const raw = {}
+                raw["value"] = data["name"]
+                raw["label"] = data["name"]
+                raws.push(raw)
+            }
+
+            setOptionDrawers(raws)
+        }
+
+        fetchDrawers()
         fetchShelf()
         fetchWareHouseRoom()
         fetchOrgan()
@@ -147,85 +164,102 @@ const ModalApprove = ({ open, setOpenModal }) => {
     }
 
     return (
-        <Modal
-            title="Duyệt hồ sơ vào kho"
-            footer={null}
-            style={{
-                top: 200,
-            }}
-            open={open}
-            onOk={handleOk}
-            onCancel={handleCancle}
-        >
-            <div className="flex justify-between py-[12px]">
-                <span>Cơ quan</span>
-                <Select
-                    name="organ"
-                    className="w-[70%] bg-white outline-none rounded-md"
-                    showSearch
-                    allowClear
-                    placeholder="Chọn cơ quan"
-                    optionFilterProp="children"
-                    onChange={(value) => handleChangeRequest('organ', value)}
-                    filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    options={optionOrgan}
-                />
-            </div>
-            <div className="flex justify-between py-[12px]">
-                <span>Kho</span>
-                <Select
-                    name="warehouse"
-                    className="w-[70%] bg-white outline-none rounded-md"
-                    showSearch
-                    allowClear
-                    placeholder="Chọn kho"
-                    optionFilterProp="children"
-                    onChange={(value) => handleChangeRequest('warehouse', value)}
-                    filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    options={optionWarehouse}
-                />
-            </div>
-            <div className="flex justify-between py-[12px]">
-                <span>Phòng kho</span>
-                <Select
-                    name="warehouseroom"
-                    className="w-[70%] bg-white outline-none rounded-md"
-                    showSearch
-                    allowClear
-                    placeholder="Chọn phòng kho"
-                    optionFilterProp="children"
-                    onChange={(value) => handleChangeRequest('warehouseroom', value)}
-                    filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    options={optionWarehouseRoom}
-                />
-            </div>
-            <div className="flex justify-between py-[12px]">
-                <span>Kệ</span>
-                <Select
-                    name="warehouseroom"
-                    className="w-[70%] bg-white outline-none rounded-md"
-                    showSearch
-                    allowClear
-                    placeholder="Chọn phòng kho"
-                    optionFilterProp="children"
-                    onChange={(value) => handleChangeRequest('shelf', value)}
-                    filterOption={(input, option) =>
-                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                    }
-                    options={optionShelf}
-                />
-            </div>
-
-            <div className="flex justify-center">
-                <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
-            </div>
-        </Modal>
+        <div>
+            <Modal
+                title="Duyệt hồ sơ vào kho"
+                footer={null}
+                style={{
+                    top: 200,
+                }}
+                open={open}
+                onOk={handleOk}
+                onCancel={handleCancle}
+            >
+                <div className="flex justify-between py-[12px]">
+                    <span>Cơ quan</span>
+                    <Select
+                        name="organ"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn cơ quan"
+                        optionFilterProp="children"
+                        onChange={(value) => handleChangeRequest('organ', value)}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionOrgan}
+                    />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Kho</span>
+                    <Select
+                        name="warehouse"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn kho"
+                        optionFilterProp="children"
+                        onChange={(value) => handleChangeRequest('warehouse', value)}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionWarehouse}
+                    />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Phòng kho</span>
+                    <Select
+                        name="warehouseroom"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn phòng kho"
+                        optionFilterProp="children"
+                        onChange={(value) => handleChangeRequest('warehouseroom', value)}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionWarehouseRoom}
+                    />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Kệ</span>
+                    <Select
+                        name="warehouseroom"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn phòng kho"
+                        optionFilterProp="children"
+                        onChange={(value) => handleChangeRequest('shelf', value)}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionShelf}
+                    />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Hộp</span>
+                    <Select
+                        name="warehouseroom"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn phòng kho"
+                        optionFilterProp="children"
+                        onChange={(value) => handleChangeRequest('drawers', value)}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionDrawers}
+                    />
+                </div>
+                <div className="flex justify-center">
+                    <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
+                </div>
+            </Modal>
+        </div>
     )
 }
 

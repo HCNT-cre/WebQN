@@ -37,7 +37,7 @@ export const TABS_SIDEBAR = [
                     { title: "Kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", numChildTabs: 0 },
                     { title: "Phòng kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", numChildTabs: 0 },
                     { title: "Kệ", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", numChildTabs: 0 },
-
+                    { title: "Hộp", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop", numChildTabs: 0 },
                 ]
             },
 

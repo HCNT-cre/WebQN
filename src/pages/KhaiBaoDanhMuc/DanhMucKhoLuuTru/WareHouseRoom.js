@@ -23,7 +23,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
         organ: null,
         warehouseId: null,
         warehouse: null,
-        state: false
+        state: true
     })
 
     const handleChangeOptionOrgan = (value) => {
@@ -248,7 +248,7 @@ const Delete = ({ id, reFetchData }) => {
     }
 
     useEffect(() => {
-        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1vtf12y.css-dev-only-do-not-override-1vtf12y.ant-popover-placement-top")[0]
+        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1fviqcj.css-dev-only-do-not-override-1fviqcj.ant-popover-placement-top")[0]
 
         if (popupContainer === undefined)
             return

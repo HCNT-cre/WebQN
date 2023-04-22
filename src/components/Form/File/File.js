@@ -200,6 +200,7 @@ const File = ({ reset }) => {
 
         try {
             const response = await axios.post(API, { ...request, gov_file_code: gov_file_code, perm_token: userPermissionId })
+            console.log(response)
             const error_code = response.data.error_code
             if (error_code === undefined) {
                 notifySuccess(title + ' thành công');
