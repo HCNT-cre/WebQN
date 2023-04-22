@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button } from "antd"
-import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 const Login = () => {
     const navigate = useNavigate();

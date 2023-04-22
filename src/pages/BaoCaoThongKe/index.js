@@ -8,7 +8,7 @@ const BaoCaoThongKe = ()=>{
         title: "Báo cáo và thống kê"
     }
 
-    return <BasePage parent={parent} current={current}/>
+    // return <BasePage parent={parent} current={current}/>
 }
 
 export default BaoCaoThongKe;

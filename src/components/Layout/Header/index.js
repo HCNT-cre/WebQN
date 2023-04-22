@@ -11,7 +11,6 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
     const [stateBoxUserRole, setStateBoxUserRole] = useState(false)
 
     const handleLogOut = () =>{
-
         dispatch({type: "LOGOUT"})
     }
 

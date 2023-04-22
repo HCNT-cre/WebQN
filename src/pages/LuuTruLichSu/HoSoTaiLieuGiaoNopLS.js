@@ -10,7 +10,7 @@ const HoSoTaiLieuGiaoNopLS = ()=>{
         title: "Hồ sơ tài liệu giao nộp"
     }
 
-    return <BasePage parent={parent} current={current}/>
+    // return <BasePage parent={parent} current={current}/>
 }
 
 export default HoSoTaiLieuGiaoNopLS;

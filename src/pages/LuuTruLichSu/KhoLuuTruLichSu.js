@@ -10,7 +10,7 @@ const KhoLuuTruLichSu = ()=>{
         title: "Kho lưu trữ lịch sử"
     }
 
-    return <BasePage parent={parent} current={current}/>
+    // return <BasePage parent={parent} current={current}/>
 }
 
 export default KhoLuuTruLichSu;

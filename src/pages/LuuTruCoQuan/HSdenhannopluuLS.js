@@ -10,7 +10,7 @@ const HSdenhannopluuLS = ()=>{
         title: "Hồ sơ đến hạn nộp lưu lịch sử"
     }
 
-    return <BasePage parent={parent} current={current}/>
+    // return <BasePage parent={parent} current={current}/>
 }
 
 export default HSdenhannopluuLS;

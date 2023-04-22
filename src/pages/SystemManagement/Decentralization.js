@@ -11,7 +11,7 @@ const Decentralization = () => {
 
 
 
-    return <BasePage parent={parent} current={current} />
+    // return <BasePage parent={parent} current={current} />
 }
 
 export default Decentralization;
