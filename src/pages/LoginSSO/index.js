@@ -24,17 +24,20 @@ const LoginForm = styled(Box)`
 `;
 
 const LoginSSO = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch({ type: "LOGINED" });
+    // dispatch({ type: "LOGINED" });
     window.location.replace("https://hcnt-cre.github.io/LoginSSO/")
   }, [])
 
   return (
-    <>
-    </>
+    <h1>
+      <strong>
+      Vui lòng chờ ...
+      </strong>
+    </h1>
   )
 };
 

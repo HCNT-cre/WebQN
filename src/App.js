@@ -45,6 +45,36 @@ const App = () => {
     const isLogin = useSelector(state => state.login)
     console.log("isLogin", isLogin, typeof isLogin)
 
+    function loginPage() {
+        if (isLogin !== 'true')
+            return (
+                <>
+                    <Login />
+                </>
+            )
+        
+        return (
+            <>
+                <Navigate to="/" />
+            </>
+        )
+    }
+
+    function loginSSOPage() {
+        if (isLogin !== 'true')
+            return (
+                <>
+                    <LoginSSO />
+                </>
+            )
+        
+        return (
+            <>
+                <Navigate to="/" />
+            </>
+        )
+    }
+
     const routes = [
         { path: "/", element: <Home /> },
         { path: "/ho-so/tao-ho-so-dien-tu", element: <AddFile /> },
@@ -128,10 +158,8 @@ const App = () => {
 
             <BrowserRouter>
                 <Routes>
-                    <Route path="/dang-nhap" element={isLogin === "true" ?
-                        <Navigate to="/" /> : <Login />} />
-                    <Route path="/dang-nhap-sso" element={isLogin === "true" ?
-                        <Navigate to="/" /> : <LoginSSO />} />
+                    <Route path="/dang-nhap" element={loginPage()} />
+                    <Route path="/dang-nhap-sso" element={loginSSOPage()} />
                     <Route path="/logged-in" element={<LoggedIn />} />
 
                         
