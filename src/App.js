@@ -22,7 +22,24 @@ import Drawers from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Drawers";
 import ReturnFile from "./pages/Files/ReturnFile";
 import LoginSSO from "./pages/LoginSSO";
 import HoSoBiTraVeCoQuan from "./pages/LuuTruCoQuan/HoSoBiTraVeCoQuan";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
+function LoggedIn() {
+    const dispatch = useDispatch();
+    const navigate = useNavigate()
+    
+    useEffect(() => {
+        dispatch({ type: "LOGINED" });
+        navigate("/")
+    }, [])
+    
+    return (
+        <>
+        </>
+    )
+}
 
 const App = () => {
     const isLogin = useSelector(state => state.login)
@@ -115,6 +132,7 @@ const App = () => {
                         <Navigate to="/" /> : <Login />} />
                     <Route path="/dang-nhap-sso" element={isLogin === "true" ?
                         <Navigate to="/" /> : <LoginSSO />} />
+                    <Route path="/logged-in" element={<LoggedIn />} />
 
                         
                     {routes.map((route, index) => (
