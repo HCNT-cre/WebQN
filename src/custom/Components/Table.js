@@ -32,7 +32,7 @@ const ConvertDataToArrayForRenderTableCell = (table) => {
                         color = "bg-[#e17055]"
                     }
                     data.push(<td className="text-white px-[12px] py-[16px] break-words text-center" >
-                        <span className={`px-[8px] py-[4px] rounded-md text-[12px] font-300 ${color}`}>
+                        <span className={`block px-[2px] py-[4px] rounded-md text-[12px] font-300 break-normal ${color}`}>
                             {row[key]}
                         </span>
                     </td>)
