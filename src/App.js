@@ -21,7 +21,7 @@ import Shelf from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Shelf";
 import Drawers from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Drawers";
 import ReturnFile from "./pages/Files/ReturnFile";
 import LoginSSO from "./pages/LoginSSO";
-
+import HoSoBiTraVeCoQuan from "./pages/LuuTruCoQuan/HoSoBiTraVeCoQuan";
 import { useSelector } from "react-redux";
 
 const App = () => {
@@ -47,9 +47,14 @@ const App = () => {
             element: <HSdenhannopluuLS />,
         },
         {
+            path: "/luu-tru-co-quan/ho-so-bi-tra-ve",
+            element: <HoSoBiTraVeCoQuan />,
+        },
+        {
             path: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop",
             element: <HoSoTaiLieuGiaoNopLS />,
         },
+      
         {
             path: "/luu-tru-lich-su/kho-luu-tru-lich-su",
             element: <KhoLuuTruLichSu />,

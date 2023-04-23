@@ -1,5 +1,5 @@
 export const STATE = [
-    "Tất cả", "Mở", "Đóng", "Nộp lưu cơ quan", "Lưu trữ cơ quan", "Nộp lưu lịch sử", "Lưu trữ lịch sử", " Nộp lưu cơ quan bị trả về", "Nộp lưu lịch sử bị trả về"
+    "Tất cả", "Mở", "Đóng", "Nộp lưu cơ quan", "Lưu trữ cơ quan", "Nộp lưu lịch sử", "Lưu trữ lịch sử", "Nộp lưu cơ quan bị trả về", "Nộp lưu lịch sử bị trả về"
 ]
 
 export const TABS_SIDEBAR = [
@@ -17,7 +17,8 @@ export const TABS_SIDEBAR = [
         title: "Lưu trữ cơ quan", numChildTabs: 3, childTabs: [
             { title: "Hồ sơ tài liệu giao nộp", to: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop", key: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop" },
             { title: "Kho lưu trữ cơ quan", to: "/luu-tru-co-quan/kho-luu-tru-co-quan", key: "/luu-tru-co-quan/kho-luu-tru-co-quan" },
-            { title: "HS đến hạn nộp lưu LS", to: "/luu-tru-co-quan/ho-so-den-han-nop-luu-lich-su", key: "/luu-tru-co-quan/ho-so-den-han-nop-luu-lich-su" }
+            { title: "HS đến hạn nộp lưu LS", to: "/luu-tru-co-quan/ho-so-den-han-nop-luu-lich-su", key: "/luu-tru-co-quan/ho-so-den-han-nop-luu-lich-su" },
+            { title: "Hồ sơ bị trả về", to: "/luu-tru-co-quan/ho-so-bi-tra-ve", key: "/luu-tru-co-quan/ho-so-bi-tra-ve" }
         ]
     },
     {
