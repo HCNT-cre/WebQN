@@ -58,12 +58,9 @@ const KhoLuuTruCoQuan = () => {
         return newFile
     }
 
-    console.log(allOrganStorageFiles)
 
     const filter = useCallback((files) => {
         if (!allOrganStorageFiles.length) return files
-        console.log("update", allOrganStorageFiles)
-        console.log("test", files)
         const newFiles = []
         for (const file of files) {
             if (file.state.props.children === "Lưu trữ cơ quan") {
