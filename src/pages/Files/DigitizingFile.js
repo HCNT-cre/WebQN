@@ -10,7 +10,7 @@ const DigitizingFile = ()=>{
         title: "Số hóa hồ sơ tài liệu"
     }
 
-    return <BasePage parent={parent} current={current}/>
+    // return <BasePage parent={parent} current={current}/>
 }
 
 export default DigitizingFile;
