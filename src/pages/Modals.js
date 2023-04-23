@@ -37,12 +37,14 @@ const ModalApprove = ({ open, setOpenModal }) => {
         shelf: null,
     })
     const IDFile = useSelector(state => state.modalCensorship.id)
-
+    const current_state = useSelector(state => state.modalCensorship.current_state)
     const [optionShelf, setOptionShelf] = useState([])
     const [optionOrgan, setOptionOrgan] = useState([])
     const [optionWarehouse, setOptionWarehouse] = useState([])
     const [optionWarehouseRoom, setOptionWarehouseRoom] = useState([])
     const [optionDrawers, setOptionDrawers] = useState([])
+
+
     const reFetchData = () => {
 
         const fetchShelf = async () => {
@@ -156,8 +158,8 @@ const ModalApprove = ({ open, setOpenModal }) => {
         }
 
         await axios.post(API_GOV_FILE_UPDATE_STATE, [{
-            id: IDFile, current_state: 3,
-            new_state: 4
+            id: IDFile, current_state: current_state,
+            new_state: current_state + 1
         }])
         await axios.post(API_STORAGE_POST_FILE_ORGAN_STORAGE, { ...request, file_id: IDFile })
         notifySuccess("Duyệt thành công")
@@ -268,7 +270,7 @@ const ModalApprove = ({ open, setOpenModal }) => {
 export const ModalCensorship = () => {
     const open = useSelector(state => state.modalCensorship.state)
     const IDFile = useSelector(state => state.modalCensorship.id)
-
+    const current_state = useSelector(state => state.modalCensorship.current_state)
     const dispatch = useDispatch();
     const [isCheck, setIsCheck] = useState([]);
     const [modalOpen, setModalOpen] = useState(false)
@@ -312,7 +314,7 @@ export const ModalCensorship = () => {
 
     const handleClickReject = () => {
         axios.post(API_GOV_FILE_UPDATE_STATE, [
-            { id: IDFile, current_state: 3, new_state: 7 }])
+            { id: IDFile, current_state: current_state, new_state: current_state === 3 ? 7 : 8 }])
     }
 
     return (

@@ -156,11 +156,12 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
             if (buttonFuctions != null) {
                 newButton = cloneElement(buttonFuctions, {
                     clickFunction: () => {
-                        dispatch({ type: "open_modal", id: rawData.id })
+                        dispatch({ type: "open_modal", id: rawData.id, current_state: rawData.state })
                     }
                 })
             }
 
+            console.log(rawData)
             const row = {
                 'id': rawData.id,
                 'gov_file_code': <p className="cursor-pointer hover:underline" onClick={() => handleClickOnFile(rawData.id)}>{rawData.gov_file_code || ''}</p>,
