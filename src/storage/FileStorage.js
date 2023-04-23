@@ -39,7 +39,7 @@ export const MAINTENANCE = [
     { label: "30 năm", value: "30 năm" },
     { label: "40 năm", value: "40 năm" },
     { label: "50 năm", value: "50 năm" },
-    { label: "Vĩnh viễn", value: "60 năm" },
+    { label: "Vĩnh viễn", value: "Vĩnh viễn" },
 ]
 
 export const LANGUAGE = [
