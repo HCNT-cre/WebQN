@@ -1,5 +1,5 @@
 export const STATE = [
-    "Tất cả", "Mở", "Đóng", "Nộp lưu cơ quan", "Lưu trữ cơ quan", "Nộp lưu lịch sử", "Lưu trữ lịch sử", "Nộp lưu cơ quan bị trả về", "Nộp lưu lịch sử bị trả về"
+    "Tất cả", "Mở", "Đóng", "Nộp lưu cơ quan", "Lưu trữ cơ quan", "Nộp lưu lịch sử", "Lưu trữ lịch sử", "Nộp lưu CQ bị trả về", "Nộp lưu LS bị trả về"
 ]
 
 export const TABS_SIDEBAR = [

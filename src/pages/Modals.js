@@ -311,10 +311,13 @@ export const ModalCensorship = () => {
     const handleClickApprove = () => {
         setModalApprove(true)
     }
-
+    
     const handleClickReject = () => {
         axios.post(API_GOV_FILE_UPDATE_STATE, [
             { id: IDFile, current_state: current_state, new_state: current_state === 3 ? 7 : 8 }])
+            notifySuccess("Đã trả hồ sơ về")
+            // setModalOpen(false)            
+            // reFetchData()
     }
 
     return (

@@ -16,7 +16,7 @@ const HoSoBiTraVeCoQuan = () => {
         const newFiles = []
         for (const file of files) {
             console.log(file)
-            if (file.state.props.children === "Nộp lưu lịch sử bị trả về") {
+            if (file.state.props.children === "Nộp lưu LS bị trả về") {
                 newFiles.push(file)
 
             }
