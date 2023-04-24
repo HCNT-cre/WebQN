@@ -29,7 +29,10 @@ const API_STORAGE_GET_DRAWERS_ALL = process.env.REACT_APP_API_STORAGE_GET_DRAWER
 
 const API_STORAGE_POST_FILE_ORGAN_STORAGE = process.env.REACT_APP_API_STORAGE_POST_FILE_ORGAN_STORAGE
 
-const ModalApprove = ({ open, setOpenModal }) => {
+const ModalApprove = ({ open, setOpenModal, setParentModal }) => {
+    const dispatch = useDispatch()
+    const reFetchFile = useSelector(state => state.reFetchFile.fetchFileFunction)
+
     const [request, setRequest] = useState({
         organ: null,
         warehouse: null,
@@ -43,7 +46,6 @@ const ModalApprove = ({ open, setOpenModal }) => {
     const [optionWarehouse, setOptionWarehouse] = useState([])
     const [optionWarehouseRoom, setOptionWarehouseRoom] = useState([])
     const [optionDrawers, setOptionDrawers] = useState([])
-
 
     const reFetchData = () => {
 
@@ -163,7 +165,9 @@ const ModalApprove = ({ open, setOpenModal }) => {
         }])
         await axios.post(API_STORAGE_POST_FILE_ORGAN_STORAGE, { ...request, file_id: IDFile })
         notifySuccess("Duyệt thành công")
+        reFetchFile()
         setOpenModal(false)
+        dispatch({ type: "close_modal", id: null })
     }
 
     return (
@@ -271,6 +275,8 @@ export const ModalCensorship = () => {
     const open = useSelector(state => state.modalCensorship.state)
     const IDFile = useSelector(state => state.modalCensorship.id)
     const current_state = useSelector(state => state.modalCensorship.current_state)
+    const reFetchFile = useSelector(state => state.reFetchFile.fetchFileFunction)
+
     const dispatch = useDispatch();
     const [isCheck, setIsCheck] = useState([]);
     const [modalOpen, setModalOpen] = useState(false)
@@ -294,7 +300,6 @@ export const ModalCensorship = () => {
     }
 
     const handleCancle = () => {
-        // setModalOpen(false)
         dispatch({ type: "close_modal", id: null })
     }
 
@@ -315,6 +320,12 @@ export const ModalCensorship = () => {
     const handleClickReject = () => {
         axios.post(API_GOV_FILE_UPDATE_STATE, [
             { id: IDFile, current_state: current_state, new_state: current_state === 3 ? 7 : 8 }])
+        notifySuccess("Đã trả về hồ sơ")
+        dispatch({ type: "close_modal", id: null })
+
+        if (reFetchFile !== null) {
+            reFetchFile()
+        }
     }
 
     return (
@@ -357,7 +368,7 @@ export const ModalCensorship = () => {
                 </div>
             </Modal>
 
-            <ModalApprove open={modalApprove} setOpenModal={setModalApprove} />
+            <ModalApprove open={modalApprove} setOpenModal={setModalApprove} setParentModal={setModalOpen} />
         </>
 
     )

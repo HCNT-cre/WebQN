@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, cloneElement } from "react"
+import { useState, useEffect, cloneElement} from "react"
 import DocCategory from "../components/Form/Document/DocCategory"
 import MultimediaCategory from "../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
@@ -16,14 +16,14 @@ import { useButtonClickOutside } from "../custom/Hook"
 import { Link } from "react-router-dom"
 import { notifyError, notifySuccess } from "../custom/Function"
 import { ModalCensorship } from "./Modals"
-import { FORM_FIELDS } from "../storage/DocumentStorage"
 
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_UPDATE_STATE_GOV_FILE = process.env.REACT_APP_API_GOV_FILE_UPDATE_STATE
 const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_GOV_FILE_DELETE = process.env.REACT_APP_API_GOV_FILE_DELETE
-
+const API_STORAGE_DELETE_FILE_ORGAN_STORAGE = process.env.REACT_APP_API_STORAGE_DELETE_FILE_ORGAN_STORAGE
+const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL = process.env.REACT_APP_API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL
 const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     const userPermissionId = useSelector(state => state.user.permission_id)
     const handleClose = () => {
@@ -31,7 +31,17 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     }
 
     const handleConfirm = () => {
+        const DeleteOrganFile = async () => {
+            const files = axios.get(API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL)
+            for(const file of files){
+                if(file.file_id === IDFile){
+                    await axios.delete(API_STORAGE_DELETE_FILE_ORGAN_STORAGE + file.id)
+                }
+            }
+        }
+
         DeleteData(API_GOV_FILE_DELETE, { id: IDFile, perm_token: userPermissionId }, "Xóa thành công")
+        DeleteOrganFile()
         setTimeout(async () => {
             await reset()
         }, 500)
@@ -134,6 +144,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
     const userPermissionId = useSelector(state => state.user.permission_id)
     const userPermissions = useSelector(state => state.user.permissions)
     const [buttonRef, contentRef, toggleContent, showContent] = useButtonClickOutside(false);
+    
     const [search, setSearch] = useState({
         "title": null,
         "organ_id": null,
@@ -161,7 +172,6 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
                 })
             }
 
-            console.log(rawData)
             const row = {
                 'id': rawData.id,
                 'gov_file_code': <p className="cursor-pointer hover:underline" onClick={() => handleClickOnFile(rawData.id)}>{rawData.gov_file_code || ''}</p>,
@@ -216,6 +226,10 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
         fetchFileData();
     }
 
+    useEffect(()=>{
+        dispatch({type: "ADD_FETCH_FILE_ACTION", fetchFileFunction: reset})
+    },[])
+
     const handleSearch = async (ev) => {
         try {
 
@@ -267,6 +281,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
             const error_code = response.data.error_code
             if (error_code === undefined) {
                 notifySuccess('Thay đổi trạng thái thành công')
+                // setStateCheckBox([])
                 reset()
             } else {
                 const description = response.data.description
@@ -281,12 +296,12 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
 
     useEffect(() => {
         if (filter === null)
-            return 
-        
+            return
+
         setFiles(prev => {
             return filter(files)
         })
-        
+
         setDoesFilter(false)
     }, [doesFilter, filter])
 
@@ -419,7 +434,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
                                 {userPermissions.map((permission, index) => {
                                     return (
                                         <button className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-black font-medium border-none truncate" onClick={() => handleChangeStateFile(permission.update_state)}>
-                                            <i class=
+                                            <i className=
                                                 {permission.icon_class}
                                             ></i>
                                             {permission.permission_title}</button>
