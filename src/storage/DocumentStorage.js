@@ -16,7 +16,7 @@ export const FORM_FIELDS = [
     { key: "organ_id", title: "Mã phông/công trình/sưu tập lưu trữ", require: true, type: "select", options: ORGAN_ID, extract: true },
 
 
-    
+
     { key: "file_catalog", title: "Mục lục số hoặc năm hình thành hồ sơ", require: false, type: "number", extract: true },
     { key: "file_notation", title: "Số và ký hiệu hồ sơ", require: false, type: "text", extract: true },
     { key: "type_name", title: "Tên loại văn bản", require: false, type: "text" },

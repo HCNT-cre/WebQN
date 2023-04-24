@@ -254,12 +254,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
             // notifySuccess
         }
         for (const state of stateCheckBox) {
-            // Pattern "checkbox19-8"
-            // "checkbox" + "-" + {id} + "-" + {stateId}
-            const parts = state.split("-")
-            const id = parseInt(parts[1])
-            const current_state = parseInt(parts[2])
-            newState.current_state = current_state
+            const id = parseInt(state.substring(state.indexOf("checkbox") + "checkbox".length))
             listState.push({
                 ...newState,
                 id: id,
@@ -392,14 +387,6 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
                                 {
                                     value: 6,
                                     label: 'Lưu trữ lịch sử',
-                                },
-                                {
-                                    value: 7,
-                                    label: 'Nộp lưu CQ bị trả về',
-                                },
-                                {
-                                    value: 8,
-                                    label: 'Nộp lưu LS bị trả về',
                                 },
                             ]}
                         />

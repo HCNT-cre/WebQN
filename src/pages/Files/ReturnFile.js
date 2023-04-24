@@ -16,7 +16,7 @@ const ReturnFile = () => {
         const newFiles = []
         for (const file of files) {
             console.log(file)
-            if (file.state.props.children === "Nộp lưu CQ bị trả về") {
+            if (file.state.props.children === "Nộp lưu cơ quan bị trả về") {
                 newFiles.push(file)
                 // for (const fileS of allOrganStorageFiles) {
                 //     console.log(fileS)
