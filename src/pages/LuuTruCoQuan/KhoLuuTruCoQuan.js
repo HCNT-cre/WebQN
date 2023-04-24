@@ -64,9 +64,7 @@ const KhoLuuTruCoQuan = () => {
         const newFiles = []
         for (const file of files) {
             if (file.state.props.children === "Lưu trữ cơ quan") {
-
                 for (const fileS of allOrganStorageFiles) {
-                    console.log(fileS)
                     if (fileS.file_id === file.id)
                         newFiles.push(mergeTwoFile(file, fileS))
                 }

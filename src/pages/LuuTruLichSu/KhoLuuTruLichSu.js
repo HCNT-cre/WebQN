@@ -60,12 +60,13 @@ const KhoLuuTruLichSu = () => {
 
 
     const filter = useCallback((files) => {
+        console.log(files)
         if (!allOrganStorageFiles.length) return files
         const newFiles = []
         for (const file of files) {
             if (file.state.props.children === "Lưu trữ lịch sử") {
-
                 for (const fileS of allOrganStorageFiles) {
+                    console.log(fileS.file_id, file.id)
                     if (fileS.file_id === file.id)
                         newFiles.push(mergeTwoFile(file, fileS))
                 }
