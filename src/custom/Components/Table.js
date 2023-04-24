@@ -26,11 +26,24 @@ const ConvertDataToArrayForRenderTableCell = (table) => {
             if (!Array.isArray(row[key])) {
                 if (key.includes("state")) {
                     let color = "bg-[#0984e3]"
+
                     if (row[key].props.children === "Đóng") {
-                        color = "bg-[#d63031]"
+                        color = "bg-red-600";
+                    } else if (row[key].props.children === "Nộp lưu cơ quan") {
+                        color = "bg-yellow-500";
                     } else if (row[key].props.children === "Lưu trữ cơ quan") {
-                        color = "bg-[#e17055]"
+                        color = "bg-green-500";
+                    } else if (row[key].props.children === "Nộp lưu lịch sử") {
+                        color = "bg-blue-600";
+                    } else if (row[key].props.children === "Lưu trữ lịch sử") {
+                        color = "bg-purple-900";
+                    } else if (row[key].props.children === "Nộp lưu CQ bị trả về") {
+                        color = "bg-pink-500";
+                    } else if (row[key].props.children === "Nộp lưu LS bị trả về") {
+                        color = "bg-orange-500";
                     }
+
+
                     data.push(<td className="text-white px-[12px] py-[16px] break-words text-center" >
                         <span className={`block px-[2px] py-[4px] rounded-md text-[12px] font-300 break-normal ${color}`}>
                             {row[key]}
