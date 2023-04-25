@@ -1,6 +1,6 @@
 export const EofficeFile = [
     {
-        gov_file_id: 29,
+        gov_file_id_of_doc: 29,
         file_name: "Về Mạng truyền số liệu chuyên dùng phục vụ các cơ quan Đảng, Nhà nước",
         doc: [
 
@@ -9,7 +9,7 @@ export const EofficeFile = [
         ]
     },
     {
-        gov_file_id: 39,
+        gov_file_id_of_doc: 39,
         file_name: "Hồ sơ thi THPT 2011",
         doc: [
 

@@ -6,24 +6,23 @@ import AddDoc from './AddDoc';
 import { useSelector } from 'react-redux';
 import { GetDataFromIDFile } from '../../../custom/Function';
 import axios from 'axios';
-const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile }) => {
+const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile, govFileID}) => {
 
     const [select, setSelect] = useState([])
     const [docs, setDocs] = useState([])
     const [stateAddDoc, setStateAddDoc] = useState(false)
-    const [govFileID, setGovFileId] = useState(null)
     const [fileData, setFileData] = useState(null)
     const [fileUploaded, setFileUploaded] = useState(null)
-
     const userPermissionId = useSelector(state => state.user.permission_id)
+    const [govFileIdOfDoc, setGovFileIdOfDoc] = useState(null)
 
     const handleClickFile = (ev) => {
         const { id } = ev.target
         const gov_file_id = id.split("-")[1]
         for (const file of EofficeFile) {
-            if (file.gov_file_id === parseInt(gov_file_id)) {
+            if (file.gov_file_id_of_doc === parseInt(gov_file_id)) {
                 setDocs(file.doc)
-                setGovFileId(file.gov_file_id)
+                setGovFileIdOfDoc(file.gov_file_id_of_doc)
                 setSelect([])
             }
         }
@@ -56,7 +55,7 @@ const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile }) => {
     }
 
     const fetchFile = async () => {
-        const data = await GetDataFromIDFile(govFileID, userPermissionId)
+        const data = await GetDataFromIDFile(govFileIdOfDoc, userPermissionId)
         setFileData(data)
     }
 
@@ -97,7 +96,7 @@ const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile }) => {
                                         <ul>
                                             {EofficeFile.map((item, index) => {
                                                 return (
-                                                    <li id={`file-${item.gov_file_id}`} onClick={handleClickFile} className='font-medium border-b-2 text-[14px] cursor-pointer py-[8px] hover:bg-[#e1e1e1]'>
+                                                    <li id={`file-${item.gov_file_id_of_doc}`} onClick={handleClickFile} className='font-medium border-b-2 text-[14px] cursor-pointer py-[8px] hover:bg-[#e1e1e1]'>
                                                         <span className='mx-[12px] text-[#ccc]'>
                                                             <i className="fa-solid fa-folder"></i>
                                                         </span>
@@ -116,9 +115,9 @@ const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile }) => {
                                                 {
                                                     docs.map((item, index) => {
                                                         return (
-                                                            <li id={`select-file-${index}`} onClick={handleSelectDoc} data-doesSelected={select.includes(`select-file-${index}`)} className={`font-medium border-b-2 text-[14px] cursor-pointer py-[8px] ${select.includes(`select-file-${index}`) ? "bg-[#e1e1e1]" : ""} `}>
+                                                            <li id={`select-file-${index}`} onClick={handleSelectDoc} data-doesselected={select.includes(`select-file-${index}`)} className={`font-medium border-b-2 text-[14px] cursor-pointer py-[8px] ${select.includes(`select-file-${index}`) ? "bg-[#e1e1e1]" : ""} `}>
                                                                 <span className='mx-[12px] text-[#ccc]'>
-                                                                    <i class="fa-solid fa-file"></i>
+                                                                    <i className="fa-solid fa-file"></i>
                                                                 </span>
                                                                 {item.name}
                                                             </li>
