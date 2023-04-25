@@ -115,15 +115,24 @@ const FIELDS_RIGHT = [
 
 const File = ({ reset }) => {
     const userPermissionId = useSelector(state => state.user.permission_id)
-    const data = useSelector((state) => state.formFile.data)
-    let stateForm = useSelector((state) => state.formFile.state);
+    const stateForm = useSelector((state) => state.formFile.state)
+    const fileID = useSelector((state) => state.formFile.id)
 
-    let fileID = null
-    
+
     let title = "Tạo hồ sơ"
-    if (data !== undefined && data.id !== null) {
-        title = data.state === "watch_file" ? "Xem hồ sơ" : "Sửa hồ sơ"
-        fileID = data.id
+
+    switch (stateForm) {
+        case "CREATE_FILE":
+            title = "Tạo hồ sơ"
+            break;
+        case "WATCH_FILE":
+            title = "Xem hồ sơ"
+            break;
+        case "EDIT_FILE":
+            title = "Sửa hồ sơ"
+            break;
+        default:
+            break;
     }
 
     const dispatch = useDispatch();
@@ -149,7 +158,7 @@ const File = ({ reset }) => {
     })
 
     useEffect(() => {
-        if (fileID === null) {
+        if (fileID === null || fileID === undefined) {
             const updatedRequest = {}
             Object.keys(request).forEach(key => {
                 updatedRequest[key] = null
@@ -196,6 +205,7 @@ const File = ({ reset }) => {
         }
 
         const gov_file_code = IDENTIFIER_CODE[request["identifier"]] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
+
         const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : API_GOV_FILE_UPDATE
 
         try {
@@ -239,7 +249,7 @@ const File = ({ reset }) => {
     return (
         <>
             {
-                (stateForm !== "close") && <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[1001] bg-[rgba(0,0,0,.45)]">
+                (stateForm !== "CLOSE_FILE") && <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[1001] bg-[rgba(0,0,0,.45)]">
                     <div className="relative top-[50px] pb-[30px] ">
                         <div className="w-[1000px] max-w-[calc(100vw-80px)] my-0 mx-auto bg-white">
                             <div className="relative rounded-[2px] bg-white">
@@ -254,57 +264,60 @@ const File = ({ reset }) => {
                                 <div className="p-[24px] text-[14px] ">
                                     <form onSubmit={handleSubmit}>
                                         <div className="flex justify-between">
-                                        <div className="w-[50%] px-[10px]">
-                                        {FIELDS_LEFT.map((field, index) => {
-                                            const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
-                                            return (
-                                                <div
-                                                    key={field.key}
-                                                    className="mt-[8px] w-full mb-[24px] h-[65px]"
-                                                >
-                                                    <label
-                                                        className={`${field.require ? "after-form" : ""
-                                                            } text-[14px]`}
-                                                        title={field.title}
-                                                    >
-                                                        {field.title}
-                                                    </label>
+                                            <div className="w-[50%] px-[10px]">
+                                                {FIELDS_LEFT.map((field, index) => {
+                                                    const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
+                                                    return (
+                                                        <div
+                                                            key={field.key}
+                                                            className="mt-[8px] w-full mb-[24px] h-[65px]"
+                                                        >
+                                                            <label
+                                                                className={`${field.require ? "after-form" : ""
+                                                                    } text-[14px]`}
+                                                                title={field.title}
+                                                            >
+                                                                {field.title}
+                                                            </label>
 
-                                                    {field.type === "select" ? (
-                                                        field.default === true ? (
-                                                            <Select
-                                                                onChange={(value) => handleChangeForm(field.key, value)}
-                                                                className="block mt-[12px]"
-                                                                options={field.options}
-                                                                defaultValue={field.options[0]}
-                                                                value={request[field.key] === null ? "" : request[field.key]}
+                                                            {field.type === "select" ? (
+                                                                field.default === true ? (
+                                                                    <Select
+                                                                        disabled={stateForm === "WATCH_FILE"}
+                                                                        onChange={(value) => handleChangeForm(field.key, value)}
+                                                                        className="block mt-[12px]"
+                                                                        options={field.options}
+                                                                        defaultValue={field.options[0]}
+                                                                        value={request[field.key] === null ? "" : request[field.key]}
 
-                                                            />
-                                                        ) : (
-                                                            <Select
-                                                                onChange={(value) => handleChangeForm(field.key, value)}
-                                                                className="block mt-[12px]"
-                                                                options={field.options}
-                                                                value={request[field.key] === null ? "" : request[field.key]}
+                                                                    />
+                                                                ) : (
+                                                                    <Select
+                                                                        disabled={stateForm === "WATCH_FILE"}
+                                                                        onChange={(value) => handleChangeForm(field.key, value)}
+                                                                        className="block mt-[12px]"
+                                                                        options={field.options}
+                                                                        value={request[field.key] === null ? "" : request[field.key]}
 
-                                                            />
-                                                        )
+                                                                    />
+                                                                )
 
-                                                    ) : (
-                                                        <Input
-                                                            onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
-                                                            name={field.key}
-                                                            placeholder={placeholder}
-                                                            type={field.type}
-                                                            min="0"
-                                                            value={request[field.key] === null ? "" : request[field.key]}
-                                                            className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
-                                                        />
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
+                                                            ) : (
+                                                                <Input
+                                                                    disabled={stateForm === "WATCH_FILE"}
+                                                                    onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
+                                                                    name={field.key}
+                                                                    placeholder={placeholder}
+                                                                    type={field.type}
+                                                                    min="0"
+                                                                    value={request[field.key] === null ? "" : request[field.key]}
+                                                                    className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
                                             <div className="w-[50%] px-[10px]">
                                                 {FIELDS_RIGHT.map((field, index) => {
                                                     const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
@@ -324,6 +337,7 @@ const File = ({ reset }) => {
                                                             {field.type === "select" ? (
                                                                 field.default === true ? (
                                                                     <Select
+                                                                        disabled={stateForm === "WATCH_FILE"}
                                                                         onChange={(value) => handleChangeForm(field.key, value)}
                                                                         className="block mt-[12px]"
                                                                         options={field.options}
@@ -333,6 +347,7 @@ const File = ({ reset }) => {
                                                                     />
                                                                 ) : (
                                                                     <Select
+                                                                        disabled={stateForm === "WATCH_FILE"}
                                                                         onChange={(value) => handleChangeForm(field.key, value)}
                                                                         className="block mt-[12px]"
                                                                         options={field.options}
@@ -343,6 +358,7 @@ const File = ({ reset }) => {
 
                                                             ) : (
                                                                 <Input
+                                                                    disabled={stateForm === "WATCH_FILE"}
                                                                     onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
                                                                     name={field.key}
                                                                     placeholder={placeholder}
@@ -358,7 +374,11 @@ const File = ({ reset }) => {
                                             </div>
                                         </div>
                                         <div className="flex justify-center">
-                                            <input className="mr-[12px] h-[32px] w-[60px] rounded-[5px] text-white font-medium bg-blue-500 cursor-pointer" type="submit" value="Lưu" />
+
+                                            {
+                                                stateForm !== "WATCH_FILE" &&
+                                                < input className="mr-[12px] h-[32px] w-[60px] rounded-[5px] text-white font-medium bg-blue-500 cursor-pointer" type="submit" value="Lưu" />
+                                            }
                                             <button onClick={() => { dispatch(actionFile.CloseFile()) }} className="h-[32px] w-[60px] bg-gray-300 border-solid border-[1px] rounded-[5px]">Đóng</button>
                                         </div>
 
