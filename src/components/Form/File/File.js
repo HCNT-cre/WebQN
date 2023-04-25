@@ -137,15 +137,15 @@ const File = ({ reset }) => {
 
     const dispatch = useDispatch();
     const [request, setRequest] = useState({
-        rights: null,
+        rights: "Công Khai",
         gov_file_code: null,
         identifier: "Trung tâm lưu trữ lịch sử",
-        organ_id: null,
+        organ_id: "Phông trung tâm lưu trữ lịch sử",
         file_catalog: null,
         file_notation: null,
         title: null,
-        maintenance: null,
-        language: null,
+        maintenance: "5 năm",
+        language: "Tiếng Việt",
         start_date: null,
         end_date: null,
         total_doc: null,
@@ -154,7 +154,7 @@ const File = ({ reset }) => {
         keyword: null,
         sheet_number: null,
         page_number: null,
-        format: null
+        format: "Bình thường"
     })
 
     useEffect(() => {
@@ -164,6 +164,11 @@ const File = ({ reset }) => {
                 updatedRequest[key] = null
             })
             updatedRequest['identifier'] = "Trung tâm lưu trữ lịch sử"
+            updatedRequest['rights'] = "Công Khai"
+            updatedRequest['organ_id'] = "Phông trung tâm lưu trữ lịch sử"
+            updatedRequest['maintenance'] = "5 năm"
+            updatedRequest['language'] = "Tiếng Việt"
+            updatedRequest['format'] = "Bình thường"
             setRequest(prev => updatedRequest)
             return
         }
@@ -266,6 +271,7 @@ const File = ({ reset }) => {
                                         <div className="flex justify-between">
                                             <div className="w-[50%] px-[10px]">
                                                 {FIELDS_LEFT.map((field, index) => {
+                                                    console.log(field.options)
                                                     const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
                                                     return (
                                                         <div
@@ -281,27 +287,15 @@ const File = ({ reset }) => {
                                                             </label>
 
                                                             {field.type === "select" ? (
-                                                                field.default === true ? (
-                                                                    <Select
-                                                                        disabled={stateForm === "WATCH_FILE"}
-                                                                        onChange={(value) => handleChangeForm(field.key, value)}
-                                                                        className="block mt-[12px]"
-                                                                        options={field.options}
-                                                                        defaultValue={field.options[0]}
-                                                                        value={request[field.key] === null ? "" : request[field.key]}
+                                                                <Select
+                                                                    disabled={stateForm === "WATCH_FILE"}
+                                                                    onChange={(value) => handleChangeForm(field.key, value)}
+                                                                    className="block mt-[12px]"
+                                                                    options={field.options}
+                                                                    defaultValue={field.options[0]}
+                                                                    value={request[field.key] === null ? "" : request[field.key]}
 
-                                                                    />
-                                                                ) : (
-                                                                    <Select
-                                                                        disabled={stateForm === "WATCH_FILE"}
-                                                                        onChange={(value) => handleChangeForm(field.key, value)}
-                                                                        className="block mt-[12px]"
-                                                                        options={field.options}
-                                                                        value={request[field.key] === null ? "" : request[field.key]}
-
-                                                                    />
-                                                                )
-
+                                                                />
                                                             ) : (
                                                                 <Input
                                                                     disabled={stateForm === "WATCH_FILE"}
@@ -335,27 +329,14 @@ const File = ({ reset }) => {
                                                             </label>
 
                                                             {field.type === "select" ? (
-                                                                field.default === true ? (
-                                                                    <Select
-                                                                        disabled={stateForm === "WATCH_FILE"}
-                                                                        onChange={(value) => handleChangeForm(field.key, value)}
-                                                                        className="block mt-[12px]"
-                                                                        options={field.options}
-                                                                        defaultValue={field.options[0]}
-                                                                        value={request[field.key] === null ? "" : request[field.key]}
-
-                                                                    />
-                                                                ) : (
-                                                                    <Select
-                                                                        disabled={stateForm === "WATCH_FILE"}
-                                                                        onChange={(value) => handleChangeForm(field.key, value)}
-                                                                        className="block mt-[12px]"
-                                                                        options={field.options}
-                                                                        value={request[field.key] === null ? "" : request[field.key]}
-
-                                                                    />
-                                                                )
-
+                                                                <Select
+                                                                    disabled={stateForm === "WATCH_FILE"}
+                                                                    onChange={(value) => handleChangeForm(field.key, value)}
+                                                                    className="block mt-[12px]"
+                                                                    options={field.options}
+                                                                    defaultValue={field.options[0]}
+                                                                    value={request[field.key] === null ? "" : request[field.key]}
+                                                                />
                                                             ) : (
                                                                 <Input
                                                                     disabled={stateForm === "WATCH_FILE"}
