@@ -1,23 +1,31 @@
 const initialState = {
-    state: "close",
-    data: {
-        id: null,
-    }
+    state: "CLOSE_FILE",
+    id:null
 }
 
 const formFileReducer = (state = initialState, action) => {
-
     switch (action.type) {
-        case "CLOSE":
+        case "CLOSE_FILE":
             return {
-                state: "close",
+                state: "CLOSE_FILE",
+                id: null
             }
-        case "OPEN": {
-            const cur = {}
-            cur["state"] = "open"
-            cur["data"] = action.payload
-            return cur
-        }
+        case "WATCH_FILE":
+            return {
+                state: "WATCH_FILE",
+                id: action.id
+            }
+        case "EDIT_FILE":
+            return {
+                state: "EDIT_FILE",
+                id: action.id
+            }
+        case "CREATE_FILE":
+            return {
+                state: "CREATE_FILE",
+                id: null
+            }
+
         default:
             return state
     }

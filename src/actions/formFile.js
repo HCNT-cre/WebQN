@@ -1,16 +1,25 @@
 export const CloseFile = () => {
     return {
-        type: "CLOSE"
+        type: "CLOSE_FILE"
     }
 }
 
-export const OpenFile = (state, id = null) => {
-    const newState = {
-        id: id,
-        state: state,
-    }
+export const CreateFile = () => {
     return {
-        type: "OPEN",
-        payload: newState
+        type: "CREATE_FILE"
+    }
+}
+
+export const OpenFile = (id = null) => {
+    return {
+        type: "WATCH_FILE",
+        id: id
+    }
+}
+
+export const EditFile = (id = null) => {
+    return {
+        type: "EDIT_FILE",
+        id: id
     }
 }
