@@ -17,7 +17,7 @@ const API_EXTRACT_OCR = process.env.REACT_APP_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = process.env.REACT_APP_API_DOCUMENT_UPLOAD
 
 
-const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOfFile, govFileID, fileData }) => {
+const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFile, govFileID, fileData }) => {
     const [request, setRequest] = useState({
         gov_file_id: govFileID,
         file: null,
@@ -64,9 +64,9 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, evFilesUploaded, fetchDocumentsOf
 
 
     useEffect(() => {
-        if (evFilesUploaded !== null)
-            setFiles(Array.from(evFilesUploaded.target.files))
-    }, [evFilesUploaded])
+        if (fileUploaded !== null)
+            setFiles(fileUploaded)
+    }, [fileUploaded])
 
     const handleChangePdfFile = (index) => {
         if (files === null || files.length === 0) return null

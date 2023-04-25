@@ -4,6 +4,7 @@ import AddDoc from "./AddDoc"
 import { Table } from "../../../custom/Components"
 import axios from "axios"
 import FixDoc from "./FixDoc"
+import EOFFICE from "./EOFFICE"
 import { DeleteData, GetDataFromIDFile } from "../../../custom/Function"
 import { Button, Popconfirm, Input } from 'antd';
 
@@ -75,7 +76,7 @@ const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, 
 const DocCategory = () => {
     const [stateAddDoc, setStateAddDoc] = useState(false)
     const [stateFixDoc, setStateFixDoc] = useState(false)
-    const [evFilesUploaded, setEvFilesUploaded] = useState(null)
+    const [fileUploaded, setFileUploaded] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [files, setFiles] = useState([])
     const [pdfFile, setPdfFile] = useState(null)
@@ -83,11 +84,13 @@ const DocCategory = () => {
     const [pdfData, setPdfData] = useState(null)
     const [pdfID, setPdfID] = useState(null)
     const [fileData, setFileData] = useState(null)
+    const [stateEoffice, setStateEoffice] = useState(false)
+
     const userPermissionId = useSelector(state => state.user.permission_id)
     const stateDocCategory = useSelector(state => state.docCategory.state)
     const govFileID = useSelector(state => state.docCategory.id)
     const dispatch = useDispatch()
-    
+
     const handleClickOnDocument = async (URL_PDF_FILE, pdfData, pdfID) => {
         setPdfFileLink(URL_PDF_FILE)
         setPdfData(pdfData)
@@ -151,7 +154,7 @@ const DocCategory = () => {
                     <div className="relative  h-[calc(100vh)] top-[20px] pb-[30px] ">
                         <div className="h-full relative overflow-y-scroll w-[calc(100vw-80px)] my-0 mx-auto bg-[#f0f2f5]">
                             <div className="relative">
-                                <button onClick={() => { dispatch({ type: "close", id:govFileID }) }} className="text-[20px] absolute right-0 w-[40px] h-full bg-blue-300 top-0 text-black ">
+                                <button onClick={() => { dispatch({ type: "close", id: govFileID }) }} className="text-[20px] absolute right-0 w-[40px] h-full bg-blue-300 top-0 text-black ">
                                     <i className="fa-solid fa-xmark"></i>
                                 </button>
                                 <div className="bg-blue-300 text-black font-bold py-[8px] px-[24px]">
@@ -191,14 +194,14 @@ const DocCategory = () => {
                                             </label>
                                             <input onClick={(ev) => { ev.target.value = '' }} type='file' id="file-upload" name="file-upload" className="hidden" onChange={(ev) => {
                                                 setStateAddDoc(true)
-                                                setEvFilesUploaded(prev => ev)
+                                                setFileUploaded(Array.from(ev.target.files))
+
                                             }} accept="application/pdf" multiple></input>
                                         </form>
-
                                     </div>
                                     <div className="w-[12.5%] text-white text-center px-[5px] flex">
 
-                                        <button className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px] ">
+                                        <button className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]" onClick={() => setStateEoffice(true)} >
                                             <div className="mr-[8px]">
                                                 <i className="fa-solid fa-magnifying-glass"></i>
                                             </div>
@@ -206,7 +209,6 @@ const DocCategory = () => {
                                         </button>
 
                                     </div>
-
                                 </div>
                                 <Table fieldNames={TABLE_FIELDS} fieldDatas={files} isLoading={isLoading} />
                             </div>
@@ -216,7 +218,8 @@ const DocCategory = () => {
             }
 
             <FixDoc pdfID={pdfID} pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} fileData={fileData} />
-            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} evFilesUploaded={evFilesUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} fileData={fileData} />
+            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} fileUploaded={fileUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} fileData={fileData} />
+            <EOFFICE stateEoffice={stateEoffice} setStateEoffice={setStateEoffice} />
         </>
     )
 }
