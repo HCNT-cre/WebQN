@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, cloneElement} from "react"
+import { useState, useEffect, cloneElement } from "react"
 import DocCategory from "../components/Form/Document/DocCategory"
 import MultimediaCategory from "../components/Form/Multimedia/MultimediaCategory"
 import axios from "axios"
@@ -7,7 +7,7 @@ import { Table } from "../custom/Components"
 import { useSelector, useDispatch } from "react-redux"
 import 'react-toastify/dist/ReactToastify.css';
 import { Button, Input, Select, Popconfirm } from "antd"
-import { OpenFile } from "../actions/formFile"
+import { OpenFile, EditFile, CreateFile } from "../actions/formFile"
 import File from "../components/Form/File/File"
 import { FIELDS_TABLE } from "../storage/FileStorage"
 import { STATE } from "../storage/Storage"
@@ -24,7 +24,9 @@ const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL
 const API_GOV_FILE_DELETE = process.env.REACT_APP_API_GOV_FILE_DELETE
 const API_STORAGE_DELETE_FILE_ORGAN_STORAGE = process.env.REACT_APP_API_STORAGE_DELETE_FILE_ORGAN_STORAGE
 const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL = process.env.REACT_APP_API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL
-const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
+
+
+const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset, state }) => {
     const userPermissionId = useSelector(state => state.user.permission_id)
     const handleClose = () => {
         setOpen(false)
@@ -33,8 +35,8 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     const handleConfirm = () => {
         const DeleteOrganFile = async () => {
             const files = axios.get(API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL)
-            for(const file of files){
-                if(file.file_id === IDFile){
+            for (const file of files) {
+                if (file.file_id === IDFile) {
                     await axios.delete(API_STORAGE_DELETE_FILE_ORGAN_STORAGE + file.id)
                 }
             }
@@ -72,14 +74,18 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     }, [open])
 
 
+    const BUTTON_READ_ONLY = [
+        { icon: <i className="fa-regular fa-folder-open"></i>, title: "Xem hồ sơ", color: "text-[#FF8400]", onclick: () => { dispatch(OpenFile(IDFile)) } }
+    ]
+
     const BUTTON_DEFAULT = [
         { icon: <i className="fa-solid fa-upload"></i>, title: "Thêm văn bản", color: "text-[#537FE7]", onclick: () => { handleClickOnFile(IDFile) } },
         { icon: <i className="fa-solid fa-photo-film"></i>, title: "Thêm tài liệu đa phương tiện", color: "text-[#19376D]", onclick: () => { } },
-        { icon: <i className="fa-regular fa-folder-open"></i>, title: "Xem hồ sơ", color: "text-[#FF8400]", onclick: () => { dispatch(OpenFile("watch_file", IDFile)) } }
+        { icon: <i className="fa-regular fa-folder-open"></i>, title: "Xem hồ sơ", color: "text-[#FF8400]", onclick: () => { dispatch(OpenFile(IDFile)) } }
     ]
 
     const BUTTON_MORE = [
-        { icon: <i className="fa-solid fa-hammer"></i>, title: "Sửa hồ sơ", color: "text-[#E7B10A]", onclick: () => { dispatch(OpenFile("update_file", IDFile)) } },
+        { icon: <i className="fa-solid fa-hammer"></i>, title: "Sửa hồ sơ", color: "text-[#E7B10A]", onclick: () => { dispatch(EditFile(IDFile)) } },
         {
             popup: true,
             element:
@@ -103,33 +109,51 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset }) => {
     return (
         <div>
             <div className="flex flex-wrap">
-                {BUTTON_DEFAULT.map((item) => {
-                    return (
-                        <Button key={GetKey()} className={` hover:bg-blue-300 cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`} onClick={item.onclick} title={item.title}>
-                            {item.icon}
-                        </Button>
-                    )
-                })}
-
-                <div className="relative">
-                    <Button ref={buttonRef} onClick={toggleContent} className=" hover:bg-blue-300 px-[2px] text-[#000] cursor-pointer border-none text-center icon-button" title="Xem thêm">
-                        <i className="fa-solid fa-ellipsis"></i>
-                    </Button>
-                    {showContent &&
-                        <div ref={el => { contentRef.current[1] = el }} className="absolute right-[0] top-[-25px] flex">
-                            {BUTTON_MORE.map((item) => {
-                                if (item.popup) return item.element
+                {
+                    state !== 1 ?
+                        <div className="flex justify-center w-full">
+                            {BUTTON_READ_ONLY.map((item) => {
                                 return (
-                                    <Button key={GetKey()} className={`hover:bg-blue-300 cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`} onClick={item.onclick} title={item.title}>
+                                    <Button key={GetKey()} className={` hover:bg-blue-300 cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`} onClick={item.onclick} title={item.title}>
                                         {item.icon}
                                     </Button>
                                 )
                             })}
+                        </div> :
+                        <div className="flex justify-center">
+                            {BUTTON_DEFAULT.map((item) => {
+                                return (
+                                    <Button key={GetKey()} className={` hover:bg-blue-300 cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`} onClick={item.onclick} title={item.title}>
+                                        {item.icon}
+                                    </Button>
+                                )
+                            })}
+
+                            <div className="relative">
+                                <Button ref={buttonRef} onClick={toggleContent} className=" hover:bg-blue-300 px-[2px] text-[#000] cursor-pointer border-none text-center icon-button" title="Xem thêm">
+                                    <i className="fa-solid fa-ellipsis"></i>
+                                </Button>
+                                {showContent &&
+                                    <div ref={el => { contentRef.current[1] = el }} className="absolute right-[0] top-[-25px] flex">
+                                        {BUTTON_MORE.map((item) => {
+                                            if (item.popup) return item.element
+                                            return (
+                                                <Button key={GetKey()} className={`hover:bg-blue-300 cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`} onClick={item.onclick} title={item.title}>
+                                                    {item.icon}
+                                                </Button>
+                                            )
+                                        })}
+                                    </div>
+                                }
+                            </div>
                         </div>
-                    }
-                </div>
+
+
+                }
+
+
             </div>
-        </div>
+        </div >
     )
 }
 
@@ -144,7 +168,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
     const userPermissionId = useSelector(state => state.user.permission_id)
     const userPermissions = useSelector(state => state.user.permissions)
     const [buttonRef, contentRef, toggleContent, showContent] = useButtonClickOutside(false);
-    
+
     const [search, setSearch] = useState({
         "title": null,
         "organ_id": null,
@@ -187,7 +211,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
                     search["state"] = rawData.state
                     handleSearch()
                 }}>{STATE[rawData.state]}</button>,
-                'Function': newButton || <ButtonFunctionOfEachFile handleClickOnFile={handleClickOnFile} IDFile={rawData.id} reset={reset} />
+                'Function': newButton || <ButtonFunctionOfEachFile state={parseInt(rawData.state)} handleClickOnFile={handleClickOnFile} IDFile={rawData.id} reset={reset} />
             }
             filesArray.push(row)
         }
@@ -226,9 +250,9 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
         fetchFileData();
     }
 
-    useEffect(()=>{
-        dispatch({type: "ADD_FETCH_FILE_ACTION", fetchFileFunction: reset})
-    },[])
+    useEffect(() => {
+        dispatch({ type: "ADD_FETCH_FILE_ACTION", fetchFileFunction: reset })
+    }, [])
 
     const handleSearch = async (ev) => {
         try {
@@ -319,7 +343,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
     const BUTTON_ACTIONS = [
         { title: "Tìm kiếm", btn_class_name: "custom-btn-search", icon: <i className="fa-solid fa-magnifying-glass"></i>, onClick: handleSearch },
         { title: "Xóa bộ lọc", btn_class_name: "custom-btn-clear-filter", icon: <i className="fa-solid fa-sync"></i>, onClick: resetSearch },
-        { title: "Thêm hồ sơ mới", btn_class_name: "custom-btn-add-file", icon: <i className="fa-solid fa-plus"></i>, onClick: () => { dispatch(OpenFile("open_upload")) } },
+        { title: "Thêm hồ sơ mới", btn_class_name: "custom-btn-add-file", icon: <i className="fa-solid fa-plus"></i>, onClick: () => { dispatch(CreateFile()) } },
         { title: "Xuất Excel", btn_class_name: "custom-btn-export-excel", icon: <i className="fa-solid fa-file-excel"></i>, onClick: () => { } },
     ]
 
