@@ -305,7 +305,7 @@ export const ModalCensorship = () => {
 
     const handleClickViewFile = () => {
         if (IDFile === null || IDFile === undefined) return;
-        dispatch(OpenFile("watch_file", IDFile))
+        dispatch(OpenFile(IDFile))
     }
 
     const handleClickViewDocCategory = () => {
