@@ -54,6 +54,13 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset, state }) =
     const dispatch = useDispatch()
     const [open, setOpen] = useState(false);
 
+    const handleClickUploadFile = () => {
+        dispatch({ type: "open", id: IDFile })
+        setTimeout(()=>{
+            document.getElementById("file-upload").click()
+        }, 500)
+    }
+
     useEffect(() => {
         const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1fviqcj.css-dev-only-do-not-override-1fviqcj.ant-popover-placement-top")[0]
 
@@ -79,13 +86,12 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset, state }) =
     ]
 
     const BUTTON_DEFAULT = [
-        { icon: <i className="fa-solid fa-upload"></i>, title: "Thêm văn bản", color: "text-[#537FE7]", onclick: () => { handleClickOnFile(IDFile) } },
+        { icon: <i className="fa-solid fa-upload"></i>, title: "Thêm văn bản", color: "text-[#537FE7]", onclick: () => { handleClickUploadFile() } },
         { icon: <i className="fa-solid fa-photo-film"></i>, title: "Thêm tài liệu đa phương tiện", color: "text-[#19376D]", onclick: () => { } },
-        { icon: <i className="fa-regular fa-folder-open"></i>, title: "Xem hồ sơ", color: "text-[#FF8400]", onclick: () => { dispatch(OpenFile(IDFile)) } }
+        { icon: <i className="fa-regular fa-folder-open"></i>, title: "Sửa hồ sơ", color: "text-[#FF8400]", onclick: () => { dispatch(EditFile(IDFile)) } }
     ]
 
     const BUTTON_MORE = [
-        { icon: <i className="fa-solid fa-hammer"></i>, title: "Sửa hồ sơ", color: "text-[#E7B10A]", onclick: () => { dispatch(EditFile(IDFile)) } },
         {
             popup: true,
             element:
@@ -134,7 +140,7 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset, state }) =
                                     <i className="fa-solid fa-ellipsis"></i>
                                 </Button>
                                 {showContent &&
-                                    <div ref={el => { contentRef.current[1] = el }} className="absolute right-[0] top-[-25px] flex">
+                                    <div ref={el => { contentRef.current[1] = el }} className="absolute right-[0] top-[-25px] flex justify-between">
                                         {BUTTON_MORE.map((item) => {
                                             if (item.popup) return item.element
                                             return (
