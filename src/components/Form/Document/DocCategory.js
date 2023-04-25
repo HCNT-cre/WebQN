@@ -219,7 +219,7 @@ const DocCategory = () => {
 
             <FixDoc pdfID={pdfID} pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} fileData={fileData} />
             <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} fileUploaded={fileUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} fileData={fileData} />
-            <EOFFICE stateEoffice={stateEoffice} setStateEoffice={setStateEoffice} />
+            <EOFFICE stateEoffice={stateEoffice} setStateEoffice={setStateEoffice} fetchDocumentsOfFile={fetchDocumentsOfFile} />
         </>
     )
 }
