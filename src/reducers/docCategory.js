@@ -1,4 +1,3 @@
-
 const docCategoryReducer = (state = false, action) => {
     switch (action.type) {
         case "open":
@@ -6,7 +5,7 @@ const docCategoryReducer = (state = false, action) => {
                 state: true,
                 id: action.id
             }
-        case "close":{
+        case "close": {
             return {
                 state: false,
                 id: action.id
