@@ -2,17 +2,28 @@
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useState } from 'react';
 import { EofficeFile } from '../../../storage/Eoffice';
+import AddDoc from './AddDoc';
+import { useSelector } from 'react-redux';
+import { GetDataFromIDFile } from '../../../custom/Function';
+import axios from 'axios';
+const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile }) => {
 
-const EOFFICE = ({ setStateEoffice, stateEoffice }) => {
     const [select, setSelect] = useState([])
-    const [doc, setDoc] = useState([])
+    const [docs, setDocs] = useState([])
+    const [stateAddDoc, setStateAddDoc] = useState(false)
+    const [govFileID, setGovFileId] = useState(null)
+    const [fileData, setFileData] = useState(null)
+    const [fileUploaded, setFileUploaded] = useState(null)
+
+    const userPermissionId = useSelector(state => state.user.permission_id)
 
     const handleClickFile = (ev) => {
         const { id } = ev.target
         const gov_file_id = id.split("-")[1]
         for (const file of EofficeFile) {
             if (file.gov_file_id === parseInt(gov_file_id)) {
-                setDoc(file.doc)
+                setDocs(file.doc)
+                setGovFileId(file.gov_file_id)
                 setSelect([])
             }
         }
@@ -29,6 +40,30 @@ const EOFFICE = ({ setStateEoffice, stateEoffice }) => {
         }
     }
 
+    const fetchDoc = async () => {
+        const _docs = []
+        for (const doc of docs) {
+            await axios.get(doc.link, {
+                responseType: 'blob',
+            }).then(res => {
+                const uploadedFile = res.data 
+                uploadedFile.name = doc.name
+                _docs.push(uploadedFile);
+            })
+        }
+        setFileUploaded(_docs)
+        setStateAddDoc(true)
+    }
+
+    const fetchFile = async () => {
+        const data = await GetDataFromIDFile(govFileID, userPermissionId)
+        setFileData(data)
+    }
+
+    const handleAddFile = () => {
+        fetchDoc()
+        fetchFile()
+    }
 
     return (
         <>
@@ -48,8 +83,7 @@ const EOFFICE = ({ setStateEoffice, stateEoffice }) => {
                             </div>
                             <div className="pt-[16px] mx-[24px] flex justify-end">
                                 <div className="w-[12.5%] text-center px-[5px] flex">
-                                    <button className="rounded-[5px] h-[30px] flex justify-center w-full px-[16px] items-center text-[12px] font-medium custom-btn-add-file">
-
+                                    <button onClick={handleAddFile} className="rounded-[5px] h-[30px] flex justify-center w-full px-[16px] items-center text-[12px] font-medium custom-btn-add-file">
                                         Thêm văn bản
                                     </button>
 
@@ -77,10 +111,10 @@ const EOFFICE = ({ setStateEoffice, stateEoffice }) => {
                                     </div>
                                     <div className='ml-[24px] h-full w-[50%]'>
                                         <h2 className='text-[28px] font-medium'>Văn bản, Tài liệu</h2>
-                                        {doc.length > 0 &&
+                                        {docs.length > 0 &&
                                             <ul>
                                                 {
-                                                    doc.map((item, index) => {
+                                                    docs.map((item, index) => {
                                                         return (
                                                             <li id={`select-file-${index}`} onClick={handleSelectDoc} data-doesSelected={select.includes(`select-file-${index}`)} className={`font-medium border-b-2 text-[14px] cursor-pointer py-[8px] ${select.includes(`select-file-${index}`) ? "bg-[#e1e1e1]" : ""} `}>
                                                                 <span className='mx-[12px] text-[#ccc]'>
@@ -102,7 +136,7 @@ const EOFFICE = ({ setStateEoffice, stateEoffice }) => {
                 </div>
             }
 
-
+            <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} fileData={fileData} govFileID={govFileID} fetchDocumentsOfFile={fetchDocumentsOfFile} fileUploaded={fileUploaded} />
         </>
     )
 }
