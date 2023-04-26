@@ -66,7 +66,7 @@ const ConvertDataToArrayForRenderTableCell = (table) => {
     return dataTableRender
 }
 
-export const Table = ({ fieldNames, fieldDatas, isLoading, setStateCheckBox, isCheckBox = false }) => {
+export const Table = ({ fieldNames, fieldDatas, isLoading, setStateCheckBox, isCheckBox = false, headerBgColor = "#fafafa" }) => {
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
     const dataTableRenderForTableCell = ConvertDataToArrayForRenderTableCell(fieldDatas)
@@ -108,7 +108,7 @@ export const Table = ({ fieldNames, fieldDatas, isLoading, setStateCheckBox, isC
                 <div className="bg-[#f0f2f5] rounded-[2px] border-[2px] border-solid border-stone-400">
                     <table className="table-fixed w-full">
                         <colgroup></colgroup>
-                        <thead className="bg-[#fafafa]">
+                        <thead className={`bg-[${headerBgColor}]`}>
                             <tr>
                                 {
                                     doesNeedOrder &&

@@ -4,15 +4,12 @@ import { useState } from 'react';
 import { INCOMING_DOC, OUTCOMING_DOC, MARKED_DOC } from '../../../storage/Eoffice';
 import AddDoc from './AddDoc';
 import { useSelector } from 'react-redux';
-import { GetDataFromIDFile, GetKey } from '../../../custom/Function';
+import { GetDataFromIDFile } from '../../../custom/Function';
 import axios from 'axios';
 import { Table } from '../../../custom/Components'
 import { Button, Input, Menu } from 'antd';
 import Sider from 'antd/es/layout/Sider';
-import UserOutlined from '@ant-design/icons/UserOutlined';
-import LaptopOutlined from '@ant-design/icons/LaptopOutlined';
-import NotificationOutlined from '@ant-design/icons/NotificationOutlined';
-import { createElement } from 'react';
+
 const Search = Input.Search;
 
 const TABLE_FIELDS = [
@@ -46,6 +43,7 @@ const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile, govFileI
     const [dataTable, setDataTable] = useState([])
 
     const handleClickFile = (id) => {
+        setIsLoading(true)
         const gov_file_id = id.split("-")[1]
         for (const tab of SIDEBAR) {
             if (tab.id === parseInt(gov_file_id)) {
@@ -60,6 +58,7 @@ const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile, govFileI
                 setGovFileIdOfDoc(tab.gov_file_id_of_doc)
             }
         }
+        setIsLoading(false)
     }
 
     const item = [
@@ -168,8 +167,10 @@ const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile, govFileI
     }
 
     const handleAddFile = () => {
-        fetchDoc()
+        setIsLoading(true)
         fetchFile()
+        fetchDoc()
+        setIsLoading(false)
     }
 
     return (
@@ -212,7 +213,6 @@ const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile, govFileI
                                         <div className="pt-[12px] mx-[24px] flex justify-between">
                                             <div className='flex'>
                                                 <Search allowClear placeholder="Nhập tên văn bản" enterButton />
-                                                <Button className='ml-[8px] text-white bg-[#00f]'>Tìm kiếm nâng cao</Button>
                                             </div>
                                             <div className="w-[12.5%] text-center px-[5px] flex">
                                                 <button onClick={handleAddFile} className="rounded-[5px] h-[30px] flex justify-center w-full px-[16px] items-center text-[12px] font-medium custom-btn-add-file">
@@ -222,7 +222,7 @@ const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile, govFileI
                                         </div>
                                         <div className='mt-[16px]'>
                                             <h2 className='text-[20px] pl-[24px] font-medium'>Văn bản, Tài liệu</h2>
-                                            <Table isLoading={isLoading} setStateCheckBox={setStateCheckBox} fieldNames={TABLE_FIELDS} fieldDatas={dataTable} isCheckBox={true} />
+                                            <Table isLoading={isLoading} setStateCheckBox={setStateCheckBox} fieldNames={TABLE_FIELDS} fieldDatas={dataTable} isCheckBox={true} headerBgColor='#ccc'/>
                                         </div>
 
                                     </div>
