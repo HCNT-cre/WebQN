@@ -1,54 +1,162 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useState } from 'react';
-import { EofficeFile } from '../../../storage/Eoffice';
+import { INCOMING_DOC, OUTCOMING_DOC, MARKED_DOC } from '../../../storage/Eoffice';
 import AddDoc from './AddDoc';
 import { useSelector } from 'react-redux';
-import { GetDataFromIDFile } from '../../../custom/Function';
+import { GetDataFromIDFile, GetKey } from '../../../custom/Function';
 import axios from 'axios';
-const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile, govFileID}) => {
+import { Table } from '../../../custom/Components'
+import { Button, Input, Menu } from 'antd';
+import Sider from 'antd/es/layout/Sider';
+import UserOutlined from '@ant-design/icons/UserOutlined';
+import LaptopOutlined from '@ant-design/icons/LaptopOutlined';
+import NotificationOutlined from '@ant-design/icons/NotificationOutlined';
+import { createElement } from 'react';
+const Search = Input.Search;
 
-    const [select, setSelect] = useState([])
+const TABLE_FIELDS = [
+    { title: "Số ký hiệu", width: "100%" },
+    { title: "Trích yếu", width: "200%" },
+    { title: "Tên văn bản", width: "100%" }]
+
+const SIDEBAR = [
+    { id: 1, docs: INCOMING_DOC, gov_file_id_of_doc: 39 },
+    { id: 2, docs: OUTCOMING_DOC, gov_file_id_of_doc: 39 },
+    { id: 3, docs: MARKED_DOC, gov_file_id_of_doc: 39 },
+    { id: 4, docs: INCOMING_DOC, gov_file_id_of_doc: 39 },
+    { id: 5, docs: OUTCOMING_DOC, gov_file_id_of_doc: 39 },
+    { id: 6, docs: MARKED_DOC, gov_file_id_of_doc: 39 },
+    { id: 7, docs: INCOMING_DOC, gov_file_id_of_doc: 39 },
+    { id: 8, docs: OUTCOMING_DOC, gov_file_id_of_doc: 39 },
+    { id: 9, docs: MARKED_DOC, gov_file_id_of_doc: 39 }
+]
+
+
+const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile, govFileID }) => {
+
     const [docs, setDocs] = useState([])
     const [stateAddDoc, setStateAddDoc] = useState(false)
     const [fileData, setFileData] = useState(null)
     const [fileUploaded, setFileUploaded] = useState(null)
     const userPermissionId = useSelector(state => state.user.permission_id)
     const [govFileIdOfDoc, setGovFileIdOfDoc] = useState(null)
+    const [stateCheckBox, setStateCheckBox] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
+    const [dataTable, setDataTable] = useState([])
 
-    const handleClickFile = (ev) => {
-        const { id } = ev.target
+    const handleClickFile = (id) => {
         const gov_file_id = id.split("-")[1]
-        for (const file of EofficeFile) {
-            if (file.gov_file_id_of_doc === parseInt(gov_file_id)) {
-                setDocs(file.doc)
-                setGovFileIdOfDoc(file.gov_file_id_of_doc)
-                setSelect([])
+        for (const tab of SIDEBAR) {
+            if (tab.id === parseInt(gov_file_id)) {
+                setDocs(tab.docs)
+                const _doc = []
+                for (const doc of tab.docs) {
+                    let __doc = { ...doc }
+                    delete __doc.link
+                    _doc.push(__doc)
+                }
+                setDataTable(_doc)
+                setGovFileIdOfDoc(tab.gov_file_id_of_doc)
             }
         }
     }
 
-    const handleSelectDoc = (ev) => {
-        const { id, dataset } = ev.target;
-        const doesselected = dataset.doesselected === "true"
-        if (!doesselected) {
-            setSelect([...select, id]);
+    const item = [
+        {
+            key: 1,
+            icon:
+                <span className='mx-[12px] text-[#FF8400]'>
+                    <i className="fa-solid fa-folder"></i>,
+                </span>,
+            label: "Văn bản đến",
+            children: [
+                {
+                    id: "file-1",
+                    key: "sub-1",
+                    label: "Văn bản đến cần xử lý",
+                    onClick: () => { handleClickFile("file-1") }
+                },
+                {
+                    id: "file-2",
+                    key: "sub-2",
+                    label: "Văn bản đến có ký số",
+                    onClick: () => { handleClickFile("file-2") }
+                },
+                {
+                    id: "file-3",
+                    key: "sub-3",
+                    label: "Văn bản đến không có ký số",
+                    onClick: () => { handleClickFile("file-3") }
+                },
+                {
+                    id: "file-4",
+                    key: "sub-4",
+                    label: "Văn bản đến đã xử lý",
+                    onClick: () => { handleClickFile("file-4") }
+                }
+            ]
+        },
+        {
+            key: 2,
+            icon: <span className='mx-[12px] text-[#FF8400]'>
+                <i className="fa-solid fa-folder"></i>,
+            </span>,
+            label: "Văn bản đi",
+            children: [
+                {
+                    id: "file-5",
+                    key: "sub-5",
+                    label: "Văn bản đi cần xử lý",
+                    onClick: () => { handleClickFile("file-5") }
+                },
+                {
+                    id: "file-6",
+                    key: "sub-6",
+                    label: "Văn bản đi có ký số",
+                    onClick: () => { handleClickFile("file-6") }
+                },
+                {
+                    id: "file-7",
+                    key: "sub-7",
+                    label: "Văn bản đi không có ký số",
+                    onClick: () => { handleClickFile("file-7") }
+                },
+                {
+                    id: "file-8",
+                    key: "sub-8",
+                    label: "Văn bản đến đã xử lý",
+                    onClick: () => { handleClickFile("file-8") }
+                }
+            ]
+        },
+        {
+            key: 3,
+            icon: <span className='mx-[12px] text-[#FF8400]'>
+                <i className="fa-solid fa-folder"></i>,
+            </span>,
+            label: "Văn bản đánh dấu",
+            id: `file-9`,
+            onClick: () => { handleClickFile("file-9") }
         }
-        else {
-            setSelect(select.filter(item => item !== id));
-        }
-    }
+    ]
+
 
     const fetchDoc = async () => {
         const _docs = []
         for (const doc of docs) {
-            await axios.get(doc.link, {
-                responseType: 'blob',
-            }).then(res => {
-                const uploadedFile = res.data 
-                uploadedFile.name = doc.name
-                _docs.push(uploadedFile);
-            })
+            for (const cb of stateCheckBox) {
+                const idOfCb = parseInt(cb.substring(cb.indexOf("checkbox") + "checkbox".length))
+                if (doc.id === idOfCb) {
+                    await axios.get(doc.link, {
+                        responseType: 'blob',
+                    }).then(res => {
+                        const uploadedFile = res.data
+                        uploadedFile.name = doc.doc_name
+                        _docs.push(uploadedFile);
+                    })
+                }
+            }
         }
         setFileUploaded(_docs)
         setStateAddDoc(true)
@@ -80,55 +188,46 @@ const EOFFICE = ({ setStateEoffice, stateEoffice, fetchDocumentsOfFile, govFileI
 
                                 </div>
                             </div>
-                            <div className="pt-[16px] mx-[24px] flex justify-end">
-                                <div className="w-[12.5%] text-center px-[5px] flex">
-                                    <button onClick={handleAddFile} className="rounded-[5px] h-[30px] flex justify-center w-full px-[16px] items-center text-[12px] font-medium custom-btn-add-file">
-                                        Thêm văn bản
-                                    </button>
 
-                                </div>
-                            </div>
 
                             <div className="w-full h-full  py-[24px] bg-[#f0f2f5]">
                                 <div className='flex h-full'>
-                                    <div className='ml-[24px] h-full w-[50%] border-r-[4px]'>
-                                        <h2 className='text-[28px] font-medium'>Hồ sơ</h2>
-                                        <ul>
-                                            {EofficeFile.map((item, index) => {
-                                                return (
-                                                    <li id={`file-${item.gov_file_id_of_doc}`} onClick={handleClickFile} className='font-medium border-b-2 text-[14px] cursor-pointer py-[8px] hover:bg-[#e1e1e1]'>
-                                                        <span className='mx-[12px] text-[#ccc]'>
-                                                            <i className="fa-solid fa-folder"></i>
-                                                        </span>
-                                                        {item.file_name}
-                                                    </li>
-                                                )
-                                            })}
+                                    <div className='ml-[24px] h-full w-[20%] border-r-[4px] pr-[8px]'>
 
-                                        </ul>
 
+                                        <Sider width={"100%"}>
+                                            <Menu mode="inline"
+                                                defaultSelectedKeys={['1']}
+                                                defaultOpenKeys={['sub1']}
+                                                style={{
+                                                    height: '100%',
+                                                    borderRight: 0,
+                                                    backgroundColor: '#e1e1e1'
+                                                }}
+                                                items={item}
+                                            />
+                                        </Sider>
                                     </div>
-                                    <div className='ml-[24px] h-full w-[50%]'>
-                                        <h2 className='text-[28px] font-medium'>Văn bản, Tài liệu</h2>
-                                        {docs.length > 0 &&
-                                            <ul>
-                                                {
-                                                    docs.map((item, index) => {
-                                                        return (
-                                                            <li id={`select-file-${index}`} onClick={handleSelectDoc} data-doesselected={select.includes(`select-file-${index}`)} className={`font-medium border-b-2 text-[14px] cursor-pointer py-[8px] ${select.includes(`select-file-${index}`) ? "bg-[#e1e1e1]" : ""} `}>
-                                                                <span className='mx-[12px] text-[#ccc]'>
-                                                                    <i className="fa-solid fa-file"></i>
-                                                                </span>
-                                                                {item.name}
-                                                            </li>
-                                                        )
-                                                    })
-                                                }
-                                            </ul>
-                                        }
+                                    <div className='ml-[24px] h-full w-[80%]'>
+                                        <div className="pt-[12px] mx-[24px] flex justify-between">
+                                            <div className='flex'>
+                                                <Search allowClear placeholder="Nhập tên văn bản" enterButton />
+                                                <Button className='ml-[8px] text-white bg-[#00f]'>Tìm kiếm nâng cao</Button>
+                                            </div>
+                                            <div className="w-[12.5%] text-center px-[5px] flex">
+                                                <button onClick={handleAddFile} className="rounded-[5px] h-[30px] flex justify-center w-full px-[16px] items-center text-[12px] font-medium custom-btn-add-file">
+                                                    Thêm văn bản
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div className='mt-[16px]'>
+                                            <h2 className='text-[20px] pl-[24px] font-medium'>Văn bản, Tài liệu</h2>
+                                            <Table isLoading={isLoading} setStateCheckBox={setStateCheckBox} fieldNames={TABLE_FIELDS} fieldDatas={dataTable} isCheckBox={true} />
+                                        </div>
 
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
