@@ -29,15 +29,14 @@ import { useEffect } from "react";
 function LoggedIn() {
     const dispatch = useDispatch();
     const navigate = useNavigate()
-    
+
     useEffect(() => {
         dispatch({ type: "LOGINED" });
         navigate("/")
     }, [])
-    
+
     return (
-        <>
-        </>
+        <div></div>
     )
 }
 
@@ -48,30 +47,22 @@ const App = () => {
     function loginPage() {
         if (isLogin !== 'true')
             return (
-                <>
-                    <Login />
-                </>
+                <Login />
             )
-        
+
         return (
-            <>
-                <Navigate to="/" />
-            </>
+            <Navigate to="/" />
         )
     }
 
     function loginSSOPage() {
         if (isLogin !== 'true')
             return (
-                <>
-                    <LoginSSO />
-                </>
+                <LoginSSO />
             )
-        
+
         return (
-            <>
-                <Navigate to="/" />
-            </>
+            <Navigate to="/" />
         )
     }
 
@@ -101,7 +92,7 @@ const App = () => {
             path: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop",
             element: <HoSoTaiLieuGiaoNopLS />,
         },
-      
+
         {
             path: "/luu-tru-lich-su/kho-luu-tru-lich-su",
             element: <KhoLuuTruLichSu />,
@@ -162,7 +153,7 @@ const App = () => {
                     <Route path="/dang-nhap-sso" element={loginSSOPage()} />
                     <Route path="/logged-in" element={<LoggedIn />} />
 
-                        
+
                     {routes.map((route, index) => (
                         <Route
                             key={index}
