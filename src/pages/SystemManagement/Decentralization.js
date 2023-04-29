@@ -5,7 +5,7 @@ import { Checkbox } from "antd";
 import { useEffect, useState } from "react";
 import { Table } from "../../custom/Components"
 import { LIST_PERMISSION } from "../../storage/Storage";
-import { notifyError, notifySuccess } from "../../custom/Function";
+import { GetKey, notifyError, notifySuccess } from "../../custom/Function";
 import axios from "axios";
 
 const API_GROUP_PERMISSION = process.env.REACT_APP_API_GROUP_PERMISSION
@@ -130,8 +130,6 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
         } catch (error) {
             notifyError("Đã có lỗi xảy ra")
         }
-
-
     }
 
     const handleChangeGroupName = (e) => {
@@ -179,7 +177,7 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
                                 {choosePermission.map((item, index) => {
                                     const doesSelected = selectPermission.includes(item.id)
                                     return (
-                                        <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} onClick={() => handleSelectPermission(item.id)} key={index}>
+                                        <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} onClick={() => handleSelectPermission(item.id)} key={GetKey()}>
                                             {item.name}
                                         </li>
                                     )
@@ -191,13 +189,13 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
 
                             <Button className="w-[2px] rounded-[50%]" onClick={handleRemovePermission}>
                                 <span className="text-[10px] flex items-center justify-center">
-                                    <i class="fa-solid fa-left-long"></i>
+                                    <i className="fa-solid fa-left-long"></i>
                                 </span>
                             </Button>
 
                             <Button className="w-[2px] rounded-[50%]" onClick={handleAddPermission}>
                                 <span className="text-[10px] flex items-center justify-center">
-                                    <i class="fa-solid fa-right-long"></i>
+                                    <i className="fa-solid fa-right-long"></i>
                                 </span>
                             </Button>
 
@@ -207,7 +205,7 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
                             <ul className="h-[200px] overflow-auto">
                                 {chosenPermission.map((item, index) => {
                                     const doesSelected = selectAddedPermission.includes(item.id)
-                                    return <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} key={index} onClick={() => handleSelectAddedPermission(item.id)}>{item.name}</li>
+                                    return <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} key={GetKey()} onClick={() => handleSelectAddedPermission(item.id)}>{item.name}</li>
                                 })}
                             </ul>
                         </div>
@@ -254,13 +252,11 @@ const Group = ({ stateGroup, setStateGroup }) => {
                 </div>
                 <div>
                     <div className="py-[4px] border-b-4 font-medium cursor-pointer">
-                        <Checkbox className="mr-[8px]" />
                         Nhóm
                     </div>
                     {groups.map((group, index) => {
                         return (
-                            <div className="py-[4px] font-medium cursor-pointer" onClick={() => setStateGroupChange({ action: "CHANGE_GROUP_PERMISSION", group: group })}>
-                                <Checkbox className="mr-[8px]" />
+                            <div key={GetKey()} className="py-[4px] font-medium cursor-pointer" onClick={() => setStateGroupChange({ action: "CHANGE_GROUP_PERMISSION", group: group })}>
                                 {group.name}
                             </div>
                         )
@@ -279,9 +275,9 @@ const CreateUser = ({ setStateUserChange, reFetchUser }) => {
     const [request, setRequest] = useState({
         username: "",
         password: "",
-        first_name:"",
-        last_name:"",
-        email:""
+        first_name: "",
+        last_name: "",
+        email: ""
     })
 
     const handleChangeRequest = (e) => {
@@ -375,21 +371,20 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
 
 
     const user = stateUserChange === null ? null : stateUserChange.user
-    const state = stateUserChange === null ? null : stateUserChange.state
 
     useEffect(() => {
         const getGroupPermission = () => {
             if (user !== null) {
-                setChosenPermission(user.permissions)
-                const newPermission = LIST_PERMISSION.filter((item) => !user.permissions.some((i) => i.id === item.id))
+                setChosenPermission(user.permission)
+                const newPermission = LIST_PERMISSION.filter((item) => !user.permission.some((i) => i.id === item.id))
                 setChoosePermission(newPermission)
             } else setChoosePermission(LIST_PERMISSION)
         }
 
         const getGroup = () => {
             if (user !== null) {
-                setChosenGroup(user.groups)
-                const newGroup = LIST_GROUP.filter((item) => !user.groups.some((i) => i.id === item.id))
+                setChosenGroup(user.group)
+                const newGroup = LIST_GROUP.filter((item) => !user.group.some((i) => i.id === item.id))
                 setChooseGroup(newGroup)
             } else setChooseGroup(LIST_GROUP)
         }
@@ -398,6 +393,7 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
         getGroupPermission()
     }, [user])
 
+    console.log(user)
     const handleSelectPermission = (id) => {
         if (selectPermission.includes(id)) {
             setSelectPermission(selectPermission.filter((i) => i !== id))
@@ -451,15 +447,15 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
     }
 
     const handleSelectAddedGroup = (id) => {
-        if (selectAddedPermission.includes(id)) {
-            setSelectAddedPermission(selectAddedPermission.filter((i) => i !== id))
+        if (selectAddedGroup.includes(id)) {
+            setSelectAddedGroup(selectAddedGroup.filter((i) => i !== id))
         } else {
-            setSelectAddedPermission([...selectAddedPermission, id])
+            setSelectAddedGroup([...selectAddedGroup, id])
         }
     }
 
     const handleAddGroup = () => {
-        const selectedGroup = LIST_PERMISSION.filter((item) => selectPermission.includes(item.id))
+        const selectedGroup = LIST_GROUP.filter((item) => selectGroup.includes(item.id))
         setChosenGroup((prev) => {
             const newGroup = prev.concat(selectedGroup)
             return newGroup
@@ -474,9 +470,9 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
     }
 
     const handleRemoveGroup = () => {
-        const selectedPermisson = chosenGroup.filter((item) => selectAddedGroup.includes(item.id))
+        const selectedGroup = chosenGroup.filter((item) => selectAddedGroup.includes(item.id))
         setChooseGroup((prev) => {
-            const newGroup = prev.concat(selectedPermisson)
+            const newGroup = prev.concat(selectedGroup)
             return newGroup
         })
         setChosenGroup((prev) => {
@@ -486,12 +482,32 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
         setSelectAddedGroup([])
     }
 
+    const handleSubmitUserPermission = () => {
+        try {
+            axios.put(API_USER_PERMISSION + user.id, { permission: chosenPermission, group: chosenGroup })
+            notifySuccess("Thêm quyền cho người dùng thành công")
+            setTimeout(() => {
+                reFetchUser()
+            }, 500)
+        } catch (error) {
+            notifyError("Đã có lỗi xảy ra")
+        }
+    }
+
+    const handleDeleteUser = () => {
+        axios.delete(API_USER_PERMISSION + user.id)
+
+        setTimeout(() => {
+            reFetchUser()
+            notifySuccess("Xóa người dùng thành công")
+        }, 500)
+    }
+
     return (
         <div className="mb-[50px]">
             <div className="flex justify-between">
                 <h2 className="font-medium text-[20px]">{ }</h2>
                 <Button onClick={() => setStateUserChange(null)}>Đóng</Button>
-
             </div>
 
 
@@ -507,7 +523,7 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
                                 {chooseGroup.map((item, index) => {
                                     const doesSelected = selectGroup.includes(item.id)
                                     return (
-                                        <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} onClick={() => handleSelectPermission(item.id)} key={index}>
+                                        <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} onClick={() => handleSelectGroup(item.id)} key={GetKey()}>
                                             {item.name}
                                         </li>
                                     )
@@ -517,15 +533,15 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
                         </div>
                         <div className="flex flex-col justify-center mx-[2px]">
 
-                            <Button className="w-[2px] rounded-[50%]" onClick={handleRemovePermission}>
+                            <Button className="w-[2px] rounded-[50%]" onClick={handleRemoveGroup}>
                                 <span className="text-[10px] flex items-center justify-center">
-                                    <i class="fa-solid fa-left-long"></i>
+                                    <i className="fa-solid fa-left-long"></i>
                                 </span>
                             </Button>
 
-                            <Button className="w-[2px] rounded-[50%]" onClick={handleAddPermission}>
+                            <Button className="w-[2px] rounded-[50%]" onClick={handleAddGroup}>
                                 <span className="text-[10px] flex items-center justify-center">
-                                    <i class="fa-solid fa-right-long"></i>
+                                    <i className="fa-solid fa-right-long"></i>
                                 </span>
                             </Button>
 
@@ -533,9 +549,9 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
                         <div className="w-[45%] flex flex-col border-solid border-[2px] rounded-[5px] p-[8px] border-black">
                             <h2 className="mb-[4px]">Những nhóm đã chọn</h2>
                             <ul className="h-[200px] overflow-auto">
-                                {chooseGroup.map((item, index) => {
-                                    const doesSelected = selectAddedPermission.includes(item.id)
-                                    return <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} key={index} onClick={() => handleSelectAddedPermission(item.id)}>{item.name}</li>
+                                {chosenGroup.map((item, index) => {
+                                    const doesSelected = selectAddedGroup.includes(item.id)
+                                    return <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} key={GetKey()} onClick={() => handleSelectAddedGroup(item.id)}>{item.name}</li>
                                 })}
                             </ul>
                         </div>
@@ -553,7 +569,7 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
                                 {choosePermission.map((item, index) => {
                                     const doesSelected = selectPermission.includes(item.id)
                                     return (
-                                        <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} onClick={() => handleSelectPermission(item.id)} key={index}>
+                                        <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} onClick={() => handleSelectPermission(item.id)} key={GetKey()}>
                                             {item.name}
                                         </li>
                                     )
@@ -565,13 +581,13 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
 
                             <Button className="w-[2px] rounded-[50%]" onClick={handleRemovePermission}>
                                 <span className="text-[10px] flex items-center justify-center">
-                                    <i class="fa-solid fa-left-long"></i>
+                                    <i className="fa-solid fa-left-long"></i>
                                 </span>
                             </Button>
 
                             <Button className="w-[2px] rounded-[50%]" onClick={handleAddPermission}>
                                 <span className="text-[10px] flex items-center justify-center">
-                                    <i class="fa-solid fa-right-long"></i>
+                                    <i className="fa-solid fa-right-long"></i>
                                 </span>
                             </Button>
 
@@ -581,12 +597,22 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
                             <ul className="h-[200px] overflow-auto">
                                 {chosenPermission.map((item, index) => {
                                     const doesSelected = selectAddedPermission.includes(item.id)
-                                    return <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} key={index} onClick={() => handleSelectAddedPermission(item.id)}>{item.name}</li>
+                                    return <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} key={GetKey()} onClick={() => handleSelectAddedPermission(item.id)}>{item.name}</li>
                                 })}
                             </ul>
                         </div>
                     </div>
                 </div>
+
+            </div>
+
+            <div className="flex justify-end mt-[16px]">
+                {
+                    user === null ?
+                        <Button className="mr-[12px]" danger onClick={handleDeleteUser}>Xóa</Button>
+                        : ""
+                }
+                <Button onClick={handleSubmitUserPermission}>Lưu</Button>
             </div>
         </div>
     )
@@ -604,6 +630,7 @@ const User = ({ stateUser, setStateUser }) => {
     const handleClickAddUser = () => {
         setStateUserChange({ state: "CREATE_USER", user: null })
     }
+
 
     const reFetchUser = async () => {
         const res = await axios.get(API_USER_PERMISSION)
@@ -652,7 +679,7 @@ const User = ({ stateUser, setStateUser }) => {
             </div>
                 :
                 <div>
-                    {stateUserChange.state === "CREATE_USER" ? <CreateUser setStateUserChange={setStateUserChange} reFetchUser={reFetchUser}  /> : <UserChange setStateUser={setStateUser} stateUserChange={setStateUserChange} reFetchUser={reFetchUser} LIST_GROUP={listGroup} />
+                    {stateUserChange.state === "CREATE_USER" ? <CreateUser setStateUserChange={setStateUserChange} reFetchUser={reFetchUser} /> : <UserChange setStateUser={setStateUser} setStateUserChange={setStateUserChange} stateUserChange={stateUserChange} reFetchUser={reFetchUser} LIST_GROUP={listGroup} />
                     }
                 </div>}
 
