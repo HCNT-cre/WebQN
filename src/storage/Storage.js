@@ -58,3 +58,12 @@ export const TABS_SIDEBAR = [
         ]
     },
 ]
+
+export const LIST_PERMISSION = [
+    { id: 1, name: "admin | log entry | Can add log entry" },
+    { id: 2, name: "admin | log entry | Can change log entry" },
+    { id: 3, name: "admin | log entry | Can view log entry" },
+    { id: 4, name: "admin | log entry | Can add log entry" },
+    { id: 5, name: "admin | log entry | Can change log entry" },
+    { id: 6, name: "admin | log entry | Can view log entry" },
+]
