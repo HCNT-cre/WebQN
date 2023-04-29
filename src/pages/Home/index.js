@@ -29,6 +29,21 @@ const Home = () => {
       });
   }, []);
 
+  const options = {
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: function (context) {
+            const label = context.label;
+            const value = context.parsed;
+            const total = context.dataset.data.reduce((a, b) => a + b);
+            const percentage = ((value / total) * 100).toFixed(2);
+            return `${label}: ${value} (${percentage}%)`;
+          },
+        },
+      },
+    },
+  };
   const countByStatus = {
     '1': 0, //Hồ sơ mở
     '2': 0, //Hồ sơ đóng
@@ -213,7 +228,7 @@ const Home = () => {
           Thống kê
         </div>
         <div className="w-[550px] h-[550px] ">
-          <Pie data={data} />
+          <Pie data={data} options={options}/>
         </div>
       </div>
     </div>
