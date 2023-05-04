@@ -43,10 +43,8 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
         mode: null,
         confidence_level: null,
         format: null,
-        doc_name: null,
     });
 
-    const [docName, setDocName] = useState(null)
     const [currentTab, setCurrentTab] = useState(0)
     const [pdfFile, setPdfFile] = useState(null);
     const [files, setFiles] = useState(null)
@@ -89,8 +87,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
 
     useEffect(() => {
         handleChangePdfFile(0)
-        if(files !== null && files.length > 0)
-            setDocName(files[0].name)
+
     }, [files])
 
     // tab operations
@@ -102,7 +99,6 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
         })
         handleChangePdfFile(index)
         setCurrentTab(index);
-        setDocName(files[index].name)
     };
 
     const handleCloseAllTab = () => {
@@ -197,7 +193,6 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
         const num_page = Number(document.getElementsByClassName("rpv-toolbar__label")[0].textContent.split(" ")[1])
         request["num_page"] = num_page
         request["file"] = files[0]
-        request["doc_name"] = docName
         const formDataValidated = ValidateFormDoc(request)
         try {
             setIsLoading(true)
