@@ -3,9 +3,9 @@ import { Spin } from "antd";
 import { FaSearch } from "react-icons/fa";
 import "./searchbar.css";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { OpenFile } from "../../actions/formFile";
+import {useSelector } from "react-redux";
 import Doc from "./Doc";
+import File from "./File";
 
 const API_SEARCH = process.env.REACT_APP_API_SEARCH;
 const API_GOV_FILE_GET = process.env.REACT_APP_API_GOV_FILE_GET
@@ -21,14 +21,12 @@ const Searchbar = () => {
 	const [textSearch, setTextSearch] = useState("");
 	const [numberOfData, setNumberOfData] = useState(-1);
 	const userPermissionId = useSelector(state => state.user.permission_id)
-
+	const [stateFile, setStateFile] = useState(false)
 	const getFileName = async (items) => {
 		const searchedFileWithFileName = []
 		try {
 			for (const item of items) {
-				console.log(item)
 				const response = await axios.get(API_GOV_FILE_GET + "id=" + item.gov_file_id + "&perm_token=" + userPermissionId)
-				console.log(response.data)
 				searchedFileWithFileName.push({
 					...item,
 					file_name: response.data[0].title
@@ -66,14 +64,17 @@ const Searchbar = () => {
 
 	};
 
-	const viewFile = (idFile, idDoc) => {
+	const viewDoc = (idFile, idDoc) => {
 		setIdDoc(idDoc)
 		setGovFileId(idFile)
 		setStateDoc(true)
 	};
 
-	console.log(numberOfData)
-	console.log(searchedFile)
+	const viewFile = (idFile) => {
+		setStateFile(true)
+		setGovFileId(idFile)
+	}
+
 	return (
 		<Fragment>
 			<div className="bg-white h-[80vh] relative">
@@ -117,13 +118,13 @@ const Searchbar = () => {
 									<div className="border-[2px] border-solid p-[8px] rounded-[5px] mb-[16px]">
 										<div className="flex justify-left items-center text-[20px]">
 											<span
-												onClick={() => viewFile(file.gov_file_id, file.doc_id)}
+												onClick={() => viewFile(file.gov_file_id)}
 												className="cursor-pointer text-[rgba(0,0,0,.45)]"
 											>
 												{file.file_name}
 											</span>
 											&nbsp;/ &nbsp;
-											<span className="cursor-pointer" onClick={() => { viewFile(file.gov_file_id, file.doc_id) }}>{file.doc_name}</span>
+											<span className="cursor-pointer" onClick={() => { viewDoc(file.gov_file_id, file.doc_id) }}>{file.doc_name}</span>
 										</div>
 										<div className="font-bold">
 											{textSearch}
@@ -135,6 +136,7 @@ const Searchbar = () => {
 				</div>
 			</div>
 			<Doc stateFixDoc={stateDoc} setStateFixDoc={setStateDoc} id={idDOc} govFileId={govFileId} />
+			<File stateFile={stateFile} setStateFile={setStateFile} govFileId={govFileId}/>
 		</Fragment>
 
 	);
