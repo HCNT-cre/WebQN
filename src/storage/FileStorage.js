@@ -13,23 +13,23 @@ export const FIELDS_TABLE = [
 ]
 
 export const IDENTIFIER_CODE = {
-    "Trung tâm lưu trữ lịch sử": "001.03.34.H48",
-    "Sở giáo dục và đào tạo": "001.03.34.J09",
-    "Sở thông tin và truyền thông": "001.09.34.K21",
+    "Trung tâm Lưu trữ lịch sử": "001.03.34.H48",
+    "Sở Giáo dục và Đào tạo": "001.03.34.J09",
+    "Sở Thông tin và Truyền thông": "001.09.34.K21",
     "UBND tỉnh Quảng Ngãi": "020.03.34.H01",
 }
 
 export const IDENTIFIER = [
-    { label: "Trung tâm lưu trữ lịch sử" , value: "Trung tâm lưu trữ lịch sử"},
-    { label: "Sở giáo dục và đào tạo", value: "Sở giáo dục và đào tạo" },
-    { label: "Sở thông tin và truyền thông", value: "Sở thông tin và truyền thông" },
+    { label: "Trung tâm Lưu trữ lịch sử" , value: "Trung tâm Lưu trữ lịch sử"},
+    { label: "Sở Giáo dục và Đào tạo", value: "Sở Giáo dục và Đào tạo" },
+    { label: "Sở Thông tin và Truyền thông", value: "Sở Thông tin và Truyền thông" },
     { label: "UBND tỉnh Quảng Ngãi", value: "UBND tỉnh Quảng Ngãi" },
 ]
 
 export const ORGAN_ID = [
-    { label: "Phông trung tâm lưu trữ lịch sử" , value: "Phông trung tâm lưu trữ lịch sử"},
-    { label: "Phông sở thông tin và truyền thông", value: "Phông sở thông tin và truyền thông" },
-    { label: "Phông sở giáo dục và đào tạo", value: "Phông sở giáo dục và đào tạo" },
+    { label: "Phông trung tâm Lưu trữ lịch sử" , value: "Phông trung tâm Lưu trữ lịch sử"},
+    { label: "Phông sở Thông tin và Truyền thông", value: "Phông sở Thông tin và Truyền thông" },
+    { label: "Phông sở Giáo dục và Đào tạo", value: "Phông sở Giáo dục và Đào tạo" },
 ]
 
 export const MAINTENANCE = [

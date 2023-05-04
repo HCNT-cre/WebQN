@@ -115,8 +115,8 @@ const File = ({ stateFile, setStateFile, govFileId }) => {
     const [request, setRequest] = useState({
         rights: "Công Khai",
         gov_file_code: null,
-        identifier: "Trung tâm lưu trữ lịch sử",
-        organ_id: "Phông trung tâm lưu trữ lịch sử",
+        identifier: "Trung tâm Lưu trữ lịch sử",
+        organ_id: "Phông trung tâm Lưu trữ lịch sử",
         file_catalog: null,
         file_notation: null,
         title: null,
@@ -139,9 +139,9 @@ const File = ({ stateFile, setStateFile, govFileId }) => {
             Object.keys(request).forEach(key => {
                 updatedRequest[key] = null
             })
-            updatedRequest['identifier'] = "Trung tâm lưu trữ lịch sử"
+            updatedRequest['identifier'] = "Trung tâm Lưu trữ lịch sử"
             updatedRequest['rights'] = "Công Khai"
-            updatedRequest['organ_id'] = "Phông trung tâm lưu trữ lịch sử"
+            updatedRequest['organ_id'] = "Phông trung tâm Lưu trữ lịch sử"
             updatedRequest['maintenance'] = "5 năm"
             updatedRequest['language'] = "Tiếng Việt"
             updatedRequest['format'] = "Bình thường"
