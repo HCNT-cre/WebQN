@@ -22,6 +22,9 @@ import Drawers from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Drawers";
 import ReturnFile from "./pages/Files/ReturnFile";
 import LoginSSO from "./pages/LoginSSO";
 import HoSoBiTraVeCoQuan from "./pages/LuuTruCoQuan/HoSoBiTraVeCoQuan";
+import NhanVien from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/NhanVien";
+import PhongBan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/PhongBan";
+import CoQuan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/CoQuan";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -128,7 +131,20 @@ const App = () => {
         {
             path: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop",
             element: <Drawers />
-        }
+        },
+        {
+            path: "/khai-bao-danh-muc/danh-muc-co-quan/nhan-vien",
+            element: <NhanVien />
+        },
+        {
+            path: "/khai-bao-danh-muc/danh-muc-co-quan/phong-ban",
+            element: <PhongBan />
+        },
+        {
+            path: "/khai-bao-danh-muc/danh-muc-co-quan/co-quan",
+            element: <CoQuan />
+        },
+        
     ];
 
     return (

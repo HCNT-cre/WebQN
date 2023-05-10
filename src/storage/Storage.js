@@ -32,7 +32,13 @@ export const TABS_SIDEBAR = [
         key: "/khai-bao-danh-muc/", isExpand: false, icon: '<i class="fa-solid fa-list"></i>',
         title: "Khai báo danh mục", numChildTabs: 3, childTabs: [
             // { title: "Danh mục hồ sơ", to: "/khai-bao-danh-muc/danh-muc-ho-so", key: "/khai-bao-danh-muc/danh-muc-ho-so" },
-            // { title: "Danh mục cơ quan", to: "/khai-bao-danh-muc/danh-muc-co-quan", key: "/khai-bao-danh-muc/danh-muc-co-quan" },
+            {
+                title: "Danh mục cơ quan", key: "/khai-bao-danh-muc/danh-muc-co-quan", isExpand: false, numChildTabs: 3, childTabs: [
+                    { title: "Cơ quan", to: "/khai-bao-danh-muc/danh-muc-co-quan/co-quan", key: "/khai-bao-danh-muc/danh-muc-co-quan/co-quan", numChildTabs: 0 },
+                    { title: "Phòng ban", to: "/khai-bao-danh-muc/danh-muc-co-quan/phong-ban", key: "/khai-bao-danh-muc/danh-muc-co-quan/phong-ban", numChildTabs: 0 },
+                    { title: "Nhân viên", to: "/khai-bao-danh-muc/danh-muc-co-quan/nhan-vien", key: "/khai-bao-danh-muc/danh-muc-co-quan/nhan-vien", numChildTabs: 0 }
+                ]
+            },
             {
                 title: "Danh mục kho lưu trữ", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru", isExpand: false, numChildTabs: 3, childTabs: [
                     { title: "Kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", numChildTabs: 0 },
