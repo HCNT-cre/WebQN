@@ -39,10 +39,13 @@
         @apply text-white !important;
     }
 
-  
 }
 
 /* loading animation */
+.ant-form-item-label{
+    text-align: left !important;
+}
+
 .lds-ring {
     display: inline-block;
     position: relative;
