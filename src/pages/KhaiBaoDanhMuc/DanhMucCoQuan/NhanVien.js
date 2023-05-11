@@ -1,6 +1,6 @@
 import DanhMucCoQuan from "."
 import { STAFF, STAFF_DECENTRALIZATION } from "../../../storage/StorageOffice"
-import { Input, Modal, Button, Form} from "antd";
+import { Input, Modal, Button, Form, Select } from "antd";
 import { GetKey } from "../../../custom/Function";
 
 const Search = Input.Search
@@ -28,15 +28,20 @@ const Create = ({ modalOpen, setModalOpen }) => {
         >
 
             <Form onFinish={onFinish} labelCol={{ span: 7 }}>
-                {STAFF_DECENTRALIZATION.map((item, index) => {
-                    return(
-                        <Form.Item label={item.label} name={item.name} key={GetKey()} rules={[{required: true}]}>
-                            <Input/>
-                        </Form.Item>
+                {STAFF_DECENTRALIZATION.map((input) => {
+                    return (
+
+                        <div className="relative">
+                            <div className="after-form pr-[2px] absolute left-0 top-[2px]" />
+                            <Form.Item name={input.name} label={input.label} key={GetKey()} className="ml-[20px]">
+                                {input.type === "input" ?
+                                    <Input /> : <Select />}
+                            </Form.Item>
+                        </div>
                     )
                 })}
-              
-                
+
+
                 <Form.Item>
                     <div className="flex justify-between mt-[30px]">
                         <Button onClick={handleCancle} htmlType="reset">Hủy</Button>
@@ -46,7 +51,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
                     </div>
                 </Form.Item>
             </Form>
-        </Modal>
+        </Modal >
     )
 }
 
@@ -66,7 +71,7 @@ const SearchBar = () => {
 
 const NhanVien = () => {
     return (
-        <DanhMucCoQuan title="Nhân viên" fieldNames={STAFF} fieldDatas={[]} SearchBar={<SearchBar/>} Create={<Create />} />
+        <DanhMucCoQuan title="Nhân viên" fieldNames={STAFF} fieldDatas={[]} SearchBar={<SearchBar />} Create={<Create />} />
     )
 }
 

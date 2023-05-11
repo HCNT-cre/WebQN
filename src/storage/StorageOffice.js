@@ -25,19 +25,20 @@ export const ORGAN = [
     { title: "Địa chỉ", key: "address", width: "100%" },
     { title: "Số điện thoại", key: "phone", width: "100%" },
     { title: "Fax", key: "fax", width: "100%" },
-    { title: "Tỉnh thành", key: "province", width: "100%" },
-    { title: "Quận huyện", key: "district", width: "100%" },
-    { title: "Phường xã", key: "ward", width: "100%" },
+    { title: "Tỉnh thành", key: "provinceName", width: "100%" },
+    { title: "Quận huyện", key: "districtName", width: "100%" },
+    { title: "Phường xã", key: "wardName", width: "100%" },
     { title: "", key: "update", width: "100%" }
 ]
 export const DEPARTMENT_DECENTRALIZATION_INPUTS = [
-    { type: "input", require: true, name: "name", title: "Tên", },
-    { type: "input", require: true, name: "code", title: "Mã", },
-    { type: "select", require: true, name: "organ", title: "Cơ quan", },
+    { type: "input", require: true, name: "name", label: "Tên", },
+    { type: "input", require: true, name: "code", label: "Mã", },
+    { type: "select", require: true, name: "organ", label: "Cơ quan", },
 ]
+
 export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
     {
-        type: "checkbox", require: true, name: "organ", title: "Cơ quan", permission: [
+        type: "checkbox", require: true, name: "organ", label: "Cơ quan", permission: [
             { label: "Admin cơ quan", value: "admin-organ" },
             { label: "Xem cơ quan", value: "watch-organ" },
             { label: "Chỉnh sửa cơ quan", value: "update-organ" },
@@ -45,7 +46,7 @@ export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
         ]
     },
     {
-        type: "checkbox", require: true, name: "department", title: "Phòng ban", permission: [
+        type: "checkbox", require: true, name: "department", label: "Phòng ban", permission: [
             { label: "Admin phòng ban", value: "admin-department" },
             { label: "Xem phòng ban", value: "watch-department" },
             { label: "Chỉnh sửa phòng ban", value: "update-department" },
@@ -53,7 +54,7 @@ export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
         ]
     },
     {
-        type: "checkbox", require: true, name: "staff", title: "Nhân viên", permission: [
+        type: "checkbox", require: true, name: "staff", label: "Nhân viên", permission: [
             { label: "Admin nhân viên", value: "admin-staff" },
             { label: "Xem nhân viên", value: "watch-staff" },
             { label: "Chỉnh sửa nhân viên", value: "update-staff" },
@@ -61,7 +62,7 @@ export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
         ]
     },
     {
-        type: "checkbox", require: true, name: "warehouse", title: "Kho", permission: [
+        type: "checkbox", require: true, name: "warehouse", label: "Kho", permission: [
             { label: "Admin kho", value: "admin-warehouse" },
             { label: "Xem kho", value: "watch-warehouse" },
             { label: "Chỉnh sửa kho", value: "update-warehouse" },
@@ -69,7 +70,7 @@ export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
         ]
     },
     {
-        type: "checkbox", require: true, name: "file", title: "Hồ sơ", permission: [
+        type: "checkbox", require: true, name: "file", label: "Hồ sơ", permission: [
             { label: "Admin hồ sơ", value: "admin-file" },
             { label: "Xem hồ sơ", value: "watch-file" },
             { label: "Chỉnh sửa hồ sơ", value: "update-file" },
@@ -80,22 +81,25 @@ export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
 ]
 
 export const STAFF_DECENTRALIZATION = [
-    { name: "name", label: "Tên" },
-    { name: "email", label: "Email" },
-    { name: "password", label: "Mật khẩu" },
-    { name: "phone", label: "Số điện thoại" },
-    { name: "address", label: "Địa chỉ" },
-    { name: "position", label: "Vị trí" },
-    { name: "department", label: "Phòng ban" },
+    { type:"input", require:true, name: "name", label: "Tên" },
+    { type:"input", require:true, name: "email", label: "Email" },
+    { type:"input", require:true, name: "password", label: "Mật khẩu" },
+    { type:"input", require:true, name: "phone", label: "Số điện thoại" },
+    { type:"input", require:true, name: "address", label: "Địa chỉ" },
+    { type:"input", require:true, name: "position", label: "Vị trí" },
+    { type:"select", require:true, name: "department", label: "Phòng ban" },
 ]
 
-export const ORGAN_DECENTRALIZATION = [
-    { name: "name", label: "Tên" },
-    { name: "code", label: "Mã" },
-    { name: "address", label: "Địa chỉ" },
-    { name: "phone", label: "Số điện thoại" },
-    { name: "fax", label: "Fax" },
-    { name: "province", label: "Tỉnh thành" },
-    { name: "district", label: "Quận huyện" },
-    { name: "ward", label: "Phường xã" },
+export const ORGAN_DECENTRALIZATION_INPUTS = [
+    { type: "text", require: true, name: "name", label: "Tên" },
+    { type: "text", require: true, name: "code", label: "Mã" },
+    { type: "text", require: true, name: "address", label: "Địa chỉ" },
+    { type: "number", require: false, name: "phone", label: "Số điện thoại" },
+    { type: "number", require: false, name: "fax", label: "Fax" },
+    { type: "select", require: true, name: "province", label: "Tỉnh thành" },
+    { type: "select", require: true, name: "district", label: "Quận huyện" },
+    { type: "select", require: true, name: "ward", label: "Phường xã" },
+    { type: "switch", require: false, false: "storage", label: "Trung tâm lưu trữ lịch sử" },
+    { type: "textarea", require: false, false: "note", label: "Ghi chú" },
+    
 ]

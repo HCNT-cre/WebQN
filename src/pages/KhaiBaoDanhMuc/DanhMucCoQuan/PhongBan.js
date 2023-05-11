@@ -4,16 +4,20 @@ import { Input, Select, Modal, Button, Form, Checkbox, Row, Col } from "antd";
 import { Collapse } from "antd";
 import { GetKey } from "../../../custom/Function";
 import { notifyError, notifySuccess } from "../../../custom/Function";
+import { useState } from "react";
+
 
 const Panel = Collapse.Panel
 const Search = Input.Search
 
 const Create = ({ modalOpen, setModalOpen }) => {
+    const [request, setRequest] = useState({ organ: "123" })
     const handleCancle = () => {
         setModalOpen(false)
     }
 
     const onFinish = (values) => {
+        console.log(values);
         for (const input of DEPARTMENT_DECENTRALIZATION_INPUTS) {
             if (input.require && !values[input.name]) {
                 notifyError("Vui lòng nhập " + input.title)
@@ -42,24 +46,29 @@ const Create = ({ modalOpen, setModalOpen }) => {
         >
 
             <Form onFinish={onFinish} labelCol={{ span: 7 }}>
-                {DEPARTMENT_DECENTRALIZATION_INPUTS.map((input, index) => {
-                    return (
-                        <div className="relative">
-                            <div className="after-form pr-[2px] absolute left-0 top-[2px]" />
-                            <Form.Item name={input.name} label={input.title} key={GetKey()} className="ml-[20px]" >
-                                {input.type === "input" ?
-                                    <Input />
-                                    :
-                                    <Select showSearch
-                                        placeholder="Chọn cơ quan"
-                                        optionFilterProp="children"
-                                    />
-                                }
-                            </Form.Item>
-                        </div>
-                    )
-                })}
-
+                <div>
+                    {DEPARTMENT_DECENTRALIZATION_INPUTS.map((input, index) => {
+                        return (
+                            <div className="relative">
+                                <div className="after-form pr-[2px] absolute left-0 top-[2px]" />
+                                <Form.Item name={input.name} label={input.label} key={GetKey()} className="ml-[20px]" >
+                                    {input.type === "input" ?
+                                        <Input />
+                                        :
+                                        <Select showSearch
+                                            name="state"
+                                            id="1"
+                                            placeholder="Chọn cơ quan"
+                                            value={request["organ"]}
+                                            options={[{ label: "Bình thường", value: "Bình thường" }]}
+                                            onChange={(e) => { console.log(e) }}
+                                        />
+                                    }
+                                </Form.Item>
+                            </div>
+                        )
+                    })}
+                </div>
 
                 <Collapse defaultActiveKey={['1']} >
                     <Panel header="Phân quyền" key="1">
@@ -68,12 +77,16 @@ const Create = ({ modalOpen, setModalOpen }) => {
                                 return (
                                     <Form.Item name={item.name} key={GetKey()}>
                                         <Checkbox.Group className="mt-[8px] flex-col w-full">
-                                            <div className="font-bold">{item.title}</div>
+                                            <div className="font-bold">{item.label}</div>
                                             <Row>
                                                 {item.permission.map((option) => {
                                                     return (
                                                         <Col span={12} key={GetKey()} className="mt-[8px]">
-                                                            <Checkbox value={option.value}>{option.label}</Checkbox>
+                                                            <Checkbox type="checkbox" onChange={(e) => {
+                                                                e.preventDefault()
+                                                                console.log(e)
+                                                            }
+                                                            } value={option.value}>{option.label}</Checkbox>
                                                         </Col>
                                                     )
                                                 }
