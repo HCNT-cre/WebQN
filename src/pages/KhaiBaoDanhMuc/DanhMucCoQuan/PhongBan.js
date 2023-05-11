@@ -1,8 +1,9 @@
 import DanhMucCoQuan from "."
-import { DEPARTMENT, DEPARTMENT_DECENTRALIZATION } from "../../../storage/StorageOffice"
-import { Input, Select, Modal, Button, Form, Checkbox, Row, Col} from "antd";
+import { DEPARTMENT, DEPARTMENT_DECENTRALIZATION_COLLASPE, DEPARTMENT_DECENTRALIZATION_INPUTS } from "../../../storage/StorageOffice"
+import { Input, Select, Modal, Button, Form, Checkbox, Row, Col } from "antd";
 import { Collapse } from "antd";
 import { GetKey } from "../../../custom/Function";
+import { notifyError, notifySuccess } from "../../../custom/Function";
 
 const Panel = Collapse.Panel
 const Search = Input.Search
@@ -13,7 +14,19 @@ const Create = ({ modalOpen, setModalOpen }) => {
     }
 
     const onFinish = (values) => {
-        console.log(values);
+        for (const input of DEPARTMENT_DECENTRALIZATION_INPUTS) {
+            if (input.require && !values[input.name]) {
+                notifyError("Vui lòng nhập " + input.title)
+                return
+            }
+        }
+
+        for (const collaspe of DEPARTMENT_DECENTRALIZATION_COLLASPE) {
+            if (collaspe.require && !values[collaspe.name]) {
+                notifyError("Vui lòng nhập " + collaspe.title)
+                return
+            }
+        }
     }
 
     return (
@@ -29,32 +42,37 @@ const Create = ({ modalOpen, setModalOpen }) => {
         >
 
             <Form onFinish={onFinish} labelCol={{ span: 7 }}>
-                <Form.Item name="name-department" label="Tên " rules={[{ required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name="code-department" label="Mã " rules={[{ required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name="parent-department" label="Cơ quan" rules={[{ required: true }]}>
-                    <Select showSearch
-                        placeholder="Chọn cơ quan"
-                        optionFilterProp="children"
-                    />
+                {DEPARTMENT_DECENTRALIZATION_INPUTS.map((input, index) => {
+                    return (
+                        <div className="relative">
+                            <div className="after-form pr-[2px] absolute left-0 top-[2px]" />
+                            <Form.Item name={input.name} label={input.title} key={GetKey()} className="ml-[20px]" >
+                                {input.type === "input" ?
+                                    <Input />
+                                    :
+                                    <Select showSearch
+                                        placeholder="Chọn cơ quan"
+                                        optionFilterProp="children"
+                                    />
+                                }
+                            </Form.Item>
+                        </div>
+                    )
+                })}
 
-                </Form.Item>
 
                 <Collapse defaultActiveKey={['1']} >
                     <Panel header="Phân quyền" key="1">
                         <div>
-                            {DEPARTMENT_DECENTRALIZATION.map((item, index) => {
+                            {DEPARTMENT_DECENTRALIZATION_COLLASPE.map((item) => {
                                 return (
                                     <Form.Item name={item.name} key={GetKey()}>
-                                        <Checkbox.Group className="mt-[8px] flex-col">
+                                        <Checkbox.Group className="mt-[8px] flex-col w-full">
                                             <div className="font-bold">{item.title}</div>
                                             <Row>
-                                                {item.permission.map((option, index) => {
+                                                {item.permission.map((option) => {
                                                     return (
-                                                        <Col span={8} key={GetKey()} className="mt-[8px]">
+                                                        <Col span={12} key={GetKey()} className="mt-[8px]">
                                                             <Checkbox value={option.value}>{option.label}</Checkbox>
                                                         </Col>
                                                     )
@@ -117,8 +135,9 @@ const SearchBar = () => {
 
 
 const PhongBan = () => {
+
     return (
-        <DanhMucCoQuan title="Phòng ban" fieldNames={DEPARTMENT} fieldDatas={[]} SearchBar={<SearchBar/>} Create={<Create />} />
+        <DanhMucCoQuan title="Phòng ban" fieldNames={DEPARTMENT} fieldDatas={[]} SearchBar={<SearchBar />} Create={<Create />} />
     )
 }
 
