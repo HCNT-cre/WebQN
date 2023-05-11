@@ -30,9 +30,14 @@ export const ORGAN = [
     { title: "Phường xã", key: "ward", width: "100%" },
     { title: "", key: "update", width: "100%" }
 ]
-export const DEPARTMENT_DECENTRALIZATION = [
+export const DEPARTMENT_DECENTRALIZATION_INPUTS = [
+    { type: "input", require: true, name: "name", title: "Tên", },
+    { type: "input", require: true, name: "code", title: "Mã", },
+    { type: "select", require: true, name: "organ", title: "Cơ quan", },
+]
+export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
     {
-        name: "organ", title: "Cơ quan", permission: [
+        type: "checkbox", require: true, name: "organ", title: "Cơ quan", permission: [
             { label: "Admin cơ quan", value: "admin-organ" },
             { label: "Xem cơ quan", value: "watch-organ" },
             { label: "Chỉnh sửa cơ quan", value: "update-organ" },
@@ -40,7 +45,7 @@ export const DEPARTMENT_DECENTRALIZATION = [
         ]
     },
     {
-        name: "department", title: "Phòng ban", permission: [
+        type: "checkbox", require: true, name: "department", title: "Phòng ban", permission: [
             { label: "Admin phòng ban", value: "admin-department" },
             { label: "Xem phòng ban", value: "watch-department" },
             { label: "Chỉnh sửa phòng ban", value: "update-department" },
@@ -48,7 +53,7 @@ export const DEPARTMENT_DECENTRALIZATION = [
         ]
     },
     {
-        name: "staff", title: "Nhân viên", permission: [
+        type: "checkbox", require: true, name: "staff", title: "Nhân viên", permission: [
             { label: "Admin nhân viên", value: "admin-staff" },
             { label: "Xem nhân viên", value: "watch-staff" },
             { label: "Chỉnh sửa nhân viên", value: "update-staff" },
@@ -56,7 +61,7 @@ export const DEPARTMENT_DECENTRALIZATION = [
         ]
     },
     {
-        name: "warehouse", title: "Kho", permission: [
+        type: "checkbox", require: true, name: "warehouse", title: "Kho", permission: [
             { label: "Admin kho", value: "admin-warehouse" },
             { label: "Xem kho", value: "watch-warehouse" },
             { label: "Chỉnh sửa kho", value: "update-warehouse" },
@@ -64,7 +69,7 @@ export const DEPARTMENT_DECENTRALIZATION = [
         ]
     },
     {
-        name: "file", title: "Hồ sơ", permission: [
+        type: "checkbox", require: true, name: "file", title: "Hồ sơ", permission: [
             { label: "Admin hồ sơ", value: "admin-file" },
             { label: "Xem hồ sơ", value: "watch-file" },
             { label: "Chỉnh sửa hồ sơ", value: "update-file" },
