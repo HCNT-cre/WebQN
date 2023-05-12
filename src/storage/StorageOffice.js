@@ -3,7 +3,7 @@ export const DEPARTMENT = [
     { title: "Mã", key: "code", width: "100%" },
     { title: "Cơ quan", key: "organ", width: "100%" },
     { title: "Tổng nhân viên", key: "total_staff", width: "100%" },
-    { title: "Phân quyền", key: "decentralization", width: "100%" },
+    { title: "Phân quyền", key: "permission", width: "100%" },
     { title: "", key: "update", width: "100%" },
 ]
 
@@ -39,43 +39,43 @@ export const DEPARTMENT_DECENTRALIZATION_INPUTS = [
 export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
     {
         type: "checkbox", require: true, name: "organ", label: "Cơ quan", permission: [
-            { label: "Admin cơ quan", value: "admin-organ" },
-            { label: "Xem cơ quan", value: "watch-organ" },
-            { label: "Chỉnh sửa cơ quan", value: "update-organ" },
-            { label: "Xóa cơ quan", value: "delete-organ" },
+            { label: "Admin cơ quan", value: "coquan_admin" },
+            { label: "Xem cơ quan", value: "coquan_watch" },
+            { label: "Chỉnh sửa cơ quan", value: "coquan_update" },
+            { label: "Xóa cơ quan", value: "coquan_xoa" },
         ]
     },
     {
         type: "checkbox", require: true, name: "department", label: "Phòng ban", permission: [
-            { label: "Admin phòng ban", value: "admin-department" },
-            { label: "Xem phòng ban", value: "watch-department" },
-            { label: "Chỉnh sửa phòng ban", value: "update-department" },
-            { label: "Xóa phòng ban", value: "delete-department" },
+            { label: "Admin phòng ban", value: "phongban_admin" },
+            { label: "Xem phòng ban", value: "phongban_watch" },
+            { label: "Chỉnh sửa phòng ban", value: "phongban_update" },
+            { label: "Xóa phòng ban", value: "phongban_delete" },
         ]
     },
     {
         type: "checkbox", require: true, name: "staff", label: "Nhân viên", permission: [
-            { label: "Admin nhân viên", value: "admin-staff" },
-            { label: "Xem nhân viên", value: "watch-staff" },
-            { label: "Chỉnh sửa nhân viên", value: "update-staff" },
-            { label: "Xóa nhân viên", value: "delete-staff" },
+            { label: "Admin nhân viên", value: "nhanvien_admin" },
+            { label: "Xem nhân viên", value: "nhanvien_watch" },
+            { label: "Chỉnh sửa nhân viên", value: "nhanvien_update" },
+            { label: "Xóa nhân viên", value: "nhanvien_delete" },
         ]
     },
     {
         type: "checkbox", require: true, name: "warehouse", label: "Kho", permission: [
-            { label: "Admin kho", value: "admin-warehouse" },
-            { label: "Xem kho", value: "watch-warehouse" },
-            { label: "Chỉnh sửa kho", value: "update-warehouse" },
-            { label: "Xóa kho", value: "delete-warehouse" },
+            { label: "Admin kho", value: "kho_admin" },
+            { label: "Xem kho", value: "kho_watch" },
+            { label: "Chỉnh sửa kho", value: "kho_update" },
+            { label: "Xóa kho", value: "kho_delete" },
         ]
     },
     {
         type: "checkbox", require: true, name: "file", label: "Hồ sơ", permission: [
-            { label: "Admin hồ sơ", value: "admin-file" },
-            { label: "Xem hồ sơ", value: "watch-file" },
-            { label: "Chỉnh sửa hồ sơ", value: "update-file" },
-            { label: "Xóa hồ sơ", value: "delete-file" },
-            { label: "Thay đổi trạng thái hồ sơ", value: "change-state-file" },
+            { label: "Admin hồ sơ", value: "hoso_admin" },
+            { label: "Xem hồ sơ", value: "hoso_watch" },
+            { label: "Chỉnh sửa hồ sơ", value: "hoso_update" },
+            { label: "Xóa hồ sơ", value: "hoso_delete" },
+            { label: "Thay đổi trạng thái hồ sơ", value: "hoso_changestate" },
         ]
     }
 ]
