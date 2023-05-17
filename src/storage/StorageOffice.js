@@ -3,7 +3,7 @@ export const DEPARTMENT = [
     { title: "Mã", key: "code", width: "100%" },
     { title: "Cơ quan", key: "organ", width: "100%" },
     { title: "Tổng nhân viên", key: "total_staff", width: "100%" },
-    { title: "Phân quyền", key: "permission", width: "100%" },
+    // { title: "Phân quyền", key: "permission", width: "100%" },
     { title: "", key: "update", width: "100%" },
 ]
 

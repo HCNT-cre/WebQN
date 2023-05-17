@@ -1,12 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Input } from "antd";
 import Search from "antd/es/input/Search";
-import { Checkbox } from "antd";
+import { Checkbox, Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { Table } from "../../custom/Components"
 import { LIST_PERMISSION } from "../../storage/Storage";
 import { GetKey, notifyError, notifySuccess } from "../../custom/Function";
 import axios from "axios";
+import {DEPARTMENT_DECENTRALIZATION_COLLASPE} from "../../storage/StorageOffice";
+
 
 const API_GROUP_PERMISSION = process.env.REACT_APP_API_GROUP_PERMISSION
 const API_USER_PERMISSION = process.env.REACT_APP_API_USER_PERMISSION
@@ -169,7 +171,7 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
             <div>
                 <div className="flex mt-[8px]">
                     <p className="w-[25%]">Quyền: </p>
-                    <div className="w-full flex">
+                    {/*<div className="w-full flex">
                         <div className="w-[45%] mr-[4px] flex flex-col border-solid border-[2px] rounded-[5px] p-[8px] border-black">
                             <h2 className="mb-[4px]">Những quyền khả thi</h2>
                             <Search title="Lọc" enterButton allowClear className="h-[40px]" />
@@ -210,10 +212,33 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
                             </ul>
                         </div>
                     </div>
+                            */}
 
+                    <div className="bg-white p-[16px] rounded-[10px] mx-[auto]">
+                        {DEPARTMENT_DECENTRALIZATION_COLLASPE.map((item) => {
+                            return (
+                                <Checkbox.Group className="mt-[8px] flex-col w-full">
+                                    <div className="font-bold">{item.label}</div>
+                                    <Row>
+                                        {item.permission.map((option) => {
+                                            return (
+                                                <Col span={12} key={GetKey()} className="mt-[8px]">
+                                                    <Checkbox type="checkbox" name="permission" onChange={(e) => {
+                                                        // handlePermission(e.target.value)
+                                                    }
+                                                    } value={option.value}>{option.label}</Checkbox>
+                                                </Col>
+                                            )
+                                        }
+                                        )}
+                                    </Row>
+                                </Checkbox.Group>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
-            <div className="flex justify-end mt-[16px]">
+            <div className="flex justify-end mt-[16px] mb-[20px]">
                 {
                     group === null ?
                         <Button className="mr-[12px]" danger onClick={handleDeleteGroupPermission}>Xóa</Button>

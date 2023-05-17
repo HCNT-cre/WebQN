@@ -114,7 +114,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
                         )
                     })}
                 </div>
-
+                    {/*
                 <Collapse defaultActiveKey={['1']} >
                     <Panel header="Phân quyền" key="1">
                         <div>
@@ -141,7 +141,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
                         </div>
                     </Panel>
                 </Collapse>
-
+*/}
                 <div className="flex justify-between mt-[30px]">
                     <Button onClick={handleCancle}>Hủy</Button>
                     <Button form="tao-phong-ban" type="submit" className="bg-[#00f] text-white" onClick={onSubmit}>
@@ -224,7 +224,7 @@ const PhongBan = () => {
                     "code": data.code,
                     "organ": data.organ,
                     "total_staff": 0,
-                    "permission": <HoverPermission permission={data.permission} />,
+                    // "permission": <HoverPermission permission={data.permission} />,
                     "update": <span className="cursor-pointer"><i className="fa-regular fa-pen-to-square"></i></span>
                 })
             }
