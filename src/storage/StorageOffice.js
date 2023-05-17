@@ -39,40 +39,40 @@ export const DEPARTMENT_DECENTRALIZATION_INPUTS = [
 export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
     {
         type: "checkbox", require: true, name: "organ", label: "Cơ quan", permission: [
-            { label: "Admin cơ quan", value: "coquan_admin" },
-            { label: "Xem cơ quan", value: "coquan_watch" },
+            { label: "Tạo cơ quan", value: "coquan_create" },
+            { label: "Xem cơ quan", value: "coquan_read" },
             { label: "Chỉnh sửa cơ quan", value: "coquan_update" },
-            { label: "Xóa cơ quan", value: "coquan_xoa" },
+            { label: "Xóa cơ quan", value: "coquan_delete" },
         ]
     },
     {
         type: "checkbox", require: true, name: "department", label: "Phòng ban", permission: [
-            { label: "Admin phòng ban", value: "phongban_admin" },
-            { label: "Xem phòng ban", value: "phongban_watch" },
+            { label: "Tạo phòng ban", value: "phongban_create" },
+            { label: "Xem phòng ban", value: "phongban_read" },
             { label: "Chỉnh sửa phòng ban", value: "phongban_update" },
             { label: "Xóa phòng ban", value: "phongban_delete" },
         ]
     },
     {
         type: "checkbox", require: true, name: "staff", label: "Nhân viên", permission: [
-            { label: "Admin nhân viên", value: "nhanvien_admin" },
-            { label: "Xem nhân viên", value: "nhanvien_watch" },
+            { label: "Tạo nhân viên", value: "nhanvien_create" },
+            { label: "Xem nhân viên", value: "nhanvien_read" },
             { label: "Chỉnh sửa nhân viên", value: "nhanvien_update" },
             { label: "Xóa nhân viên", value: "nhanvien_delete" },
         ]
     },
     {
         type: "checkbox", require: true, name: "warehouse", label: "Kho", permission: [
-            { label: "Admin kho", value: "kho_admin" },
-            { label: "Xem kho", value: "kho_watch" },
+            { label: "Tạo kho", value: "kho_create" },
+            { label: "Xem kho", value: "kho_read" },
             { label: "Chỉnh sửa kho", value: "kho_update" },
             { label: "Xóa kho", value: "kho_delete" },
         ]
     },
     {
         type: "checkbox", require: true, name: "file", label: "Hồ sơ", permission: [
-            { label: "Admin hồ sơ", value: "hoso_admin" },
-            { label: "Xem hồ sơ", value: "hoso_watch" },
+            { label: "Tạo hồ sơ", value: "hoso_create" },
+            { label: "Xem hồ sơ", value: "hoso_read" },
             { label: "Chỉnh sửa hồ sơ", value: "hoso_update" },
             { label: "Xóa hồ sơ", value: "hoso_delete" },
             { label: "Thay đổi trạng thái hồ sơ", value: "hoso_changestate" },
@@ -81,13 +81,13 @@ export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
 ]
 
 export const STAFF_DECENTRALIZATION = [
-    { type:"input", require:true, name: "name", label: "Tên" },
-    { type:"email", require:true, name: "email", label: "Email" },
-    { type:"password", require:true, name: "password", label: "Mật khẩu" },
-    { type:"number", require:true, name: "phone", label: "Số điện thoại" },
-    { type:"input", require:true, name: "address", label: "Địa chỉ" },
-    { type:"input", require:true, name: "position", label: "Vị trí" },
-    { type:"select", require:true, name: "department", label: "Phòng ban" },
+    { type: "input", require: true, name: "name", label: "Tên" },
+    { type: "email", require: true, name: "email", label: "Email" },
+    { type: "password", require: true, name: "password", label: "Mật khẩu" },
+    { type: "number", require: true, name: "phone", label: "Số điện thoại" },
+    { type: "input", require: true, name: "address", label: "Địa chỉ" },
+    { type: "input", require: true, name: "position", label: "Vị trí" },
+    { type: "select", require: true, name: "department", label: "Phòng ban" },
 ]
 
 export const ORGAN_DECENTRALIZATION_INPUTS = [
@@ -101,5 +101,5 @@ export const ORGAN_DECENTRALIZATION_INPUTS = [
     { type: "select", require: true, name: "ward", label: "Phường xã" },
     { type: "switch", require: false, false: "storage", label: "Trung tâm lưu trữ lịch sử" },
     { type: "textarea", require: false, false: "note", label: "Ghi chú" },
-    
+
 ]
