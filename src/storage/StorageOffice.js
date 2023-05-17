@@ -15,7 +15,7 @@ export const STAFF = [
     { title: "Cơ quan", key: "organ", width: "100%" },
     { title: "Phòng ban", key: "department", width: "100%" },
     { title: "Vị trí", key: "position", width: "100%" },
-    { title: "Trạng thái", key: "state", width: "100%" },
+    // { title: "Trạng thái", key: "state", width: "100%" },
     { title: "", key: "update", width: "100%" },
 ]
 
@@ -82,9 +82,9 @@ export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
 
 export const STAFF_DECENTRALIZATION = [
     { type:"input", require:true, name: "name", label: "Tên" },
-    { type:"input", require:true, name: "email", label: "Email" },
-    { type:"input", require:true, name: "password", label: "Mật khẩu" },
-    { type:"input", require:true, name: "phone", label: "Số điện thoại" },
+    { type:"email", require:true, name: "email", label: "Email" },
+    { type:"password", require:true, name: "password", label: "Mật khẩu" },
+    { type:"number", require:true, name: "phone", label: "Số điện thoại" },
     { type:"input", require:true, name: "address", label: "Địa chỉ" },
     { type:"input", require:true, name: "position", label: "Vị trí" },
     { type:"select", require:true, name: "department", label: "Phòng ban" },
