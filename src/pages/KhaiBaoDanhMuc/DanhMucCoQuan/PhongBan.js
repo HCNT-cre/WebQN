@@ -1,6 +1,6 @@
 import DanhMucCoQuan from "."
-import { DEPARTMENT, DEPARTMENT_DECENTRALIZATION_COLLASPE, DEPARTMENT_DECENTRALIZATION_INPUTS } from "../../../storage/StorageOffice"
-import { Input, Select, Modal, Button, Checkbox, Row, Col, Popover } from "antd";
+import { DEPARTMENT, DEPARTMENT_DECENTRALIZATION_INPUTS } from "../../../storage/StorageOffice"
+import { Input, Select, Modal, Button } from "antd";
 import { Collapse } from "antd";
 import { GetKey } from "../../../custom/Function";
 import { notifyError, notifySuccess } from "../../../custom/Function";
@@ -27,7 +27,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
 
             const organ = data.map((item) => ({
                 label: item.name,
-                value: item.id
+                value: item.name
             }))
             setOrgan(organ)
         }
@@ -64,15 +64,15 @@ const Create = ({ modalOpen, setModalOpen }) => {
 
     const onSubmit = async (e) => {
         e.preventDefault()
+        if (!request) {
+            notifyError("Vui lòng nhập đầy đủ thông tin")
+            return
+        }
         for (const input of DEPARTMENT_DECENTRALIZATION_INPUTS) {
             if (input.require && !request[input.name]) {
                 notifyError("Vui lòng nhập " + input.label)
                 return
             }
-        }
-        if (request.permission.length === 0) {
-            notifyError("Vui lòng chọn quyền")
-            return
         }
 
         console.log(request)
@@ -80,6 +80,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
         await axios.post(API_ORGAN_POST_DEPARTMENT, request)
         notifySuccess("Tạo phòng ban thành công")
         setModalOpen(false)
+        setRequest(null)
     }
 
     return (
@@ -94,8 +95,6 @@ const Create = ({ modalOpen, setModalOpen }) => {
             footer={null}
         >
             <form id="tao-phong-ban" onSubmit={onSubmit}>
-
-
                 <div>
                     {DEPARTMENT_DECENTRALIZATION_INPUTS.map((input, index) => {
                         return (
@@ -114,34 +113,6 @@ const Create = ({ modalOpen, setModalOpen }) => {
                         )
                     })}
                 </div>
-                    {/*
-                <Collapse defaultActiveKey={['1']} >
-                    <Panel header="Phân quyền" key="1">
-                        <div>
-                            {DEPARTMENT_DECENTRALIZATION_COLLASPE.map((item) => {
-                                return (
-                                    <Checkbox.Group className="mt-[8px] flex-col w-full">
-                                        <div className="font-bold">{item.label}</div>
-                                        <Row>
-                                            {item.permission.map((option) => {
-                                                return (
-                                                    <Col span={12} key={GetKey()} className="mt-[8px]">
-                                                        <Checkbox type="checkbox" name="permission" onChange={(e) => {
-                                                            handlePermission(e.target.value)
-                                                        }
-                                                        } value={option.value}>{option.label}</Checkbox>
-                                                    </Col>
-                                                )
-                                            }
-                                            )}
-                                        </Row>
-                                    </Checkbox.Group>
-                                )
-                            })}
-                        </div>
-                    </Panel>
-                </Collapse>
-*/}
                 <div className="flex justify-between mt-[30px]">
                     <Button onClick={handleCancle}>Hủy</Button>
                     <Button form="tao-phong-ban" type="submit" className="bg-[#00f] text-white" onClick={onSubmit}>
@@ -185,59 +156,37 @@ const SearchBar = () => {
     )
 }
 
-const HoverPermission = ({ permission }) => {
-    console.log(permission)
-    const content = (
-        <div>
-            {permission.map((item) => {
-                return (
-                    <div className="w-[70%]">{item}</div>
-                )
-            })}
-        </div>
-
-    )
-    return (
-        <Popover content={content} title="Phân quyền">
-            <div className="relative">
-                <span className="cursor-pointer" >
-                    <i className="fa-regular fa-user">
-                    </i></span>
-            </div>
-        </Popover>
-
-
-    )
-}
 const PhongBan = () => {
+    const [isLoading, setIsLoading] = useState(true)
     const [fieldData, setFieldData] = useState([])
-    useEffect(() => {
-        const fetchFieldData = async () => {
-            const res = await axios.get(API_ORGAN_GET_DEPARTMENT)
-            const datas = res.data
 
-            const newData = []
-            for (const data of datas) {
-                newData.push({
-                    "id": data.id,
-                    "name": data.name,
-                    "code": data.code,
-                    "organ": data.organ,
-                    "total_staff": 0,
-                    // "permission": <HoverPermission permission={data.permission} />,
-                    "update": <span className="cursor-pointer"><i className="fa-regular fa-pen-to-square"></i></span>
-                })
-            }
+    const fetchFieldData = async () => {
+        setIsLoading(true)
+        const res = await axios.get(API_ORGAN_GET_DEPARTMENT)
+        const datas = res.data
 
-            setFieldData(newData)
-
-
+        const newData = []
+        for (const data of datas) {
+            newData.push({
+                "id": data.id,
+                "name": data.name,
+                "code": data.code,
+                "organ": data.organ,
+                "total_staff": 0,
+                "update": <span className="cursor-pointer"><i className="fa-regular fa-pen-to-square"></i></span>
+            })
         }
+
+        setFieldData(newData)
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
         fetchFieldData()
     }, [])
 
     return (
-        <DanhMucCoQuan title="Phòng ban" fieldNames={DEPARTMENT} fieldDatas={fieldData} SearchBar={<SearchBar />} Create={<Create />} />
+        <DanhMucCoQuan title="Phòng ban" fieldNames={DEPARTMENT} fieldDatas={fieldData} SearchBar={<SearchBar />} Create={<Create />} isLoading={isLoading} />
     )
 }
 

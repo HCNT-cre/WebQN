@@ -221,35 +221,39 @@ const SearchBar = () => {
 
 const CoQuan = () => {
     const [fieldData, setFieldData] = useState([])
-    useEffect(() => {
-        const fetchFieldData = async () => {
-            const res = await axios.get(API_STORAGE_GET_ORGAN)
-            const datas = res.data
+    const [isLoading, setIsLoading] = useState(true)
+   
+    const fetchFieldData = async () => {
+        setIsLoading(true)
+        const res = await axios.get(API_STORAGE_GET_ORGAN)
+        const datas = res.data
 
-            const newData = []
-            for (const data of datas) {
-                newData.push({
-                    "id": data.id,
-                    "name": data.name,
-                    "code": data.code,
-                    "address": data.address,
-                    "phone": data.phone,
-                    "fax": data.fax,
-                    "provinceName": data.provinceName,
-                    "districtName": data.districtName,
-                    "wardName": data.wardName,
-                    "update": <span className="cursor-pointer"><i className="fa-regular fa-pen-to-square"></i></span>
-                })
-            }
-
-            setFieldData(newData)
-
-
+        const newData = []
+        for (const data of datas) {
+            newData.push({
+                "id": data.id,
+                "name": data.name,
+                "code": data.code,
+                "address": data.address,
+                "phone": data.phone,
+                "fax": data.fax,
+                "provinceName": data.provinceName,
+                "districtName": data.districtName,
+                "wardName": data.wardName,
+                "update": <span className="cursor-pointer"><i className="fa-regular fa-pen-to-square"></i></span>
+            })
         }
+
+        setFieldData(newData)
+        setIsLoading(false)
+    }
+
+    useEffect(() => {
         fetchFieldData()
     }, [])
+
     return (
-        <DanhMucCoQuan title="Cơ quan" fieldNames={ORGAN} fieldDatas={fieldData} SearchBar={<SearchBar />} Create={<Create />} />
+        <DanhMucCoQuan title="Cơ quan" fieldNames={ORGAN} fieldDatas={fieldData} SearchBar={<SearchBar />} Create={<Create />} isLoading={isLoading} />
     )
 }
 
