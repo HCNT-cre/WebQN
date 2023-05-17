@@ -11,12 +11,10 @@ import { useSelector } from "react-redux";
 import { GetDataFromIDFile } from "../../../custom/Function";
 import axios from "axios";
 import { Table } from "../../../custom/Components";
-import { Button, Input, Menu } from "antd";
+import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { FaSearch } from "react-icons/fa";
 import "./EOFFICEstyle.css";
-
-const Search = Input.Search;
 
 const TABLE_FIELDS = [
   { title: "Số ký hiệu", width: "100%" },
