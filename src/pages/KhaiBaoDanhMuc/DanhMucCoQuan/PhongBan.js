@@ -64,7 +64,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
 
     const onSubmit = async (e) => {
         e.preventDefault()
-        if (!request) {
+        if(!request){
             notifyError("Vui lòng nhập đầy đủ thông tin")
             return
         }
@@ -186,7 +186,7 @@ const PhongBan = () => {
     }, [])
 
     return (
-        <DanhMucCoQuan title="Phòng ban" fieldNames={DEPARTMENT} fieldDatas={fieldData} SearchBar={<SearchBar />} Create={<Create />} isLoading={isLoading} />
+        <DanhMucCoQuan title="Phòng ban" fieldNames={DEPARTMENT} fieldDatas={fieldData} SearchBar={<SearchBar />} Create={<Create />} isLoading={isLoading}/>
     )
 }
 
