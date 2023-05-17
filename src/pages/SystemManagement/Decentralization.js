@@ -1,17 +1,42 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Input } from "antd";
 import Search from "antd/es/input/Search";
-import { Checkbox, Col, Row } from "antd";
+import { Checkbox, Col, Row, Popover } from "antd";
 import { useEffect, useState } from "react";
 import { Table } from "../../custom/Components"
 import { LIST_PERMISSION } from "../../storage/Storage";
 import { GetKey, notifyError, notifySuccess } from "../../custom/Function";
 import axios from "axios";
-import {DEPARTMENT_DECENTRALIZATION_COLLASPE} from "../../storage/StorageOffice";
+import { DEPARTMENT_DECENTRALIZATION_COLLASPE } from "../../storage/StorageOffice";
+import { GROUP_PERMISSION_FIELD } from "../../storage/GroupPermission";
 
 
 const API_GROUP_PERMISSION = process.env.REACT_APP_API_GROUP_PERMISSION
 const API_USER_PERMISSION = process.env.REACT_APP_API_USER_PERMISSION
+
+const KEY_GROUP_PERMISSION = {
+    coquan_create: "Tạo cơ quan",
+    coquan_read: "Xem cơ quan",
+    coquan_update: "Chỉnh sửa cơ quan",
+    coquan_delete: "Xóa cơ quan",
+    phongban_create: "Tạo phòng ban",
+    phongban_read: "Xem phòng ban",
+    phongban_update: "Chỉnh sửa phòng ban",
+    phongban_delete: "Xóa phòng ban",
+    nhanvien_create: "Tạo nhân viên",
+    nhanvien_read: "Xem nhân viên",
+    nhanvien_update: "Chỉnh sửa nhân viên",
+    nhanvien_delete: "Xóa nhân viên",
+    kho_create: "Tạo kho",
+    kho_read: "Xem kho",
+    kho_update: "Chỉnh sửa kho",
+    kho_delete: "Xóa kho",
+    hoso_create: "Tạo hồ sơ",
+    hoso_read: "Xem hồ sơ",
+    hoso_update: "Chỉnh sửa hồ sơ",
+    hoso_delete: "Xóa hồ sơ",
+    hoso_changestate: "Thay đổi trạng thái hồ sơ"
+}
 
 const columns = [
     {
@@ -42,100 +67,52 @@ const columns = [
 ];
 
 const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) => {
-    const [chosenPermission, setChosenPermission] = useState([])
-    const [selectPermission, setSelectPermission] = useState([])
-    const [selectAddedPermission, setSelectAddedPermission] = useState([])
-    const [choosePermission, setChoosePermission] = useState([])
-
     const group = stateGroupChange === null ? null : stateGroupChange.group
     const state = stateGroupChange === null ? null : stateGroupChange.state
 
-    const [groupName, setGroupName] = useState(group === null ? "" : group.name)
+    const [permission, setPermission] = useState(group === null ? [] : group.permissions)
+    const [request, setRequest] = useState(group === null ? {} : { name: group.name, permissions: group.permissions })
 
-    useEffect(() => {
-        const getGroupPermission = () => {
-            if (group !== null) {
-                setChosenPermission(group.permissions)
-                const newPermission = LIST_PERMISSION.filter((item) => !group.permissions.some((i) => i.id === item.id))
-                setChoosePermission(newPermission)
-            } else setChoosePermission(LIST_PERMISSION)
+    console.log(permission)
+
+    const handleChangeRequest = (name, value) => {
+        setRequest(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    const handlePermission = (value) => {
+        const index = permission.findIndex((item) => item === value)
+        if (index === -1) {
+            setPermission(prev => {
+                handleChangeRequest("permissions", [...prev, value])
+                return [...prev, value]
+            })
         }
-
-        getGroupPermission()
-    }, [group])
-
-    const handleSelectPermission = (id) => {
-        if (selectPermission.includes(id)) {
-            setSelectPermission(selectPermission.filter((i) => i !== id))
-        } else {
-            setSelectPermission([...selectPermission, id])
+        else {
+            setPermission(prev => {
+                handleChangeRequest("permissions", prev.filter((item) => item !== value))
+                return prev.filter((item) => item !== value)
+            })
         }
     }
 
-    const handleSelectAddedPermission = (id) => {
-        if (selectAddedPermission.includes(id)) {
-            setSelectAddedPermission(selectAddedPermission.filter((i) => i !== id))
-        } else {
-            setSelectAddedPermission([...selectAddedPermission, id])
-        }
-    }
-
-    const handleAddPermission = () => {
-        const selectedPermisson = LIST_PERMISSION.filter((item) => selectPermission.includes(item.id))
-        setChosenPermission((prev) => {
-            const newPermission = prev.concat(selectedPermisson)
-            return newPermission
-        })
-
-        setChoosePermission((prev) => {
-            const newPermission = prev.filter((item) => !selectPermission.includes(item.id))
-            return newPermission
-        })
-
-        setSelectPermission([])
-    }
-
-    const handleRemovePermission = () => {
-        const selectedPermisson = chosenPermission.filter((item) => selectAddedPermission.includes(item.id))
-        setChoosePermission((prev) => {
-            const newPermission = prev.concat(selectedPermisson)
-            return newPermission
-        })
-        setChosenPermission((prev) => {
-            const newPermission = prev.filter((item) => !selectAddedPermission.includes(item.id))
-            return newPermission
-        })
-        setSelectAddedPermission([])
-    }
-
-    const handleSubmitGroupPermission = () => {
-        if (groupName.length === 0) {
-            notifyError("Vui lòng nhập tên nhóm")
-            return
-        }
-
-        if (chosenPermission.length === 0) {
-            notifyError("Vui lòng chọn quyền")
-            return
-        }
-
-        try {
-            if (group === null) {
-                axios.post(API_GROUP_PERMISSION, { name: groupName, permissions: chosenPermission })
-            } else {
-                axios.put(API_GROUP_PERMISSION + group.id, { name: groupName, permissions: chosenPermission })
-            }
+    const handleSubmitGroupPermission = async (e) => {
+        e.preventDefault()
+        if (state === "ADD_GROUP") {
+            await axios.post(API_GROUP_PERMISSION, request)
             notifySuccess("Thêm nhóm thành công")
             setTimeout(() => {
                 reFetchGroups()
-            }, 500)
-        } catch (error) {
-            notifyError("Đã có lỗi xảy ra")
+            }, 300)
+        } else {
+            await axios.put(API_GROUP_PERMISSION + group.id, request)
+            notifySuccess("Thay đổi nhóm thành công")
+            setTimeout(() => {
+                reFetchGroups()
+            }, 300)
         }
-    }
-
-    const handleChangeGroupName = (e) => {
-        setGroupName(e.target.value)
     }
 
     const handleDeleteGroupPermission = () => {
@@ -165,66 +142,26 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
             <div>
                 <div className="flex mt-[8px]">
                     <p className="w-[25%]">Tên nhóm: </p>
-                    <Input value={groupName} onChange={handleChangeGroupName} />
+                    <Input value={request["name"]} name="name" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} className="w-[75%]" />
                 </div>
             </div>
             <div>
                 <div className="flex mt-[8px]">
                     <p className="w-[25%]">Quyền: </p>
-                    {/*<div className="w-full flex">
-                        <div className="w-[45%] mr-[4px] flex flex-col border-solid border-[2px] rounded-[5px] p-[8px] border-black">
-                            <h2 className="mb-[4px]">Những quyền khả thi</h2>
-                            <Search title="Lọc" enterButton allowClear className="h-[40px]" />
-                            <ul className="h-[200px] overflow-auto">
-                                {choosePermission.map((item, index) => {
-                                    const doesSelected = selectPermission.includes(item.id)
-                                    return (
-                                        <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} onClick={() => handleSelectPermission(item.id)} key={GetKey()}>
-                                            {item.name}
-                                        </li>
-                                    )
-                                })
-                                }
-                            </ul>
-                        </div>
-                        <div className="flex flex-col justify-center mx-[2px]">
-
-                            <Button className="w-[2px] rounded-[50%]" onClick={handleRemovePermission}>
-                                <span className="text-[10px] flex items-center justify-center">
-                                    <i className="fa-solid fa-left-long"></i>
-                                </span>
-                            </Button>
-
-                            <Button className="w-[2px] rounded-[50%]" onClick={handleAddPermission}>
-                                <span className="text-[10px] flex items-center justify-center">
-                                    <i className="fa-solid fa-right-long"></i>
-                                </span>
-                            </Button>
-
-                        </div>
-                        <div className="w-[45%] flex flex-col border-solid border-[2px] rounded-[5px] p-[8px] border-black">
-                            <h2 className="mb-[4px]">Những quyền đã chọn</h2>
-                            <ul className="h-[200px] overflow-auto">
-                                {chosenPermission.map((item, index) => {
-                                    const doesSelected = selectAddedPermission.includes(item.id)
-                                    return <li className={`cursor-pointer pl-[4px] ${doesSelected === true ? "bg-[#ccc]" : ""}`} key={GetKey()} onClick={() => handleSelectAddedPermission(item.id)}>{item.name}</li>
-                                })}
-                            </ul>
-                        </div>
-                    </div>
-                            */}
-
-                    <div className="bg-white p-[16px] rounded-[10px] mx-[auto]">
+                    <div className="bg-white p-[16px] rounded-[10px] mx-[auto] w-[75%]">
                         {DEPARTMENT_DECENTRALIZATION_COLLASPE.map((item) => {
                             return (
-                                <Checkbox.Group className="mt-[8px] flex-col w-full">
+                                <div className="mt-[8px] flex-col w-full">
                                     <div className="font-bold">{item.label}</div>
                                     <Row>
                                         {item.permission.map((option) => {
                                             return (
                                                 <Col span={12} key={GetKey()} className="mt-[8px]">
-                                                    <Checkbox type="checkbox" name="permission" onChange={(e) => {
-                                                        // handlePermission(e.target.value)
+                                                    <Checkbox checked={
+                                                        permission.findIndex((item) => item === option.value) !== -1
+                                                    } name="permission" onChange={(e) => {
+                                                        console.log(e)
+                                                        handlePermission(e.target.value)
                                                     }
                                                     } value={option.value}>{option.label}</Checkbox>
                                                 </Col>
@@ -232,7 +169,7 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
                                         }
                                         )}
                                     </Row>
-                                </Checkbox.Group>
+                                </div>
                             )
                         })}
                     </div>
@@ -240,7 +177,7 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
             </div>
             <div className="flex justify-end mt-[16px] mb-[20px]">
                 {
-                    group === null ?
+                    group !== null ?
                         <Button className="mr-[12px]" danger onClick={handleDeleteGroupPermission}>Xóa</Button>
                         : ""
                 }
@@ -251,18 +188,61 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
 }
 
 const Group = ({ stateGroup, setStateGroup }) => {
-
     const [stateGroupChange, setStateGroupChange] = useState(null)
-    const [groups, setGroups] = useState([])
+    const [fieldDatas, setFieldDatas] = useState([])
+
+    const HoverPermission = ({ permission }) => {
+        const content = (
+            <div>
+                {permission.map((item) => {
+                    return (
+                        <div className="w-[100%]">{item}</div>
+                    )
+                })}
+            </div>
+
+        )
+        return (
+            <Popover content={content} title="Phân quyền">
+                <div className="relative">
+                    <span className="cursor-pointer" >
+                        <i className="fa-regular fa-user">
+                        </i></span>
+                </div>
+            </Popover>
+        )
+    }
 
     const reFetchGroups = async () => {
         const response = await axios.get(API_GROUP_PERMISSION)
-        setGroups(response.data)
+        const datas = response.data
+        const newData = []
+
+        const getNamePermissions = (permissions) => {
+            const permissionsName = []
+            for (const permission of permissions) {
+                permissionsName.push(KEY_GROUP_PERMISSION[permission])
+            }
+            return permissionsName
+        }
+
+        for (const data of datas) {
+
+            newData.push({
+                id: data.id,
+                name: data.name,
+                permissions: <HoverPermission permission={getNamePermissions(data.permissions)} />,
+                update: <span className="cursor-pointer" onClick={() => setStateGroupChange({ state: "UPDATE_GROUP", group: { id: data.id, permissions: data.permissions, name: data.name } })}><i className="fa-regular fa-pen-to-square"></i></span>
+            })
+        }
+
+        setFieldDatas(newData)
     }
 
     useEffect(() => {
         reFetchGroups()
     }, [])
+
 
     return (
         stateGroup &&
@@ -270,22 +250,18 @@ const Group = ({ stateGroup, setStateGroup }) => {
             {stateGroupChange === null ? <div>
                 <div className="flex justify-between">
                     <h2 className="font-medium text-[20px]">Chọn nhóm để thay đổi</h2>
-                    <Button onClick={() => setStateGroupChange({ action: "ADD_GROUP", group: null })}>Thêm nhóm +</Button>
+                    <Button onClick={() => setStateGroupChange({ state: "ADD_GROUP", group: null })}>Thêm nhóm +</Button>
                 </div>
                 <div className="mt-[12px]">
                     <Search allowClear placeholder="Nhập tên group" enterButton />
                 </div>
                 <div>
+
                     <div className="py-[4px] border-b-4 font-medium cursor-pointer">
                         Nhóm
                     </div>
-                    {groups.map((group, index) => {
-                        return (
-                            <div key={GetKey()} className="py-[4px] font-medium cursor-pointer" onClick={() => setStateGroupChange({ action: "CHANGE_GROUP_PERMISSION", group: group })}>
-                                {group.name}
-                            </div>
-                        )
-                    })}
+
+                    <Table fieldNames={GROUP_PERMISSION_FIELD} fieldDatas={fieldDatas} />
                 </div>
             </div>
                 :
@@ -333,7 +309,7 @@ const CreateUser = ({ setStateUserChange, reFetchUser }) => {
             notifySuccess("Tạo người dùng thành công")
             setTimeout(() => {
                 reFetchUser()
-            }, 500)
+            }, 300)
         } catch (e) {
             notifyError("Tạo người dùng thất bại")
         }
@@ -513,7 +489,7 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
             notifySuccess("Thêm quyền cho người dùng thành công")
             setTimeout(() => {
                 reFetchUser()
-            }, 500)
+            }, 300)
         } catch (error) {
             notifyError("Đã có lỗi xảy ra")
         }
@@ -525,7 +501,7 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
         setTimeout(() => {
             reFetchUser()
             notifySuccess("Xóa người dùng thành công")
-        }, 500)
+        }, 300)
     }
 
     return (
@@ -718,7 +694,7 @@ const Decentralization = () => {
 
     return (
         <div className="flex justify-between mx-[24px] h-full">
-            <div className="w-[25%] border-r-4 h-full">
+            <div className="w-[15%] border-r-4 h-full">
                 <h2 className="text-[14px] font-bold">PHÂN QUYỀN</h2>
                 <div>
                     <div className="flex items-center border-b-4 py-[8px] cursor-pointer" onClick={() => {
@@ -741,7 +717,7 @@ const Decentralization = () => {
                     </div>
                 </div>
             </div>
-            <div className="w-[75%]">
+            <div className="w-[85%]">
                 <Group stateGroup={stateGroup} setStateGroup={setStateGroup} />
                 <User stateUser={stateUser} setStateUser={setStateUser} />
             </div>
