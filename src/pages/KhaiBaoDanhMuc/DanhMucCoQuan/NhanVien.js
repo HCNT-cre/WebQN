@@ -57,7 +57,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
 
         request["organ"] = organ[request.department]
         await axios.post(API_ORGAN_POST_STAFF, request)
-        notifySuccess("Tạo phòng ban thành công")
+        notifySuccess("Tạo nhân viên thành công")
         setModalOpen(false)
         setRequest(null)
     }
