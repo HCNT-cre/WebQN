@@ -84,7 +84,7 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
         }
         setRequest({})
         handleChangeRequest("organ_id", idOrgan)
-        handleChangeRequest("organ",organ.name)
+        handleChangeRequest("organ", organ.name)
         setTimeout(() => {
             setModalOpen(false)
             fetchFieldData()
@@ -184,7 +184,7 @@ const PhongBan = () => {
             if (data.organ_id !== params.id) continue;
             newData.push({
                 "id": data.id,
-                "name": data.name,
+                "name": <Link to={`./${data.id}`} className="cursor-pointer">{data.name}</Link>,
                 "code": data.code,
                 "organ": data.organ,
                 "total_staff": 0,
@@ -242,7 +242,7 @@ const PhongBan = () => {
                 title={
                     <span>
                         <Link to="/khai-bao-danh-muc/danh-muc-co-quan/">Danh mục cơ quan</Link> /
-                        <span className="text-black"> Cơ quan </span>
+                        <span className="text-black"> Phòng ban </span>
                     </span>
                 }
                 fieldNames={DEPARTMENT}

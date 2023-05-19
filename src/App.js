@@ -133,11 +133,11 @@ const App = () => {
             element: <Drawers />
         },
         {
-            path: "/khai-bao-danh-muc/danh-muc-co-quan/nhan-vien",
+            path: "/khai-bao-danh-muc/danh-muc-co-quan/:organ_id/:department_id",
             element: <NhanVien />
         },
         {
-            path: "/khai-bao-danh-muc/danh-muc-co-quan/phong-ban/:id",
+            path: "/khai-bao-danh-muc/danh-muc-co-quan/:id",
             element: <PhongBan />
         },
         {

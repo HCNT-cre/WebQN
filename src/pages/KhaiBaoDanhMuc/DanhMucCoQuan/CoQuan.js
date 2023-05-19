@@ -279,7 +279,7 @@ const CoQuan = () => {
         for (const data of datas) {
             newData.push({
                 "id": data.id,
-                "name": <Link to={`./phong-ban/${data.id}`} className="cursor-pointer">{data.name}</Link>,
+                "name": <Link to={`./${data.id}`} className="cursor-pointer">{data.name}</Link>,
                 "code": data.code,
                 "address": data.address,
                 "phone": data.phone,
