@@ -1,41 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import DanhMucCoQuan from "."
 import { DEPARTMENT, DEPARTMENT_DECENTRALIZATION_INPUTS } from "../../../storage/StorageOffice"
-import { Input, Select, Modal, Button } from "antd";
-import { Collapse } from "antd";
+import { Input, Select, Modal, Button, Popconfirm } from "antd";
 import { GetKey } from "../../../custom/Function";
 import { notifyError, notifySuccess } from "../../../custom/Function";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link, useParams } from "react-router-dom";
 
-const Panel = Collapse.Panel
 const Search = Input.Search
 
 const API_STORAGE_GET_ORGAN = process.env.REACT_APP_API_STORAGE_GET_ORGAN
 const API_ORGAN_POST_DEPARTMENT = process.env.REACT_APP_API_ORGAN_GET_DEPARTMENT
 const API_ORGAN_GET_DEPARTMENT = process.env.REACT_APP_API_ORGAN_GET_DEPARTMENT
 
-const Create = ({ modalOpen, setModalOpen }) => {
-    const [request, setRequest] = useState(null)
-    const [permission, setPermission] = useState([])
-    const [organ, setOrgan] = useState([])
-
-    useEffect(() => {
-        const fetchOrgan = async () => {
-            const res = await axios.get(API_STORAGE_GET_ORGAN)
-            const data = res.data
-            console.log(data)
-
-            const organ = data.map((item) => ({
-                label: item.name,
-                value: item.name
-            }))
-            setOrgan(organ)
-        }
-        fetchOrgan()
-    }, [])
-    const handleCancle = () => {
-        setModalOpen(false)
-    }
+const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = null }) => {
+    const [request, setRequest] = useState({})
+    const [organ, setOrgan] = useState({})
 
     const handleChangeRequest = (name, value) => {
         setRequest(prev => ({
@@ -44,23 +25,42 @@ const Create = ({ modalOpen, setModalOpen }) => {
         }))
     }
 
-    const handlePermission = (value) => {
-        const index = permission.findIndex((item) => item === value)
-        console.log(index)
-        console.log(value)
-        if (index === -1) {
-            setPermission(prev => {
-                handleChangeRequest("permission", [...prev, value])
-                return [...prev, value]
+    useEffect(() => {
+        const fetchOrgan = async () => {
+            if (!idOrgan) return
+            const res = await axios.get(API_STORAGE_GET_ORGAN + idOrgan)
+            const data = res.data
+
+            setOrgan({
+                id: idOrgan,
+                name: data.name,
+                value: data.name
             })
+
+            handleChangeRequest("organ_id", idOrgan)
+            handleChangeRequest("organ", data.name)
         }
-        else {
-            setPermission(prev => {
-                handleChangeRequest("permission", prev.filter((item) => item !== value))
-                return prev.filter((item) => item !== value)
-            })
+        fetchOrgan()
+    }, [idOrgan])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!id) return
+            try {
+                const res = await axios.get(API_ORGAN_GET_DEPARTMENT + id)
+                const data = res.data
+                setRequest(data)
+            } catch (err) {
+                console.log(err);
+            }
         }
+        fetchData()
+    }, [id])
+
+    const handleCancle = () => {
+        setModalOpen(false)
     }
+
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -75,12 +75,20 @@ const Create = ({ modalOpen, setModalOpen }) => {
             }
         }
 
-        console.log(request)
-
-        await axios.post(API_ORGAN_POST_DEPARTMENT, request)
-        notifySuccess("Tạo phòng ban thành công")
-        setModalOpen(false)
-        setRequest(null)
+        if (id !== null) {
+            await axios.put(API_ORGAN_GET_DEPARTMENT + id, request)
+            notifySuccess("Cập nhật phòng ban thành công")
+        } else {
+            await axios.post(API_ORGAN_POST_DEPARTMENT, request)
+            notifySuccess("Tạo phòng ban thành công")
+        }
+        setRequest({})
+        handleChangeRequest("organ_id", idOrgan)
+        handleChangeRequest("organ",organ.name)
+        setTimeout(() => {
+            setModalOpen(false)
+            fetchFieldData()
+        }, 500)
     }
 
     return (
@@ -94,32 +102,43 @@ const Create = ({ modalOpen, setModalOpen }) => {
             onCancel={handleCancle}
             footer={null}
         >
-            <form id="tao-phong-ban" onSubmit={onSubmit}>
-                <div>
-                    {DEPARTMENT_DECENTRALIZATION_INPUTS.map((input, index) => {
-                        return (
-                            <div className="flex mb-[30px]">
-                                <div className={`w-[30%]  ${input.require === true ? "after-form" : ""}`}>
-                                    {input.label}
-                                </div>
-                                <div className="w-[70%]">
-                                    {input.type === "select" ?
-                                        <Select name={input.name} options={organ} onChange={(ev) => handleChangeRequest(input.name, ev)}
-                                            className="w-full" value={request !== null ? request[input.name] : ""} />
-                                        : <Input type={input.type} name={input.name} onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)} />
-                                    }
-                                </div>
+
+            <div>
+                {DEPARTMENT_DECENTRALIZATION_INPUTS.map((input, index) => {
+                    return (
+                        <div className="flex mb-[30px]">
+                            <div
+                                className={`w-[30%]  ${input.require === true ? "after-form" : ""}`}>
+                                {input.label}
                             </div>
-                        )
-                    })}
-                </div>
-                <div className="flex justify-between mt-[30px]">
-                    <Button onClick={handleCancle}>Hủy</Button>
-                    <Button form="tao-phong-ban" type="submit" className="bg-[#00f] text-white" onClick={onSubmit}>
-                        Tạo
-                    </Button>
-                </div>
-            </form>
+                            <div className="w-[70%]">
+                                {input.type === "select" ?
+                                    <Select
+                                        value={organ["name"]}
+                                        disabled
+                                        className="w-full" />
+                                    : <Input
+                                        type={input.type}
+                                        name={input.name}
+                                        onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
+                                        value={request[input.name]}
+                                    />
+                                }
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
+            <div className="flex justify-between mt-[30px]">
+                <Button onClick={handleCancle}>Hủy</Button>
+                <Button
+                    form="tao-phong-ban"
+                    type="submit"
+                    className="bg-[#00f] 
+                    text-white" onClick={onSubmit}>
+                    {id !== null ? "Cập nhật" : "Tạo"}
+                </Button>
+            </div>
 
         </Modal>
     )
@@ -133,52 +152,84 @@ const SearchBar = () => {
                 <p className="mb-[12px]">Tìm kiếm</p>
                 <Search placeholder="Tìm kiếm" onSearch={(ev) => console.log(ev)} enterButton />
             </div>
-
-            <div className="bg-white p-[12px] w-[300px] max-w-[25%] ml-[20px]">
-                <p className="mb-[12px]">Cơ quan</p>
-                <div>
-                    <Select
-                        name="state"
-                        className="w-full bg-white outline-none rounded-md"
-                        showSearch
-                        allowClear
-                        placeholder="Chọn cơ quan"
-                        optionFilterProp="children"
-                        onChange={(value) => console.log(value)}
-                        filterOption={(input, option) =>
-                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                        }
-                        options={[]}
-                    ></Select>
-                </div>
-            </div>
         </div>
     )
+}
+
+const Create = ({ modalOpen, setModalOpen, idOrgan, fetchFieldData }) => {
+    return <Form modalOpen={modalOpen} setModalOpen={setModalOpen} idOrgan={idOrgan} fetchFieldData={fetchFieldData} />
+}
+
+const Update = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
+    return <Form modalOpen={modalOpen} setModalOpen={setModalOpen} id={id} fetchFieldData={fetchFieldData} />
 }
 
 const PhongBan = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [fieldData, setFieldData] = useState([])
+    const [idOrgan, setIdOrgan] = useState(null)
+    const [id, setId] = useState(null)
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const params = useParams()
 
     const fetchFieldData = async () => {
+        console.log("fetch data")
         setIsLoading(true)
         const res = await axios.get(API_ORGAN_GET_DEPARTMENT)
         const datas = res.data
 
         const newData = []
         for (const data of datas) {
+            if (data.organ_id !== params.id) continue;
             newData.push({
                 "id": data.id,
                 "name": data.name,
                 "code": data.code,
                 "organ": data.organ,
                 "total_staff": 0,
-                "update": <span className="cursor-pointer"><i className="fa-regular fa-pen-to-square"></i></span>
+                "update":
+                    <span className="flex items-center justify-center">
+                        <span className="text-teal-500 px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button cursor-pointer "
+                            onClick={() => {
+                                setId(data.id)
+                                setModalOpen(true)
+                            }}
+                            title="Cập nhật phòng ban"
+                        >
+                            <i className="fa-regular fa-pen-to-square"></i>
+                        </span>
+
+                        <Popconfirm title="Xóa phòng ban"
+                            description="Bạn có chắc chắn xóa?"
+                            key={GetKey()}
+                            onConfirm={() => handleDelete(data.id)}
+                        >
+                            <span
+                                className="text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button cursor-pointer"
+                                title="Xóa phòng ban"
+                                onClick={(e) => console.log(e)}
+                            >
+                                <i className="fa-solid fa-trash-can"></i>
+                            </span>
+                        </Popconfirm>
+                    </span>
             })
         }
 
         setFieldData(newData)
+        setIdOrgan(params.id)
         setIsLoading(false)
+    }
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(API_ORGAN_GET_DEPARTMENT + id)
+            notifySuccess("Xóa phòng ban thành công")
+            fetchFieldData()
+        } catch (err) {
+            notifyError("Xóa phòng ban thất bại")
+        }
     }
 
     useEffect(() => {
@@ -186,7 +237,26 @@ const PhongBan = () => {
     }, [])
 
     return (
-        <DanhMucCoQuan title="Phòng ban" fieldNames={DEPARTMENT} fieldDatas={fieldData} SearchBar={<SearchBar />} Create={<Create />} isLoading={isLoading} />
+        <div>
+            <DanhMucCoQuan
+                title={
+                    <span>
+                        <Link to="/khai-bao-danh-muc/danh-muc-co-quan/">Danh mục cơ quan</Link> /
+                        <span className="text-black"> Cơ quan </span>
+                    </span>
+                }
+                fieldNames={DEPARTMENT}
+                fieldDatas={fieldData}
+                SearchBar={<SearchBar />}
+                Create={<Create idOrgan={idOrgan} fetchFieldData={fetchFieldData} />}
+                isLoading={isLoading}
+            />
+            <Update
+                fetchFieldData={fetchFieldData}
+                id={id}
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen} />
+        </div>
     )
 }
 

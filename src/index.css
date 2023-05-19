@@ -38,11 +38,10 @@
     .toggle-side-bar-button:hover {
         @apply text-white !important;
     }
-
 }
 
 /* loading animation */
-.ant-form-item-label{
+.ant-form-item-label {
     text-align: left !important;
 }
 
@@ -90,41 +89,47 @@
     outline: none !important;
 }
 
-.ant-select-selector{
+.ant-select-selector {
     border-radius: 0px !important;
 }
 .ant-select-selection-search-input {
     height: 100% !important;
 }
 
-.ant-select-selection-placeholder{
+.ant-select-selection-placeholder {
     font-size: 13px !important;
     list-style: 100% !important;
 }
 
-.ant-select-selection-item{
+.ant-select-selection-item {
     padding-left: 10px;
 }
 
-#react-confirm-alert{
+#react-confirm-alert {
     z-index: 500;
     position: fixed;
 }
 
-.ant-popconfirm-description{
+.ant-popconfirm-description {
     font-size: 12px !important;
 }
 
-.ant-popconfirm-buttons > .ant-btn-primary{
+.ant-popconfirm-buttons > .ant-btn-primary {
     background-color: #1677ff !important;
 }
 
-.ant-popconfirm-buttons > button{
+.ant-popconfirm-buttons > button {
     font-size: 12px !important;
 }
 
 .ant-btn {
     /* background-color: green !important; */
+}
+
+.ant-btn {
+    &::after {
+        all: unset;
+    }
 }
 
 .icon-button {
@@ -152,14 +157,14 @@
     @apply font-medium text-black bg-purple-300 hover:bg-purple-400 !important;
 }
 
-.ant-input-search-button{
+.ant-input-search-button {
     background-color: #00f !important;
     display: flex;
     align-items: center;
 }
 
-.ant-modal-close{
-    top: 0!important;
+.ant-modal-close {
+    top: 0 !important;
     right: 0 !important;
     color: white !important;
     font-weight: 700;
@@ -167,11 +172,11 @@
     height: 30px;
 }
 
-.ant-modal-title{
+.ant-modal-title {
     color: white !important;
 }
 
-.ant-modal-header{
+.ant-modal-header {
     display: flex;
     align-items: center;
     background-color: #00f !important;
@@ -180,21 +185,20 @@
     padding: 24px;
 }
 
-
-.ant-modal-content{
+.ant-modal-content {
     padding: 0 !important;
 }
 
-.ant-modal-body{
+.ant-modal-body {
     padding: 12px 24px;
 }
 
-.ant-btn.css-dev-only-do-not-override-1fviqcj.ant-btn-primary{
-   background-color: #00f;
-   color: white; 
+.ant-btn.css-dev-only-do-not-override-1fviqcj.ant-btn-primary {
+    background-color: #00f;
+    color: white;
 }
 
-.ant-modal-footer{
+.ant-modal-footer {
     display: flex;
     justify-content: space-between;
     padding: 0 24px;

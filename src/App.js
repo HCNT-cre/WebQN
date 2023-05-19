@@ -137,7 +137,7 @@ const App = () => {
             element: <NhanVien />
         },
         {
-            path: "/khai-bao-danh-muc/danh-muc-co-quan/phong-ban",
+            path: "/khai-bao-danh-muc/danh-muc-co-quan/phong-ban/:id",
             element: <PhongBan />
         },
         {
