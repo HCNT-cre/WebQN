@@ -1,21 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import DanhMucCoQuan from "."
 import { STAFF, STAFF_DECENTRALIZATION } from "../../../storage/StorageOffice"
-import { Input, Modal, Button, Select } from "antd";
+import { Input, Modal, Button, Select, Collapse, Checkbox, Row, Col } from "antd";
 import { GetKey } from "../../../custom/Function";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { notifyError, notifySuccess } from "../../../custom/Function";
+import { CheckBox } from "@mui/icons-material";
+
 const Search = Input.Search
+const { Panel } = Collapse
 
 const API_ORGAN_GET_STAFF = process.env.REACT_APP_API_ORGAN_GET_STAFF
 const API_ORGAN_POST_STAFF = process.env.REACT_APP_API_ORGAN_POST_STAFF
 const API_ORGAN_GET_DEPARTMENT = process.env.REACT_APP_API_ORGAN_GET_DEPARTMENT
+const API_GROUP_PERMISSION = process.env.REACT_APP_API_GROUP_PERMISSION
 
 const Create = ({ modalOpen, setModalOpen }) => {
     const [request, setRequest] = useState(null)
     const [department, setDepartment] = useState([])
     const [organ, setOrgan] = useState({})
+    const [groupPermission, setGroupPermission] = useState([])
+    const [permissionGroup, setPermissionGroup] = useState([])
+
     useEffect(() => {
         const fetchDepartment = async () => {
             const res = await axios.get(API_ORGAN_GET_DEPARTMENT)
@@ -32,6 +39,20 @@ const Create = ({ modalOpen, setModalOpen }) => {
             setOrgan(organ)
             setDepartment(department)
         }
+
+        const fetchGroupPermission = async () => {
+            const res = await axios.get(API_GROUP_PERMISSION)
+            const data = res.data
+
+            const groupPermission = data.map((item) => {
+                return {
+                    label: item.name,
+                    value: item.name
+                }
+            })
+            setGroupPermission(groupPermission)
+        }
+        fetchGroupPermission()
         fetchDepartment()
     }, [])
 
@@ -39,7 +60,6 @@ const Create = ({ modalOpen, setModalOpen }) => {
         setModalOpen(false)
     }
 
-    console.log(organ)
     const onSubmit = async (e) => {
         console.log(request)
 
@@ -69,6 +89,19 @@ const Create = ({ modalOpen, setModalOpen }) => {
         }))
     }
 
+    const handleChangePermission = (value) => {
+        if (permissionGroup.includes(value)) {
+            handleChangeRequest("permission_group", permissionGroup.filter((item) => item !== value))
+            setPermissionGroup(prev => prev.filter((item) => item !== value))
+        } else {
+            handleChangeRequest("permission_group", [...permissionGroup, value])
+            setPermissionGroup(prev => [...prev, value])
+        }
+    }
+
+
+    console.log(permissionGroup);
+    console.log(request);
     return (
         <Modal
             title="Tạo nhân viên"
@@ -95,6 +128,26 @@ const Create = ({ modalOpen, setModalOpen }) => {
                             </div>
                         )
                     })}
+                    <Collapse defaultActiveKey={['1']} >
+                        <Panel header="Nhóm quyền" key="1">
+                            <Row className="w-full">
+                                {groupPermission.map((item) => {
+                                    return (
+                                        <Col span={12}>
+                                            <Checkbox checked={
+                                                permissionGroup.includes(item.value)
+                                            } onChange={(e) =>handleChangePermission(e.target.value)} value={item.value}>
+                                                {item.label}
+                                            </Checkbox>
+                                        </Col>
+                                        
+                                    )
+                                })}
+                            </Row>
+
+                        </Panel>
+
+                    </Collapse>
                 </div>
                 <div className="flex justify-between mt-[30px]">
                     <Button onClick={handleCancle}>Hủy</Button>
