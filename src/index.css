@@ -126,11 +126,6 @@
     /* background-color: green !important; */
 }
 
-.ant-btn {
-    &::after {
-        all: unset;
-    }
-}
 
 .icon-button {
     background-color: inherit !important;
