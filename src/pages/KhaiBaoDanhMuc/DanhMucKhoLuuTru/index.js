@@ -9,7 +9,6 @@ const DanhMucKhoLuuTru = ({ fieldNames, fieldDatas, title, isLoading, SearchBar,
 
     const newFieldData = []
 
-    console.log(fieldDatas)
     for(const data of fieldDatas) {
         let temp = {}
         Object.keys(data).forEach(key => {
