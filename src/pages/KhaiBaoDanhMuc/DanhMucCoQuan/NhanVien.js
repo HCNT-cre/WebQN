@@ -32,10 +32,9 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null }) => {
                 organ[item.name] = item.organ
                 return {
                     label: item.name,
-                    value: item.name
+                    value: item.id
                 }
             })
-
             setOrgan(organ)
             setDepartment(department)
         }
@@ -104,10 +103,12 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null }) => {
         }
 
         request["organ"] = organ[request.department]
+        request["department_id"] = request["department"]
+        request["department"] = department.find((item) => item.value === request.department).label
 
         if (id !== null) {
             await axios.put(API_ORGAN_POST_STAFF + id, request)
-            notifySuccess("Sửa nhân viên thành công")
+            notifySuccess("Cập nhật nhân viên thành công")
         } else {
             await axios.post(API_ORGAN_POST_STAFF, request)
             notifySuccess("Tạo nhân viên thành công")
@@ -210,11 +211,128 @@ const Update = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
     return <Form modalOpen={modalOpen} setModalOpen={setModalOpen} id={id} fetchFieldData={fetchFieldData} />
 }
 
+const Read = ({ modalOpenRead, setModalOpenRead, id, fetchFieldData }) => {
+    const [request, setRequest] = useState({})
+    const [permissionGroup, setPermissionGroup] = useState([])
+    const [groupPermission, setGroupPermission] = useState([])
+
+    useEffect(() => {
+        const fetchGroupPermission = async () => {
+            const res = await axios.get(API_GROUP_PERMISSION)
+            const data = res.data
+
+            const groupPermission = data.map((item) => {
+                return {
+                    label: item.name,
+                    value: item.name
+                }
+            })
+            setGroupPermission(groupPermission)
+        }
+        fetchGroupPermission()
+    }, [])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!id) return
+            const res = await axios.get(API_ORGAN_GET_STAFF + id)
+            const data = res.data
+
+            setRequest(data)
+            setPermissionGroup(data.permission_group)
+        }
+        fetchData()
+    }, [id, modalOpenRead])
+
+    const handleChangeRequest = (name, value) => {
+        setRequest(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    const handleCancle = () => {
+        setModalOpenRead(false)
+    }
+
+    const handleChangePermission = (value) => {
+        if (permissionGroup.includes(value)) {
+            handleChangeRequest("permission_group", permissionGroup.filter((item) => item !== value))
+            setPermissionGroup(prev => prev.filter((item) => item !== value))
+        } else {
+            handleChangeRequest("permission_group", [...permissionGroup, value])
+            setPermissionGroup(prev => [...prev, value])
+        }
+    }
+
+    const onSubmit = async (e) => {
+        if (id !== null) {
+            await axios.put(API_ORGAN_POST_STAFF + id, request)
+            notifySuccess("Cập nhật nhân viên thành công")
+        } else {
+            await axios.post(API_ORGAN_POST_STAFF, request)
+            notifySuccess("Tạo nhân viên thành công")
+        }
+
+        setRequest({})
+        setTimeout(() => {
+            setModalOpenRead(false)
+            fetchFieldData()
+        }, 500)
+    }
+
+    return (
+        <Modal
+            title="Tạo nhân viên"
+            style={{
+                top: 20,
+            }}
+            className="w-[600px]"
+            open={modalOpenRead}
+            onCancel={handleCancle}
+            footer={null}
+        >
+            <form id="tao-nhan-vien">
+                <div>
+
+                    <Collapse defaultActiveKey={['1']} >
+                        <Panel header="Nhóm quyền" key="1">
+                            <Row className="w-full">
+                                {groupPermission.map((item) => {
+                                    return (
+                                        <Col span={12} key={GetKey()}>
+                                            <Checkbox checked={
+                                                permissionGroup.includes(item.value)
+                                            } onChange={(e) => handleChangePermission(e.target.value)} value={item.value}>
+                                                {item.label}
+                                            </Checkbox>
+                                        </Col>
+
+                                    )
+                                })}
+                            </Row>
+
+                        </Panel>
+
+                    </Collapse>
+                </div>
+                <div className="flex justify-between mt-[30px]">
+                    <Button onClick={handleCancle}>Hủy</Button>
+                    <Button form="tao-nhan-vien" type="submit" className="bg-[#00f] text-white" onClick={onSubmit}>
+                        Cập nhật
+                    </Button>
+                </div>
+            </form>
+        </Modal >
+    )
+}
 const NhanVien = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [fieldData, setFieldData] = useState([])
     const [id, setId] = useState(null)
     const [modalOpen, setModalOpen] = useState(false)
+    const [modalOpenRead, setModalOpenRead] = useState(false)
+
     const params = useParams()
 
     const fetchFieldData = async () => {
@@ -227,7 +345,12 @@ const NhanVien = () => {
             if (data.department_id !== params.department_id) continue
             newData.push({
                 "id": data.id,
-                "name": data.name,
+                "name": <span
+                    className="cursor-pointer"
+                    onClick={() => {
+                        setModalOpenRead(true)
+                        setId(data.id)
+                    }}> {data.name}</span>,
                 "email": data.email,
                 "address": data.address,
                 "phone": data.phone,
@@ -268,6 +391,7 @@ const NhanVien = () => {
             />
 
             <Update modalOpen={modalOpen} setModalOpen={setModalOpen} id={id} fetchFieldData={fetchFieldData} />
+            <Read modalOpenRead={modalOpenRead} setModalOpenRead={setModalOpenRead} id={id}></Read>
         </div>
 
     )
