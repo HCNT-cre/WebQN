@@ -73,8 +73,6 @@ const GroupChange = ({ setStateGroupChange, stateGroupChange, reFetchGroups }) =
     const [permission, setPermission] = useState(group === null ? [] : group.permissions)
     const [request, setRequest] = useState(group === null ? {} : { name: group.name, permissions: group.permissions })
 
-    console.log(permission)
-
     const handleChangeRequest = (name, value) => {
         setRequest(prev => ({
             ...prev,

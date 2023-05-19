@@ -6,7 +6,6 @@ import { GetKey } from "../../../custom/Function";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { notifyError, notifySuccess } from "../../../custom/Function";
-import { CheckBox } from "@mui/icons-material";
 
 const Search = Input.Search
 const { Panel } = Collapse
@@ -16,7 +15,7 @@ const API_ORGAN_POST_STAFF = process.env.REACT_APP_API_ORGAN_POST_STAFF
 const API_ORGAN_GET_DEPARTMENT = process.env.REACT_APP_API_ORGAN_GET_DEPARTMENT
 const API_GROUP_PERMISSION = process.env.REACT_APP_API_GROUP_PERMISSION
 
-const Create = ({ modalOpen, setModalOpen }) => {
+const Form = ({ modalOpen, setModalOpen, id = null }) => {
     const [request, setRequest] = useState(null)
     const [department, setDepartment] = useState([])
     const [organ, setOrgan] = useState({})
@@ -52,6 +51,17 @@ const Create = ({ modalOpen, setModalOpen }) => {
             })
             setGroupPermission(groupPermission)
         }
+
+        const fetchData = async () => {
+            if (id === null)
+                return
+            const res = await axios.get(API_ORGAN_GET_STAFF + "/" + id)
+            const data = res.data
+
+            setRequest(data)
+        }
+
+        fetchData()
         fetchGroupPermission()
         fetchDepartment()
     }, [])
@@ -61,8 +71,6 @@ const Create = ({ modalOpen, setModalOpen }) => {
     }
 
     const onSubmit = async (e) => {
-        console.log(request)
-
         e.preventDefault()
         if (!request) {
             notifyError("Vui lòng nhập đầy đủ thông tin")
@@ -76,8 +84,15 @@ const Create = ({ modalOpen, setModalOpen }) => {
         }
 
         request["organ"] = organ[request.department]
-        await axios.post(API_ORGAN_POST_STAFF, request)
-        notifySuccess("Tạo nhân viên thành công")
+
+        if (id !== null) {
+            await axios.put(API_ORGAN_POST_STAFF + "/" + id, request)
+            notifySuccess("Sửa nhân viên thành công")
+        } else {
+            await axios.post(API_ORGAN_POST_STAFF, request)
+            notifySuccess("Tạo nhân viên thành công")
+        }
+
         setModalOpen(false)
         setRequest(null)
     }
@@ -99,9 +114,6 @@ const Create = ({ modalOpen, setModalOpen }) => {
         }
     }
 
-
-    console.log(permissionGroup);
-    console.log(request);
     return (
         <Modal
             title="Tạo nhân viên"
@@ -117,7 +129,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
                 <div>
                     {STAFF_DECENTRALIZATION.map((input, index) => {
                         return (
-                            <div className="flex mb-[30px]">
+                            <div className="flex mb-[30px]" key={GetKey()}>
                                 <div className={`w-[30%]  ${input.require === true ? "after-form" : ""}`}>
                                     {input.label}
                                 </div>
@@ -133,14 +145,14 @@ const Create = ({ modalOpen, setModalOpen }) => {
                             <Row className="w-full">
                                 {groupPermission.map((item) => {
                                     return (
-                                        <Col span={12}>
+                                        <Col span={12} key={GetKey()}>
                                             <Checkbox checked={
                                                 permissionGroup.includes(item.value)
-                                            } onChange={(e) =>handleChangePermission(e.target.value)} value={item.value}>
+                                            } onChange={(e) => handleChangePermission(e.target.value)} value={item.value}>
                                                 {item.label}
                                             </Checkbox>
                                         </Col>
-                                        
+
                                     )
                                 })}
                             </Row>
@@ -160,6 +172,7 @@ const Create = ({ modalOpen, setModalOpen }) => {
     )
 }
 
+
 const SearchBar = () => {
     return (
         <div className="mx-[24px] mt-[8px] flex">
@@ -177,6 +190,7 @@ const SearchBar = () => {
 const NhanVien = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [fieldData, setFieldData] = useState([])
+    const [id, setId] = useState(null)
 
     const fetchFieldData = async () => {
         setIsLoading(true)
@@ -195,7 +209,7 @@ const NhanVien = () => {
                 "department": data.department,
                 "position": data.position,
                 // "state": 0,
-                "update": <span className="cursor-pointer"><i className="fa-regular fa-pen-to-square"></i></span>
+                "update": <span className="cursor-pointer" onClick={() => setId(data.id)}><i className="fa-regular fa-pen-to-square"></i></span>
             })
         }
 
@@ -209,7 +223,7 @@ const NhanVien = () => {
     }, [])
 
     return (
-        <DanhMucCoQuan title="Nhân viên" fieldNames={STAFF} fieldDatas={fieldData} SearchBar={<SearchBar />} Create={<Create />} isLoading={isLoading} />
+        <DanhMucCoQuan title="Nhân viên" fieldNames={STAFF} fieldDatas={fieldData} SearchBar={<SearchBar />} isLoading={isLoading} id={id}/>
     )
 }
 

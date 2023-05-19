@@ -57,7 +57,6 @@ const SideBar = ({ sideBarWidth }) => {
 
                                 }
                             </div>
-
                             {sideBarWidth === 250 && tab.numChildTabs > 0 &&
                                 <Expand open={tab.isExpand} duration={200} transitions={transitions}>
                                     {tab.numChildTabs > 0 &&
