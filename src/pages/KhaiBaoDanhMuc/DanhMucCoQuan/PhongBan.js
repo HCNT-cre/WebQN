@@ -61,7 +61,6 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
         setModalOpen(false)
     }
 
-
     const onSubmit = async (e) => {
         e.preventDefault()
         if (!request) {
@@ -114,7 +113,7 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
                             <div className="w-[70%]">
                                 {input.type === "select" ?
                                     <Select
-                                        value={organ["name"]}
+                                        value={request["organ"]}
                                         disabled
                                         className="w-full" />
                                     : <Input
@@ -187,7 +186,7 @@ const PhongBan = () => {
                 "name": <Link to={`./${data.id}`} className="cursor-pointer">{data.name}</Link>,
                 "code": data.code,
                 "organ": data.organ,
-                "total_staff": 0,
+                "total_staff": data.total_staff,
                 "update":
                     <span className="flex items-center justify-center">
                         <span className="text-teal-500 px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button cursor-pointer "
