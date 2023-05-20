@@ -15,6 +15,7 @@ const API_ORGAN_GET_STAFF = process.env.REACT_APP_API_ORGAN_GET_STAFF
 const API_ORGAN_POST_STAFF = process.env.REACT_APP_API_ORGAN_POST_STAFF
 const API_ORGAN_GET_DEPARTMENT = process.env.REACT_APP_API_ORGAN_GET_DEPARTMENT
 const API_GROUP_PERMISSION = process.env.REACT_APP_API_GROUP_PERMISSION
+const API_STORAGE_GET_ORGAN = process.env.REACT_APP_API_STORAGE_GET_ORGAN
 
 const Form = ({ modalOpen,
     setModalOpen,
@@ -248,10 +249,29 @@ const NhanVien = () => {
     const [id, setId] = useState(null)
     const [modalOpen, setModalOpen] = useState(false)
     const [modalOpenRead, setModalOpenRead] = useState(false)
-
+    const [organ, setOrgan] = useState(null)
+    const [department, setDepartment] = useState(null)
     const params = useParams()
 
-    console.log(params)
+    useEffect(()=>{
+        const department_id = params.department_id
+        const organ_id = params.organ_id 
+        
+        if(!organ_id || !department_id) return 
+
+        const fetchDepartment = async () =>{
+            const res = await axios.get(API_ORGAN_GET_DEPARTMENT + department_id)
+            setDepartment(res.data)    
+        }
+
+        const fetchOrgan = async () =>{
+            const res = await axios.get(API_STORAGE_GET_ORGAN + organ_id)
+            setOrgan(res.data)
+        } 
+
+        fetchDepartment()
+        fetchOrgan()
+    }, [params])
     const fetchFieldData = async () => {
         setIsLoading(true)
         const res = await axios.get(API_ORGAN_GET_STAFF)
@@ -296,9 +316,9 @@ const NhanVien = () => {
             <DanhMucCoQuan
                 title={
                     <span>
-                        <Link to="/khai-bao-danh-muc/danh-muc-co-quan/">Danh mục cơ quan</Link> /
-                        <Link to={`/khai-bao-danh-muc/danh-muc-co-quan/${params.organ_id}`}> Phòng ban </Link> /
-                        <span className="text-black"> Nhân viên </span>
+                        <Link to="/khai-bao-danh-muc/danh-muc-co-quan/">Danh mục cơ quan </Link> /
+                        <Link to={`/khai-bao-danh-muc/danh-muc-co-quan/${params.organ_id}`}> {organ !== null ? organ.name : ""}</Link> /
+                        <span className="text-black"> {department !== null ? department.name : ""} / Nhân viên </span>
                     </span>
                 }
                 fieldNames={STAFF}

@@ -169,8 +169,17 @@ const PhongBan = () => {
     const [idOrgan, setIdOrgan] = useState(null)
     const [id, setId] = useState(null)
     const [modalOpen, setModalOpen] = useState(false)
-
+    const [organ, setOrgan] = useState(null)
     const params = useParams()
+
+    useEffect(()=>{
+        const fetchOrgan = async () =>{
+            if(!params.id) return 
+            const res = await axios.get(API_STORAGE_GET_ORGAN + params.id)
+            setOrgan(res.data)
+        } 
+        fetchOrgan()
+    }, [params.id])
 
     const fetchFieldData = async () => {
         console.log("fetch data")
@@ -240,7 +249,8 @@ const PhongBan = () => {
             <DanhMucCoQuan
                 title={
                     <span>
-                        <Link to="/khai-bao-danh-muc/danh-muc-co-quan/">Danh mục cơ quan</Link> /
+                        <Link to="/khai-bao-danh-muc/danh-muc-co-quan/">Danh mục cơ quan</Link> / &nbsp; 
+                        {organ !== null ? organ.name + " /": ""} 
                         <span className="text-black"> Phòng ban </span>
                     </span>
                 }
