@@ -2,11 +2,12 @@
 import DanhMucCoQuan from "."
 
 import { ORGAN, ORGAN_DECENTRALIZATION_INPUTS } from "../../../storage/StorageOffice"
-import { Input, Modal, Button, Form, Switch, Select } from "antd";
+import { Input, Modal, Button, Switch, Select, Popconfirm } from "antd";
 import { GetKey, notifyError, notifySuccess } from "../../../custom/Function";
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const Search = Input.Search
 const API_STORAGE_POST_ORGAN = process.env.REACT_APP_API_STORAGE_POST_ORGAN
@@ -15,18 +16,17 @@ const API_STORAGE_GET_ORGAN = process.env.REACT_APP_API_STORAGE_GET_ORGAN
 const API_PROVINCES = process.env.REACT_APP_API_PROVINCES
 const API_DISTRICTS = process.env.REACT_APP_API_DISTRICTS
 const API_WARD = process.env.REACT_APP_API_WARD
-console.log(API_DISTRICTS)
-const Create = ({ modalOpen, setModalOpen }) => {
+
+const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
     const [request, setRequest] = useState({
         storage: false
     })
-
     const [provinces, setProvinces] = useState([])
     const [districts, setDistricts] = useState([])
     const [wards, setWards] = useState([])
 
     const handleChangeRequest = (name, value) => {
-        // console.log(name, value)
+        console.log(name, value)
 
         const getNameProvince = (code) => {
             if (!code) return null
@@ -69,9 +69,22 @@ const Create = ({ modalOpen, setModalOpen }) => {
         setRequest(prev => ({
             ...prev,
             [name]: value
-        }
-        ))
+        }))
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!id) return
+            try {
+                const res = await axios.get(API_STORAGE_GET_ORGAN + id)
+                const data = res.data
+                setRequest(data)
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        fetchData()
+    }, [id])
 
     useEffect(() => {
         const fetchProvinces = async () => {
@@ -133,7 +146,6 @@ const Create = ({ modalOpen, setModalOpen }) => {
         setModalOpen(false)
     }
 
-
     const onSubmit = async (e) => {
         e.preventDefault()
         if (request === null) {
@@ -147,18 +159,24 @@ const Create = ({ modalOpen, setModalOpen }) => {
                 return
             }
         }
-        console.log(request)
-        const res = await axios.post(API_STORAGE_POST_ORGAN, request)
-        console.log(res)
-        notifySuccess("Tạo cơ quan thành công")
-        setModalOpen(false)
+        if (id !== null) {
+            await axios.put(API_STORAGE_POST_ORGAN + id, request)
+            notifySuccess("Cập nhật cơ quan thành công")
+        } else {
+            await axios.post(API_STORAGE_POST_ORGAN, request)
+            notifySuccess("Tạo cơ quan thành công")
+        }
+        setRequest({
+            storage: false
+        })
+
+        setTimeout(() => {
+            setModalOpen(false)
+            fetchFieldData()
+        }, 500)
     }
 
-
-
-
     return (
-
         <Modal
             title="Tạo cơ quan"
             style={{
@@ -169,36 +187,57 @@ const Create = ({ modalOpen, setModalOpen }) => {
             onCancel={handleCancle}
             footer={null}
         >
-            <form onSubmit={onSubmit} id="tao-co-quan">
-                {ORGAN_DECENTRALIZATION_INPUTS.map((input) => {
-                    return (
-                        <div className="flex mb-[30px]">
-                            <div className={`w-[30%]  ${input.require === true ? "after-form" : ""}`}>
-                                {input.label}
-                            </div>
-                            <div className="w-[70%]">
-                                {input.type === "textarea" ?
-                                    <TextArea name={input.name} onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)} />
-                                    : input.type === "switch" ?
-                                        <Switch name={input.name} onChange={(ev) => handleChangeRequest("storage", ev)} />
-                                        :
-                                        input.type === "select" ?
-                                            <Select name={input.name} options={input.name === "province" ? provinces :
-                                                input.name === "district" ? districts : wards} onChange={(ev) => handleChangeRequest(input.name, ev)}
-                                                className="w-full" value={request[input.name]} />
-                                            : <Input type={input.type} name={input.name} onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)} />
 
-
-                                }
-                            </div>
+            {ORGAN_DECENTRALIZATION_INPUTS.map((input) => {
+                return (
+                    <div className="flex mb-[30px]">
+                        <div className={`w-[30%]  ${input.require === true ? "after-form" : ""}`}>
+                            {input.label}
                         </div>
-                    )
-                })}
-            </form>
+                        <div className="w-[70%]">
+                            {input.type === "textarea" ?
+                                <TextArea
+                                    name={input.name}
+                                    value={request[input.name]}
+                                    onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
+                                />
+                                : input.type === "switch" ?
+                                    <Switch
+                                        name={input.name}
+                                        onChange={(ev) => handleChangeRequest("storage", ev)}
+                                    />
+                                    :
+                                    input.type === "select" ?
+                                        <Select
+                                            name={input.name}
+                                            options={input.name === "province" ? provinces :
+                                                input.name === "district" ? districts : wards}
+                                            onChange={(ev) => handleChangeRequest(input.name, ev)}
+                                            className="w-full" value={request[input.name]} />
+                                        : <Input
+                                            type={input.type} name={input.name}
+                                            defaultValue={request[input.name]}
+                                            onChange={(ev) =>
+                                                handleChangeRequest(ev.target.name, ev.target.value)
+                                            }
+                                            value={request[input.name]}
+                                        />
+                            }
+                        </div>
+                    </div>
+                )
+            })}
 
             <div className="flex justify-end">
-                <Button className="mr-[10px]" onClick={handleCancle}>Hủy</Button>
-                <Button type="submit" className="bg-[#00f] text-white" form="tao-co-quan" onClick={onSubmit}>Tạo</Button>
+                <Button className="mr-[10px]"
+                    onClick={handleCancle}>Hủy</Button>
+                <Button
+                    type="submit"
+                    className="bg-[#00f] text-white"
+                    form="tao-co-quan"
+                    onClick={onSubmit}>
+                    {id !== null ? "Cập nhật" : "Tạo"}
+                </Button>
             </div>
 
         </Modal >
@@ -218,38 +257,99 @@ const SearchBar = () => {
     )
 }
 
+const Create = ({ modalOpen, setModalOpen, fetchFieldData }) => {
+    return <Form modalOpen={modalOpen} setModalOpen={setModalOpen} id={null} fetchFieldData={fetchFieldData} />
+}
+
+const Update = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
+    return <Form modalOpen={modalOpen} setModalOpen={setModalOpen} id={id} fetchFieldData={fetchFieldData} />
+}
 
 const CoQuan = () => {
     const [fieldData, setFieldData] = useState([])
-    useEffect(() => {
-        const fetchFieldData = async () => {
-            const res = await axios.get(API_STORAGE_GET_ORGAN)
-            const datas = res.data
+    const [isLoading, setIsLoading] = useState(true)
+    const [id, setId] = useState(null)
+    const [modalOpen, setModalOpen] = useState(false)
+    const fetchFieldData = async () => {
+        setIsLoading(true)
+        const res = await axios.get(API_STORAGE_GET_ORGAN)
+        const datas = res.data
+        const newData = []
 
-            const newData = []
-            for (const data of datas) {
-                newData.push({
-                    "id": data.id,
-                    "name": data.name,
-                    "code": data.code,
-                    "address": data.address,
-                    "phone": data.phone,
-                    "fax": data.fax,
-                    "provinceName": data.provinceName,
-                    "districtName": data.districtName,
-                    "wardName": data.wardName,
-                    "update": <span className="cursor-pointer"><i className="fa-regular fa-pen-to-square"></i></span>
-                })
-            }
-
-            setFieldData(newData)
-
-
+        for (const data of datas) {
+            newData.push({
+                "id": data.id,
+                "name": <Link to={`./${data.id}`} className="cursor-pointer">{data.name}</Link>,
+                "code": data.code,
+                "address": data.address,
+                "phone": data.phone,
+                "fax": data.fax,
+                "provinceName": data.provinceName,
+                "districtName": data.districtName,
+                "wardName": data.wardName,
+                "update":
+                    <span className="flex items-center justify-center">
+                        <span className="text-teal-500 px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button cursor-pointer"
+                            onClick={() => {
+                                setId(data.id)
+                                setModalOpen(true)
+                            }}
+                            title="Cập nhật phòng ban"
+                        ><i className="fa-regular fa-pen-to-square"></i>
+                        </span>
+                        <Popconfirm title="Xóa cơ quan"
+                            description="Bạn có chắc chắn xóa?"
+                            key={GetKey()}
+                            onConfirm={() => handleDelete(data.id)}
+                        >
+                            <span
+                                className="text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button cursor-pointer"
+                                title="Xóa cơ quan"
+                                onClick={(e) => console.log(e)}
+                            >
+                                <i className="fa-solid fa-trash-can"></i>
+                            </span>
+                        </Popconfirm>
+                    </span>
+            })
         }
+
+        setFieldData(newData)
+        setIsLoading(false)
+    }
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(API_STORAGE_POST_ORGAN + id)
+            notifySuccess("Xóa cơ quan thành công")
+            fetchFieldData()
+        } catch (err) {
+            notifyError("Xóa cơ quan thất bại")
+        }
+    }
+
+
+
+    useEffect(() => {
         fetchFieldData()
     }, [])
+
     return (
-        <DanhMucCoQuan title="Cơ quan" fieldNames={ORGAN} fieldDatas={fieldData} SearchBar={<SearchBar />} Create={<Create />} />
+        <div>
+            <Update
+                id={id}
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+                fetchFieldData={fetchFieldData}
+            />
+            <DanhMucCoQuan
+                title={<Link to="/khai-bao-danh-muc/danh-muc-co-quan/"
+                    className="text-black">Danh mục cơ quan</Link>}
+                fieldNames={ORGAN} fieldDatas={fieldData}
+                SearchBar={<SearchBar />}
+                Create={<Create fetchFieldData={fetchFieldData} />}
+                isLoading={isLoading} />
+        </div>
     )
 }
 

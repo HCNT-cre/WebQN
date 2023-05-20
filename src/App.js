@@ -133,15 +133,15 @@ const App = () => {
             element: <Drawers />
         },
         {
-            path: "/khai-bao-danh-muc/danh-muc-co-quan/nhan-vien",
+            path: "/khai-bao-danh-muc/danh-muc-co-quan/:organ_id/:department_id",
             element: <NhanVien />
         },
         {
-            path: "/khai-bao-danh-muc/danh-muc-co-quan/phong-ban",
+            path: "/khai-bao-danh-muc/danh-muc-co-quan/:id",
             element: <PhongBan />
         },
         {
-            path: "/khai-bao-danh-muc/danh-muc-co-quan/co-quan",
+            path: "/khai-bao-danh-muc/danh-muc-co-quan",
             element: <CoQuan />
         },
         
