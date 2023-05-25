@@ -7,6 +7,8 @@ import docCategoryReducer from './docCategory'
 import modalCensorshipReducer from './modalCensorship'
 import loginReducer from './login'
 import reFetchFileReducer from './reFetchFile'
+import userPermissionReducer from './userPermission'
+
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
@@ -15,7 +17,8 @@ const rootReducer = combineReducers({
     docCategory: docCategoryReducer, 
     modalCensorship: modalCensorshipReducer,
     login: loginReducer,
-    reFetchFile: reFetchFileReducer
+    reFetchFile: reFetchFileReducer,
+    userPermission: userPermissionReducer
 })
 
 export default rootReducer

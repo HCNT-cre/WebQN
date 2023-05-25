@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -28,12 +29,27 @@ import CoQuan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/CoQuan";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { setUserPermission } from "./actions/userPermission"
+
+import axios from "axios";
+
+const API_ORGAN_GET_STAFF = process.env.REACT_APP_API_ORGAN_GET_STAFF
 
 function LoggedIn() {
     const dispatch = useDispatch();
     const navigate = useNavigate()
+    const params = useParams();
 
+    console.log(params)
     useEffect(() => {
+        const fetchPermission = async () => {
+            console.log("id", params.id)
+            const res = await axios.get(API_ORGAN_GET_STAFF + "/" + params.id);
+            dispatch(setUserPermission(res.data.permission_group_id));
+            localStorage.setItem('userID', params.id);
+            console.log(localStorage.getItem("userID"))
+        }
+        fetchPermission();
         dispatch({ type: "LOGINED" });
         navigate("/")
     }, [])
@@ -44,15 +60,25 @@ function LoggedIn() {
 }
 
 const App = () => {
+    const dispatch = useDispatch();
     const isLogin = useSelector(state => state.login)
+    const userID = localStorage.getItem('userID')
+    
     console.log("isLogin", isLogin, typeof isLogin)
+    const fetchPermission = async (id) => {
+        const res = await axios.get(API_ORGAN_GET_STAFF + "/" + id);
+        dispatch(setUserPermission(res.data.permission_group_id));
+    }
 
+    if (userID !== null && isLogin !== 'false') {
+        fetchPermission(userID);
+    }
+   
     function loginPage() {
         if (isLogin !== 'true')
             return (
                 <Login />
             )
-
         return (
             <Navigate to="/" />
         )
@@ -63,7 +89,6 @@ const App = () => {
             return (
                 <LoginSSO />
             )
-
         return (
             <Navigate to="/" />
         )
@@ -144,7 +169,7 @@ const App = () => {
             path: "/khai-bao-danh-muc/danh-muc-co-quan",
             element: <CoQuan />
         },
-        
+
     ];
 
     return (
@@ -167,7 +192,7 @@ const App = () => {
                 <Routes>
                     <Route path="/dang-nhap" element={loginPage()} />
                     <Route path="/dang-nhap-sso" element={loginSSOPage()} />
-                    <Route path="/logged-in" element={<LoggedIn />} />
+                    <Route path="/logged-in/:id" element={<LoggedIn />} />
 
 
                     {routes.map((route, index) => (

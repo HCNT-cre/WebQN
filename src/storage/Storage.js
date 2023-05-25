@@ -3,9 +3,9 @@ export const STATE = [
 ]
 
 export const TABS_SIDEBAR = [
-    { isExpand: false, icon: `<i class="fa-solid fa-house"></i>`, title: "Trang chủ", to: "/", numChildTabs: 0, key: "/" },
+    { isExpand: false, icon: `<i class="fa-solid fa-house"></i>`, title: "Trang chủ", to: "/", numChildTabs: 0, key: "/", display: true },
     {
-        key: "/ho-so/tao-ho-so-dien-tu", isExpand: false, icon: '<i class="fa-regular fa-file"></i>',
+        key: "/ho-so/tao-ho-so-dien-tu", isExpand: false, icon: '<i class="fa-regular fa-file"></i>', display: false, type: ["hoso"],
         title: "Hồ sơ tài liệu", numChildTabs: 3, childTabs: [
             { title: "Danh sách hồ sơ", to: "/ho-so/tao-ho-so-dien-tu", key: "/ho-so/tao-ho-so-dien-tu" },
             { title: "Số hóa hồ sơ tài liệu", to: "/ho-so/so-hoa-ho-so-tai-lieu", key: "/ho-so/so-hoa-ho-so-tai-lieu" },
@@ -13,7 +13,7 @@ export const TABS_SIDEBAR = [
             { title: "Hồ sơ bị trả về", to: "/ho-so/ho-so-bi-tra-ve", key: "/ho-so/ho-so-bi-tra-ve" },]
     },
     {
-        key: "/luu-tru-co-quan/", isExpand: false, icon: '<i class="fa-regular fa-building"></i>',
+        key: "/luu-tru-co-quan/", isExpand: false, icon: '<i class="fa-regular fa-building"></i>', display: false, type: ["hoso"],
         title: "Lưu trữ cơ quan", numChildTabs: 3, childTabs: [
             { title: "Hồ sơ tài liệu giao nộp", to: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop", key: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop" },
             { title: "Kho lưu trữ cơ quan", to: "/luu-tru-co-quan/kho-luu-tru-co-quan", key: "/luu-tru-co-quan/kho-luu-tru-co-quan" },
@@ -22,20 +22,21 @@ export const TABS_SIDEBAR = [
         ]
     },
     {
-        key: "/luu-tru-lich-su/", isExpand: false, icon: '<i class="fa-solid fa-arrow-rotate-right"></i>',
+        key: "/luu-tru-lich-su/", isExpand: false, icon: '<i class="fa-solid fa-arrow-rotate-right"></i>', display: false, type: ["hoso"],
         title: "Lưu trữ lịch sử", numChildTabs: 2, childTabs: [
             { title: "Hồ sơ tài liệu giao nộp", to: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop", key: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop" },
             { title: "Kho lưu trữ lịch sử", to: "/luu-tru-lich-su/kho-luu-tru-lich-su", key: "/luu-tru-lich-su/kho-luu-tru-lich-su" },
         ]
     },
     {
-        key: "/khai-bao-danh-muc/", isExpand: false, icon: '<i class="fa-solid fa-list"></i>',
+        key: "/khai-bao-danh-muc/", isExpand: false, icon: '<i class="fa-solid fa-list"></i>', display: false, type: ["coquan", "kho"],
         title: "Khai báo danh mục", numChildTabs: 2, childTabs: [
             {
-                icon: '<i class="fa-regular fa-newspaper"></i>', title: "Danh mục cơ quan", to: "/khai-bao-danh-muc/danh-muc-co-quan", key: "/khai-bao-danh-muc/danh-muc-co-quan"
+                icon: '<i class="fa-regular fa-newspaper"></i>', title: "Danh mục cơ quan", to: "/khai-bao-danh-muc/danh-muc-co-quan", key: "/khai-bao-danh-muc/danh-muc-co-quan", display: false, type:["coquan"]
             },
             {
-                title: "Danh mục kho lưu trữ", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru", isExpand: false, numChildTabs: 3, childTabs: [
+                title: "Danh mục kho lưu trữ", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru", isExpand: false, numChildTabs: 3, 
+                display: false, type:["kho"], childTabs: [
                     { title: "Kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", numChildTabs: 0 },
                     { title: "Phòng kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", numChildTabs: 0 },
                     { title: "Kệ", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", numChildTabs: 0 },
@@ -46,13 +47,13 @@ export const TABS_SIDEBAR = [
         ]
     },
     {
-        isExpand: false, icon: '<i class="fa-solid fa-magnifying-glass"></i>', title: "Tra cứu và tìm kiếm", numChildTabs: 0, to: "/tra-cuu-va-tim-kiem", key: "/tra-cuu-va-tim-kiem"
+        isExpand: false, icon: '<i class="fa-solid fa-magnifying-glass"></i>', title: "Tra cứu và tìm kiếm", numChildTabs: 0, to: "/tra-cuu-va-tim-kiem", key: "/tra-cuu-va-tim-kiem", display: true
     },
     {
-        isExpand: false, icon: '<i class="fa-regular fa-newspaper"></i>', title: "Báo cáo và thống kê", numChildTabs: 0, to: "/bao-cao-va-thong-ke", key: "/bao-cao-va-thong-ke"
+        isExpand: false, icon: '<i class="fa-regular fa-newspaper"></i>', title: "Báo cáo và thống kê", numChildTabs: 0, to: "/bao-cao-va-thong-ke", key: "/bao-cao-va-thong-ke", display: false
     },
     {
-        key: "/quan-ly-he-thong/", isExpand: false, icon: '<i class="fa-solid fa-people-roof"></i>',
+        key: "/quan-ly-he-thong/", isExpand: false, icon: '<i class="fa-solid fa-people-roof"></i>', display: false, 
         title: "Quản lý hệ thống", numChildTabs: 2, childTabs: [
             { title: "Người dùng", to: "/quan-ly-he-thong/nguoi-dung", key: "/quan-ly-he-thong/nguoi-dung" },
             { title: "Phân quyền hệ thống", to: "/quan-ly-he-thong/phan-quyen-he-thong", key: "/quan-ly-he-thong/phan-quyen-he-thong" },

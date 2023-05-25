@@ -6,6 +6,7 @@ const loginReducer = (initialState = localStorage.getItem('isLogin'), action) =>
         }
         case 'LOGOUT':{
             localStorage.setItem('isLogin', "false");
+            localStorage.removeItem('userID');
             return "false";
         }
         default:

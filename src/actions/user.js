@@ -4,8 +4,9 @@ export const setRoleToApplicant = () => {
     }
 }
 
-export const setRoleToApplicationReviewer= () => {
+export const setRoleToApplicationReviewer = () => {
     return {
         type: 'SET_ROLE_TO_APPLICATION_REVIEWER'
     }
 }
+
