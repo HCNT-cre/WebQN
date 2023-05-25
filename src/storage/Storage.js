@@ -32,11 +32,11 @@ export const TABS_SIDEBAR = [
         key: "/khai-bao-danh-muc/", isExpand: false, icon: '<i class="fa-solid fa-list"></i>', display: false, type: ["coquan", "kho"],
         title: "Khai báo danh mục", numChildTabs: 2, childTabs: [
             {
-                icon: '<i class="fa-regular fa-newspaper"></i>', title: "Danh mục cơ quan", to: "/khai-bao-danh-muc/danh-muc-co-quan", key: "/khai-bao-danh-muc/danh-muc-co-quan", display: false, type:["coquan"]
+                icon: '<i class="fa-regular fa-newspaper"></i>', title: "Danh mục cơ quan", to: "/khai-bao-danh-muc/danh-muc-co-quan", key: "/khai-bao-danh-muc/danh-muc-co-quan", display: false, type: ["coquan"]
             },
             {
-                title: "Danh mục kho lưu trữ", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru", isExpand: false, numChildTabs: 3, 
-                display: false, type:["kho"], childTabs: [
+                title: "Danh mục kho lưu trữ", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru", isExpand: false, numChildTabs: 3,
+                display: false, type: ["kho"], childTabs: [
                     { title: "Kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", numChildTabs: 0 },
                     { title: "Phòng kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho", numChildTabs: 0 },
                     { title: "Kệ", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke", numChildTabs: 0 },
@@ -50,10 +50,10 @@ export const TABS_SIDEBAR = [
         isExpand: false, icon: '<i class="fa-solid fa-magnifying-glass"></i>', title: "Tra cứu và tìm kiếm", numChildTabs: 0, to: "/tra-cuu-va-tim-kiem", key: "/tra-cuu-va-tim-kiem", display: true
     },
     {
-        isExpand: false, icon: '<i class="fa-regular fa-newspaper"></i>', title: "Báo cáo và thống kê", numChildTabs: 0, to: "/bao-cao-va-thong-ke", key: "/bao-cao-va-thong-ke", display: false
+        isExpand: false, icon: '<i class="fa-regular fa-newspaper"></i>', title: "Báo cáo và thống kê", numChildTabs: 0, to: "/bao-cao-va-thong-ke", key: "/bao-cao-va-thong-ke", display: true
     },
     {
-        key: "/quan-ly-he-thong/", isExpand: false, icon: '<i class="fa-solid fa-people-roof"></i>', display: false, 
+        key: "/quan-ly-he-thong/", isExpand: false, icon: '<i class="fa-solid fa-people-roof"></i>', display: false,
         title: "Quản lý hệ thống", numChildTabs: 2, childTabs: [
             { title: "Người dùng", to: "/quan-ly-he-thong/nguoi-dung", key: "/quan-ly-he-thong/nguoi-dung" },
             { title: "Phân quyền hệ thống", to: "/quan-ly-he-thong/phan-quyen-he-thong", key: "/quan-ly-he-thong/phan-quyen-he-thong" },
