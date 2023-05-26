@@ -3,13 +3,22 @@ import { useState } from "react"
 import * as userAction from '../../../actions/user'
 import { GetKey } from "../../../custom/Function"
 const USER_ROLES = ["Nhân viên nhập liệu", "Người duyệt đơn"]
+const userName = {
+    1: "Cường",
+    2: "Lương",
+    3: "Hiếu"
+}
 
 const Header = ({ sideBarWidth, setSideBarWidth }) => {
 
     const dispatch = useDispatch()
     const userRole = useSelector(state => state.user.role)
+    const p = useSelector(state => state.userPermission)
+    console.log(p)
+    const userID = localStorage.getItem("userID")
     const [stateBoxUserRole, setStateBoxUserRole] = useState(false)
-
+    console.log(userID)
+    console.log(userName[userID])
     const handleLogOut = () =>{
         dispatch({type: "LOGOUT"})
     }
@@ -25,18 +34,18 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
                     </button>
                     <p className="font-bold text-black text-[16px]">ISTORAGE - HỆ THỐNG QUẢN LÝ TÀI LIỆU LƯU TRỮ ĐIỆN TỬ TỈNH QUẢNG NGÃI</p>
                 </div>
-                <div onClick={() => setStateBoxUserRole(!stateBoxUserRole)} className="flex justify-between items-center cursor-pointer relative select-none">
+                <div onClick={() => setStateBoxUserRole(!stateBoxUserRole)} className="flex justify-between items-center cursor-pointer relative select-none min-w-[150px]">
                     <div className="mr-[8px] flex items-center rounded-[50%] justify-center w-[36px] h-[36px] bg-lime-100 border-amber-500 border-[0.5px] text-black">
                         <i className="fa-regular fa-user"></i>
                     </div>
-                    <p className="text-black font-medium ">
-                        {userRole}
+                    <p className="text-black font-medium w-[calc(100%-36px)] text-center">
+                        {userName[userID]   }
                     </p>
 
                     {
                         stateBoxUserRole &&
-                        <div className="absolute top-[45px] w-[calc(100%-36px)] ">
-                            <div className="text-center w-full  bg-white font-medium rounded-[8px] p-[8px] mt-[8px] text-[12px] cursor-pointer border-solid border-[1px]  hover:bg-blue-700 hover:text-white border-[#ccc] shadow-sm ml-[36px]">
+                        <div className="absolute top-[50px] w-[calc(100%-36px)]">
+                           {/* <div className="text-center w-full  bg-white font-medium rounded-[8px] p-[8px] mt-[8px] text-[12px] cursor-pointer border-solid border-[1px]  hover:bg-blue-700 hover:text-white border-[#ccc] shadow-sm ml-[36px]">
                                 {
                                     USER_ROLES.filter(role => role !== userRole).map((role, index) => {
                                         return (
@@ -55,7 +64,7 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
                                     })
                                 }
                             </div>
-
+                            */}
                             <div onClick={handleLogOut} className="text-center w-full font-medium text-black bg-white rounded-[8px] p-[8px] text-[12px] cursor-pointer border-solid border-[1px] border-[#ccc] shadow-sm ml-[36px] hover:bg-blue-700 hover:text-white">Đăng xuất</div>
                         </div>
 
