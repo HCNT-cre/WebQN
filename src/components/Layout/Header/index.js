@@ -4,6 +4,7 @@ import * as userAction from '../../../actions/user'
 import { GetKey } from "../../../custom/Function"
 const USER_ROLES = ["Nhân viên nhập liệu", "Người duyệt đơn"]
 const userName = {
+    0: "Admin",
     1: "Cường",
     2: "Lương",
     3: "Hiếu"

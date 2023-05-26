@@ -12,10 +12,27 @@ const SideBar = ({ sideBarWidth }) => {
     const permissionId = useSelector(state => state.userPermission)
     const [permission, setPermission] = useState([])
     const locaiton = useLocation()
-    const [sidebarTabs, setSidebarTabs] = useState(TABS_SIDEBAR)
+    const [sidebarTabs, setSidebarTabs] = useState([TABS_SIDEBAR])
     const transitions = ["height"];
+    const userID = localStorage.getItem('userID')
 
-    console.log(permissionId)
+    useEffect(() => {
+        if (userID === "0") {
+            const newSidebarTabs = structuredClone(TABS_SIDEBAR);
+            for (const tab of newSidebarTabs) {
+                tab.display = true
+                if (tab.numChildTabs > 0) {
+                    for (const child of tab.childTabs) {
+                        if (!child.type) continue
+                        child.display = true
+                    }
+                }
+            }
+            setSidebarTabs(newSidebarTabs)
+        }
+    }, [userID])
+
+
     useEffect(() => {
         if (!permissionId) return
         const fetchPermission = async () => {
@@ -26,7 +43,7 @@ const SideBar = ({ sideBarWidth }) => {
     }, [permissionId])
 
     useEffect(() => {
-        if (!permission) return
+        if (!permission || userID === "0") return
         let newSidebarTabs = structuredClone(TABS_SIDEBAR);
         for (const tab of newSidebarTabs) {
             if (tab.type === undefined) continue
@@ -34,10 +51,10 @@ const SideBar = ({ sideBarWidth }) => {
                 for (const p of permission) {
                     if (p.includes(t)) {
                         tab.display = true
-                        if(tab.numChildTabs > 0) {
-                            for(const child of tab.childTabs) {
-                                if(!child.type) continue
-                                if(child.type.includes(t)) {
+                        if (tab.numChildTabs > 0) {
+                            for (const child of tab.childTabs) {
+                                if (!child.type) continue
+                                if (child.type.includes(t)) {
                                     child.display = true
                                 }
                             }
@@ -51,7 +68,7 @@ const SideBar = ({ sideBarWidth }) => {
 
     console.log(permission)
     console.log(sidebarTabs)
-    
+
     const toggleExpand = (key) => {
         const cur = sidebarTabs.map((tab) => {
             if (tab.key === key)
@@ -113,7 +130,7 @@ const SideBar = ({ sideBarWidth }) => {
                                                             )
                                                         else {
                                                             return (
-                                                                (child.display === undefined || child.display === true) && 
+                                                                (child.display === undefined || child.display === true) &&
                                                                 <Link to={child.to} onClick={() => { setCurrentTab(child.key) }} key={child.key} className={`block ${sideBarWidth === 250 ? 'sidebar-items--large' : 'sidebar-items--small'} m-0
                         `}>
                                                                     <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#aaaaaa25]  px-[8px] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] flex relative ${child.key === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(child.key)}>

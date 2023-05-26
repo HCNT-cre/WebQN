@@ -44,10 +44,13 @@ function LoggedIn() {
     useEffect(() => {
         const fetchPermission = async () => {
             console.log("id", params.id)
+            localStorage.setItem('userID', params.id);
+            if(params.id === "0") {
+                dispatch(setUserPermission([]));
+                return ;
+            }
             const res = await axios.get(API_ORGAN_GET_STAFF + "/" + params.id);
             dispatch(setUserPermission(res.data.permission_group_id));
-            localStorage.setItem('userID', params.id);
-            console.log(localStorage.getItem("userID"))
         }
         fetchPermission();
         dispatch({ type: "LOGINED" });
@@ -66,6 +69,10 @@ const App = () => {
     
     console.log("isLogin", isLogin, typeof isLogin)
     const fetchPermission = async (id) => {
+        if(id === "0") {
+            dispatch(setUserPermission([]));
+            return 
+        }
         const res = await axios.get(API_ORGAN_GET_STAFF + "/" + id);
         dispatch(setUserPermission(res.data.permission_group_id));
     }
