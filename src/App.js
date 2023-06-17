@@ -26,6 +26,8 @@ import HoSoBiTraVeCoQuan from "./pages/LuuTruCoQuan/HoSoBiTraVeCoQuan";
 import NhanVien from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/NhanVien";
 import PhongBan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/PhongBan";
 import CoQuan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/CoQuan";
+import DanhMucHoSo from "./pages/KhaiBaoDanhMuc/DanhMucHoSo";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -45,9 +47,9 @@ function LoggedIn() {
         const fetchPermission = async () => {
             console.log("id", params.id)
             localStorage.setItem('userID', params.id);
-            if(params.id === "0") {
+            if (params.id === "0") {
                 dispatch(setUserPermission([]));
-                return ;
+                return;
             }
             const res = await axios.get(API_ORGAN_GET_STAFF + "/" + params.id);
             dispatch(setUserPermission(res.data.permission_group_id));
@@ -66,12 +68,12 @@ const App = () => {
     const dispatch = useDispatch();
     const isLogin = useSelector(state => state.login)
     const userID = localStorage.getItem('userID')
-    
+
     console.log("isLogin", isLogin, typeof isLogin)
     const fetchPermission = async (id) => {
-        if(id === "0") {
+        if (id === "0") {
             dispatch(setUserPermission([]));
-            return 
+            return
         }
         const res = await axios.get(API_ORGAN_GET_STAFF + "/" + id);
         dispatch(setUserPermission(res.data.permission_group_id));
@@ -80,7 +82,7 @@ const App = () => {
     if (userID !== null && isLogin !== 'false') {
         fetchPermission(userID);
     }
-   
+
     function loginPage() {
         if (isLogin !== 'true')
             return (
@@ -176,7 +178,10 @@ const App = () => {
             path: "/khai-bao-danh-muc/danh-muc-co-quan",
             element: <CoQuan />
         },
-
+        {
+            path: "/khai-bao-danh-muc/danh-muc-ho-so",
+            element: <DanhMucHoSo />
+        },
     ];
 
     return (

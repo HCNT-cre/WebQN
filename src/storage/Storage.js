@@ -35,6 +35,9 @@ export const TABS_SIDEBAR = [
                 icon: '<i class="fa-regular fa-newspaper"></i>', title: "Danh mục cơ quan", to: "/khai-bao-danh-muc/danh-muc-co-quan", key: "/khai-bao-danh-muc/danh-muc-co-quan", display: false, type: ["coquan"]
             },
             {
+                icon: '<i class="fa-regular fa-newspaper"></i>', title: "Danh mục hồ sơ", to: "/khai-bao-danh-muc/danh-muc-ho-so", key: "/khai-bao-danh-muc/danh-muc-ho-so", display: false, type: ["coquan"]
+            },
+            {
                 title: "Danh mục kho lưu trữ", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru", isExpand: false, numChildTabs: 3,
                 display: false, type: ["kho"], childTabs: [
                     { title: "Kho", to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho", numChildTabs: 0 },
