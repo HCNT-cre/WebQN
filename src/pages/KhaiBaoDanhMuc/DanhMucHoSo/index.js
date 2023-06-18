@@ -34,12 +34,12 @@ const Create = ({
     reFetchData,
     order, // 1: first, 2: second, 3: third
     parent, // for 2 and 3
-    select // for 2 and 3, 1 is "Đề mục gốc"
+    select // for 2 and 3, 1 is "Danh mục gốc"
 }) => {
 
     const [request, setRequest] = useState({})
     const [selectOrder, setSelectOrder] = useState([])
-    const [defaultValue, setDefaultValue] = useState("Đề mục gốc")
+    const [defaultValue, setDefaultValue] = useState("Danh mục gốc")
 
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const Create = ({
         const newSelect = []
 
         if (order === 1) {
-            setDefaultValue("Đề mục gốc")
+            setDefaultValue("Danh mục gốc")
             setSelectOrder([])
             return
         }
@@ -119,7 +119,7 @@ const Create = ({
                         onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
                         type="text"
                         className="w-[70%]"
-                    // value={order === 1 ? "Đề mục gốc" : request["parent"]}
+                    // value={order === 1 ? "Danh mục gốc" : request["parent"]}
                     />
                 </div>
 
