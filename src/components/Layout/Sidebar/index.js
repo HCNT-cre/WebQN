@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom"
 import QuocHuy from '../../../assets/img/QuocHuy.png'

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Select } from "antd"
+import { Button, Select, Spin } from "antd"
 import { useEffect, useState } from "react"
-import { Input, Table, Modal } from "antd"
+import { Input, Table, Modal, Popconfirm } from "antd"
 import axios from "axios";
 
 const CATEGORY_FILE_API = process.env.REACT_APP_CATEGORY_FILE_API
@@ -36,16 +36,18 @@ const Create = ({
     parent, // for 2 and 3
     select // for 2 and 3, 1 is "Đề mục gốc"
 }) => {
+
     const [request, setRequest] = useState({})
     const [selectOrder, setSelectOrder] = useState([])
     const [defaultValue, setDefaultValue] = useState("Đề mục gốc")
 
-    console.log(defaultValue)
+
     useEffect(() => {
         let selectFiltered = null
         const newSelect = []
 
         if (order === 1) {
+            setDefaultValue("Đề mục gốc")
             setSelectOrder([])
             return
         }
@@ -71,9 +73,13 @@ const Create = ({
         request["order"] = order
         request["parent"] = parent
         await axios.post(`${CATEGORY_FILE_API}`, request)
-        reFetchData()
-        setRequest({})
-        setModelOpen(false)
+
+        setTimeout(() => {
+            reFetchData()
+            setRequest({})
+            setModelOpen(false)
+        }, 500)
+
     }
 
 
@@ -108,7 +114,7 @@ const Create = ({
                     <span>Đề mục / Nhóm lớn</span>
                     <Select
                         options={selectOrder}
-                        defaultValue={defaultValue}
+                        value={defaultValue}
                         name="parent"
                         onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
                         type="text"
@@ -126,87 +132,166 @@ const Create = ({
     )
 }
 
+const Update = ({ reFetchData, id }) => {
+    const [request, setRequest] = useState({
+        name: null,
+    })
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const handleChangeRequest = (name, value) => {
+        return setRequest({
+            ...request,
+            [name]: value
+        })
+    }
+
+    const handleClick = () => {
+        setModalOpen(true)
+    }
+
+    const handleOk = async () => {
+        if (request.name !== null)
+            await axios.put(CATEGORY_FILE_API + id, request)
+        setModalOpen(false)
+        reFetchData()
+    }
+
+    const handleCancle = () => {
+        setModalOpen(false)
+    }
+
+    return (
+        <div>
+            <Button onClick={handleClick} className='border-none'>
+                <i className="fa-regular fa-pen-to-square"></i>
+            </Button>
+            <Modal open={modalOpen}
+                title="Sửa"
+                onOk={handleOk}
+                onCancel={handleCancle}>
+                <div className='flex justify-between items-center' >
+                    <span>Tên</span>
+                    <Input name="name" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} className='w-[70%]' />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Mô tả</span>
+                    <Input name="description" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="text" className="w-[70%]" value={request["description"]} />
+                </div>
+            </Modal>
+        </div>
+    )
+}
+
+const Delete = ({
+    id,
+    reFetchData
+}) => {
+    const [open, setOpen] = useState(false);
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const handleConfirm = () => {
+        const deleteWarehouse = async () => {
+            const res = await axios.delete(CATEGORY_FILE_API + id)
+            console.log(res)
+        }
+
+        deleteWarehouse()
+        setTimeout(async () => {
+            await reFetchData()
+        }, 500)
+
+        setOpen(false)
+    }
+
+    useEffect(() => {
+        const popupContainer = document.querySelectorAll(".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1fviqcj.css-dev-only-do-not-override-1fviqcj.ant-popover-placement-top")[0]
+
+        if (popupContainer === undefined)
+            return
+
+        const buttonAccepts = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-primary")
+        buttonAccepts.forEach((buttonCancel) => {
+            buttonCancel.textContent = "Xóa"
+        })
+
+        const buttonCancels = document.querySelectorAll(".ant-popconfirm-buttons > .ant-btn-default ")
+        buttonCancels.forEach((buttonAccept) => {
+            buttonAccept.textContent = "Hủy"
+        })
+    }, [open])
+
+    return (
+        <Popconfirm title="Xóa"
+            open={open}
+            description="Bạn có chắc chắn xóa?"
+            onConfirm={handleConfirm}
+            onCancel={handleClose}
+        >
+            <Button className='border-none' onClick={() => { setOpen(true) }} title="Xóa">
+                <i className="fa-solid fa-trash-can"></i>
+            </Button>
+        </Popconfirm>
+    )
+}
+
+const generateColumn = (
+    reFetchData,
+    setModelOpen,
+    setOrder,
+    setParent,
+    order = null) => {
+    return [
+        { title: "Tên đề mục và tiêu đề hồ sơ", dataIndex: "name", key: "name" },
+        {
+            title: "Hành động",
+            dataIndex: "",
+            width: "120px",
+            render: (record) => {
+                return (
+                    <div className="flex items-center justify-left">
+                        <div >
+                            <Delete id={record.id} reFetchData={reFetchData} />
+                        </div>
+                        <div >
+                            <Update id={record.id} reFetchData={reFetchData} />
+                        </div>
+                        {order !== null &&
+                            <div
+                                className="cursor-pointer ml-[10px]"
+                                onClick={() => {
+                                    setModelOpen(true)
+                                    setOrder(order)
+                                    setParent(record.id)
+                                }}>
+                                <i class="fa-solid fa-plus"></i>
+                            </div>
+                        }
+                    </div>)
+            }
+        }
+    ];
+}
+
 const DanhMucHoSo = () => {
+    const [isLoading, setIsLoading] = useState(true)
     const [order, setOrder] = useState(1)
     const [parent, setParent] = useState(null)
-
-    const columnsFirst = [
-        { title: "Tên đề mục và tiêu đề hồ sơ", dataIndex: "name", key: "name" },
-        {
-            title: "Hành động",
-            dataIndex: "",
-            width: "120px",
-            render: (record) => {
-                return (
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <i className="fa-solid fa-trash-can"></i>
-                        </div>
-                        <div>
-                            <i className="fa-regular fa-pen-to-square"></i>
-                        </div>
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => {
-                                setModelOpen(true)
-                                setOrder(2)
-                                setParent(record.id)
-                            }}>
-                            <i class="fa-solid fa-plus"></i>
-                        </div>
-                    </div>)
-            }
-
-        }
-    ];
-
-    const columnsSecond = [
-        { title: "Tên đề mục và tiêu đề hồ sơ", dataIndex: "name", key: "name" },
-        {
-            title: "Hành động",
-            dataIndex: "",
-            width: "120px",
-            render: (record) => {
-                return (
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <i className="fa-solid fa-trash-can"></i>
-                        </div>
-                        <div>
-                            <i className="fa-regular fa-pen-to-square"></i>
-                        </div>
-                        <div
-                            className="cursor-pointer"
-                            onClick={() => {
-                                setModelOpen(true)
-                                setOrder(3)
-                                setParent(record.id)
-                            }}>
-                            <i class="fa-solid fa-plus"></i>
-                        </div>
-                    </div>)
-            }
-        }
-    ];
-
-    const columnsThird = [
-        { title: "Tên đề mục và tiêu đề hồ sơ", dataIndex: "name", key: "name" },
-        {
-            title: "Action",
-            dataIndex: "",
-            key: "x",
-            width: "120px"
-        }
-    ];
-
     const [modalOpen, setModelOpen] = useState(false)
     const [data, setData] = useState([])
 
-
     const reFetchData = async () => {
+        setIsLoading(true)
         const res = await axios.get(`${CATEGORY_FILE_API}`)
         setData(res.data)
+        setIsLoading(false)
     }
+
+    const columnsFirst = generateColumn(reFetchData, setModelOpen, setOrder, setParent, 2)
+    const columnsSecond = generateColumn(reFetchData, setModelOpen, setOrder, setParent, 3)
+    const columnsThird = generateColumn(reFetchData, setModelOpen, setOrder, setParent)
 
     useEffect(() => {
         reFetchData()
@@ -219,7 +304,12 @@ const DanhMucHoSo = () => {
                 inTable.push(item)
             }
         })
-        return <Table columns={columnsThird} dataSource={inTable} pagination={false} className="pl-[50px]" showHeader={false} />;
+        return <Table
+            columns={columnsThird}
+            dataSource={inTable}
+            pagination={false}
+            className="pl-[50px]"
+            showHeader={false} />;
     };
 
     const expandedRow = row => {
@@ -271,16 +361,16 @@ const DanhMucHoSo = () => {
             {<SearchBar />}
 
             <div className="mt-[30px] px-[24px]">
-                <Table columns={columnsFirst}
-                    expandable={{
-                        expandedRowRender: expandedRow,
-                        rowExpandable: (record) => data.find(rc => rc.parent === record.id)
-                        ,
-                    }}
-                    dataSource={data.filter((item) => item.order === 1)} />
+                <Spin spinning={isLoading}>
+                    <Table columns={columnsFirst}
+                        expandable={{
+                            expandedRowRender: expandedRow,
+                            rowExpandable: (record) => data.find(rc => rc.parent === record.id)
+                        }}
+                        dataSource={data.filter((item) => item.order === 1)} />
+                </Spin>
 
             </div>
-
         </div>
     )
 }
