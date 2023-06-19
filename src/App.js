@@ -27,6 +27,7 @@ import NhanVien from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/NhanVien";
 import PhongBan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/PhongBan";
 import CoQuan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/CoQuan";
 import DanhMucHoSo from "./pages/KhaiBaoDanhMuc/DanhMucHoSo";
+import KeHoachThuThap from "./pages/KeHoachThuThap";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -181,6 +182,10 @@ const App = () => {
         {
             path: "/khai-bao-danh-muc/danh-muc-ho-so",
             element: <DanhMucHoSo />
+        },
+        {
+            path: "/ke-hoach-thu-thap",
+            element: <KeHoachThuThap />
         },
     ];
 

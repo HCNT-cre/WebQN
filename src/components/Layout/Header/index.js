@@ -15,11 +15,8 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
     const dispatch = useDispatch()
     const userRole = useSelector(state => state.user.role)
     const p = useSelector(state => state.userPermission)
-    console.log(p)
     const userID = localStorage.getItem("userID")
     const [stateBoxUserRole, setStateBoxUserRole] = useState(false)
-    console.log(userID)
-    console.log(userName[userID])
     const handleLogOut = () =>{
         dispatch({type: "LOGOUT"})
     }

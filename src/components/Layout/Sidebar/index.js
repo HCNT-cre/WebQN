@@ -67,8 +67,6 @@ const SideBar = ({ sideBarWidth }) => {
         setSidebarTabs(prev => newSidebarTabs)
     }, [permission])
 
-    console.log(permission)
-    console.log(sidebarTabs)
 
     const toggleExpand = (key) => {
         const cur = sidebarTabs.map((tab) => {
