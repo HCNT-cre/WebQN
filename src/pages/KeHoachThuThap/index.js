@@ -128,10 +128,21 @@ const Delete = ({ id, reFetchData }) => {
 
 
 const Update = ({ reFetchData, id }) => {
-    const [request, setRequest] = useState({
-        name: null,
-    })
+    const [request, setRequest] = useState({})
     const [modalOpen, setModalOpen] = useState(false)
+
+    useEffect(() => {
+        const getPlan = async () => {
+            const { data } = await axios.get(API_COLLECTION_PLAN + id)
+            setRequest(
+                {
+                    name: data.name,
+                    date: data.date,
+                    organ: data.organ,
+                })
+        }
+        getPlan()
+    }, [id])
 
     const handleChangeRequest = (name, value) => {
         return setRequest({
@@ -145,8 +156,7 @@ const Update = ({ reFetchData, id }) => {
     }
 
     const handleOk = async () => {
-        if (request.name !== null)
-            await axios.put(API_COLLECTION_PLAN + id, request)
+        await axios.put(API_COLLECTION_PLAN + id, request)
         setModalOpen(false)
         reFetchData()
     }
@@ -166,15 +176,15 @@ const Update = ({ reFetchData, id }) => {
                 onCancel={handleCancle}>
                 <div className='flex justify-between items-center' >
                     <span>Tên kế hoạch</span>
-                    <Input name="name" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} className='w-[70%]' />
+                    <Input name="name" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} className='w-[70%]' value={request["name"]} />
                 </div>
                 <div className="flex justify-between py-[12px]">
                     <span>Ngày kế hoạch</span>
-                    <Input name="description" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="date" className="w-[70%]" value={request["description"]} />
+                    <Input name="date" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="date" className="w-[70%]" value={request["date"]} />
                 </div>
                 <div className="flex justify-between py-[12px]">
                     <span>Cơ quan / Đơn vị</span>
-                    <Input name="description" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="text" className="w-[70%]" value={request["description"]} />
+                    <Input name="organ" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="text" className="w-[70%]" value={request["organ"]} />
                 </div>
             </Modal>
         </div>
