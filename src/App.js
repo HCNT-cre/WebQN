@@ -28,6 +28,7 @@ import PhongBan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/PhongBan";
 import CoQuan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/CoQuan";
 import DanhMucHoSo from "./pages/KhaiBaoDanhMuc/DanhMucHoSo";
 import KeHoachThuThap from "./pages/KeHoachThuThap";
+import ThuThapHoSo from "./pages/ThuThapHoSo";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -186,6 +187,10 @@ const App = () => {
         {
             path: "/ke-hoach-thu-thap",
             element: <KeHoachThuThap />
+        },
+        {
+            path: "/thu-thap-ho-so",
+            element: <ThuThapHoSo />
         },
     ];
 

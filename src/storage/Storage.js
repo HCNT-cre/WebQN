@@ -28,6 +28,8 @@ export const TABS_SIDEBAR = [
             { title: "Kho lưu trữ lịch sử", to: "/luu-tru-lich-su/kho-luu-tru-lich-su", key: "/luu-tru-lich-su/kho-luu-tru-lich-su" },
         ]
     },
+    { isExpand: false, icon: `<i class="fa-solid fa-file"></i>`, title: "Thu thập hồ sơ", to: "/thu-thap-ho-so", numChildTabs: 0, key: "/thu-thap-ho-so", display: false },
+
     { isExpand: false, icon: `<i class="fa-solid fa-database"></i>`, title: "Kế hoạch thu thập", to: "/ke-hoach-thu-thap", numChildTabs: 0, key: "/ke-hoach-thu-thap", display: false },
     {
         key: "/khai-bao-danh-muc/", isExpand: false, icon: '<i class="fa-solid fa-list"></i>', display: false, type: ["coquan", "kho"],
