@@ -4,18 +4,28 @@ export const STATE = [
 
 export const TABS_SIDEBAR = [
     { isExpand: false, icon: `<i class="fa-solid fa-house"></i>`, title: "Trang chủ", to: "/", numChildTabs: 0, key: "/", display: true },
-    { isExpand: false, icon: `<i class="fa-solid fa-database"></i>`, title: "Kế hoạch thu thập", to: "/ke-hoach-thu-thap", numChildTabs: 0, key: "/ke-hoach-thu-thap", display: false },
-    { isExpand: false, icon: `<i class="fa-solid fa-file"></i>`, title: "Thu thập hồ sơ", to: "/thu-thap-ho-so", numChildTabs: 0, key: "/thu-thap-ho-so", display: false },
 
-
+    {
+        key: "/thu-thap-va-nop-luu", isExpand: false, icon: `<i class="fa-solid fa-database"></i>`, display: false, type: ["hoso"],
+        title: "Thu thập và nộp lưu", numChildTabs: 6, childTabs: [
+            { title: "Tạo kế hoạch thu thập", to: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap", key: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap" },
+            { title: "Thu thập hồ sơ", to: "/thu-thap-va-nop-luu/thu-thap-ho-so", key: "/thu-thap-va-nop-luu/thu-thap-ho-so" },
+            { title: "Nộp lưu cơ quan", to: "/thu-thap-va-nop-luu/nop-luu-co-quan", key: "/thu-thap-va-nop-luu/nop-luu-co-quan" },
+            { title: "Duyệt hồ sơ nộp lưu", to: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu", key: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu" },
+            { title: "Hồ sơ đã nhận nộp lưu", to: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu", key: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu" },
+            { title: "Biên bản bàn giao", to: "/thu-thap-va-nop-luu/bien-ban-ban-giao", key: "/thu-thap-va-nop-luu/bien-ban-ban-giao" },
+        ]
+    },
     {
         key: "/ho-so/tao-ho-so-dien-tu", isExpand: false, icon: '<i class="fa-regular fa-file"></i>', display: false, type: ["hoso"],
         title: "Hồ sơ tài liệu", numChildTabs: 3, childTabs: [
             { title: "Danh sách hồ sơ", to: "/ho-so/tao-ho-so-dien-tu", key: "/ho-so/tao-ho-so-dien-tu" },
-            { title: "Số hóa hồ sơ tài liệu", to: "/ho-so/so-hoa-ho-so-tai-lieu", key: "/ho-so/so-hoa-ho-so-tai-lieu" },
+            // { title: "Số hóa hồ sơ tài liệu", to: "/ho-so/so-hoa-ho-so-tai-lieu", key: "/ho-so/so-hoa-ho-so-tai-lieu" },
             { title: "HS đến hạn nộp lưu", to: "/ho-so/ho-so-den-han-nop-luu", key: "/ho-so/ho-so-den-han-nop-luu" },
             { title: "Hồ sơ bị trả về", to: "/ho-so/ho-so-bi-tra-ve", key: "/ho-so/ho-so-bi-tra-ve" },]
     },
+
+
     {
         key: "/luu-tru-co-quan/", isExpand: false, icon: '<i class="fa-regular fa-building"></i>', display: false, type: ["hoso"],
         title: "Lưu trữ cơ quan", numChildTabs: 3, childTabs: [
@@ -32,7 +42,7 @@ export const TABS_SIDEBAR = [
             { title: "Kho lưu trữ lịch sử", to: "/luu-tru-lich-su/kho-luu-tru-lich-su", key: "/luu-tru-lich-su/kho-luu-tru-lich-su" },
         ]
     },
-    
+
     {
         key: "/khai-bao-danh-muc/", isExpand: false, icon: '<i class="fa-solid fa-list"></i>', display: false, type: ["coquan", "kho"],
         title: "Khai báo danh mục", numChildTabs: 2, childTabs: [

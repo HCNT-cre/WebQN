@@ -1,34 +1,38 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
-import Layout from "./components/Layout";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import AddFile from "./pages/Files/AddFile";
+import Layout from "components/Layout";
+import Home from "pages/Home";
+import Login from "pages/Login";
+import AddFile from "pages/Files/AddFile";
 import { ToastContainer, Zoom } from 'react-toastify';
-import DigitizingFile from "./pages/Files/DigitizingFile";
-import DueFile from "./pages/Files/DueFile";
-import HoSoTaiLieuGiaoNopLS from "./pages/LuuTruLichSu/HoSoTaiLieuGiaoNopLS";
-import KhoLuuTruLichSu from "./pages/LuuTruLichSu/KhoLuuTruLichSu";
-import HoSoTaiLieuGiaoNop from "./pages/LuuTruCoQuan/HoSoTaiLieuGiaoNop";
-import KhoLuuTruCoQuan from "./pages/LuuTruCoQuan/KhoLuuTruCoQuan";
-import HSdenhannopluuLS from "./pages/LuuTruCoQuan/HSdenhannopluuLS";
-import Search from "./pages/Search";
-import BaoCaoThongKe from "./pages/BaoCaoThongKe";
-import Decentralization from "./pages/SystemManagement/Decentralization";
-import User from "./pages/SystemManagement/User";
-import WareHouse from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouse";
-import WareHouseRoom from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouseRoom";
-import Shelf from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Shelf";
-import Drawers from "./pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Drawers";
-import ReturnFile from "./pages/Files/ReturnFile";
-import LoginSSO from "./pages/LoginSSO";
-import HoSoBiTraVeCoQuan from "./pages/LuuTruCoQuan/HoSoBiTraVeCoQuan";
-import NhanVien from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/NhanVien";
-import PhongBan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/PhongBan";
-import CoQuan from "./pages/KhaiBaoDanhMuc/DanhMucCoQuan/CoQuan";
-import DanhMucHoSo from "./pages/KhaiBaoDanhMuc/DanhMucHoSo";
-import KeHoachThuThap from "./pages/KeHoachThuThap";
-import ThuThapHoSo from "./pages/ThuThapHoSo";
+import DigitizingFile from "pages/Files/DigitizingFile";
+import DueFile from "pages/Files/DueFile";
+import HoSoTaiLieuGiaoNopLS from "pages/LuuTruLichSu/HoSoTaiLieuGiaoNopLS";
+import KhoLuuTruLichSu from "pages/LuuTruLichSu/KhoLuuTruLichSu";
+import HoSoTaiLieuGiaoNop from "pages/LuuTruCoQuan/HoSoTaiLieuGiaoNop";
+import KhoLuuTruCoQuan from "pages/LuuTruCoQuan/KhoLuuTruCoQuan";
+import HSdenhannopluuLS from "pages/LuuTruCoQuan/HSdenhannopluuLS";
+import Search from "pages/Search";
+import BaoCaoThongKe from "pages/BaoCaoThongKe";
+import Decentralization from "pages/SystemManagement/Decentralization";
+import User from "pages/SystemManagement/User";
+import WareHouse from "pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouse";
+import WareHouseRoom from "pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouseRoom";
+import Shelf from "pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Shelf";
+import Drawers from "pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Drawers";
+import ReturnFile from "pages/Files/ReturnFile";
+import LoginSSO from "pages/LoginSSO";
+import HoSoBiTraVeCoQuan from "pages/LuuTruCoQuan/HoSoBiTraVeCoQuan";
+import NhanVien from "pages/KhaiBaoDanhMuc/DanhMucCoQuan/NhanVien";
+import PhongBan from "pages/KhaiBaoDanhMuc/DanhMucCoQuan/PhongBan";
+import CoQuan from "pages/KhaiBaoDanhMuc/DanhMucCoQuan/CoQuan";
+import DanhMucHoSo from "pages/KhaiBaoDanhMuc/DanhMucHoSo";
+import KeHoachThuThap from "pages/ThuThapVaNopLuu/KeHoachThuThap";
+import ThuThapHoSo from "pages/ThuThapVaNopLuu/ThuThapHoSo";
+import BienBanBanGiao from "pages/ThuThapVaNopLuu/BienBanBanGiao";
+import DuyetHoSoNopLuu from "pages/ThuThapVaNopLuu/DuyetHoSoNopLuu";
+import NopLuuCoQuan from "pages/ThuThapVaNopLuu/NopLuuCoQuan";
+import HoSoDaNhanNopLuu from "pages/ThuThapVaNopLuu/HoSoDaNhanNopLuu";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -185,12 +189,28 @@ const App = () => {
             element: <DanhMucHoSo />
         },
         {
-            path: "/ke-hoach-thu-thap",
+            path: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
             element: <KeHoachThuThap />
         },
         {
-            path: "/thu-thap-ho-so",
+            path: "/thu-thap-va-nop-luu/thu-thap-ho-so",
             element: <ThuThapHoSo />
+        },
+        {
+            path: "/thu-thap-va-nop-luu/bien-ban-ban-giao",
+            element: <BienBanBanGiao />
+        },
+        {
+            path: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
+            element: <HoSoDaNhanNopLuu />
+        },
+        {
+            path: "/thu-thap-va-nop-luu/nop-luu-co-quan",
+            element: <NopLuuCoQuan />
+        },
+        {
+            path: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu",
+            element: <DuyetHoSoNopLuu />
         },
     ];
 

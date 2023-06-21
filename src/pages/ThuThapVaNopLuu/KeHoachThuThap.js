@@ -2,6 +2,7 @@ import { Button, Input, Modal, Popconfirm } from "antd"
 import { Table } from "custom/Components/Table"
 import { useState, useEffect } from "react"
 import axios from "axios"
+import { Link } from "react-router-dom"
 
 const API_COLLECTION_PLAN = process.env.REACT_APP_API_COLLECTION_PLAN
 
@@ -244,8 +245,14 @@ const KeHoachThuThap = () => {
         <div className="w-full">
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
                 <p className="text-[14px] font-300 cursor-pointer ">
-                    <span className="text-[rgba(0,0,0,.45)]">Kế hoạch thu thập
+                    <span className="text-[rgba(0,0,0,.45)]">
+                        <Link to="/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap">Thu thập và nộp lưu / </Link>
                     </span>
+                    <span>
+                        <Link to="/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap">Kế hoạch thu thập</Link>
+                    </span>
+
+
                 </p>
 
             </div>
