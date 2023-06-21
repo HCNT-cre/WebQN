@@ -201,6 +201,14 @@ const DocCategory = () => {
                                     </div>
                                     <div className="w-[12.5%] text-white text-center px-[5px] flex">
 
+                                        <button className="rounded-[5px] h-[30px] flex justify-center bg-yellow-500 w-full px-[4px] items-center text-[12px]" onClick={() => setStateEoffice(true)} >
+                                            Số hóa tài liệu
+                                        </button>
+
+                                    </div>
+
+                                    <div className="w-[12.5%] text-white text-center px-[5px] flex">
+
                                         <button className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]" onClick={() => setStateEoffice(true)} >
                                             <div className="mr-[8px]">
                                                 <i className="fa-solid fa-magnifying-glass"></i>
@@ -209,6 +217,7 @@ const DocCategory = () => {
                                         </button>
 
                                     </div>
+
                                 </div>
                                 <Table fieldNames={TABLE_FIELDS} fieldDatas={files} isLoading={isLoading} />
                             </div>
@@ -219,7 +228,7 @@ const DocCategory = () => {
 
             <FixDoc pdfID={pdfID} pdfData={pdfData} pdfFile={pdfFile} setStateFixDoc={setStateFixDoc} stateFixDoc={stateFixDoc} API_PDF={pdfFileLink} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} fileData={fileData} />
             <AddDoc stateAddDoc={stateAddDoc} setStateAddDoc={setStateAddDoc} fileUploaded={fileUploaded} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} fileData={fileData} />
-            <EOFFICE stateEoffice={stateEoffice} setStateEoffice={setStateEoffice} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID}/>
+            <EOFFICE stateEoffice={stateEoffice} setStateEoffice={setStateEoffice} fetchDocumentsOfFile={fetchDocumentsOfFile} govFileID={govFileID} />
         </>
     )
 }
