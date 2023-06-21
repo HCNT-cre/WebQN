@@ -56,7 +56,7 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset, state }) =
 
     const handleClickUploadFile = () => {
         dispatch({ type: "open", id: IDFile })
-        setTimeout(()=>{
+        setTimeout(() => {
             document.getElementById("file-upload").click()
         }, 500)
     }
@@ -163,7 +163,7 @@ const ButtonFunctionOfEachFile = ({ handleClickOnFile, IDFile, reset, state }) =
     )
 }
 
-const BasePage = ({ parent, current, filter = null, addNewFile = false, newButtons = null, isCheckBox = true, buttonFuctions = null, fieldsTableCustom = null }) => {
+const BasePage = ({ parent, current, filter = null, addNewFile = false, newButtons = null, isCheckBox = true, buttonFuctions = null, fieldsTableCustom = null, showTable = true }) => {
     const dispatch = useDispatch();
     const [fieldsTable, setFieldsTable] = useState(FIELDS_TABLE)
     const [files, setFiles] = useState([])
@@ -368,7 +368,7 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
         <>
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
                 <p className="text-[14px] font-300 cursor-pointer ">
-                    <span className="text-[rgba(0,0,0,.45)]">
+                    <span className="text-[rgba(160,158,158,0.45)]">
                         {parent.map((item, index) => {
                             return <Link key={index} to={item.link}>{item.title} / </Link>
                         })}
@@ -382,108 +382,111 @@ const BasePage = ({ parent, current, filter = null, addNewFile = false, newButto
             <div className="w-full px-[24px] pb-[16px] bg-white">
                 <p className="text-[20px] font-bold ">{current.title}</p>
             </div>
+            {showTable &&
+                <div>
+                    <div className="w-full my-[24px]">
+                        <div className="mt-[16px] mx-[24px] flex ">
 
-            <div className="w-full my-[24px]">
-                <div className="mt-[16px] mx-[24px] flex ">
+                            <div className="w-[11.11111%] px-[5px]">
+                                <Input allowClear onChange={(ev) => handleChangeSearch("title", ev.target.value)} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px] flex items-center"></Input>
+                            </div>
+                            <div className="w-[11.11111%] px-[5px]">
+                                <Input value={search["start_date"]} onChange={(ev) => handleChangeSearch("start_date", ev.target.value)} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
+                            </div>
+                            <div className="w-[11.11111%] px-[5px]">
+                                <Input value={search["end_date"]} onChange={(ev) => handleChangeSearch("end_date", ev.target.value)} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
+                            </div>
+                            <div className="w-[11.11111%] px-[5px] rounded-none">
+                                <Select
+                                    name="state"
+                                    className="w-full bg-white outline-none rounded-md"
+                                    showSearch
+                                    defaultValue="Tất cả"
+                                    value={search["state"]}
+                                    optionFilterProp="children"
+                                    onChange={(value) => handleChangeSearch("state", value)}
+                                    filterOption={(input, option) =>
+                                        (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                    }
+                                    options={[
+                                        { value: 0, label: "Tất cả" },
+                                        {
+                                            value: 1,
+                                            label: 'Mở',
+                                        },
+                                        {
+                                            value: 2,
+                                            label: 'Đóng',
+                                        },
+                                        {
+                                            value: 3,
+                                            label: 'Nộp lưu cơ quan',
+                                        },
+                                        {
+                                            value: 4,
+                                            label: 'Lưu trữ cơ quan',
+                                        },
+                                        {
+                                            value: 5,
+                                            label: 'Nộp lưu lịch sử',
+                                        },
+                                        {
+                                            value: 6,
+                                            label: 'Lưu trữ lịch sử',
+                                        },
+                                    ]}
+                                />
+                            </div>
 
-                    <div className="w-[11.11111%] px-[5px]">
-                        <Input allowClear onChange={(ev) => handleChangeSearch("title", ev.target.value)} value={search["title"]} name="title" placeholder="Tiêu đề hồ sơ" className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px] flex items-center"></Input>
-                    </div>
-                    <div className="w-[11.11111%] px-[5px]">
-                        <Input value={search["start_date"]} onChange={(ev) => handleChangeSearch("start_date", ev.target.value)} name="start_date" placeholder="Ngày bắt đầu" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
-                    </div>
-                    <div className="w-[11.11111%] px-[5px]">
-                        <Input value={search["end_date"]} onChange={(ev) => handleChangeSearch("end_date", ev.target.value)} name="end_date" placeholder="Ngày kết thúc" type="text" onFocus={(e) => (e.target.type = 'date')} onBlur={(e) => (e.target.type = 'text')} className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"></Input>
-                    </div>
-                    <div className="w-[11.11111%] px-[5px] rounded-none">
-                        <Select
-                            name="state"
-                            className="w-full bg-white outline-none rounded-md"
-                            showSearch
-                            defaultValue="Tất cả"
-                            value={search["state"]}
-                            optionFilterProp="children"
-                            onChange={(value) => handleChangeSearch("state", value)}
-                            filterOption={(input, option) =>
-                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                            }
-                            options={[
-                                { value: 0, label: "Tất cả" },
-                                {
-                                    value: 1,
-                                    label: 'Mở',
-                                },
-                                {
-                                    value: 2,
-                                    label: 'Đóng',
-                                },
-                                {
-                                    value: 3,
-                                    label: 'Nộp lưu cơ quan',
-                                },
-                                {
-                                    value: 4,
-                                    label: 'Lưu trữ cơ quan',
-                                },
-                                {
-                                    value: 5,
-                                    label: 'Nộp lưu lịch sử',
-                                },
-                                {
-                                    value: 6,
-                                    label: 'Lưu trữ lịch sử',
-                                },
-                            ]}
-                        />
-                    </div>
-
-                    {BUTTON_ACTIONS.map((item, index) => {
-                        return (
-                            <div key={index} className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
-                                <Button onClick={item.onClick} className={`rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center ${item.btn_class_name}`}>
-                                    <div className="mr-[8px]">
-                                        {item.icon}
+                            {BUTTON_ACTIONS.map((item, index) => {
+                                return (
+                                    <div key={index} className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+                                        <Button onClick={item.onClick} className={`rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center ${item.btn_class_name}`}>
+                                            <div className="mr-[8px]">
+                                                {item.icon}
+                                            </div>
+                                            {item.title}
+                                        </Button>
                                     </div>
-                                    {item.title}
+                                )
+                            }
+                            )}
+
+                            <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  relative">
+                                <Button disabled={!(stateCheckBox.length > 0)} onClick={toggleContent} ref={buttonRef} className=" disabled:opacity-30 rounded-[5px] flex justify-center items-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] custom-btn-show-action ">
+                                    Hành động
+                                    <div className="ml-[4px]">
+                                        <i className="fa-solid fa-chevron-down"></i>
+                                    </div>
                                 </Button>
+
+                                {showContent &&
+                                    <div ref={el => { contentRef.current[0] = el }} className="rounded-[5px]  text-left top-[40px] absolute bg-purple-400 w-full text-[14px] z-10">
+                                        {userPermissions.map((permission, index) => {
+                                            return (
+                                                <button className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-black font-medium border-none truncate" onClick={() => handleChangeStateFile(permission.update_state)}>
+                                                    <i className=
+                                                        {permission.icon_class}
+                                                    ></i>
+                                                    {permission.permission_title}</button>
+                                            )
+                                        })}
+                                    </div>
+                                }
                             </div>
-                        )
-                    }
-                    )}
-
-                    <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  relative">
-                        <Button disabled={!(stateCheckBox.length > 0)} onClick={toggleContent} ref={buttonRef} className=" disabled:opacity-30 rounded-[5px] flex justify-center items-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] custom-btn-show-action ">
-                            Hành động
-                            <div className="ml-[4px]">
-                                <i className="fa-solid fa-chevron-down"></i>
-                            </div>
-                        </Button>
-
-                        {showContent &&
-                            <div ref={el => { contentRef.current[0] = el }} className="rounded-[5px]  text-left top-[40px] absolute bg-purple-400 w-full text-[14px] z-10">
-                                {userPermissions.map((permission, index) => {
-                                    return (
-                                        <button className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-black font-medium border-none truncate" onClick={() => handleChangeStateFile(permission.update_state)}>
-                                            <i className=
-                                                {permission.icon_class}
-                                            ></i>
-                                            {permission.permission_title}</button>
-                                    )
-                                })}
-                            </div>
-                        }
-                    </div>
 
 
 
-                </div>
-                <Table setStateCheckBox={setStateCheckBox} fieldNames={fieldsTable} fieldDatas={files} isLoading={isLoading} isCheckBox={isCheckBox} />
-            </div >
+                        </div>
+                        <Table setStateCheckBox={setStateCheckBox} fieldNames={fieldsTable} fieldDatas={files} isLoading={isLoading} isCheckBox={isCheckBox} />
+                    </div >
 
-            <File reset={reset} />
-            <DocCategory />
-            <MultimediaCategory stateMultimediaCategory={stateMultimediaCategory} setStateMultimediaCategory={setStateMultimediaCategory} />
-            <ModalCensorship />
+                    <File reset={reset} />
+                    <DocCategory />
+                    <MultimediaCategory stateMultimediaCategory={stateMultimediaCategory} setStateMultimediaCategory={setStateMultimediaCategory} />
+                    <ModalCensorship />
+                </div>}
+
         </>
     )
 }
