@@ -10,7 +10,7 @@ const BienBanBanGiao = () => {
         title: "Biên bản bàn giao"
     }
 
-    return <BasePage parent={parent} current={current} addNewFile={true} />
+    return <BasePage parent={parent} current={current} addNewFile={true} showTable={false}/>
 }
 
 export default BienBanBanGiao;
