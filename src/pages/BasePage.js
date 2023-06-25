@@ -6,7 +6,7 @@ import axios from "axios";
 import { Table } from "../custom/Components";
 import { useSelector, useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import { Button, Input, Select, Popconfirm } from "antd";
+import { Button, Input, Select, Popconfirm, Modal } from "antd";
 import { OpenFile, EditFile, CreateFile } from "../actions/formFile";
 import File from "../components/Form/File/File";
 import { FIELDS_TABLE } from "../storage/FileStorage";
@@ -30,7 +30,86 @@ const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL =
 const CATEGORY_FILE_API = process.env.REACT_APP_CATEGORY_FILE_API;
 const API_COLLECTION_PLAN = process.env.REACT_APP_API_COLLECTION_PLAN;
 
-const modal = () => {};
+const PlanAndCategoryFile = ({ open, setOpen }) => {
+  const dispatch = useDispatch();
+  const [categoryFile, setCategoryFile] = useState([]);
+  const [collectionPlan, setCollectionPlan] = useState([]);
+
+  const handleOk = () => {
+    setOpen(false);
+    dispatch(CreateFile());
+  };
+
+  const handleCancle = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    const getCategoryFile = async () => {
+      const { data } = await axios.get(CATEGORY_FILE_API);
+      const _ = [];
+      for (let i = 0; i < data.length; i++) {
+        let isParent = false;
+        for (let j = 0; j < data.length; j++) {
+          if (i == j) continue;
+          if (data[i].id == data[j].parent) isParent = true;
+        }
+        if (!isParent)
+          _.push({
+            label: data[i].name,
+            value: data[i].name,
+          });
+      }
+      setCategoryFile(_);
+    };
+
+    const getCollectionPlan = async () => {
+      const { data } = await axios.get(API_COLLECTION_PLAN);
+      const _ = data.map((item) => {
+        return {
+          value: item.name,
+          label: item.name,
+        };
+      });
+      console.log(_);
+      setCollectionPlan(_);
+    };
+
+    getCategoryFile();
+    getCollectionPlan();
+  }, []);
+
+  return (
+    <Modal
+      title="Chọn danh mục và kê hoạch"
+      style={{
+        top: 20,
+      }}
+      className="w-[600px]"
+      open={open}
+      onCancel={handleCancle}
+      onOk={handleOk}
+    >
+      <div className="flex justify-between py-[12px]">
+        <span>Kế hoạch </span>
+        <Select
+          name="collectionPlan"
+          className="w-[70%]"
+          options={collectionPlan}
+        />
+      </div>
+      <div className="flex justify-between py-[12px]">
+        <span>Danh mục</span>
+        <Select
+          name="categoryFile"
+          className="w-[70%]"
+          options={categoryFile}
+        />
+      </div>
+    </Modal>
+  );
+};
+
 const ButtonFunctionOfEachFile = ({
   handleClickOnFile,
   IDFile,
@@ -259,6 +338,7 @@ const BasePage = ({
   showTable = true,
 }) => {
   const dispatch = useDispatch();
+  const [modalOpen, setModalOpen] = useState(false);
   const [fieldsTable, setFieldsTable] = useState(FIELDS_TABLE);
   const [files, setFiles] = useState([]);
   const [doesFilter, setDoesFilter] = useState(true);
@@ -486,7 +566,7 @@ const BasePage = ({
       btn_class_name: "custom-btn-add-file",
       icon: <i className="fa-solid fa-plus"></i>,
       onClick: () => {
-        dispatch(CreateFile());
+        setModalOpen(true);
       },
     },
   ];
@@ -689,6 +769,7 @@ const BasePage = ({
             setStateMultimediaCategory={setStateMultimediaCategory}
           />
           <ModalCensorship />
+          <PlanAndCategoryFile open={modalOpen} setOpen={setModalOpen} />
         </div>
       )}
     </>
