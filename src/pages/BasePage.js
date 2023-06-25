@@ -27,6 +27,10 @@ const API_STORAGE_DELETE_FILE_ORGAN_STORAGE =
 const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL =
   process.env.REACT_APP_API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL;
 
+const CATEGORY_FILE_API = process.env.REACT_APP_CATEGORY_FILE_API;
+const API_COLLECTION_PLAN = process.env.REACT_APP_API_COLLECTION_PLAN;
+
+const modal = () => {};
 const ButtonFunctionOfEachFile = ({
   handleClickOnFile,
   IDFile,
