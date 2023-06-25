@@ -16,9 +16,7 @@ const ThuThapHoSo = () => {
 
   const filter = (files) => {
     const newFiles = [];
-    console.log(files);
     for (const file of files) {
-      console.log(file.state.props.children);
       if (
         file.state.props.children !== "Đóng" &&
         file.state.props.children !== "Mở"
