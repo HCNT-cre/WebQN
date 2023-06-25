@@ -1,5 +1,13 @@
 import BasePage from "../BasePage";
 
+const newButtons = [
+  {
+    title: "In mục lục",
+    btn_class_name: "custom-btn-export-excel",
+    icon: <i className="fa-solid fa-file-excel"></i>,
+  },
+];
+
 const NopLuuCoQuan = () => {
   const parent = [
     {
@@ -23,13 +31,13 @@ const NopLuuCoQuan = () => {
 
     return newFiles;
   };
-
   return (
     <BasePage
       parent={parent}
       current={current}
       addNewFile={true}
       filter={filter}
+      newButtons={newButtons}
     />
   );
 };
