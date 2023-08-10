@@ -7,7 +7,7 @@ const ThoiGianKetThuc = ()=>{
 
     const current = {
         link: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/thoi-gian-ket-thuc",
-        title: "Hồ sơ hết thời hạn bảo quản"
+        title: "Hồ sơ đến hạn kết thúc"
     }
 
     const filter = (files) => {
