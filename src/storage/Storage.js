@@ -203,7 +203,7 @@ export const TABS_SIDEBAR = [
 	{
 		key: "/tieu-huy-ho-so/",
 		isExpand: false,
-		icon: '<i class="fa-solid fa-list"></i>',
+		icon: '<i class="fa-solid fa-trash"></i>',
 		display: false,
 		type: ["hoso"],
 		title: "Tiêu hủy hồ sơ",
