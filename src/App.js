@@ -33,6 +33,11 @@ import BienBanBanGiao from "pages/ThuThapVaNopLuu/BienBanBanGiao";
 import DuyetHoSoNopLuu from "pages/ThuThapVaNopLuu/DuyetHoSoNopLuu";
 import NopLuuCoQuan from "pages/ThuThapVaNopLuu/NopLuuCoQuan";
 import HoSoDaNhanNopLuu from "pages/ThuThapVaNopLuu/HoSoDaNhanNopLuu";
+import HetThoiHanBaoQuan from "pages/TieuHuyHoSo/DSHoSoChoTieuHuy/HetThoiHanBaoQuan";
+import ThoiGianKetThuc from "pages/TieuHuyHoSo/DSHoSoChoTieuHuy/ThoiGianKetThuc";
+import TaoQuyetDinh from "pages/TieuHuyHoSo/QuyetDinh/TaoQuyetDinh"
+import TraVe from "pages/TieuHuyHoSo/QuyetDinh/Trave"
+import DuyetQuyetDinh from "pages/TieuHuyHoSo/QuyetDinh/DuyetQuyetDinh"
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -211,6 +216,26 @@ const App = () => {
         {
             path: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu",
             element: <DuyetHoSoNopLuu />
+        },
+        {
+            path: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/thoi-gian-ket-thuc",
+            element: <ThoiGianKetThuc/>
+        },
+        {
+            path: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/het-thoi-han-bao-quan",
+            element: <HetThoiHanBaoQuan/>
+        },
+        {
+            path: "/tieu-huy-ho-so/quyet-dinh/tra-ve",
+            element: <TraVe/>
+        },
+        {
+            path: "/tieu-huy-ho-so/quyet-dinh/duyet-quyet-dinh",
+            element: <DuyetQuyetDinh/>
+        },
+        {
+            path: "/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh",
+            element: <TaoQuyetDinh/>
         },
     ];
 
