@@ -66,13 +66,22 @@ const ConvertDataToArrayForRenderTableCell = (table) => {
     return dataTableRender
 }
 
-export const Table = ({ fieldNames, fieldDatas, isLoading = false, setStateCheckBox = null, isCheckBox = false, headerBgColor = "#fafafa" }) => {
+export const Table = ({
+    fieldNames,
+    fieldDatas,
+    isLoading = false,
+    setStateCheckBox = null,
+    isCheckBox = false,
+    headerBgColor = "#fafafa"
+    
+}) => {
+
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [isCheck, setIsCheck] = useState([]);
     const dataTableRenderForTableCell = ConvertDataToArrayForRenderTableCell(fieldDatas)
 
-
     let doesNeedOrder = true
+
     for (let i = 0; i < fieldNames.length; i++)
         if (fieldNames[i].key === "doc_ordinal") {
             doesNeedOrder = false

@@ -10,9 +10,9 @@ import axios from "axios";
 import { Button, Input, Select } from "antd";
 
 const API_GOV_FILE_GET_ALL = process.env.REACT_APP_API_GOV_FILE_GET_ALL;
-const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_SEARCH;
+const API_GOV_FILE_SEARCH = process.env.REACT_APP_API_GOV_FILE_GET_ALL;
 
-const fieldsTable = FIELDS_TABLE
+const fieldsTable = [...FIELDS_TABLE];
 fieldsTable.pop()
 
 const TAB = [
@@ -21,17 +21,53 @@ const TAB = [
     { text: 'Thời gian kết thúc', className: 'mb-[12px] text-[12px]' }
 ];
 
+const filterFileEachTab = (files, text) => {
+    if (text === "Tất cả") return files
+    const newFiles = []
+
+    let today = new Date()
+    const y = today.getFullYear();
+    const m = today.getMonth() + 1; // Months start at 0!
+    const d = today.getDate();
+
+    today = new Date(`${y}-${m}-${d}`)
+
+    const dateDiff = (start_date, end_date = today) => {
+        start_date = new Date(start_date)
+        const diffTime = end_date - start_date
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        return diffDays / 365
+    }
+
+    for (const file of files) {
+        const yearMaintenance = parseInt(file.maintenance.split(' ')[0])
+        if (text === "Hết thời hạn bảo quản") {
+            if (file.maintenance === "Vĩnh viễn") continue;
+            if (dateDiff(file.start_date) >= yearMaintenance)
+                newFiles.push(file)
+        } else {
+            if (dateDiff(file.end_date) >= 0)
+                newFiles.push(file)
+        }
+    }
+
+    return newFiles
+}
+
+
 const ThemHoSo = ({
     open,
     setOpen,
 }) => {
-
     const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
-    const dispatch = useDispatch();
+    const [orgFiles, setOrgFiles] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [selectedFiles, setSelectedFiles] = useState([])
+
     const userPermissionId = useSelector((state) => state.user.permission_id);
 
-    const [isLoading, setIsLoading] = useState(true);
     const [search, setSearch] = useState({
         title: null,
         organ_id: null,
@@ -39,7 +75,13 @@ const ThemHoSo = ({
         state: 0,
         type: null,
     });
-    const [doesFilter, setDoesFilter] = useState(true);
+
+    const dispatch = useDispatch();
+
+    const handleChangeTab = (text) => {
+        setActiveTab(text)
+        setFiles(filterFileEachTab(orgFiles, text))
+    }
 
     const getFileFromResponse = (response) => {
         const rawDatas = response.data;
@@ -95,8 +137,9 @@ const ThemHoSo = ({
                     API_GOV_FILE_GET_ALL + userPermissionId
                 );
                 setIsLoading(false);
-                setFiles(getFileFromResponse(response));
-                setDoesFilter(true);
+                const files = getFileFromResponse(response);
+                setFiles(files);
+                setOrgFiles(files)
             } catch (err) {
                 console.log(err);
             }
@@ -122,7 +165,6 @@ const ThemHoSo = ({
             });
             setIsLoading(false);
             setFiles(getFileFromResponse(response));
-            setDoesFilter(true);
         } catch (error) {
             console.error(error);
         }
@@ -131,11 +173,11 @@ const ThemHoSo = ({
     const handleClickOnFile = (IDFile) => {
         dispatch({ type: "open", id: IDFile });
     };
+
     const resetSearch = async () => {
         let request = API_GOV_FILE_SEARCH + userPermissionId;
         const response = await axios.get(request);
         setFiles(getFileFromResponse(response));
-        setDoesFilter(true);
         setSearch((prev) => ({
             title: "",
             organ_id: "",
@@ -146,12 +188,14 @@ const ThemHoSo = ({
             start_date: "",
         }));
     };
+
     const handleChangeSearch = (name, value) => {
         setSearch((prev) => ({
             ...prev,
             [name]: value,
         }));
     };
+
     const BUTTON_ACTIONS = [
         {
             title: "Tìm kiếm",
@@ -166,9 +210,11 @@ const ThemHoSo = ({
             onClick: resetSearch,
         }
     ];
+
     useEffect(() => {
         reset()
     }, [])
+
     return (
         <Modal
             style={{
@@ -183,11 +229,11 @@ const ThemHoSo = ({
                 <div className="flex flex-col mt-[72px]">
                     {TAB.map((button, index) => (
                         <Button
-                            onClick={() => setActiveTab(button.text)}
+                            onClick={() => handleChangeTab(button.text)}
                             key={index}
                             className={`${activeTab === button.text
-                                    ? 'text-white bg-sky-700'
-                                    : ''
+                                ? 'text-white bg-sky-700'
+                                : ''
                                 } ${button.className}`}
                         >
                             {button.text}
@@ -305,7 +351,13 @@ const ThemHoSo = ({
                         })}
 
                     </div>
-                    <Table fieldDatas={files} isLoading={isLoading} fieldNames={fieldsTable} />
+                    <Table
+                        isCheckBox={true}
+                        fieldDatas={files}
+                        isLoading={isLoading}
+                        fieldNames={fieldsTable}
+                        setStateCheckBox={setSelectedFiles}
+                    />
                 </div>
             </div>
 

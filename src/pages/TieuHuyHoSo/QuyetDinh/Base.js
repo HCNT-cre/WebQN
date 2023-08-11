@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Input, Modal, Popconfirm, Select } from "antd";
 import { Table } from "custom/Components/Table";
 import { useState, useEffect } from "react";
@@ -103,14 +104,18 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 
                     <div className="flex justify-between py-[12px]">
                         <span>Hồ sơ</span>
-                        <Button onClick={() => {
-                            setOpenModalAddFile(true)
-                        }}> Chọn hồ sơ </Button>
+                        <div
+                            className="w-[70%]"
+                        >
+                            <Button onClick={() => {
+                                setOpenModalAddFile(true)
+                            }}> Chọn hồ sơ </Button>
+                        </div>
                     </div>
 
                 </div>
             </Modal>
-            <ThemHoSo open={openModalAddFile} setOpen={setOpenModalAddFile}/>
+            <ThemHoSo open={openModalAddFile} setOpen={setOpenModalAddFile} />
         </div>
 
     );
@@ -260,7 +265,11 @@ const Update = ({ reFetchData, id }) => {
     );
 };
 
-const BasePage = () => {
+const BasePage = ({
+    parent,
+    current,
+    
+}) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [stateCheckBox, setStateCheckBox] = useState([]);
@@ -321,19 +330,19 @@ const BasePage = () => {
                 <p className="text-[14px] font-300 cursor-pointer ">
                     <span className="text-[rgba(0,0,0,.45)]">
                         <Link to="/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap">
-                            Thu thập và nộp lưu /{" "}
+                            {parent.title} / &nbsp;
                         </Link>
                     </span>
                     <span>
                         <Link to="/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap">
-                            Quyết định thu thập
+                            {current.title}
                         </Link>
                     </span>
                 </p>
             </div>
 
             <div className="w-full px-[24px] pb-[16px] bg-white flex justify-between">
-                <p className="text-[20px] font-bold ">quyết định thu thập</p>
+                <p className="text-[20px] font-bold ">{current.title}</p>
             </div>
 
             <div className="mt-[16px] mx-[24px] flex ">
