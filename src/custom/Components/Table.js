@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useState } from "react";
 import { Checkbox } from "antd";
@@ -72,8 +73,8 @@ export const Table = ({
     isLoading = false,
     setStateCheckBox = null,
     isCheckBox = false,
-    headerBgColor = "#fafafa"
-    
+    headerBgColor = "#fafafa",
+    selectedFiles = null
 }) => {
 
     const [isCheckAll, setIsCheckAll] = useState(false);
@@ -109,6 +110,10 @@ export const Table = ({
         setStateCheckBox(isCheck)
     }, [isCheck, setStateCheckBox])
 
+    useEffect(() =>{
+        if(!selectedFiles) return 
+        setIsCheck(selectedFiles)
+    }, [])
 
     return (
         <Spin spinning={isLoading} delay={0}>

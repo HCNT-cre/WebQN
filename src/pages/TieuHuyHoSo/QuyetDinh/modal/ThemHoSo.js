@@ -59,12 +59,13 @@ const filterFileEachTab = (files, text) => {
 const ThemHoSo = ({
     open,
     setOpen,
+    selectedFiles,
+    setSelectedFiles
 }) => {
     const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
     const [orgFiles, setOrgFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [selectedFiles, setSelectedFiles] = useState([])
 
     const userPermissionId = useSelector((state) => state.user.permission_id);
 
@@ -222,6 +223,7 @@ const ThemHoSo = ({
             }}
             title="Thêm hồ sơ"
             onCancel={() => setOpen(false)}
+            onOk={() => {setOpen(false)}}
             open={open}
             className="w-10/12">
 
@@ -357,6 +359,7 @@ const ThemHoSo = ({
                         isLoading={isLoading}
                         fieldNames={fieldsTable}
                         setStateCheckBox={setSelectedFiles}
+                        selectedFiles={selectedFiles}
                     />
                 </div>
             </div>
