@@ -88,7 +88,6 @@ const ThemHoSo = ({
         const rawDatas = response.data;
         let filesArray = [];
         for (const rawData of rawDatas) {
-            let newButton = null;
             const row = {
                 id: rawData.id,
                 gov_file_code: (

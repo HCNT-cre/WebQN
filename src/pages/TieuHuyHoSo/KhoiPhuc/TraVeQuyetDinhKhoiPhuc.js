@@ -5,13 +5,13 @@ import axios from "axios";
 import { Button, Input, Modal} from "antd";
 import ThemHoSo from "pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSo";
 
-const API_DELETE_PLAN = process.env.REACT_APP_API_DELETE_PLAN
+const API_RESTORE_PLAN = process.env.REACT_APP_API_RESTORE_PLAN
 
 const parent =
-    { title: "Tiêu hủy hồ sơ", link: "/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh" }
+    { title: "Tiêu hủy hồ sơ", link: "/tieu-huy-ho-so/khoi-phuc/tra-ve" }
 
 const current = {
-    link: "/tieu-huy-ho-so/quyet-dinh/tra-ve-quyet-dinh",
+    link: "/tieu-huy-ho-so/khoi-phuc/tra-ve",
     title: "Quyết định trả về"
 }
 
@@ -23,7 +23,7 @@ const Update = ({ reFetchData, id }) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
 
     const getPlan = async () => {
-        const { data } = await axios.get(API_DELETE_PLAN + id);
+        const { data } = await axios.get(API_RESTORE_PLAN + id);
         setRequest({
             name: data.name,
             date: data.date,
@@ -49,7 +49,7 @@ const Update = ({ reFetchData, id }) => {
     };
 
     const handleOk = async () => {
-        await axios.put(API_DELETE_PLAN + id, request);
+        await axios.put(API_RESTORE_PLAN + id, request);
         setModalOpen(false);
         reFetchData();
     };
@@ -125,13 +125,13 @@ const Update = ({ reFetchData, id }) => {
 };
 
 
-const TraVe = () => {
+const TraVeQuyetDinhKhoiPhuc = () => {
     const [plan, setPlan] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const reFetchData = useCallback(async () => {
         setIsLoading(true);
-        const res = await axios.get(`${API_DELETE_PLAN}`);
+        const res = await axios.get(`${API_RESTORE_PLAN}`);
         const rawDatas = res.data;
         const plans = [];
         for (const rawData of rawDatas) {
@@ -174,4 +174,4 @@ const TraVe = () => {
     )
 }
 
-export default TraVe;
+export default TraVeQuyetDinhKhoiPhuc;

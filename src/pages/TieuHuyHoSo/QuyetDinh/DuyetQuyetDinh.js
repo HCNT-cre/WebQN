@@ -2,18 +2,17 @@
 import BasePage from "pages/TieuHuyHoSo/QuyetDinh/Base";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-import { Button, Input, Modal, Popconfirm, Select } from "antd";
+import { Button, Input, Modal} from "antd";
 import ThemHoSo from "pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSo";
 
-const API_STORAGE_GET_ORGAN_ALL = process.env.REACT_APP_API_STORAGE_GET_ORGAN_ALL;
 const API_DELETE_PLAN = process.env.REACT_APP_API_DELETE_PLAN
 
 const parent =
     { title: "Tiêu hủy hồ sơ", link: "/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh" }
 
 const current = {
-    link: "/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh",
-    title: "Tạo quyết định"
+    link: "/tieu-huy-ho-so/quyet-dinh/duyet-quyet-dinh",
+    title: "Duyệt quyết định"
 }
 
 
@@ -127,7 +126,6 @@ const Update = ({ reFetchData, id }) => {
 
 
 const DuyetQuyetDinh = () => {
-    const [modalOpen, setModalOpen] = useState(false);
     const [plan, setPlan] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [selectedPlan, setSelectedPlan] = useState([]);

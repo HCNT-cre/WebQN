@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./style.css";
-import DanhSachHoso from "../../assets/img/DanhSachHoSo.png";
-import TimKiemToanVan from "../../assets/img/TimKiemToanVan.png";
-import PhanQuyenHeThong from "../../assets/img/PhanQuyenHeThong.png";
-import DenHanNopLuu from "../../assets/img/HoSoDenHanNopLuu.png";
-import LuuTruCoQuan from "../../assets/img/LuuTruCoQuan.png";
-import LuuTruLichSu from "../../assets/img/LuuTruLichSu.png";
+import TimKiemToanVan from "assets/img/TimKiemToanVan.png";
+import PhanQuyenHeThong from "assets/img/PhanQuyenHeThong.png";
+import DenHanNopLuu from "assets/img/HoSoDenHanNopLuu.png";
+import LuuTruCoQuan from "assets/img/LuuTruCoQuan.png";
+import LuuTruLichSu from "assets/img/LuuTruLichSu.png";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import axios from "axios";
