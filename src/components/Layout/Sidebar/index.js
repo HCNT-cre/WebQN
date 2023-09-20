@@ -89,7 +89,7 @@ const SideBar = ({ sideBarWidth }) => {
 
     return (
         <>
-            <div className={`overflow-auto overflow-x-hidden transition-all duration-300 ${sideBarWidth === 250 ? "w-[250px]" : "w-[80px]"} fixed left-0 top-0 shadow h-full bg-[#302f2ff4] pb-[20px]`}>
+            <div className={`overflow-auto overflow-x-hidden transition-all duration-300 ${sideBarWidth === 250 ? "w-[280px]" : "w-[80px]"} fixed left-0 top-0 shadow h-full bg-[#302f2ff4] pb-[20px]`}>
 
                 <Link to='/' className={`${sideBarWidth === 250 ? 'mx-[16px]' : 'mx-[8px]'} border-[#b7b7b7] flex justify-center my-[16px] pb-[32px] border-b-[2px] border-solid `}>
                     <img className="w-[70px]" alt="Quoc Huy" src={QuocHuy} />

@@ -59,6 +59,42 @@ export const TABS_SIDEBAR = [
 		],
 	},
 	{
+		key: "/bien-muc-chinh-ly",
+		isExpand: false,
+		icon: `<i class="fa-solid fa-screwdriver-wrench"></i>`,
+		display: false,
+		type: ["hoso"],
+		title: "Biên mục chỉnh lý",
+		numChildTabs: 2,
+		childTabs: [
+			{
+				title: "Kế hoạch chỉnh lý",
+				to: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
+				key: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
+			},
+			{
+				title: "Biên mục hồ sơ",
+				to: "/bien-muc-chinh-ly/bien-muc-ho-so",
+				key: "/bien-muc-chinh-ly/bien-muc-ho-so",
+			},
+			{
+				title: "Phê duyệt lưu kho",
+				to: "/bien-muc-chinh-ly/bien-muc-ho-so",
+				key: "/bien-muc-chinh-ly/bien-muc-ho-so",
+			},
+			{
+				title: "Biên mục bổ sung",
+				to: "/bien-muc-chinh-ly/bien-muc-ho-so",
+				key: "/bien-muc-chinh-ly/bien-muc-ho-so",
+			},
+			{
+				title: "Phê duyệt lưu kho bổ sung",
+				to: "/bien-muc-chinh-ly/bien-muc-ho-so",
+				key: "/bien-muc-chinh-ly/bien-muc-ho-so",
+			}
+		],
+	},
+	{
 		key: "/ho-so/tao-ho-so-dien-tu",
 		isExpand: false,
 		icon: '<i class="fa-regular fa-file"></i>',
@@ -146,7 +182,7 @@ export const TABS_SIDEBAR = [
 		display: false,
 		type: ["coquan", "kho"],
 		title: "Khai báo danh mục",
-		numChildTabs: 2,
+		numChildTabs: 3,
 		childTabs: [
 			{
 				icon: '<i class="fa-regular fa-newspaper"></i>',
@@ -161,6 +197,30 @@ export const TABS_SIDEBAR = [
 				title: "Danh mục hồ sơ",
 				to: "/khai-bao-danh-muc/danh-muc-ho-so",
 				key: "/khai-bao-danh-muc/danh-muc-ho-so",
+				display: false,
+				type: ["coquan"],
+			},
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Danh mục ngôn ngữ",
+				to: "/khai-bao-danh-muc/danh-muc-ngon-ngu",
+				key: "/khai-bao-danh-muc/danh-muc-ngon-ngu",
+				display: false,
+				type: ["coquan"],
+			},
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Danh mục thời hạn bảo quản",
+				to: "/khai-bao-danh-muc/danh-muc-thoi-han-bao-quan",
+				key: "/khai-bao-danh-muc/danh-muc-thoi-han-bao-quan",
+				display: false,
+				type: ["coquan"],
+			},
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Danh mục tình trạng vật lý",
+				to: "/khai-bao-danh-muc/danh-muc-tinh-trang-vat-ly",
+				key: "/khai-bao-danh-muc/danh-muc-tinh-trang-vat-ly",
 				display: false,
 				type: ["coquan"],
 			},
@@ -339,3 +399,52 @@ export const LIST_PERMISSION = [
 	{ id: 5, name: "admin | log entry | Can change log entry" },
 	{ id: 6, name: "admin | log entry | Can view log entry" },
 ];
+
+export const LANGUAGE = [
+	{ title: "Tên ngôn ngữ", key: "name", width: "100%" },
+	{ title: "Mã ngôn ngữ", key: "code", width: "100%" },
+	{ title: "", key: "update", width: "100px" }
+]
+
+export const LANGUAGE_INPUT = [
+	{ type: "text", require: true, name: "name", label: "Tên ngôn ngữ" },
+	{ type: "text", require: true, name: "code", label: "Mã ngôn ngữ" },
+]
+
+
+export const PHYSICAL_STATE = [
+	{ title: "Mã tình trạng vật lý", key: "code", width: "100%" },
+	{ title: "Tên tình trạng vật lý", key: "name", width: "100%" },
+	{ title: "", key: "update", width: "100px" }
+]
+
+export const PHYSICAL_STATE_INPUT = [
+	{ type: "text", require: true, name: "code", label: "Mã tình trạng vật lý" },
+	{ type: "text", require: true, name: "name", label: "Tên tình trạng vật lý" },
+]
+
+export const STORAGE_DURATION = [
+	{ title: "Mã thời hạn bảo quản", key: "code", width: "100%" },
+	{ title: "Thời hạn", key: "duration", width: "100%" },
+	{ title: "Số năm", key: "number_of_year", width: "100%" },
+	{ title: "", key: "update", width: "100px" }
+]
+
+export const STORAGE_DURATION_INPUT = [
+	{ type: "text", require: true, name: "code", label: "Mã thời hạn bảo quản" },
+	{ type: "number", require: true, name: "duration", label: "Thời hạn" },
+	{ type: "number", require: true, name: "number_of_year", label: "Số năm" },
+]
+
+export const FOND = [
+	{ title: "Mã thời hạn bảo quản", key: "code", width: "100%" },
+	{ title: "Thời hạn", key: "duration", width: "100%" },
+	{ title: "Số năm", key: "number_of_year", width: "100%" },
+	{ title: "", key: "update", width: "100px" }
+]
+
+export const FOND_INPUT = [
+	{ type: "text", require: true, name: "code", label: "Mã thời hạn bảo quản" },
+	{ type: "number", require: true, name: "duration", label: "Thời hạn" },
+	{ type: "number", require: true, name: "number_of_year", label: "Số năm" },
+]

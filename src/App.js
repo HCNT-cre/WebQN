@@ -43,6 +43,12 @@ import TaoQuyetDinhKhoiPhuc from "pages/TieuHuyHoSo/KhoiPhuc/TaoQuyetDinhKhoiPhu
 import DuyetQuyetDinhKhoiPhuc from "pages/TieuHuyHoSo/KhoiPhuc/DuyetQuyetDinhKhoiPhuc";
 import TraVeQuyetDinhKhoiPhuc from "pages/TieuHuyHoSo/KhoiPhuc/TraVeQuyetDinhKhoiPhuc";
 
+import BienMucHoSo from "pages/BienMucChinhLy/BienMucHoSo";
+import KeHoachChinhLy from "pages/BienMucChinhLy/KeHoachChinhLy";
+
+import KhaiBaoDanhMucNgonNgu from "pages/KhaiBaoDanhMuc/DanhMucNgonNgu";
+import KhaiBaoDanhMucThoiHanBaoQuan from "pages/KhaiBaoDanhMuc/DanhMucThoiHanBaoQuan";
+import KhaiBaoDanhMucTinhTrangVatLy from "pages/KhaiBaoDanhMuc/DanhMucTinhTrangVatLy";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -252,6 +258,31 @@ const App = () => {
         {
             path: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh",
             element: <TaoQuyetDinhKhoiPhuc />
+        },
+
+        {
+            path: "/bien-muc-chinh-ly/bien-muc-ho-so",
+            element: <BienMucHoSo />
+        },
+
+        {
+            path: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
+            element: <KeHoachChinhLy/>
+        },
+
+        {
+            path: "/khai-bao-danh-muc/danh-muc-ngon-ngu/",
+            element: <KhaiBaoDanhMucNgonNgu/>
+        },
+
+        {
+            path: "/khai-bao-danh-muc/danh-muc-thoi-han-bao-quan/",
+            element: <KhaiBaoDanhMucThoiHanBaoQuan/>
+        },
+
+        {
+            path: "/khai-bao-danh-muc/danh-muc-tinh-trang-vat-ly/",
+            element: <KhaiBaoDanhMucTinhTrangVatLy/>
         },
     ];
 

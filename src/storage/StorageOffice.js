@@ -101,5 +101,4 @@ export const ORGAN_DECENTRALIZATION_INPUTS = [
     { type: "select", require: true, name: "ward", label: "Phường xã" },
     { type: "switch", require: false, false: "storage", label: "Trung tâm lưu trữ lịch sử" },
     { type: "textarea", require: false, false: "note", label: "Ghi chú" },
-
 ]
