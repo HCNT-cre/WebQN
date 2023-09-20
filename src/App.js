@@ -86,12 +86,73 @@ function LoggedIn() {
     )
 }
 
+const getLanguages = async () => {
+    const res = await axios.get(process.env.REACT_APP_API_LANGUAGE);
+    const languages = res.data.map((item) => {
+        return {
+            label: item.name,
+            value: item.name
+        }
+    })
+    return languages;
+}
+
+const getMaintance = async () => {
+    const res = await axios.get(process.env.REACT_APP_API_STORAGE_DURATION);
+    const maintance = res.data.map((item) => {
+        return {
+            label: item.duration + " năm",
+            value: item.duration + " năm"
+        }
+    })
+    return maintance;
+}
+
+const getFormat = async () => {
+    const res = await axios.get(process.env.REACT_APP_API_PHYSICAL_STATE);
+    const format = res.data.map((item) => {
+        return {
+            label: item.name,
+            value: item.name
+        }
+    })
+    return format;
+}
+
+const getOrganId = async () => {
+    const res = await axios.get(process.env.REACT_APP_API_FOND);
+    const organId = res.data.map((item) => {
+        return {
+            label: item.fond_name,
+            value: item.fond_name
+        }
+    })
+    return organId;
+}
+
 const App = () => {
     const dispatch = useDispatch();
+
+    getLanguages().then((languages) => {
+        dispatch({ type: "GET_LANGUAGE_SUCCESS", payload: languages })
+    })
+
+    getMaintance().then((maintance) => {
+        dispatch({ type: "GET_MAINTANCE_SUCCESS", payload: maintance })
+    })
+
+    getFormat().then((format) => {
+        dispatch({ type: "GET_FORMAT_SUCCESS", payload: format })
+    })
+
+    getOrganId().then((organId) => {
+        console.log(organId)
+        dispatch({ type: "GET_ORGAN_ID_SUCCESS", payload: organId })
+    })
+
     const isLogin = useSelector(state => state.login)
     const userID = localStorage.getItem('userID')
 
-    console.log("isLogin", isLogin, typeof isLogin)
     const fetchPermission = async (id) => {
         if (id === "0") {
             dispatch(setUserPermission([]));

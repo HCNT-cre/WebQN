@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector, } from "react-redux";
 import * as actionFile from "../../../actions/formFile";
-import { FORMAT, IDENTIFIER, LANGUAGE, MAINTENANCE, ORGAN_ID, RIGHTS, IDENTIFIER_CODE } from "../../../storage/FileStorage";
+import { FORMAT, LANGUAGE, MAINTENANCE, ORGAN_ID, IDENTIFIER, RIGHTS, IDENTIFIER_CODE } from "../../../storage/FileStorage";
 import { Select, Input } from "antd";
 import { FirstLower, notifyError, notifySuccess } from "../../../custom/Function";
 
@@ -12,112 +12,116 @@ const API_GOV_FILE_CREATE = process.env.REACT_APP_API_GOV_FILE_CREATE
 const API_GOV_FILE_GET = process.env.REACT_APP_API_GOV_FILE_GET
 const API_GOV_FILE_UPDATE = process.env.REACT_APP_API_GOV_FILE_UPDATE
 
-const FIELDS_LEFT = [
-    {
-        key: "gov_file_code",
-        title: "Mã hồ sơ",
-        require: false,
-        type: "text",
-    },
-    {
-        key: "identifier",
-        title: "Mã cơ quan lưu trữ lịch sử",
-        require: true,
-        type: "select",
-        options: IDENTIFIER,
-        default: true
-    },
-    {
-        key: "organ_id",
-        title: "Mã phông/công trình/sưu tập lưu trữ",
-        require: true,
-        type: "select",
-        options: ORGAN_ID
-    },
-    {
-        key: "file_catalog",
-        title: "Mục lục hoặc năm hình thành hồ sơ",
-        require: false,
-        type: "number",
-    },
-    {
-        key: "file_notation",
-        title: "Số và ký hiệu hồ sơ",
-        require: true,
-        type: "text",
-    },
-    { key: "title", title: "Tiêu đề hồ sơ", require: true, type: "text" },
-    {
-        key: "maintenance",
-        title: "Thời hạn bảo quản",
-        require: true,
-        type: "select",
-        options: MAINTENANCE
-    },
-    {
-        key: "rights",
-        title: "Chế độ sử dụng",
-        require: true,
-        type: "select",
-        options: RIGHTS
-    },
-    {
-        key: "language",
-        title: "Ngôn ngữ",
-        require: true,
-        type: "select",
-        options: LANGUAGE
-    },
-];
-
-const FIELDS_RIGHT = [
-    {
-        key: "start_date",
-        title: "Thời gian bắt đầu",
-        require: true,
-        type: "date",
-    },
-    {
-        key: "end_date",
-        title: "Thời gian kết thúc",
-        require: false,
-        type: "date",
-    },
-    {
-        key: "total_doc",
-        title: "Tổng số văn bản trong hồ sơ",
-        require: false,
-        type: "number",
-    },
-    { key: "description", title: "Chú giải", require: false, type: "options" },
-    {
-        key: "infor_sign",
-        title: "Ký hiệu thông tin",
-        require: false,
-        type: "text",
-    },
-    { key: "keyword", title: "Từ khóa", require: false, type: "text" },
-    { key: "sheet_number", title: "Số lượng tờ", require: false, type: "number" },
-    {
-        key: "page_number",
-        title: "Số lượng trang",
-        require: false,
-        type: "number",
-    },
-    {
-        key: "format",
-        title: "Tình trạng vật lý",
-        require: true,
-        type: "select",
-        options: FORMAT
-    },
-];
-
 const File = ({ reset }) => {
     const userPermissionId = useSelector(state => state.user.permission_id)
     const stateForm = useSelector((state) => state.formFile.state)
     const fileID = useSelector((state) => state.formFile.id)
+    const language = useSelector((state) => state.language.language)
+    const format = useSelector((state) => state.format.format)
+    const maintance = useSelector((state) => state.maintance.maintance)
+    const organId = useSelector((state) => state.organId.organId)
 
+
+    const FIELDS_LEFT = [
+        {
+            key: "gov_file_code",
+            title: "Mã hồ sơ",
+            require: false,
+            type: "text",
+        },
+        {
+            key: "identifier",
+            title: "Mã cơ quan lưu trữ lịch sử",
+            require: true,
+            type: "select",
+            options: IDENTIFIER,
+            default: true
+        },
+        {
+            key: "organ_id",
+            title: "Mã phông/công trình/sưu tập lưu trữ",
+            require: true,
+            type: "select",
+            options: organId
+        },
+        {
+            key: "file_catalog",
+            title: "Mục lục hoặc năm hình thành hồ sơ",
+            require: false,
+            type: "number",
+        },
+        {
+            key: "file_notation",
+            title: "Số và ký hiệu hồ sơ",
+            require: true,
+            type: "text",
+        },
+        { key: "title", title: "Tiêu đề hồ sơ", require: true, type: "text" },
+        {
+            key: "maintenance",
+            title: "Thời hạn bảo quản",
+            require: true,
+            type: "select",
+            options: maintance
+        },
+        {
+            key: "rights",
+            title: "Chế độ sử dụng",
+            require: true,
+            type: "select",
+            options: RIGHTS
+        },
+        {
+            key: "language",
+            title: "Ngôn ngữ",
+            require: true,
+            type: "select",
+            options: language
+        },
+    ];
+
+    const FIELDS_RIGHT = [
+        {
+            key: "start_date",
+            title: "Thời gian bắt đầu",
+            require: true,
+            type: "date",
+        },
+        {
+            key: "end_date",
+            title: "Thời gian kết thúc",
+            require: false,
+            type: "date",
+        },
+        {
+            key: "total_doc",
+            title: "Tổng số văn bản trong hồ sơ",
+            require: false,
+            type: "number",
+        },
+        { key: "description", title: "Chú giải", require: false, type: "options" },
+        {
+            key: "infor_sign",
+            title: "Ký hiệu thông tin",
+            require: false,
+            type: "text",
+        },
+        { key: "keyword", title: "Từ khóa", require: false, type: "text" },
+        { key: "sheet_number", title: "Số lượng tờ", require: false, type: "number" },
+        {
+            key: "page_number",
+            title: "Số lượng trang",
+            require: false,
+            type: "number",
+        },
+        {
+            key: "format",
+            title: "Tình trạng vật lý",
+            require: true,
+            type: "select",
+            options: format
+        },
+    ];
 
     let title = "Tạo hồ sơ"
 

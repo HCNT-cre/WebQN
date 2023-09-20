@@ -8,7 +8,10 @@ import modalCensorshipReducer from './modalCensorship'
 import loginReducer from './login'
 import reFetchFileReducer from './reFetchFile'
 import userPermissionReducer from './userPermission'
-
+import languageReducer from './language'
+import maintanceReducer from './maintance'
+import formatReducer from './format'
+import organIdReducer from './organId'
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
@@ -18,7 +21,11 @@ const rootReducer = combineReducers({
     modalCensorship: modalCensorshipReducer,
     login: loginReducer,
     reFetchFile: reFetchFileReducer,
-    userPermission: userPermissionReducer
+    userPermission: userPermissionReducer,
+    language: languageReducer,
+    maintance: maintanceReducer,
+    format: formatReducer,
+    organId: organIdReducer
 })
 
 export default rootReducer
