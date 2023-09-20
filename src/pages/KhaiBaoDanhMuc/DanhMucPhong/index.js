@@ -2,7 +2,7 @@ import KhaiBaoDanhMuc from "../Base"
 
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { STORAGE_DURATION, STORAGE_DURATION_INPUT } from "storage/Storage"
+import { FOND, FOND_INPUT } from "storage/Storage"
 import { Input, Modal, Button, Switch, Select, Popconfirm } from "antd";
 import { GetKey, notifyError, notifySuccess } from "../../../custom/Function";
 import TextArea from "antd/es/input/TextArea";
@@ -11,7 +11,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 const Search = Input.Search
-const API_STORAGE_DURATION = process.env.REACT_APP_API_STORAGE_DURATION
+const API_FOND = process.env.REACT_APP_API_FOND
 
 const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
     const [request, setRequest] = useState({})
@@ -27,7 +27,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         const fetchData = async () => {
             if (!id) return
             try {
-                const res = await axios.get(API_STORAGE_DURATION + id)
+                const res = await axios.get(API_FOND + id)
                 const data = res.data
                 setRequest(data)
             } catch (err) {
@@ -49,7 +49,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
             return
         }
 
-        for (const input of STORAGE_DURATION_INPUT) {
+        for (const input of FOND_INPUT) {
             if (!request[input.name]) {
                 notifyError("Vui lòng nhập " + input.label)
                 return
@@ -57,11 +57,11 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         }
 
         if (id !== null) {
-            await axios.put(API_STORAGE_DURATION + id, request)
-            notifySuccess("Cập nhật thời hạn bảo quản thành công")
+            await axios.put(API_FOND + id, request)
+            notifySuccess("Cập nhật phông thành công")
         } else {
-            await axios.post(API_STORAGE_DURATION, request)
-            notifySuccess("Tạo thời hạn bảo quản thành công")
+            await axios.post(API_FOND, request)
+            notifySuccess("Tạo phông thành công")
         }
         setRequest({})
 
@@ -73,7 +73,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
 
     return (
         <Modal
-            title="Tạo thời hạn bảo quản"
+            title="Tạo phông"
             style={{
                 top: 20,
             }}
@@ -83,7 +83,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
             footer={null}
         >
 
-            {STORAGE_DURATION_INPUT.map((input) => {
+            {FOND_INPUT.map((input) => {
                 return (
                     <div className="flex mb-[30px]">
                         <div className={`w-[30%] after-form`}>
@@ -155,16 +155,16 @@ const KhaiBaiDanhMucPhong = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const fetchFieldData = async () => {
         setIsLoading(true)
-        const res = await axios.get(API_STORAGE_DURATION)
+        const res = await axios.get(API_FOND)
         const datas = res.data
         const newData = []
 
         for (const data of datas) {
             newData.push({
                 "id": data.id,
-                "code": data.code,
-                "duration": data.duration,
-                "number_of_year": data.number_of_year,
+                "identifier": data.identifier,
+                "organ_id": data.organ_id,
+                "fond_name": data.fond_name,
                 "update":
                     <span className="flex items-center justify-center">
                         <span className="text-teal-500 px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button cursor-pointer"
@@ -172,17 +172,17 @@ const KhaiBaiDanhMucPhong = () => {
                                 setId(data.id)
                                 setModalOpen(true)
                             }}
-                            title="Cập nhật thời hạn bảo quản"
+                            title="Cập nhật phông"
                         ><i className="fa-regular fa-pen-to-square"></i>
                         </span>
-                        <Popconfirm title="Xóa thời hạn bảo quản"
+                        <Popconfirm title="Xóa phông"
                             description="Bạn có chắc chắn xóa?"
                             key={GetKey()}
                             onConfirm={() => handleDelete(data.id)}
                         >
                             <span
                                 className="text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button cursor-pointer"
-                                title="Xóa thời hạn bảo quản"
+                                title="Xóa phông"
                                 onClick={(e) => console.log(e)}
                             >
                                 <i className="fa-solid fa-trash-can"></i>
@@ -198,11 +198,11 @@ const KhaiBaiDanhMucPhong = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(API_STORAGE_DURATION + id)
-            notifySuccess("Xóa thời hạn bảo quản thành công")
+            await axios.delete(API_FOND + id)
+            notifySuccess("Xóa phông thành công")
             fetchFieldData()
         } catch (err) {
-            notifyError("Xóa thời hạn bảo quản thất bại")
+            notifyError("Xóa phông thất bại")
         }
     }
 
@@ -220,8 +220,8 @@ const KhaiBaiDanhMucPhong = () => {
             />
             <KhaiBaoDanhMuc
                 title={<Link to="/khai-bao-danh-muc/danh-muc-thoi-han-bao-quan/"
-                    className="text-black">Danh mục thời hạn bảo quản</Link>}
-                fieldNames={STORAGE_DURATION} fieldDatas={fieldData}
+                    className="text-black">Danh mục phông</Link>}
+                fieldNames={FOND} fieldDatas={fieldData}
                 SearchBar={<SearchBar />}
                 Create={<Create fetchFieldData={fetchFieldData} />}
                 isLoading={isLoading} />

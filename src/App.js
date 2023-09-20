@@ -49,6 +49,7 @@ import KeHoachChinhLy from "pages/BienMucChinhLy/KeHoachChinhLy";
 import KhaiBaoDanhMucNgonNgu from "pages/KhaiBaoDanhMuc/DanhMucNgonNgu";
 import KhaiBaoDanhMucThoiHanBaoQuan from "pages/KhaiBaoDanhMuc/DanhMucThoiHanBaoQuan";
 import KhaiBaoDanhMucTinhTrangVatLy from "pages/KhaiBaoDanhMuc/DanhMucTinhTrangVatLy";
+import KhaiBaiDanhMucPhong from "pages/KhaiBaoDanhMuc/DanhMucPhong";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
@@ -283,6 +284,11 @@ const App = () => {
         {
             path: "/khai-bao-danh-muc/danh-muc-tinh-trang-vat-ly/",
             element: <KhaiBaoDanhMucTinhTrangVatLy/>
+        },
+
+        {
+            path: "/khai-bao-danh-muc/danh-muc-phong",
+            element: <KhaiBaiDanhMucPhong/>
         },
     ];
 

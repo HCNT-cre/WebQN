@@ -194,6 +194,14 @@ export const TABS_SIDEBAR = [
 			},
 			{
 				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Danh mục phông",
+				to: "/khai-bao-danh-muc/danh-muc-phong",
+				key: "/khai-bao-danh-muc/danh-muc-phong",
+				display: false,
+				type: ["coquan"],
+			},
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
 				title: "Danh mục hồ sơ",
 				to: "/khai-bao-danh-muc/danh-muc-ho-so",
 				key: "/khai-bao-danh-muc/danh-muc-ho-so",
@@ -437,14 +445,25 @@ export const STORAGE_DURATION_INPUT = [
 ]
 
 export const FOND = [
-	{ title: "Mã thời hạn bảo quản", key: "code", width: "100%" },
-	{ title: "Thời hạn", key: "duration", width: "100%" },
-	{ title: "Số năm", key: "number_of_year", width: "100%" },
-	{ title: "", key: "update", width: "100px" }
-]
+	{ title: "Mã cơ quan lưu trữ", key: "identifier", width: "100%" },
+	{ title: "Mã phông/công trình/sưu tập lưu trữ", key: "organ_id", width: "100%" },
+	{ title: "Tên phông/công trình/sưu tập lưu trữ", key: "fond_name", width: "100%" },
+	{ title: "", key: "update", width: "100px" },
+  ];
+  
 
 export const FOND_INPUT = [
-	{ type: "text", require: true, name: "code", label: "Mã thời hạn bảo quản" },
-	{ type: "number", require: true, name: "duration", label: "Thời hạn" },
-	{ type: "number", require: true, name: "number_of_year", label: "Số năm" },
-]
+	{ type: "text", require: true, name: "identifier", label: "Mã cơ quan lưu trữ" },
+	{ type: "text", require: true, name: "organ_id", label: "Mã phông/công trình/sưu tập lưu trữ" },
+	{ type: "text", require: true, name: "fond_name", label: "Tên phông/công trình/sưu tập lưu trữ" },
+	{ type: "text", require: true, name: "fond_history", label: "Lịch sử đơn vị hình thành phông" },
+	{ type: "text", require: true, name: "archives_time", label: "Thời gian tài liệu" },
+	{ type: "number", require: true, name: "paper_total", label: "Tổng số tài liệu giấy" },
+	{ type: "number", require: true, name: "paper_digital", label: "Số lượng tài liệu giấy đã số hóa" },
+	{ type: "text", require: true, name: "key_groups", label: "Các nhóm tài liệu chủ yếu" },
+	{ type: "text", require: true, name: "other_types", label: "Các loại hình tài liệu khác" },
+	{ type: "text", require: true, name: "language", label: "Ngôn ngữ" },
+	{ type: "text", require: true, name: "lookup_tools", label: "Công cụ tra cứu" },
+	{ type: "number", require: true, name: "copy_number", label: "Số lượng trang tài liệu đã lập bản sao bảo hiểm" },
+	{ type: "text", require: true, name: "description", label: "Ghi chú" },
+];
