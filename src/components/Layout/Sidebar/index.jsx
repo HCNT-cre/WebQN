@@ -103,17 +103,20 @@ const SideBar = ({ sideBarWidth }) => {
                         block ${sideBarWidth === 250 ? 'sidebar-items--large ' : 'sidebar-items--small '} 
                         `}>
                                     <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] flex relative ${tab.key === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(tab.key)}>
-                                        <div className="mx-[10px] w-[16px]">
+                                        <div className="flex items-center mx-[10px] w-[16px]">
                                             <span dangerouslySetInnerHTML={{ __html: tab.icon }} />
                                         </div>
 
                                         {sideBarWidth === 250 && <p>{tab.title}</p>}
-                                        {tab.numChildTabs > 0 && sideBarWidth === 250 &&
-                                            <span className="absolute right-[8px] top-0">
-                                                {tab.isExpand === false ? <i className="fa-solid fa-chevron-down"></i> : <i className="fa-solid fa-chevron-up"></i>}
-                                            </span>
 
-                                        }
+                                        <div className="flex items-center mx-[10px] w-[16px]">
+                                            {tab.numChildTabs > 0 && sideBarWidth === 250 &&
+                                                <span className="absolute right-[8px]">
+                                                    {tab.isExpand === false ? <i className="fa-solid fa-chevron-down"></i> : <i className="fa-solid fa-chevron-up"></i>}
+                                                </span>
+
+                                            }
+                                        </div>
                                     </div>
                                     {sideBarWidth === 250 && tab.numChildTabs > 0 &&
                                         <Expand open={tab.isExpand} duration={200} transitions={transitions}>
