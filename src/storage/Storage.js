@@ -79,18 +79,18 @@ export const TABS_SIDEBAR = [
 			},
 			{
 				title: "Phê duyệt lưu kho",
-				to: "/bien-muc-chinh-ly/bien-muc-ho-so",
-				key: "/bien-muc-chinh-ly/bien-muc-ho-so",
+				to: "/bien-muc-chinh-ly/phe-duyet-luu-kho",
+				key: "/bien-muc-chinh-ly/phe-duyet-luu-kho",
 			},
 			{
 				title: "Biên mục bổ sung",
-				to: "/bien-muc-chinh-ly/bien-muc-ho-so",
-				key: "/bien-muc-chinh-ly/bien-muc-ho-so",
+				to: "/bien-muc-chinh-ly/bien-muc-bo-sung",
+				key: "/bien-muc-chinh-ly/bien-muc-bo-sung",
 			},
 			{
 				title: "Phê duyệt lưu kho bổ sung",
-				to: "/bien-muc-chinh-ly/bien-muc-ho-so",
-				key: "/bien-muc-chinh-ly/bien-muc-ho-so",
+				to: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung",
+				key: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung",
 			}
 		],
 	},

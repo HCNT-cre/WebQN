@@ -185,7 +185,6 @@ const Update = ({ reFetchData, id }) => {
 				date_end: data.date_end,
 				organ: data.organ,
 				organId: data.organId,
-				organ: data.organ,
 			});
 		};
 		getPlan();
@@ -321,7 +320,6 @@ const KeHoachChinhLy = () => {
 				date_end: rawData.date_end,
 				organ: rawData.organ,
 				organId: rawData.organId,
-				organ: rawData.organ,
 				function: (
 					<div className="flex ">
 						<Delete id={rawData.id} reFetchData={reFetchData} />
