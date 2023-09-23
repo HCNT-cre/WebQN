@@ -30,7 +30,7 @@ const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL =
 const CATEGORY_FILE_API = import.meta.env.VITE_CATEGORY_FILE_API;
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_COLLECTION_PLAN;
 
-const PlanAndCategoryFile = ({ open, setOpen }) => {
+const PlanAndCategoryFile = ({ open, setOpen, API_PLAN }) => {
 	const dispatch = useDispatch();
 	const [categoryFile, setCategoryFile] = useState([]);
 	const [collectionPlan, setCollectionPlan] = useState([]);
@@ -64,7 +64,7 @@ const PlanAndCategoryFile = ({ open, setOpen }) => {
 		};
 
 		const getCollectionPlan = async () => {
-			const { data } = await axiosHttpService.get(API_COLLECTION_PLAN);
+			const { data } = await axiosHttpService.get(API_PLAN);
 			const _ = data.map((item) => {
 				return {
 					value: item.name,
@@ -84,6 +84,7 @@ const PlanAndCategoryFile = ({ open, setOpen }) => {
 			style={{
 				top: 20,
 			}}
+			okButtonProps={{ style: { backgroundColor: 'blue-300' } }} 
 			className="w-[600px]"
 			open={open}
 			onCancel={handleCancle}
@@ -108,6 +109,9 @@ const PlanAndCategoryFile = ({ open, setOpen }) => {
 		</Modal>
 	);
 };
+
+
+
 
 const ButtonFunctionOfEachFile = ({
 	handleClickOnFile,
@@ -335,6 +339,7 @@ const BasePage = ({
 	buttonFuctions = null,
 	fieldsTableCustom = null,
 	showTable = true,
+	apiPlan = API_COLLECTION_PLAN,
 }) => {
 	const dispatch = useDispatch();
 	const [modalOpen, setModalOpen] = useState(false);
@@ -768,7 +773,9 @@ const BasePage = ({
 						setStateMultimediaCategory={setStateMultimediaCategory}
 					/>
 					<ModalCensorship />
-					<PlanAndCategoryFile open={modalOpen} setOpen={setModalOpen} />
+					<PlanAndCategoryFile open={modalOpen} setOpen={setModalOpen} API_PLAN={
+						apiPlan
+					}/>
 				</div>
 			)}
 		</>
