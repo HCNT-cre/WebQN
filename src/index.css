@@ -118,6 +118,10 @@
     background-color: #1677ff !important;
 }
 
+.ant-btn-primary {
+    background-color: #1677ff !important;
+}
+
 .ant-popconfirm-buttons > button {
     font-size: 12px !important;
 }
@@ -199,3 +203,4 @@
     padding: 0 24px;
     padding-bottom: 16px;
 }
+
