@@ -28,6 +28,7 @@ const HoSoDaNhanNopLuu = () => {
       current={current}
       addNewFile={true}
       filter={filter}
+      eOffice={false}
     />
   );
 };

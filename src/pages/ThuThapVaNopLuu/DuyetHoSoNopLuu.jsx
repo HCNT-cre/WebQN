@@ -22,7 +22,14 @@ const DuyetHoSoNopLuu = () => {
     }
 
 
-    return <BasePage parent={parent} current={current} filter={filter} isCheckBox={false} buttonFuctions={<ButtonFuctions />} />
+    return <BasePage
+        parent={parent}
+        current={current}
+        filter={filter}
+        isCheckBox={false}
+        buttonFuctions={<ButtonFuctions />}
+        eOffice={false}
+    />
 }
 
 export default DuyetHoSoNopLuu;

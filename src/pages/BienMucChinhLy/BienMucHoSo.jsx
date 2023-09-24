@@ -31,6 +31,7 @@ const BienMucHoSo = () => {
             addNewFile={true}
             filter={filter}
             apiPlan={API_DOCUMENT_MODIFICATION_PLAN}
+            eOffice={false}
         />
     );
 };

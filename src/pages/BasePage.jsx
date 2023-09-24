@@ -16,6 +16,7 @@ import { useButtonClickOutside } from "../custom/Hook";
 import { Link } from "react-router-dom";
 import { notifyError, notifySuccess } from "../custom/Function";
 import { ModalCensorship } from "./Modals";
+import * as XLSX from 'xlsx/xlsx.mjs';
 
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
@@ -84,7 +85,7 @@ const PlanAndCategoryFile = ({ open, setOpen, API_PLAN }) => {
 			style={{
 				top: 20,
 			}}
-			okButtonProps={{ style: { backgroundColor: 'blue-300' } }} 
+			okButtonProps={{ style: { backgroundColor: 'blue-300' } }}
 			className="w-[600px]"
 			open={open}
 			onCancel={handleCancle}
@@ -340,11 +341,13 @@ const BasePage = ({
 	fieldsTableCustom = null,
 	showTable = true,
 	apiPlan = API_COLLECTION_PLAN,
+	eOffice = true
 }) => {
 	const dispatch = useDispatch();
 	const [modalOpen, setModalOpen] = useState(false);
 	const [fieldsTable, setFieldsTable] = useState(FIELDS_TABLE);
 	const [files, setFiles] = useState([]);
+	const [fileSheet, setFileSheet] = useState([]);
 	const [doesFilter, setDoesFilter] = useState(true);
 	const [stateMultimediaCategory, setStateMultimediaCategory] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
@@ -368,6 +371,7 @@ const BasePage = ({
 
 	const getFileFromResponse = (response) => {
 		const rawDatas = response.data;
+		setFileSheet(rawDatas);
 		let filesArray = [];
 		for (const rawData of rawDatas) {
 			let newButton = null;
@@ -552,12 +556,37 @@ const BasePage = ({
 		else setFieldsTable(fieldsTableCustom);
 	}, [fieldsTableCustom]);
 
+
+	const handleExportDocToExcel = () => {
+		console.log(files)
+		const wb = XLSX.utils.book_new()
+		const ws = XLSX.utils.json_to_sheet(fileSheet)
+		XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
+		XLSX.writeFile(wb, "sheet.xlsx")
+
+		// const workbook = new Workbook();
+		// const worksheet = workbook.addWorksheet('My Data');
+
+		// data.forEach((row, index) => {
+		// 	worksheet.cell(index + 1, 1).value = row.name;
+		// 	worksheet.cell(index + 1, 2).value = row.age;
+		// });
+
+		// workbook.xlsx.writeFile('my-data.xlsx');
+	}
+
 	const BUTTON_ACTIONS = [
 		{
 			title: "Tìm kiếm",
 			btn_class_name: "custom-btn-search",
 			icon: <i className="fa-solid fa-magnifying-glass"></i>,
 			onClick: handleSearch,
+		},
+		{
+			title: "Xuất Excel",
+			btn_class_name: "custom-btn-export-excel",
+			icon: <i className="fa-solid fa-magnifying-glass"></i>,
+			onClick: handleExportDocToExcel,
 		},
 		{
 			title: "Xóa bộ lọc",
@@ -767,7 +796,9 @@ const BasePage = ({
 					</div>
 
 					<File reset={reset} />
-					<DocCategory />
+					<DocCategory
+						eOffice={eOffice}
+					/>
 					<MultimediaCategory
 						stateMultimediaCategory={stateMultimediaCategory}
 						setStateMultimediaCategory={setStateMultimediaCategory}
@@ -775,7 +806,7 @@ const BasePage = ({
 					<ModalCensorship />
 					<PlanAndCategoryFile open={modalOpen} setOpen={setModalOpen} API_PLAN={
 						apiPlan
-					}/>
+					} />
 				</div>
 			)}
 		</>

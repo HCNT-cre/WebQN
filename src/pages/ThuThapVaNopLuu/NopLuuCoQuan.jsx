@@ -36,6 +36,7 @@ const NopLuuCoQuan = () => {
       addNewFile={true}
       filter={filter}
       newButtons={newButtons}
+      eOffice={false}
     />
   );
 };

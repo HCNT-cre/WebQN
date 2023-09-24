@@ -7,6 +7,7 @@ import FixDoc from "./FixDoc"
 import EOFFICE from "./EOFFICE"
 import { DeleteData, GetDataFromIDFile } from "../../../custom/Function"
 import { Button, Popconfirm, Input } from 'antd';
+import * as XLSX from 'xlsx/xlsx.mjs';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useDispatch, useSelector } from "react-redux"
@@ -73,7 +74,9 @@ const ButtonFunctions = ({ pdfData, URL_PDF_FILE, handleClickOnDocument, pdfID, 
     )
 }
 
-const DocCategory = () => {
+const DocCategory = ({
+    eOffice = true,
+}) => {
     const [stateAddDoc, setStateAddDoc] = useState(false)
     const [stateFixDoc, setStateFixDoc] = useState(false)
     const [fileUploaded, setFileUploaded] = useState(null)
@@ -85,7 +88,7 @@ const DocCategory = () => {
     const [pdfID, setPdfID] = useState(null)
     const [fileData, setFileData] = useState(null)
     const [stateEoffice, setStateEoffice] = useState(false)
-
+    const [fileSheet, setFileSheet] = useState([])
     const userPermissionId = useSelector(state => state.user.permission_id)
     const stateDocCategory = useSelector(state => state.docCategory.state)
     const govFileID = useSelector(state => state.docCategory.id)
@@ -109,6 +112,7 @@ const DocCategory = () => {
                 const response = await fetch(currentAPI);
                 if (response.ok) {
                     const rawDatas = await response.json();
+                    setFileSheet(rawDatas)
                     const filesArray = []
                     for (const rawData of rawDatas) {
                         filesArray.push({
@@ -146,6 +150,14 @@ const DocCategory = () => {
     }, [govFileID])
 
 
+    const handleExportExcel = async () => {
+        console.log(fileSheet)
+		const wb = XLSX.utils.book_new()
+		const ws = XLSX.utils.json_to_sheet(fileSheet)
+		XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
+		XLSX.writeFile(wb, "sheetVB.xlsx")
+
+    }
     return (
         <>
             {
@@ -208,14 +220,25 @@ const DocCategory = () => {
                                     </div>
 
                                     <div className="w-[12.5%] text-white text-center px-[5px] flex">
+                                        {
+                                            eOffice &&
+                                            <button className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]" onClick={() => setStateEoffice(true)} >
+                                                <div className="mr-[8px]">
+                                                    <i className="fa-solid fa-magnifying-glass"></i>
+                                                </div>
+                                                Thêm VB từ EOFFICE
+                                            </button>
+                                        }
 
-                                        <button className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]" onClick={() => setStateEoffice(true)} >
-                                            <div className="mr-[8px]">
-                                                <i className="fa-solid fa-magnifying-glass"></i>
-                                            </div>
-                                            Thêm VB từ EOFFICE
-                                        </button>
-
+                                        {
+                                            !eOffice &&
+                                            <button className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]" onClick={handleExportExcel} >
+                                                <div className="mr-[8px]">
+                                                    <i className="fa-solid fa-magnifying-glass"></i>
+                                                </div>
+                                                Xuất Excel
+                                            </button>
+                                        }
                                     </div>
 
                                 </div>
