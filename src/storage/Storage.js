@@ -121,6 +121,15 @@ export const TABS_SIDEBAR = [
 			},
 		],
 	},
+	{
+		isExpand: false,
+		icon: '<i class="fa-solid fa-check"></i>',
+		title: "Duyệt chỉnh lý",
+		numChildTabs: 0,
+		to: "/duyet-chinh-ly",
+		key: "/duyet-chinh-ly",
+		display: true,
+	},
 
 	{
 		key: "/luu-tru-co-quan/",
