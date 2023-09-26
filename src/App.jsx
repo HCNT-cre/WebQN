@@ -46,6 +46,8 @@ import TraVeQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/TraVeQuyetDin
 import BienMucHoSo from "src/pages/BienMucChinhLy/BienMucHoSo";
 import KeHoachChinhLy from "src/pages/BienMucChinhLy/KeHoachChinhLy";
 
+import DuyetChinhLy from "src/pages/DuyetChinhLy";
+
 import KhaiBaoDanhMucNgonNgu from "src/pages/KhaiBaoDanhMuc/DanhMucNgonNgu";
 import KhaiBaoDanhMucThoiHanBaoQuan from "src/pages/KhaiBaoDanhMuc/DanhMucThoiHanBaoQuan";
 import KhaiBaoDanhMucTinhTrangVatLy from "src/pages/KhaiBaoDanhMuc/DanhMucTinhTrangVatLy";
@@ -357,6 +359,10 @@ const App = () => {
         {
             path: "/bien-muc-chinh-ly/phe-duyet-luu-kho",
             element: <PheDuyetLuuKho/>
+        },
+        {
+            path: "duyet-chinh-ly",
+            element: <DuyetChinhLy/>
         },
     ];
 
