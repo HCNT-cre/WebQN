@@ -151,11 +151,27 @@ const DocCategory = ({
 
 
     const handleExportExcel = async () => {
-        console.log(fileSheet)
-		const wb = XLSX.utils.book_new()
-		const ws = XLSX.utils.json_to_sheet(fileSheet)
-		XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
-		XLSX.writeFile(wb, "sheetVB.xlsx")
+        const getExcel = async () => {
+            const response = await axiosHttpService.post("http://34.142.137.193:5678/excel", {
+                luong: 200,
+                data: fileSheet
+            }, {
+                responseType: "blob"
+            });
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `DanhSachVanBan.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            console.log(fileSheet)
+        }
+        getExcel();
+        // console.log(fileSheet)
+        // const wb = XLSX.utils.book_new()
+        // const ws = XLSX.utils.json_to_sheet(fileSheet)
+        // XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
+        // XLSX.writeFile(wb, "sheetVB.xlsx")
 
     }
     return (
@@ -234,7 +250,7 @@ const DocCategory = ({
                                             !eOffice &&
                                             <button className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]" onClick={handleExportExcel} >
                                                 <div className="mr-[8px]">
-                                                    <i className="fa-solid fa-magnifying-glass"></i>
+                                                    <i className="fa-solid fa-file-csv"></i>
                                                 </div>
                                                 Xuất Excel
                                             </button>

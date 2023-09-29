@@ -369,6 +369,25 @@ const BasePage = ({
 		dispatch({ type: "open", id: IDFile });
 	};
 
+	// useEffect(() => {
+	// 	const getExcel = async () => {
+	// 		const response = await axiosHttpService.post("http://34.142.137.193:5678/excel", {
+	// 			luong: 200
+	// 		}, {
+	// 			responseType: "blob"
+	// 		});
+	// 		const url = window.URL.createObjectURL(new Blob([response.data]));
+	// 		const link = document.createElement('a');
+	// 		link.href = url;
+	// 		link.setAttribute('download', `${Date.now()}.xlsx`);
+	// 		document.body.appendChild(link);
+	// 		link.click();
+	// 		const data = response.data;
+	// 		console.log(typeof (data))
+	// 	}
+	// 	getExcel();
+	// }, [])
+
 	const getFileFromResponse = (response) => {
 		const rawDatas = response.data;
 		setFileSheet(rawDatas);
@@ -558,11 +577,27 @@ const BasePage = ({
 
 
 	const handleExportDocToExcel = () => {
-		console.log(files)
-		const wb = XLSX.utils.book_new()
-		const ws = XLSX.utils.json_to_sheet(fileSheet)
-		XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
-		XLSX.writeFile(wb, "sheet.xlsx")
+		const getExcel = async () => {
+			const response = await axiosHttpService.post("http://34.142.137.193:5678/excel", {
+				luong: 200,
+				data: fileSheet,
+				cmd: "danhmuc"
+			}, {
+				responseType: "blob"
+			});
+			const url = window.URL.createObjectURL(new Blob([response.data]));
+			const link = document.createElement('a');
+			link.href = url;
+			link.setAttribute('download', `DanhSachHoSo.xlsx`);
+			document.body.appendChild(link);
+			link.click();
+		}
+		getExcel();
+		// console.log(fileSheet)
+		// const wb = XLSX.utils.book_new()
+		// const ws = XLSX.utils.json_to_sheet(fileSheet)
+		// XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
+		// XLSX.writeFile(wb, "sheet.xlsx")
 
 		// const workbook = new Workbook();
 		// const worksheet = workbook.addWorksheet('My Data');
@@ -585,7 +620,7 @@ const BasePage = ({
 		{
 			title: "Xuất Excel",
 			btn_class_name: "custom-btn-export-excel",
-			icon: <i className="fa-solid fa-magnifying-glass"></i>,
+			icon: <i className="fa-solid fa-file-csv"></i>,
 			onClick: handleExportDocToExcel,
 		},
 		{
