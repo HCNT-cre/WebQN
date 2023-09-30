@@ -16,7 +16,7 @@ import { useButtonClickOutside } from "../custom/Hook";
 import { Link } from "react-router-dom";
 import { notifyError, notifySuccess } from "../custom/Function";
 import { ModalCensorship } from "./Modals";
-import * as XLSX from 'xlsx/xlsx.mjs';
+import ExportDocToExcel from "src/components/Excel/ExportDocToExcel";
 
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
@@ -369,25 +369,6 @@ const BasePage = ({
 		dispatch({ type: "open", id: IDFile });
 	};
 
-	// useEffect(() => {
-	// 	const getExcel = async () => {
-	// 		const response = await axiosHttpService.post("http://34.142.137.193:5678/excel", {
-	// 			luong: 200
-	// 		}, {
-	// 			responseType: "blob"
-	// 		});
-	// 		const url = window.URL.createObjectURL(new Blob([response.data]));
-	// 		const link = document.createElement('a');
-	// 		link.href = url;
-	// 		link.setAttribute('download', `${Date.now()}.xlsx`);
-	// 		document.body.appendChild(link);
-	// 		link.click();
-	// 		const data = response.data;
-	// 		console.log(typeof (data))
-	// 	}
-	// 	getExcel();
-	// }, [])
-
 	const getFileFromResponse = (response) => {
 		const rawDatas = response.data;
 		setFileSheet(rawDatas);
@@ -575,53 +556,12 @@ const BasePage = ({
 		else setFieldsTable(fieldsTableCustom);
 	}, [fieldsTableCustom]);
 
-
-	const handleExportDocToExcel = () => {
-		const getExcel = async () => {
-			const response = await axiosHttpService.post("http://34.142.137.193:5678/excel", {
-				luong: 200,
-				data: fileSheet,
-				cmd: "danhmuc"
-			}, {
-				responseType: "blob"
-			});
-			const url = window.URL.createObjectURL(new Blob([response.data]));
-			const link = document.createElement('a');
-			link.href = url;
-			link.setAttribute('download', `DanhSachHoSo.xlsx`);
-			document.body.appendChild(link);
-			link.click();
-		}
-		getExcel();
-		// console.log(fileSheet)
-		// const wb = XLSX.utils.book_new()
-		// const ws = XLSX.utils.json_to_sheet(fileSheet)
-		// XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
-		// XLSX.writeFile(wb, "sheet.xlsx")
-
-		// const workbook = new Workbook();
-		// const worksheet = workbook.addWorksheet('My Data');
-
-		// data.forEach((row, index) => {
-		// 	worksheet.cell(index + 1, 1).value = row.name;
-		// 	worksheet.cell(index + 1, 2).value = row.age;
-		// });
-
-		// workbook.xlsx.writeFile('my-data.xlsx');
-	}
-
 	const BUTTON_ACTIONS = [
 		{
 			title: "Tìm kiếm",
 			btn_class_name: "custom-btn-search",
 			icon: <i className="fa-solid fa-magnifying-glass"></i>,
 			onClick: handleSearch,
-		},
-		{
-			title: "Xuất Excel",
-			btn_class_name: "custom-btn-export-excel",
-			icon: <i className="fa-solid fa-file-csv"></i>,
-			onClick: handleExportDocToExcel,
 		},
 		{
 			title: "Xóa bộ lọc",
@@ -783,7 +723,11 @@ const BasePage = ({
 									</div>
 								);
 							})}
-
+							<div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  relative">
+								<ExportDocToExcel
+									fileSheet={fileSheet}
+								/>
+							</div>
 							<div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  relative">
 								<Button
 									disabled={!(stateCheckBox.length > 0)}
