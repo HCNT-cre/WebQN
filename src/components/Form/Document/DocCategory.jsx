@@ -154,7 +154,8 @@ const DocCategory = ({
         const getExcel = async () => {
             const response = await axiosHttpService.post("http://34.142.137.193:5678/excel", {
                 luong: 200,
-                data: fileSheet
+                data: fileSheet,
+                cmd: "mucluc_vanban"
             }, {
                 responseType: "blob"
             });
@@ -167,12 +168,6 @@ const DocCategory = ({
             console.log(fileSheet)
         }
         getExcel();
-        // console.log(fileSheet)
-        // const wb = XLSX.utils.book_new()
-        // const ws = XLSX.utils.json_to_sheet(fileSheet)
-        // XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
-        // XLSX.writeFile(wb, "sheetVB.xlsx")
-
     }
     return (
         <>
