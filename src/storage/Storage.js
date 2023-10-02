@@ -133,20 +133,20 @@ export const TABS_SIDEBAR = [
 	{
 		isExpand: false,
 		icon: '<i class="fa-solid fa-copy"></i>',
-		title: "Sao hồ sơ, tài liệu",
+		title: "Quản lí thông tin khai thác",
 		display: false,
 		type: ["hoso"],
 		numChildTabs: 2,
 		childTabs: [
 			{
 				title: "Danh sách yêu cầu sao hồ sơ, tài liệu",
-				to: "/sao-ho-so-tai-lieu/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
-				key: "/sao-ho-so-tai-lieu/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
+				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
+				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
 			},
 			{
-				title: "Phê duyệt yêu cầu sao hồ sơ, tài liệu",
-				to: "/sao-ho-so-tai-lieu/phe-duyet-yeu-cau-sao-ho-so-tai-lieu",
-				key: "/sao-ho-so-tai-lieu/phe-duyet-yeu-cau-sao-ho-so-tai-lieu",
+				title: "Danh sách yêu cầu chứng thực",
+				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-chung-thuc",
+				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-chung-thuc",
 			}
 		],
 	},
