@@ -126,7 +126,7 @@ const SideBar = ({ sideBarWidth }) => {
                                                         if (child.numChildTabs === undefined)
                                                             return (
                                                                 (child.display === undefined || child.display === true) &&
-                                                                <Link key={child.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] block mt-[8px]" to={child.to} >
+                                                                <Link key={child.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] block mt-[8px] text-wrap-normal" to={child.to} >
                                                                     {sideBarWidth === 250 && <span>{child.title}</span>}
                                                                 </Link>
                                                             )
@@ -147,7 +147,7 @@ const SideBar = ({ sideBarWidth }) => {
                                                                         <div className="flex flex-col ml-[12px]">
                                                                             {child.childTabs.map((childd) => {
                                                                                 return (
-                                                                                    <Link key={childd.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] block mt-[8px]" to={childd.to} >
+                                                                                    <Link key={childd.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] block mt-[8px] text-wrap-normal" to={childd.to} >
                                                                                         {sideBarWidth === 250 && <span>{childd.title}</span>}
                                                                                     </Link>
                                                                                 )
