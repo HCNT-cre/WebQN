@@ -132,7 +132,7 @@ export const TABS_SIDEBAR = [
 	},
 	{
 		isExpand: false,
-		icon: '<i class="fa-solid fa-check"></i>',
+		icon: '<i class="fa-solid fa-copy"></i>',
 		title: "Sao hồ sơ, tài liệu",
 		display: false,
 		type: ["hoso"],
