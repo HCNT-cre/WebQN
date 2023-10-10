@@ -59,6 +59,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { setUserPermission } from "./actions/userPermission"
 
+import DuyetSaoHoSo from "./pages/QuanLiKhaiThac/SaoHoSo";
+import DuyetSaoVaChungThucHoSo from "./pages/QuanLiKhaiThac/SaoVaChungThuc";
+
 import axiosHttpService from "src/utils/httpService";
 
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
@@ -364,6 +367,14 @@ const App = () => {
             path: "duyet-chinh-ly",
             element: <DuyetChinhLy/>
         },
+        {
+            path: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
+            element: <DuyetSaoHoSo />
+        },
+        {
+            path: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
+            element: <DuyetSaoVaChungThucHoSo  />
+        }
     ];
 
     return (

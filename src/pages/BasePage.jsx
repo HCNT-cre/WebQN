@@ -30,6 +30,7 @@ const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL =
 
 const CATEGORY_FILE_API = import.meta.env.VITE_CATEGORY_FILE_API;
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_COLLECTION_PLAN;
+const API_EXPORT_EXCEL = import.meta.env.VITE_API_EXPORT_EXCEL;
 
 const PlanAndCategoryFile = ({ open, setOpen, API_PLAN }) => {
 	const dispatch = useDispatch();
@@ -578,7 +579,7 @@ const BasePage = ({
 
 	const handleExportDocToExcel = () => {
 		const getExcel = async () => {
-			const response = await axiosHttpService.post("http://34.142.137.193:5678/excel", {
+			const response = await axiosHttpService.post(API_EXPORT_EXCEL, {
 				luong: 200,
 				data: fileSheet,
 				cmd: "danhmuc"

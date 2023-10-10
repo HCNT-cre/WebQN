@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux"
 
 const API_DOCUMENT_GET = import.meta.env.VITE_API_DOCUMENT_GET
 const API_DOCUMENT_DELETE = import.meta.env.VITE_API_DOCUMENT_DELETE
+const API_EXPORT_EXCEL = import.meta.env.VITE_API_EXPORT_EXCEL
 
 const TABLE_FIELDS = [
     { title: "TT", key: "doc_ordinal", width: "50px" },
@@ -152,7 +153,7 @@ const DocCategory = ({
 
     const handleExportExcel = async () => {
         const getExcel = async () => {
-            const response = await axiosHttpService.post("http://34.142.137.193:5678/excel", {
+            const response = await axiosHttpService.post(API_EXPORT_EXCEL, {
                 luong: 200,
                 data: fileSheet
             }, {
