@@ -1,6 +1,6 @@
 import { Table } from "../../custom/Components/Table";
 
-const DuyetSaoHoSo = () => {
+const DuyetSaoVaChungThucHoSo = () => {
   const fieldNames = [
     // Define your field names here
     {title: "Tiêu đề phiếu sao và chứng thực hồ sơ, tài liệu", width: 250 },
@@ -23,4 +23,4 @@ const DuyetSaoHoSo = () => {
   );
 };
 
-export default DuyetSaoHoSo;
+export default DuyetSaoVaChungThucHoSo;
