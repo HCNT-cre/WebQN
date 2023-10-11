@@ -5,8 +5,14 @@ import { OpenFile } from "../actions/formFile";
 import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../custom/Function";
 
-
 const API_GOV_FILE_UPDATE_STATE = import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE
+const API_STORAGE_GET_SHELF_ALL = import.meta.env.VITE_API_STORAGE_GET_SHELF_ALL
+const API_STORAGE_GET_WAREHOUSEROOM_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSEROOM_ALL
+const API_STORAGE_GET_WAREHOUSE_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSE_ALL
+const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL
+const API_STORAGE_GET_DRAWERS_ALL = import.meta.env.VITE_API_STORAGE_GET_DRAWERS_ALL
+
+const API_STORAGE_POST_FILE_ORGAN_STORAGE = import.meta.env.VITE_API_STORAGE_POST_FILE_ORGAN_STORAGE
 
 const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
@@ -21,16 +27,118 @@ const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     );
 };
 
-const API_STORAGE_GET_SHELF_ALL = import.meta.env.VITE_API_STORAGE_GET_SHELF_ALL
-const API_STORAGE_GET_WAREHOUSEROOM_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSEROOM_ALL
-const API_STORAGE_GET_WAREHOUSE_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSE_ALL
-const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL
-const API_STORAGE_GET_DRAWERS_ALL = import.meta.env.VITE_API_STORAGE_GET_DRAWERS_ALL
 
-const API_STORAGE_POST_FILE_ORGAN_STORAGE = import.meta.env.VITE_API_STORAGE_POST_FILE_ORGAN_STORAGE
+export const ModalCensorship = () => {
+    const open = useSelector(state => state.modalCensorship.state)
+    const IDFile = useSelector(state => state.modalCensorship.id)
+    const current_state = useSelector(state => state.modalCensorship.current_state)
+    const reFetchFile = useSelector(state => state.reFetchFile.fetchFileFunction)
 
-const ModalApprove = ({ open, setOpenModal, setParentModal }) => {
+    const dispatch = useDispatch();
+    const [isCheck, setIsCheck] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false)
+
+    useEffect(() => {
+        setModalOpen(open)
+    }, [open])
+
+    const handleClickCheckBox = e => {
+        const { id, checked } = e.target;
+        if (checked) {
+            setIsCheck([...isCheck, id]);
+        } else {
+            setIsCheck(isCheck.filter(item => item !== id));
+        }
+    };
+
+    const handleOk = () => {
+        setModalOpen(false)
+    }
+
+    const handleCancle = () => {
+        dispatch({ type: "close_modal_confirm_nopluucoquan", id: null })
+    }
+
+    const handleClickViewFile = () => {
+        if (IDFile === null || IDFile === undefined) return;
+        dispatch(OpenFile(IDFile))
+    }
+
+    const handleClickViewDocCategory = () => {
+        if (IDFile === null || IDFile === undefined) return;
+        dispatch({ type: "open", id: IDFile })
+    }
+
+    const handleClickApprove = async () => {
+        await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
+            id: IDFile, current_state: current_state,
+            new_state: current_state + 1
+        }])
+        notifySuccess("Duyệt thành công")
+        reFetchFile()
+        dispatch({ type: "close_modal_confirm_nopluucoquan", id: null })
+    }
+
+    const handleClickReject = () => {
+        axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [
+            { id: IDFile, current_state: current_state, new_state: current_state === 3 ? 7 : 8 }])
+        notifySuccess("Đã trả về hồ sơ")
+        dispatch({ type: "close_modal_confirm_nopluucoquan", id: null })
+
+        if (reFetchFile !== null) {
+            reFetchFile()
+        }
+    }
+
+    return (
+        <>
+            <Modal
+                footer={null}
+                title="Duyệt hồ sơ"
+                style={{
+                    top: 200,
+                }}
+                open={modalOpen}
+                onOk={handleOk}
+                onCancel={handleCancle}
+            >
+                <div className="my-[12px]">
+                    <div className="flex">
+                        <CheckBoxx handleClickCheckBox={handleClickCheckBox} isChecked={isCheck.includes("cb1")} id="cb1" type="checkbox" />
+                        <div className="ml-[12px]">
+                            Đã thẩm định&nbsp;
+                            <span onClick={handleClickViewFile} className="cursor-pointer underline font-bold">
+                                thông tin hồ sơ
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div className="my-[12px]">
+                    <div className="flex">
+                        <CheckBoxx handleClickCheckBox={handleClickCheckBox} isChecked={isCheck.includes("cb2")} id="cb2" type="checkbox" />
+                        <div className="ml-[12px]">
+                            Đã thẩm định&nbsp;
+                            <span onClick={handleClickViewDocCategory} className="cursor-pointer underline font-bold">
+                                văn bản hồ sơ
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex justify-center">
+                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
+                    <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
+                </div>
+            </Modal>
+
+
+        </>
+
+    )
+}
+
+export const ModalConfirmLuuTruCoQuan = () => {
     const dispatch = useDispatch()
+    const state = useSelector(state => state.modalStoreOrgan.state)
     const reFetchFile = useSelector(state => state.reFetchFile.fetchFileFunction)
 
     const [request, setRequest] = useState({
@@ -39,8 +147,8 @@ const ModalApprove = ({ open, setOpenModal, setParentModal }) => {
         warehouseroom: null,
         shelf: null,
     })
-    const IDFile = useSelector(state => state.modalCensorship.id)
-    const current_state = useSelector(state => state.modalCensorship.current_state)
+
+    const IDFile = useSelector(state => state.modalStoreOrgan.id)
     const [optionShelf, setOptionShelf] = useState([])
     const [optionOrgan, setOptionOrgan] = useState([])
     const [optionWarehouse, setOptionWarehouse] = useState([])
@@ -144,11 +252,11 @@ const ModalApprove = ({ open, setOpenModal, setParentModal }) => {
     }
 
     const handleCancle = () => {
-        setOpenModal(false)
+        dispatch({ type: "close_modal_confirm_luutrucoquan", id: null })
     }
 
     const handleOk = () => {
-        setOpenModal(false)
+        dispatch({ type: "close_modal_confirm_luutrucoquan", id: null })
     }
 
     const handleClickApprove = async () => {
@@ -159,15 +267,10 @@ const ModalApprove = ({ open, setOpenModal, setParentModal }) => {
             }
         }
 
-        await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
-            id: IDFile, current_state: current_state,
-            new_state: current_state + 1
-        }])
         await axiosHttpService.post(API_STORAGE_POST_FILE_ORGAN_STORAGE, { ...request, file_id: IDFile })
+        dispatch({ type: "close_modal_confirm_luutrucoquan", id: null })
         notifySuccess("Duyệt thành công")
         reFetchFile()
-        setOpenModal(false)
-        dispatch({ type: "close_modal", id: null })
     }
 
     return (
@@ -178,7 +281,7 @@ const ModalApprove = ({ open, setOpenModal, setParentModal }) => {
                 style={{
                     top: 200,
                 }}
-                open={open}
+                open={state}
                 onOk={handleOk}
                 onCancel={handleCancle}
             >
@@ -267,109 +370,5 @@ const ModalApprove = ({ open, setOpenModal, setParentModal }) => {
                 </div>
             </Modal>
         </div>
-    )
-}
-
-
-export const ModalCensorship = () => {
-    const open = useSelector(state => state.modalCensorship.state)
-    const IDFile = useSelector(state => state.modalCensorship.id)
-    const current_state = useSelector(state => state.modalCensorship.current_state)
-    const reFetchFile = useSelector(state => state.reFetchFile.fetchFileFunction)
-
-    const dispatch = useDispatch();
-    const [isCheck, setIsCheck] = useState([]);
-    const [modalOpen, setModalOpen] = useState(false)
-    const [modalApprove, setModalApprove] = useState(false)
-
-    useEffect(() => {
-        setModalOpen(open)
-    }, [open])
-
-    const handleClickCheckBox = e => {
-        const { id, checked } = e.target;
-        if (checked) {
-            setIsCheck([...isCheck, id]);
-        } else {
-            setIsCheck(isCheck.filter(item => item !== id));
-        }
-    };
-
-    const handleOk = () => {
-        setModalOpen(false)
-    }
-
-    const handleCancle = () => {
-        dispatch({ type: "close_modal", id: null })
-    }
-
-    const handleClickViewFile = () => {
-        if (IDFile === null || IDFile === undefined) return;
-        dispatch(OpenFile(IDFile))
-    }
-
-    const handleClickViewDocCategory = () => {
-        if (IDFile === null || IDFile === undefined) return;
-        dispatch({ type: "open", id: IDFile })
-    }
-
-    const handleClickApprove = () => {
-        setModalApprove(true)
-    }
-
-    const handleClickReject = () => {
-        axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [
-            { id: IDFile, current_state: current_state, new_state: current_state === 3 ? 7 : 8 }])
-        notifySuccess("Đã trả về hồ sơ")
-        dispatch({ type: "close_modal", id: null })
-
-        if (reFetchFile !== null) {
-            reFetchFile()
-        }
-    }
-
-    return (
-        <>
-            <Modal
-                footer={null}
-                title="Duyệt hồ sơ"
-                style={{
-                    top: 200,
-                }}
-                open={modalOpen}
-                onOk={handleOk}
-                onCancel={handleCancle}
-            >
-                <div className="my-[12px]">
-                    <div className="flex">
-                        <CheckBoxx handleClickCheckBox={handleClickCheckBox} isChecked={isCheck.includes("cb1")} id="cb1" type="checkbox" />
-                        <div className="ml-[12px]">
-                            Đã thẩm định&nbsp;
-                            <span onClick={handleClickViewFile} className="cursor-pointer underline font-bold">
-                                thông tin hồ sơ
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="my-[12px]">
-                    <div className="flex">
-                        <CheckBoxx handleClickCheckBox={handleClickCheckBox} isChecked={isCheck.includes("cb2")} id="cb2" type="checkbox" />
-                        <div className="ml-[12px]">
-                            Đã thẩm định&nbsp;
-                            <span onClick={handleClickViewDocCategory} className="cursor-pointer underline font-bold">
-                                văn bản hồ sơ
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex justify-center">
-                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
-                    <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
-                </div>
-            </Modal>
-
-            <ModalApprove open={modalApprove} setOpenModal={setModalApprove} setParentModal={setModalOpen} />
-        </>
-
     )
 }

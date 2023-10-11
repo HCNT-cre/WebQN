@@ -12,6 +12,7 @@ import languageReducer from './language'
 import maintanceReducer from './maintance'
 import formatReducer from './format'
 import organIdReducer from './organId'
+import modalStoreOrganReducer from './modalStoreOrgan'
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
     language: languageReducer,
     maintance: maintanceReducer,
     format: formatReducer,
-    organId: organIdReducer
+    organId: organIdReducer,
+    modalStoreOrgan: modalStoreOrganReducer
 })
 
 export default rootReducer

@@ -1,13 +1,15 @@
-const modalCensorshipReducer = (state = { state: false, id: null }, action) => {
+const modalStoreOrganReducer = (state = { state: false, id: null }, action) => {
+    console.log(action.type)
     switch (action.type) {
-        case "open_modal_confirm_nopluucoquan":
+        case "open_modal_confirm_luutrucoquan":
             return {
                 ...state,
                 state: true,
                 id: action.id,
                 current_state: parseInt(action.current_state)
             }
-        case "close_modal_confirm_nopluucoquan":
+        case "close_modal_confirm_luutrucoquan":
+            console.log(111)
             return {
                 ...state,
                 state: false,
@@ -18,4 +20,4 @@ const modalCensorshipReducer = (state = { state: false, id: null }, action) => {
     }
 }
 
-export default modalCensorshipReducer
+export default modalStoreOrganReducer

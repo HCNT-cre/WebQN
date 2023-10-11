@@ -1,9 +1,9 @@
 import axiosHttpService from "src/utils/httpService";
 import BasePage from "../BasePage";
 import { useState, useEffect, useCallback } from "react";
+import { ENUM_STATE } from "src/storage/Storage";
 
 const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL = import.meta.env.VITE_API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL
-
 export const FIELDS_TABLE = [
     { title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
     { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
@@ -61,12 +61,15 @@ const KhoLuuTruCoQuan = () => {
 
     const filter = useCallback((files) => {
         if (!allOrganStorageFiles.length) return files
+        const existFiles = {}
         const newFiles = []
         for (const file of files) {
-            if (file.state.props.children === "Lưu trữ cơ quan") {
+            if (file.state.props.children === ENUM_STATE.LUU_TRU_CO_QUAN) {
                 for (const fileS of allOrganStorageFiles) {
-                    if (fileS.file_id === file.id)
+                    if (fileS.file_id === file.id && !existFiles[file.id]) {
                         newFiles.push(mergeTwoFile(file, fileS))
+                        existFiles[file.id] = true                        
+                    }
                 }
             }
         }

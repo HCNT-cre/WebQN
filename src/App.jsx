@@ -42,23 +42,21 @@ import DuyetQuyetDinh from "src/pages/TieuHuyHoSo/QuyetDinh/DuyetQuyetDinh"
 import TaoQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/TaoQuyetDinhKhoiPhuc";
 import DuyetQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/DuyetQuyetDinhKhoiPhuc";
 import TraVeQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/TraVeQuyetDinhKhoiPhuc";
-
 import BienMucHoSo from "src/pages/BienMucChinhLy/BienMucHoSo";
 import KeHoachChinhLy from "src/pages/BienMucChinhLy/KeHoachChinhLy";
-
 import DuyetChinhLy from "src/pages/DuyetChinhLy";
-
 import KhaiBaoDanhMucNgonNgu from "src/pages/KhaiBaoDanhMuc/DanhMucNgonNgu";
 import KhaiBaoDanhMucThoiHanBaoQuan from "src/pages/KhaiBaoDanhMuc/DanhMucThoiHanBaoQuan";
 import KhaiBaoDanhMucTinhTrangVatLy from "src/pages/KhaiBaoDanhMuc/DanhMucTinhTrangVatLy";
 import KhaiBaiDanhMucPhong from "src/pages/KhaiBaoDanhMuc/DanhMucPhong";
-
 import PheDuyetLuuKho from "./pages/BienMucChinhLy/PheDuyetLuuKho";
+import HoSoNopLuuBiTraVe from "./pages/ThuThapVaNopLuu/HoSoNopLuuBiTraVe";
+import KeHoachThuThapBiTuChoi from "./pages/ThuThapVaNopLuu/KeHoachThuThapBiTuChoi";
+import PheDuyetKeHoachThuThap from "./pages/ThuThapVaNopLuu/PheDuyetKeHoachThuThap";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { setUserPermission } from "./actions/userPermission"
-
 import DuyetSaoHoSo from "./pages/QuanLiKhaiThac/SaoHoSo";
 import DuyetSaoVaChungThucHoSo from "./pages/QuanLiKhaiThac/SaoVaChungThuc";
 
@@ -71,10 +69,8 @@ function LoggedIn() {
     const navigate = useNavigate()
     const params = useParams();
 
-    console.log(params)
     useEffect(() => {
         const fetchPermission = async () => {
-            console.log("id", params.id)
             localStorage.setItem('userID', params.id);
             if (params.id === "0") {
                 dispatch(setUserPermission([]));
@@ -153,7 +149,6 @@ const App = () => {
     })
 
     getOrganId().then((organId) => {
-        console.log(organId)
         dispatch({ type: "GET_ORGAN_ID_SUCCESS", payload: organId })
     })
 
@@ -336,36 +331,36 @@ const App = () => {
 
         {
             path: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
-            element: <KeHoachChinhLy/>
+            element: <KeHoachChinhLy />
         },
 
         {
             path: "/khai-bao-danh-muc/danh-muc-ngon-ngu/",
-            element: <KhaiBaoDanhMucNgonNgu/>
+            element: <KhaiBaoDanhMucNgonNgu />
         },
 
         {
             path: "/khai-bao-danh-muc/danh-muc-thoi-han-bao-quan/",
-            element: <KhaiBaoDanhMucThoiHanBaoQuan/>
+            element: <KhaiBaoDanhMucThoiHanBaoQuan />
         },
 
         {
             path: "/khai-bao-danh-muc/danh-muc-tinh-trang-vat-ly/",
-            element: <KhaiBaoDanhMucTinhTrangVatLy/>
+            element: <KhaiBaoDanhMucTinhTrangVatLy />
         },
 
         {
             path: "/khai-bao-danh-muc/danh-muc-phong",
-            element: <KhaiBaiDanhMucPhong/>
+            element: <KhaiBaiDanhMucPhong />
         },
 
         {
             path: "/bien-muc-chinh-ly/phe-duyet-luu-kho",
-            element: <PheDuyetLuuKho/>
+            element: <PheDuyetLuuKho />
         },
         {
             path: "duyet-chinh-ly",
-            element: <DuyetChinhLy/>
+            element: <DuyetChinhLy />
         },
         {
             path: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
@@ -373,7 +368,19 @@ const App = () => {
         },
         {
             path: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
-            element: <DuyetSaoVaChungThucHoSo  />
+            element: <DuyetSaoVaChungThucHoSo />
+        },
+        {
+            path: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
+            element: <HoSoNopLuuBiTraVe />
+        },
+        {
+            path: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+            element: <KeHoachThuThapBiTuChoi />
+        },
+        {
+            path: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+            element: <PheDuyetKeHoachThuThap />
         }
     ];
 

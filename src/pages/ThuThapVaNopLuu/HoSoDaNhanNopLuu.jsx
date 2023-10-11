@@ -1,3 +1,4 @@
+import { ENUM_STATE } from "src/storage/Storage";
 import BasePage from "../BasePage";
 
 const HoSoDaNhanNopLuu = () => {
@@ -16,8 +17,8 @@ const HoSoDaNhanNopLuu = () => {
   const filter = (files) => {
     const newFiles = [];
     for (const file of files) {
-      if (file.state.props.children !== "Lưu trữ cơ quan") continue;
-      newFiles.push(file);
+      if (file.state.props.children === ENUM_STATE.LUU_TRU_CO_QUAN)
+        newFiles.push(file);
     }
     return newFiles;
   };

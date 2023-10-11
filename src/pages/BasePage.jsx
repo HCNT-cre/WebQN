@@ -10,12 +10,12 @@ import { Button, Input, Select, Popconfirm, Modal } from "antd";
 import { OpenFile, EditFile, CreateFile } from "../actions/formFile";
 import File from "../components/Form/File/File";
 import { FIELDS_TABLE } from "../storage/FileStorage";
-import { STATE } from "../storage/Storage";
+import { ENUM_STATE, STATE } from "../storage/Storage";
 import { DeleteData, GetKey } from "../custom/Function";
 import { useButtonClickOutside } from "../custom/Hook";
 import { Link } from "react-router-dom";
 import { notifyError, notifySuccess } from "../custom/Function";
-import { ModalCensorship } from "./Modals";
+import { ModalCensorship, ModalConfirmLuuTruCoQuan } from "./Modals";
 import * as XLSX from 'xlsx/xlsx.mjs';
 
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
@@ -111,9 +111,6 @@ const PlanAndCategoryFile = ({ open, setOpen, API_PLAN }) => {
 		</Modal>
 	);
 };
-
-
-
 
 const ButtonFunctionOfEachFile = ({
 	handleClickOnFile,
@@ -342,7 +339,8 @@ const BasePage = ({
 	fieldsTableCustom = null,
 	showTable = true,
 	apiPlan = API_COLLECTION_PLAN,
-	eOffice = true
+	eOffice = true,
+	currentStateModal = ENUM_STATE.NOP_LUU_CO_QUAN,
 }) => {
 	const dispatch = useDispatch();
 	const [modalOpen, setModalOpen] = useState(false);
@@ -370,25 +368,6 @@ const BasePage = ({
 		dispatch({ type: "open", id: IDFile });
 	};
 
-	// useEffect(() => {
-	// 	const getExcel = async () => {
-	// 		const response = await axiosHttpService.post("http://34.142.137.193:5678/excel", {
-	// 			luong: 200
-	// 		}, {
-	// 			responseType: "blob"
-	// 		});
-	// 		const url = window.URL.createObjectURL(new Blob([response.data]));
-	// 		const link = document.createElement('a');
-	// 		link.href = url;
-	// 		link.setAttribute('download', `${Date.now()}.xlsx`);
-	// 		document.body.appendChild(link);
-	// 		link.click();
-	// 		const data = response.data;
-	// 		console.log(typeof (data))
-	// 	}
-	// 	getExcel();
-	// }, [])
-
 	const getFileFromResponse = (response) => {
 		const rawDatas = response.data;
 		setFileSheet(rawDatas);
@@ -400,7 +379,7 @@ const BasePage = ({
 				newButton = cloneElement(buttonFuctions, {
 					clickFunction: () => {
 						dispatch({
-							type: "open_modal",
+							type: currentStateModal === ENUM_STATE.NOP_LUU_CO_QUAN ? "open_modal_confirm_nopluucoquan" : "open_modal_confirm_luutrucoquan",
 							id: rawData.id,
 							current_state: rawData.state,
 						});
@@ -839,7 +818,9 @@ const BasePage = ({
 						stateMultimediaCategory={stateMultimediaCategory}
 						setStateMultimediaCategory={setStateMultimediaCategory}
 					/>
+
 					<ModalCensorship />
+					<ModalConfirmLuuTruCoQuan />
 					<PlanAndCategoryFile open={modalOpen} setOpen={setModalOpen} API_PLAN={
 						apiPlan
 					} />

@@ -10,6 +10,18 @@ export const STATE = [
 	"Nộp lưu lịch sử bị trả về",
 ];
 
+export const ENUM_STATE = {
+	TAT_CA: "Tất cả",
+	MO: "Mở",
+	DONG: "Đóng",
+	NOP_LUU_CO_QUAN: "Nộp lưu cơ quan",
+	LUU_TRU_CO_QUAN: "Lưu trữ cơ quan",
+	NOP_LUU_LICH_SU: "Nộp lưu lịch sử",
+	LUU_TRU_LICH_SU: "Lưu trữ lịch sử",
+	NOP_LUU_CO_QUAN_BI_TRA_VE: "Nộp lưu cơ quan bị trả về",
+	NOP_LUU_LICH_SU_BI_TRA_VE: "Nộp lưu lịch sử bị trả về",
+};
+
 export const TABS_SIDEBAR = [
 	{
 		isExpand: false,
@@ -40,6 +52,16 @@ export const TABS_SIDEBAR = [
 				to: "/thu-thap-va-nop-luu/thu-thap-ho-so",
 				key: "/thu-thap-va-nop-luu/thu-thap-ho-so",
 			},
+			{
+				title: "Phê duyệt kế hoạch thu thập",
+				to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+				key: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+			},
+			{
+				title: "Kế hoạch thu thập bị từ chối",
+				to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+				key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+			},
 			//{ title: "Nộp lưu cơ quan", to: "/thu-thap-va-nop-luu/nop-luu-co-quan", key: "/thu-thap-va-nop-luu/nop-luu-co-quan" },
 			{
 				title: "Duyệt hồ sơ nộp lưu",
@@ -50,6 +72,11 @@ export const TABS_SIDEBAR = [
 				title: "Hồ sơ đã nhận nộp lưu",
 				to: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
 				key: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
+			},
+			{
+				title: "Hồ sơ nộp lưu bị trả về",
+				to: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
+				key: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
 			},
 			{
 				title: "Biên bản bàn giao",
@@ -145,8 +172,8 @@ export const TABS_SIDEBAR = [
 			},
 			{
 				title: "Danh sách yêu cầu chứng thực",
-				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-chung-thuc",
-				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-chung-thuc",
+				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
+				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
 			}
 		],
 	},
