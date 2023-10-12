@@ -61,6 +61,8 @@ import DuyetSaoHoSo from "./pages/QuanLiKhaiThac/SaoHoSo";
 import DuyetSaoVaChungThucHoSo from "./pages/QuanLiKhaiThac/SaoVaChungThuc";
 
 import axiosHttpService from "src/utils/httpService";
+import DuyetKeHoachChinhLy from "./pages/BienMucChinhLy/DuyetKeHoachChinhLy";
+import KeHoachChinhLyBiTuChoi from "./pages/BienMucChinhLy/KeHoachChinhLyBiTuChoi";
 
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
@@ -381,7 +383,15 @@ const App = () => {
         {
             path: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
             element: <PheDuyetKeHoachThuThap />
-        }
+        },
+        {
+            path: "/bien-muc-chinh-ly/duyet-ke-hoach-chinh-ly",
+            element: <DuyetKeHoachChinhLy />
+        },
+        {
+            path: "/bien-muc-chinh-ly/ke-hoach-chinh-ly-bi-tu-choi",
+            element: <KeHoachChinhLyBiTuChoi />
+        },
     ];
 
     return (
