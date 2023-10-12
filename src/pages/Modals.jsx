@@ -14,10 +14,11 @@ const API_STORAGE_GET_DRAWERS_ALL = import.meta.env.VITE_API_STORAGE_GET_DRAWERS
 
 const API_STORAGE_POST_FILE_ORGAN_STORAGE = import.meta.env.VITE_API_STORAGE_POST_FILE_ORGAN_STORAGE
 
-const API_MODIFICATION_DOCUMENT_APPROVE = import.meta.env.VITE_API_MODIFICATION_DOCUMENT_APPROVE
+const API_DOCUMENT_MODIFICATION_APPROVE = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_APPROVE
 
 const API_DOCUMENT_MODIFICATION_REJECT = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT
 
+const API_DOCUMENT_MODIFICATION_REJECT_ADDED = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT_ADDED
 const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
         <Checkbox
@@ -403,7 +404,7 @@ export const ModalModificationDocumentConfirmStore = () => {
     }
 
     const handleCancle = () => {
-        dispatch({ type: "close_modal_confirm_nopluucoquan", id: null })
+        dispatch({ type: "close_modal_confirm_bmcl_pheduyetluukho", id: null })
     }
 
     const handleClickViewFile = () => {
@@ -417,7 +418,7 @@ export const ModalModificationDocumentConfirmStore = () => {
     }
 
     const handleClickApprove = async () => {
-        await axiosHttpService.post(API_MODIFICATION_DOCUMENT_APPROVE, { idFile: IDFile })
+        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
         await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
             id: IDFile, current_state: 3,
             new_state: 3 + 1
@@ -472,6 +473,64 @@ export const ModalModificationDocumentConfirmStore = () => {
                 <div className="flex justify-center">
                     <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
                     <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
+                </div>
+            </Modal>
+
+
+        </>
+
+    )
+}
+
+export const ModalModificationDocumentAddDocument = () => {
+    const open = useSelector(state => state.modalModificationDocumentAddDocument.state)
+    const IDFile = useSelector(state => state.modalModificationDocumentAddDocument.id)
+
+    const dispatch = useDispatch();
+    const [modalOpen, setModalOpen] = useState(false)
+
+    useEffect(() => {
+        setModalOpen(open)
+    }, [open])
+
+    const handleOk = () => {
+        setModalOpen(false)
+    }
+
+    const handleCancle = () => {
+        dispatch({ type: "close_modal_confirm_bmcl_bosunghosotailieu", id: null })
+    }
+
+    const handleClickApprove = async () => {
+        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT_ADDED, { idFile: IDFile })
+        notifySuccess("Nộp thành công")
+        dispatch({ type: "close_modal_confirm_bmcl_bosunghosotailieu", id: null })
+
+    }
+
+    return (
+        <>
+            <Modal
+                footer={null}
+                title="Nộp hồ sơ"
+                style={{
+                    top: 200,
+                }}
+                open={open}
+                onOk={handleOk}
+                onCancel={handleCancle}
+            >
+                <div className="my-[12px]">
+                    <div className="flex">
+                        <div className="ml-[12px]">
+                            Xác nhận nộp hồ sơ&nbsp;
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="flex justify-center">
+                    <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Xác nhận</Button>
+                 
                 </div>
             </Modal>
 

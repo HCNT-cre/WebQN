@@ -2,7 +2,9 @@ import { useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
 import BasePage from "src/pages/BasePage";
 import { useState, useCallback } from "react";
+import ButtonFuctions from "src/pages/LuuTruCoQuan/Button";
 const API_DOCUMENT_MODIFICATION_REJECT = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT
+import { ENUM_STATE_BMCL } from "src/storage/Storage";
 
 const BoSungHoSoTaiLieu = () => {
     const [fileIds, setFileIds] = useState([])
@@ -19,8 +21,8 @@ const BoSungHoSoTaiLieu = () => {
     ];
 
     const current = {
-        link: "/bien-muc-chinh-ly/bien-muc-ho-so",
-        title: "Biên mục hồ sơ",
+        link: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu",
+        title: "Bổ sung hồ sơ tài liệu",
     };
     useEffect(() => {
         const getDocumentReject = async () => {
@@ -54,7 +56,10 @@ const BoSungHoSoTaiLieu = () => {
             addNewFile={true}
             filter={filter}
             eOffice={false}
-        />
+            buttonFuctions={<ButtonFuctions />}
+            currentStateModal={ENUM_STATE_BMCL.BMCL_BO_SUNG_HO_SO_TAI_LIEU}
+
+            />
     );
 };
 
