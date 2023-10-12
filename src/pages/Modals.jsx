@@ -425,15 +425,19 @@ export const ModalModificationDocumentConfirmStore = () => {
         }])
         notifySuccess("Duyệt thành công")
         dispatch({ type: "close_modal_confirm_bmcl_pheduyetluukho", id: null })
+        setTimeout(() => {
+            document.location.reload()
+        }, 1000)
 
     }
 
     const handleClickReject = async () => {
-        console.log(IDFile)
-        console.log(API_DOCUMENT_MODIFICATION_REJECT)
         await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
         notifySuccess("Đã trả về hồ sơ")
         dispatch({ type: "close_modal_confirm_bmcl_pheduyetluukho", id: null })
+        setTimeout(() => {
+            document.location.reload()
+        }, 1000)
     }
 
     return (
@@ -505,7 +509,9 @@ export const ModalModificationDocumentAddDocument = () => {
         await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT_ADDED, { idFile: IDFile })
         notifySuccess("Nộp thành công")
         dispatch({ type: "close_modal_confirm_bmcl_bosunghosotailieu", id: null })
-
+        setTimeout(() => {
+            document.location.reload()
+        }, 1000)
     }
 
     return (
@@ -527,10 +533,10 @@ export const ModalModificationDocumentAddDocument = () => {
                         </div>
                     </div>
                 </div>
-                
+
                 <div className="flex justify-center">
                     <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Xác nhận</Button>
-                 
+
                 </div>
             </Modal>
 

@@ -4,11 +4,12 @@ import BasePage from "src/pages/BasePage";
 import { useState, useCallback } from "react";
 import ButtonFuctions from "src/pages/LuuTruCoQuan/Button";
 const API_DOCUMENT_MODIFICATION_REJECT = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT
+const API_DOCUMENT_MODIFICATION_REJECT_ADDED = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT_ADDED
 import { ENUM_STATE_BMCL } from "src/storage/Storage";
 
 const BoSungHoSoTaiLieu = () => {
-    const [fileIds, setFileIds] = useState([])
-
+    const [fileIds, setFileIds] = useState(null)
+    const [fileIdsAdded, setFileIdsAdded] = useState(null)
     const parent = [
         {
             title: "Biên mục chỉnh lý",
@@ -30,24 +31,32 @@ const BoSungHoSoTaiLieu = () => {
             const data = response.data
             setFileIds(data)
         }
+        const getDocumentRejectAdded = async () => {
+            const response = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+            const data = response.data
+            setFileIdsAdded(data)
+        }
         getDocumentReject()
+        getDocumentRejectAdded()
     }, [])
 
     const filter = useCallback((files) => {
-        if (!fileIds.length) return files
+        if (fileIds === null || fileIdsAdded === null) return files
+        if (!fileIds.length) return []
+
         const existFiles = {}
         const newFiles = []
         for (const file of files) {
-            for (const fileS of fileIds) {
-                if (fileS.idFile === file.id && !existFiles[file.id]) {
-                    newFiles.push(file)
-                    existFiles[file.id] = true
-                }
+            const id = file.id
+            const existInAdded = fileIdsAdded.find((item) => item.idFile === id)
+            const existInReject = fileIds.find((item) => item.idFile === id)
+            if(existInReject !== undefined && existInAdded === undefined && !existFiles[id]) {
+                newFiles.push(file)
+                existFiles[id] = true
             }
-
         }
         return newFiles
-    }, [fileIds]);
+    }, [fileIds, fileIdsAdded]);
 
     return (
         <BasePage
@@ -59,7 +68,7 @@ const BoSungHoSoTaiLieu = () => {
             buttonFuctions={<ButtonFuctions />}
             currentStateModal={ENUM_STATE_BMCL.BMCL_BO_SUNG_HO_SO_TAI_LIEU}
 
-            />
+        />
     );
 };
 

@@ -5,9 +5,10 @@ import { ENUM_STATE_BMCL, ENUM_STATE_FILE } from "src/storage/Storage";
 import { useCallback, useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 const API_DOCUMENT_MODIFICATION_REJECT = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT
-
+const API_DOCUMENT_MODIFICATION_REJECT_ADDED = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT_ADDED
 const PheDuyetLuuKho = () => {
-    const [fileIds, setFileIds] = useState([])
+    const [fileIds, setFileIds] = useState(null)
+    const [fileIdsAdded, setFileIdsAdded] = useState(null)
 
     useEffect(() => {
         const getDocumentReject = async () => {
@@ -15,7 +16,13 @@ const PheDuyetLuuKho = () => {
             const data = response.data
             setFileIds(data)
         }
+        const getDocumentRejectAdded = async () => {
+            const response = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+            const data = response.data
+            setFileIdsAdded(data)
+        }
         getDocumentReject()
+        getDocumentRejectAdded()
     }, [])
 
     const parent = [
@@ -28,17 +35,18 @@ const PheDuyetLuuKho = () => {
     }
 
     const filter = useCallback((files) => {
-        if (!fileIds.length) return files
-        console.log(fileIds)
+        if (fileIds === null || fileIdsAdded === null) return files
         const existFiles = {}
         const newFiles = []
         for (const file of files) {
             if (file.state.props.children === ENUM_STATE_FILE.NOP_LUU_CO_QUAN) {
-                for(const fileS of fileIds) {
-                    if(fileS.idFile !== file.id && !existFiles[file.id]) {
-                        newFiles.push(file)
-                        existFiles[file.id] = true
-                    }
+                const id = file.id
+                const existInAdded = fileIdsAdded.find((item) => item.idFile === id)
+                const existInReject = fileIds.find((item) => item.idFile === id)
+
+                if (!existFiles[id] && existInAdded === undefined && existInReject === undefined) {
+                    newFiles.push(file)
+                    existFiles[id] = true
                 }
             }
         }

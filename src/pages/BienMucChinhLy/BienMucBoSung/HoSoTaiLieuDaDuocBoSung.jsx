@@ -17,7 +17,7 @@ const current = {
 }
 
 const HoSoTaiLieuDaDuocBoSung = () => {
-    const [fileIds, setFileIds] = useState([])
+    const [fileIds, setFileIds] = useState(null)
 
     useEffect(() => {
         const getFiles = async () => {
@@ -28,19 +28,19 @@ const HoSoTaiLieuDaDuocBoSung = () => {
         getFiles()
     }, [])
 
-   
 
     const filter = useCallback((files) => {
-        if (!fileIds.length) return files
+        if (fileIds === null) return files
+        if (!fileIds.length) return []
         const newFiles = []
         const existFiles = {}
         for (const file of files) {
             if (file.state.props.children === ENUM_STATE_FILE.NOP_LUU_CO_QUAN) {
-                for(const fileS of fileIds) {
-                    if(fileS.idFile !== file.id && !existFiles[file.id]) {
-                        newFiles.push(file)
-                        existFiles[file.id] = true
-                    }
+                const id = file.id
+                const existInAdded = fileIds.find((item) => item.idFile === id)
+                if (existInAdded !== undefined && !existFiles[id]) {
+                    newFiles.push(file)
+                    existFiles[id] = true
                 }
             }
         }
