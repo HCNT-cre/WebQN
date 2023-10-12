@@ -47,11 +47,7 @@ export const TABS_SIDEBAR = [
 				to: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 				key: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 			},
-			{
-				title: "Thu thập hồ sơ",
-				to: "/thu-thap-va-nop-luu/thu-thap-ho-so",
-				key: "/thu-thap-va-nop-luu/thu-thap-ho-so",
-			},
+			
 			{
 				title: "Phê duyệt kế hoạch thu thập",
 				to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
@@ -61,6 +57,11 @@ export const TABS_SIDEBAR = [
 				title: "Kế hoạch thu thập bị từ chối",
 				to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
 				key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+			},
+			{
+				title: "Thu thập hồ sơ",
+				to: "/thu-thap-va-nop-luu/thu-thap-ho-so",
+				key: "/thu-thap-va-nop-luu/thu-thap-ho-so",
 			},
 			//{ title: "Nộp lưu cơ quan", to: "/thu-thap-va-nop-luu/nop-luu-co-quan", key: "/thu-thap-va-nop-luu/nop-luu-co-quan" },
 			{
@@ -98,6 +99,16 @@ export const TABS_SIDEBAR = [
 				title: "Kế hoạch chỉnh lý",
 				to: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
 				key: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
+			},
+			{
+				title: "Phê duyệt kế hoạch chỉnh lý",
+				to: "/bien-muc-chinh-ly/duyet-ke-hoach-chinh-ly",
+				key: "/bien-muc-chinh-ly/duyet-ke-hoach-chinh-ly",
+			},
+			{
+				title: "Kế hoạch chỉnh lý bị từ chối",
+				to: "/bien-muc-chinh-ly/ke-hoach-chinh-ly-bi-tu-choi",
+				key: "/bien-muc-chinh-ly/ke-hoach-chinh-ly-bi-tu-choi",
 			},
 			{
 				title: "Biên mục hồ sơ",
