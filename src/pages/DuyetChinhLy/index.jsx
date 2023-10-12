@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import BasePage from "src/pages/BasePage";
 import ButtonFuctions from "src/pages/LuuTruCoQuan/Button";
-import { ENUM_STATE } from "src/storage/Storage";
+import { ENUM_STATE_FILE } from "src/storage/Storage";
 
 const Duyetchinhly = () => {
     const parent = [
@@ -17,7 +17,7 @@ const Duyetchinhly = () => {
         const newFiles = []
         console.log(files)
         for (const file of files) {
-            if (file.state.props.children === ENUM_STATE.LUU_TRU_CO_QUAN)
+            if (file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN)
                 newFiles.push(file)
         }
         return newFiles
@@ -29,7 +29,7 @@ const Duyetchinhly = () => {
         filter={filter}
         isCheckBox={false}
         buttonFuctions={<ButtonFuctions />}
-        currentStateModal={ENUM_STATE.LUU_TRU_CO_QUAN}
+        currentStateModal={ENUM_STATE_FILE.LUU_TRU_CO_QUAN}
         eOffice={false} />
 }
 

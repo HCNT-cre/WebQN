@@ -13,12 +13,13 @@ import maintanceReducer from './maintance'
 import formatReducer from './format'
 import organIdReducer from './organId'
 import modalStoreOrganReducer from './modalStoreOrgan'
+import modalModificationDocumentConfirmStoreReducer from './modalModificationDocumentConfirmStore'
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
     sideBar: sideBarReducer,
     govfile: govfileReducer,
-    docCategory: docCategoryReducer, 
+    docCategory: docCategoryReducer,
     modalCensorship: modalCensorshipReducer,
     login: loginReducer,
     reFetchFile: reFetchFileReducer,
@@ -27,7 +28,8 @@ const rootReducer = combineReducers({
     maintance: maintanceReducer,
     format: formatReducer,
     organId: organIdReducer,
-    modalStoreOrgan: modalStoreOrganReducer
+    modalStoreOrgan: modalStoreOrganReducer,
+    modalModificationDocumentConfirmStore: modalModificationDocumentConfirmStoreReducer
 })
 
 export default rootReducer

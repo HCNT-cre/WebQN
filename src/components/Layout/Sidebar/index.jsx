@@ -135,10 +135,10 @@ const SideBar = ({ sideBarWidth }) => {
                                                                 (child.display === undefined || child.display === true) &&
                                                                 <Link to={child.to} onClick={() => { setCurrentTab(child.key) }} key={child.key} className={`block ${sideBarWidth === 250 ? 'sidebar-items--large' : 'sidebar-items--small'} m-0
                         `}>
-                                                                    <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#aaaaaa25]  px-[8px] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] flex relative ${child.key === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(child.key)}>
+                                                                    <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#aaaaaa25]  px-[8px] border-[1.5px] border-transparent items-center justify-between hover:border-cyan-400 rounded-[8px] flex relative ${child.key === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(child.key)}>
                                                                         {sideBarWidth === 250 && <p>{child.title}</p>}
                                                                         {child.numChildTabs > 0 && sideBarWidth === 250 &&
-                                                                            <span className="absolute right-[8px] top-0">
+                                                                            <span className="inline-block">
                                                                                 {child.isExpand === false ? <i className="fa-solid fa-chevron-down"></i> : <i className="fa-solid fa-chevron-up"></i>}
                                                                             </span>
                                                                         }

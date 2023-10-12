@@ -1,4 +1,4 @@
-import { ENUM_STATE } from "src/storage/Storage";
+import { ENUM_STATE_FILE } from "src/storage/Storage";
 import BasePage from "../BasePage";
 
 const HoSoDaNhanNopLuu = () => {
@@ -17,7 +17,7 @@ const HoSoDaNhanNopLuu = () => {
   const filter = (files) => {
     const newFiles = [];
     for (const file of files) {
-      if (file.state.props.children === ENUM_STATE.LUU_TRU_CO_QUAN)
+      if (file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN)
         newFiles.push(file);
     }
     return newFiles;

@@ -12,7 +12,10 @@ const API_GOV_FILE_CREATE = import.meta.env.VITE_API_GOV_FILE_CREATE
 const API_GOV_FILE_GET = import.meta.env.VITE_API_GOV_FILE_GET
 const API_GOV_FILE_UPDATE = import.meta.env.VITE_API_GOV_FILE_UPDATE
 
-const File = ({ reset }) => {
+const File = ({
+    reset,
+    currentTab = null
+}) => {
     const userPermissionId = useSelector(state => state.user.permission_id)
     const stateForm = useSelector((state) => state.formFile.state)
     const fileID = useSelector((state) => state.formFile.id)
@@ -222,6 +225,9 @@ const File = ({ reset }) => {
             console.log(response)
             const error_code = response.data.error_code
             if (error_code === undefined) {
+                if (currentTab === "BIEN_MUC_CHINH_LY_BIEN_MUC_HO_SO") {
+                    
+                }
                 notifySuccess(title + ' thành công');
                 setRequest((prev) => {
                     return {

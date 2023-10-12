@@ -2,11 +2,10 @@
 import { Button } from "antd";
 import { GetKey } from "../../custom/Function";
 import { Fragment } from "react";
-import { ENUM_STATE } from "src/storage/Storage";
+import { ENUM_STATE_FILE } from "src/storage/Storage";
 
 const ButtonFuctions = ({
     clickFunction,
-    state=ENUM_STATE.NOP_LUU_CO_QUAN
 }) => {
     return (
         <Fragment>

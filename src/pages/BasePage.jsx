@@ -10,13 +10,12 @@ import { Button, Input, Select, Popconfirm, Modal } from "antd";
 import { OpenFile, EditFile, CreateFile } from "../actions/formFile";
 import File from "../components/Form/File/File";
 import { FIELDS_TABLE } from "../storage/FileStorage";
-import { ENUM_STATE, STATE } from "../storage/Storage";
+import { ENUM_STATE_BMCL, ENUM_STATE_FILE, STATE } from "../storage/Storage";
 import { DeleteData, GetKey } from "../custom/Function";
 import { useButtonClickOutside } from "../custom/Hook";
 import { Link } from "react-router-dom";
 import { notifyError, notifySuccess } from "../custom/Function";
-import { ModalCensorship, ModalConfirmLuuTruCoQuan } from "./Modals";
-import * as XLSX from 'xlsx/xlsx.mjs';
+import { ModalCensorship, ModalConfirmLuuTruCoQuan, ModalModificationDocumentConfirmStore } from "./Modals";
 
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
@@ -340,7 +339,8 @@ const BasePage = ({
 	showTable = true,
 	apiPlan = API_COLLECTION_PLAN,
 	eOffice = true,
-	currentStateModal = ENUM_STATE.NOP_LUU_CO_QUAN,
+	currentStateModal = ENUM_STATE_FILE.NOP_LUU_CO_QUAN,
+	currentTab = null,
 }) => {
 	const dispatch = useDispatch();
 	const [modalOpen, setModalOpen] = useState(false);
@@ -376,15 +376,50 @@ const BasePage = ({
 			let newButton = null;
 
 			if (buttonFuctions != null) {
-				newButton = cloneElement(buttonFuctions, {
-					clickFunction: () => {
-						dispatch({
-							type: currentStateModal === ENUM_STATE.NOP_LUU_CO_QUAN ? "open_modal_confirm_nopluucoquan" : "open_modal_confirm_luutrucoquan",
-							id: rawData.id,
-							current_state: rawData.state,
+				switch (currentStateModal) {
+					case ENUM_STATE_FILE.NOP_LUU_CO_QUAN:
+						newButton = cloneElement(buttonFuctions, {
+							clickFunction: () => {
+								dispatch({
+									type: "open_modal_confirm_nopluucoquan",
+									id: rawData.id,
+									current_state: rawData.state,
+								});
+							},
 						});
-					},
-				});
+						break;
+					case ENUM_STATE_FILE.LUU_TRU_CO_QUAN:
+						newButton = cloneElement(buttonFuctions, {
+							clickFunction: () => {
+								dispatch({
+									type: "open_modal_confirm_luutrucoquan",
+									id: rawData.id,
+								});
+							},
+						});
+						break;
+					case ENUM_STATE_BMCL.BMCL_PHE_DUYET_LUU_KHO:
+						newButton = cloneElement(buttonFuctions, {
+							clickFunction: () => {
+								dispatch({
+									type: "open_modal_confirm_bmcl_pheduyetluukho",
+									id: rawData.id,
+								});
+							},
+						});
+						break;
+
+				}
+
+				// newButton = cloneElement(buttonFuctions, {
+				// 	clickFunction: () => {
+				// 		dispatch({
+				// 			type: currentStateModal === ENUM_STATE.NOP_LUU_CO_QUAN ? "open_modal_confirm_nopluucoquan" : "open_modal_confirm_luutrucoquan",
+				// 			id: rawData.id,
+				// 			current_state: rawData.state,
+				// 		});
+				// 	},
+				// });
 			}
 
 			const row = {
@@ -573,21 +608,6 @@ const BasePage = ({
 			link.click();
 		}
 		getExcel();
-		// console.log(fileSheet)
-		// const wb = XLSX.utils.book_new()
-		// const ws = XLSX.utils.json_to_sheet(fileSheet)
-		// XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
-		// XLSX.writeFile(wb, "sheet.xlsx")
-
-		// const workbook = new Workbook();
-		// const worksheet = workbook.addWorksheet('My Data');
-
-		// data.forEach((row, index) => {
-		// 	worksheet.cell(index + 1, 1).value = row.name;
-		// 	worksheet.cell(index + 1, 2).value = row.age;
-		// });
-
-		// workbook.xlsx.writeFile('my-data.xlsx');
 	}
 
 	const BUTTON_ACTIONS = [
@@ -821,6 +841,7 @@ const BasePage = ({
 
 					<ModalCensorship />
 					<ModalConfirmLuuTruCoQuan />
+					<ModalModificationDocumentConfirmStore />
 					<PlanAndCategoryFile open={modalOpen} setOpen={setModalOpen} API_PLAN={
 						apiPlan
 					} />

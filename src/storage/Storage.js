@@ -10,7 +10,7 @@ export const STATE = [
 	"Nộp lưu lịch sử bị trả về",
 ];
 
-export const ENUM_STATE = {
+export const ENUM_STATE_FILE = {
 	TAT_CA: "Tất cả",
 	MO: "Mở",
 	DONG: "Đóng",
@@ -21,6 +21,12 @@ export const ENUM_STATE = {
 	NOP_LUU_CO_QUAN_BI_TRA_VE: "Nộp lưu cơ quan bị trả về",
 	NOP_LUU_LICH_SU_BI_TRA_VE: "Nộp lưu lịch sử bị trả về",
 };
+
+export const ENUM_STATE_BMCL = {
+	BMCL_PHE_DUYET_LUU_KHO: "BMCL_PHE_DUYET_LUU_KHO",
+	BMCL_TU_CHOI_PHE_DUYET_LUU_KHO: "BMCL_TU_CHOI_PHE_DUYET_LUU_KHO",
+	BMCL_DA_BO_SUNG_TAI_LIEU: "BMCL_DA_BO_SUNG_TAI_LIEU",
+}
 
 export const TABS_SIDEBAR = [
 	{
@@ -47,7 +53,7 @@ export const TABS_SIDEBAR = [
 				to: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 				key: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 			},
-			
+
 			{
 				title: "Phê duyệt kế hoạch thu thập",
 				to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
@@ -101,19 +107,10 @@ export const TABS_SIDEBAR = [
 				key: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
 			},
 			{
-				title: "Phê duyệt kế hoạch chỉnh lý",
-				to: "/bien-muc-chinh-ly/duyet-ke-hoach-chinh-ly",
-				key: "/bien-muc-chinh-ly/duyet-ke-hoach-chinh-ly",
-			},
-			{
-				title: "Kế hoạch chỉnh lý bị từ chối",
-				to: "/bien-muc-chinh-ly/ke-hoach-chinh-ly-bi-tu-choi",
-				key: "/bien-muc-chinh-ly/ke-hoach-chinh-ly-bi-tu-choi",
-			},
-			{
 				title: "Biên mục hồ sơ",
 				to: "/bien-muc-chinh-ly/bien-muc-ho-so",
 				key: "/bien-muc-chinh-ly/bien-muc-ho-so",
+
 			},
 			{
 				title: "Phê duyệt lưu kho",
@@ -122,13 +119,59 @@ export const TABS_SIDEBAR = [
 			},
 			{
 				title: "Biên mục bổ sung",
-				to: "/bien-muc-chinh-ly/bien-muc-bo-sung",
 				key: "/bien-muc-chinh-ly/bien-muc-bo-sung",
+				isExpand: false,
+				numChildTabs: 4,
+				display: false,
+				type: ["kho"],
+				childTabs: [
+					{
+						title: "Bổ sung hồ sơ tài liệu",
+						to: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu",
+						key: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu",
+						numChildTabs: 0,
+					},
+					{
+						title: "Hồ sơ tài liêu đã được bổ sung",
+						to: "/bien-muc-chinh-ly/bien-muc-bo-sung/ho-so-tai-lieu-da-duoc-bo-sung",
+						key: "/bien-muc-chinh-ly/bien-muc-bo-sung/ho-so-tai-lieu-da-duoc-bo-sung",
+						numChildTabs: 0,
+					},
+					{
+						title: "Bổ sung hồ sơ tài liệu đã lưu kho",
+						to: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu-da-luu-kho",
+						key: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu-da-luu-kho",
+						numChildTabs: 0,
+					},
+					{
+						title: "Yêu cầu bổ sung hồ sơ tài liệu đã lưu kho",
+						to: "/bien-muc-chinh-ly/bien-muc-bo-sung/yeu-cau-bo-sung-ho-so-tai-lieu-da-luu-kho",
+						key: "/bien-muc-chinh-ly/bien-muc-bo-sung/yeu-cau-bo-sung-ho-so-tai-lieu-da-luu-kho",
+						numChildTabs: 0,
+					},
+				],
 			},
 			{
 				title: "Phê duyệt lưu kho bổ sung",
-				to: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung",
 				key: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung",
+				isExpand: false,
+				numChildTabs: 2,
+				display: false,
+				type: ["kho"],
+				childTabs: [
+					{
+						title: "Duyệt bổ sung hồ sơ tài liệu",
+						to: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu",
+						key: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu",
+						numChildTabs: 0,
+					},
+					{
+						title: "Duyệt bổ sung hồ sơ tài liệu đã lưu kho",
+						to: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu-da-luu-kho",
+						key: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu-da-luu-kho",
+						numChildTabs: 0,
+					}
+				],
 			}
 		],
 	},

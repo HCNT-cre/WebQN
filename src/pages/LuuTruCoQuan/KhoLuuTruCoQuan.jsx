@@ -1,7 +1,7 @@
 import axiosHttpService from "src/utils/httpService";
 import BasePage from "../BasePage";
 import { useState, useEffect, useCallback } from "react";
-import { ENUM_STATE } from "src/storage/Storage";
+import { ENUM_STATE_FILE } from "src/storage/Storage";
 
 const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL = import.meta.env.VITE_API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL
 export const FIELDS_TABLE = [
@@ -64,7 +64,7 @@ const KhoLuuTruCoQuan = () => {
         const existFiles = {}
         const newFiles = []
         for (const file of files) {
-            if (file.state.props.children === ENUM_STATE.LUU_TRU_CO_QUAN) {
+            if (file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN) {
                 for (const fileS of allOrganStorageFiles) {
                     if (fileS.file_id === file.id && !existFiles[file.id]) {
                         newFiles.push(mergeTwoFile(file, fileS))
