@@ -15,7 +15,7 @@ import { DeleteData, GetKey } from "../custom/Function";
 import { useButtonClickOutside } from "../custom/Hook";
 import { Link } from "react-router-dom";
 import { notifyError, notifySuccess } from "../custom/Function";
-import { ModalCensorship, ModalConfirmLuuTruCoQuan, ModalModificationDocumentAddDocument, ModalModificationDocumentConfirmStore } from "./Modals";
+import { ModalCensorship, ModalConfirmLuuTruCoQuan, ModalModificationDocumentAddDocument, ModalModificationDocumentAddedDocument, ModalModificationDocumentConfirmStore } from "./Modals";
 
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
@@ -413,6 +413,16 @@ const BasePage = ({
 							clickFunction: () => {
 								dispatch({
 									type: "open_modal_confirm_bmcl_bosunghosotailieu",
+									id: rawData.id,
+								});
+							},
+						});
+						break;
+					case ENUM_STATE_BMCL.BMCL_DA_BO_SUNG_TAI_LIEU:
+						newButton = cloneElement(buttonFuctions, {
+							clickFunction: () => {
+								dispatch({
+									type: "open_modal_confirm_bmcl_hosotailieudabosung",
 									id: rawData.id,
 								});
 							},
@@ -852,6 +862,7 @@ const BasePage = ({
 					<ModalConfirmLuuTruCoQuan />
 					<ModalModificationDocumentConfirmStore />
 					<ModalModificationDocumentAddDocument />
+					<ModalModificationDocumentAddedDocument />
 					<PlanAndCategoryFile open={modalOpen} setOpen={setModalOpen} API_PLAN={
 						apiPlan
 					} />

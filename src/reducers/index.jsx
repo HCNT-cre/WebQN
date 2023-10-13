@@ -15,7 +15,7 @@ import organIdReducer from './organId'
 import modalStoreOrganReducer from './modalStoreOrgan'
 import modalModificationDocumentConfirmStoreReducer from './modalModificationDocumentConfirmStore'
 import ModalModificationDocumentAddDocumentReducer from './modalModificationDocumentAddDocument'
-
+import modalModificationDocumentAddedDocumentReducer from './modalModificationDocumentAddedDocument'
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
@@ -32,7 +32,8 @@ const rootReducer = combineReducers({
     organId: organIdReducer,
     modalStoreOrgan: modalStoreOrganReducer,
     modalModificationDocumentConfirmStore: modalModificationDocumentConfirmStoreReducer,
-    modalModificationDocumentAddDocument: ModalModificationDocumentAddDocumentReducer
+    modalModificationDocumentAddDocument: ModalModificationDocumentAddDocumentReducer,
+    modalModificationDocumentAddedDocument: modalModificationDocumentAddedDocumentReducer
 })
 
 export default rootReducer

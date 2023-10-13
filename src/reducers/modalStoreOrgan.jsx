@@ -1,5 +1,4 @@
 const modalStoreOrganReducer = (state = { state: false, id: null }, action) => {
-    console.log(action.type)
     switch (action.type) {
         case "open_modal_confirm_luutrucoquan":
             return {

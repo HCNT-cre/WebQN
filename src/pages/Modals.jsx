@@ -507,6 +507,11 @@ export const ModalModificationDocumentAddDocument = () => {
 
     const handleClickApprove = async () => {
         await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT_ADDED, { idFile: IDFile })
+
+        const rejected = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT)
+        const id = rejected.data.find(item => item.idFile === IDFile).id
+        await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT + "/" + id)
+
         notifySuccess("Nộp thành công")
         dispatch({ type: "close_modal_confirm_bmcl_bosunghosotailieu", id: null })
         setTimeout(() => {
@@ -541,6 +546,122 @@ export const ModalModificationDocumentAddDocument = () => {
             </Modal>
 
 
+        </>
+
+    )
+}
+
+export const ModalModificationDocumentAddedDocument = () => {
+    const p = useSelector(state => state.modalModificationDocumentAddedDocument)
+    const open = useSelector(state => state.modalModificationDocumentAddedDocument.state)
+    const IDFile = useSelector(state => state.modalModificationDocumentAddedDocument.id)
+    const dispatch = useDispatch();
+    const [isCheck, setIsCheck] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false)
+
+    useEffect(() => {
+        setModalOpen(open)
+    }, [open])
+
+    const handleClickCheckBox = e => {
+        const { id, checked } = e.target;
+        if (checked) {
+            setIsCheck([...isCheck, id]);
+        } else {
+            setIsCheck(isCheck.filter(item => item !== id));
+        }
+    };
+
+    const handleOk = () => {
+        setModalOpen(false)
+    }
+
+    const handleCancle = () => {
+        dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
+    }
+
+    const handleClickViewFile = () => {
+        if (IDFile === null || IDFile === undefined) return;
+        dispatch(OpenFile(IDFile))
+    }
+
+    const handleClickViewDocCategory = () => {
+        if (IDFile === null || IDFile === undefined) return;
+        dispatch({ type: "open", id: IDFile })
+    }
+
+    const handleClickApprove = async () => {
+        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
+        await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
+            id: IDFile, current_state: 3,
+            new_state: 3 + 1
+        }])
+
+        const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+        const id = added.data.find(item => item.idFile === IDFile).id
+        await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
+
+        notifySuccess("Duyệt thành công")
+        dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
+        setTimeout(() => {
+            document.location.reload()
+        }, 1000)
+
+    }
+
+    const handleClickReject = async () => {
+        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
+        notifySuccess("Đã trả về hồ sơ")
+
+        const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+        const id = added.data.find(item => item.idFile === IDFile).id
+        await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
+
+        dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
+        setTimeout(() => {
+            document.location.reload()
+        }, 1000)
+    }
+
+    return (
+        <>
+            <Modal
+                footer={null}
+                title="Duyệt hồ sơ"
+                style={{
+                    top: 200,
+                }}
+                open={open}
+                onOk={handleOk}
+                onCancel={handleCancle}
+            >
+                <div className="my-[12px]">
+                    <div className="flex">
+                        <CheckBoxx handleClickCheckBox={handleClickCheckBox} isChecked={isCheck.includes("cb1")} id="cb1" type="checkbox" />
+                        <div className="ml-[12px]">
+                            Đã thẩm định&nbsp;
+                            <span onClick={handleClickViewFile} className="cursor-pointer underline font-bold">
+                                thông tin hồ sơ
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div className="my-[12px]">
+                    <div className="flex">
+                        <CheckBoxx handleClickCheckBox={handleClickCheckBox} isChecked={isCheck.includes("cb2")} id="cb2" type="checkbox" />
+                        <div className="ml-[12px]">
+                            Đã thẩm định&nbsp;
+                            <span onClick={handleClickViewDocCategory} className="cursor-pointer underline font-bold">
+                                văn bản hồ sơ
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex justify-center">
+                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
+                    <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
+                </div>
+            </Modal>
         </>
 
     )
