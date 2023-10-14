@@ -1,4 +1,4 @@
-import { Modal, Checkbox, Button, Select } from "antd";
+import { Modal, Checkbox, Button, Select, Input } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { OpenFile } from "../actions/formFile";
@@ -601,11 +601,11 @@ export const ModalModificationDocumentAddedDocument = () => {
         const id = added.data.find(item => item.idFile === IDFile).id
         await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
 
-        notifySuccess("Duyệt thành công")
+        notifySuccess("Đã trình duyệt lưu kho hồ sơ bổ sung thành công")
         dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
-        setTimeout(() => {
-            document.location.reload()
-        }, 1000)
+        // setTimeout(() => {
+        //     document.location.reload()
+        // }, 1000)
 
     }
 
@@ -662,6 +662,136 @@ export const ModalModificationDocumentAddedDocument = () => {
                     <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
                 </div>
             </Modal>
+        </>
+
+    )
+}
+
+
+
+export const ModalModificationDocumentRequireAddDoc = () => {
+    const open = useSelector(state => state.modalModificationDocumentRequireAddDocReducer.state)
+    const IDFile = useSelector(state => state.modalModificationDocumentRequireAddDocReducer.id)
+    const dispatch = useDispatch();
+    const [isCheck, setIsCheck] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false)
+
+    useEffect(() => {
+        setModalOpen(open)
+    }, [open])
+
+    const handleClickCheckBox = e => {
+        const { id, checked } = e.target;
+        if (checked) {
+            setIsCheck([...isCheck, id]);
+        } else {
+            setIsCheck(isCheck.filter(item => item !== id));
+        }
+    };
+
+    const handleOk = () => {
+        setModalOpen(false)
+    }
+
+    const handleCancle = () => {
+        dispatch({ type: "close_modal_confirm_bmcl_yeucaubosunghosotailieudaluukho", id: null })
+    }
+
+    const handleClickApprove = async () => {
+        // await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
+        // await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
+        //     id: IDFile, current_state: 3,
+        //     new_state: 3 + 1
+        // }])
+
+        // const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+        // const id = added.data.find(item => item.idFile === IDFile).id
+        // await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
+
+        // notifySuccess("Đã trình duyệt lưu kho hồ sơ bổ sung thành công")
+        // dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
+        // // setTimeout(() => {
+        // //     document.location.reload()
+        // // }, 1000)
+
+    }
+    const handleClickReject = async () => {
+        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
+        notifySuccess("Đã trả về hồ sơ")
+
+        const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+        const id = added.data.find(item => item.idFile === IDFile).id
+        await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
+
+        dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
+        setTimeout(() => {
+            document.location.reload()
+        }, 1000)
+    }
+
+    return (
+        <>
+            <Modal
+                footer={null}
+                title="Tạo yêu cầu"
+                style={{
+                    top: 200,
+                }}
+                open={open}
+                onOk={handleOk}
+                onCancel={handleCancle}
+            >
+                <div>
+                    <div className="flex justify-between py-[12px]">
+                        <span>Tên yêu cầu</span>
+                        <Input
+                            name="name"
+                            type="text"
+                            className="w-[70%]"
+                        />
+                    </div>
+
+                    <div className="flex justify-between py-[12px]">
+                        <span>Ngày quyết định</span>
+                        <Input
+                            name="date"
+                            type="date"
+                            className="w-[70%]"
+                        />
+                    </div>
+
+                    <div className="flex justify-between py-[12px]">
+                        <span>Cơ quan / Đơn vị  </span>
+                        <Select
+                            value="Sở thông tin và truyền thông"
+                            name="organ"
+                            className="w-[70%]"
+                        />
+                    </div>
+
+                    <div className="flex justify-between py-[12px]">
+                        <span>Văn bản</span>
+                        <div
+                            className="w-[70%]"
+                        >
+                            <Button> Chọn văn bản</Button>
+                        </div>
+                    </div>
+                    <div className="flex justify-between py-[12px]">
+                        <span>Các văn bản đã chọn</span>
+                        <div className="w-[70%]">
+                            <Button className="mr-[5px]">
+                                07-ttg.signed.pdf
+                            </Button>
+                            <Button className="mr-[5px]">
+                                TTTT.pdf
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </Modal >
         </>
 
     )

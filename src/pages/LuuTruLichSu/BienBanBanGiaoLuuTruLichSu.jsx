@@ -10,7 +10,7 @@ const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL
 const API_DELETE_PLAN = import.meta.env.VITE_API_DELETE_PLAN
 
 const parent =
-    { title: "Thu thập và nộp lưu", link: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap" }
+    { title: "Lưu trữ lịch sử", link: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap" }
 
 const current = {
     link: "/thu-thap-va-nop-luu/bien-ban-ban-giao",
@@ -313,7 +313,7 @@ const Update = ({ reFetchData, id }) => {
 };
 
 
-const BienBanBanGiao = () => {
+const BienBanBanGiaoLuuTruLichSu = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [plan, setPlan] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -328,14 +328,6 @@ const BienBanBanGiao = () => {
             onClick: () => {
                 setModalOpen(true);
             },
-        },
-        {
-            title: "Gửi biên bản",
-            btn_class_name: "custom-btn-clear-filter",
-            icon: <i className="fa-solid fa-sync"></i>,
-            onClick: () =>{
-                notifySuccess("Gửi biên bản thành công")
-            }
         },
         {
             title: "In biên bản",
@@ -394,4 +386,4 @@ const BienBanBanGiao = () => {
     )
 }
 
-export default BienBanBanGiao;
+export default BienBanBanGiaoLuuTruLichSu;

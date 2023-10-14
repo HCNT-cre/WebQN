@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import BasePage from "./BasePage";
+import BasePage from "../BienMucBoSung/BasePage";
 import { useEffect, useState, useCallback } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Button, Input, Modal, Popconfirm, Select } from "antd";
@@ -9,13 +9,21 @@ import { notifySuccess } from "src/custom/Function";
 const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const API_DELETE_PLAN = import.meta.env.VITE_API_DELETE_PLAN
 
-const parent =
-    { title: "Thu thập và nộp lưu", link: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap" }
+const parent = [
+    {
+        title: "Biên mục chỉnh lý",
+        link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
+    },
+    {
+        title: "Phê duyệt lưu kho bổ sung",
+        link: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu",
+    },
+];
 
 const current = {
-    link: "/thu-thap-va-nop-luu/bien-ban-ban-giao",
-    title: "Biên bản bàn giao"
-}
+    link: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu-da-luu-kho",
+    title: "Phê duyệt bổ sung tài liệu đã lưu kho",
+};
 
 const Create = ({
     modalOpen,
@@ -74,7 +82,7 @@ const Create = ({
     return (
         <div>
             <Modal
-                title="Tạo biên bản mới"
+                title="Tạo mới"
                 style={{
                     top: 20,
                 }}
@@ -84,20 +92,24 @@ const Create = ({
             >
                 <div>
                     <div className="flex justify-between py-[12px]">
-                        <span>Tên biên bản</span>
+                        <span>Tên quyết định</span>
                         <Input
                             name="name"
+                            onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
                             type="text"
                             className="w-[70%]"
+                            value={request["name"]}
                         />
                     </div>
 
                     <div className="flex justify-between py-[12px]">
-                        <span>Ngày tạo biên bản</span>
+                        <span>Ngày quyết định</span>
                         <Input
                             name="date"
+                            onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
                             type="date"
                             className="w-[70%]"
+                            value={request["date"]}
                         />
                     </div>
 
@@ -105,7 +117,9 @@ const Create = ({
                         <span>Cơ quan / Đơn vị  </span>
                         <Select
                             name="organ"
+                            onChange={(value) => handleChangeRequest("organ", value)}
                             className="w-[70%]"
+                            value={request["organ"]}
                             options={organ}
                         />
                     </div>
@@ -120,14 +134,7 @@ const Create = ({
                             }}> Chọn hồ sơ </Button>
                         </div>
                     </div>
-                    <div className="flex justify-between py-[12px]">
-                        <span>Hồ sơ đã chọn</span>
-                        <div
-                            className="w-[70%]"
-                        >
-                            <Button className="mr-[4px]"> Phổ biến công tác phòng cháy chữa cháy</Button>
-                        </div>
-                    </div>
+
                 </div>
 
                 <ThemHoSo
@@ -262,7 +269,7 @@ const Update = ({ reFetchData, id }) => {
                 onCancel={handleCancle}
             >
                 <div className="flex justify-between items-center">
-                    <span>Tên biên bản</span>
+                    <span>Tên quyết định</span>
                     <Input
                         name="name"
                         onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
@@ -271,7 +278,7 @@ const Update = ({ reFetchData, id }) => {
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
-                    <span>Ngày biên bản</span>
+                    <span>Ngày quyết định</span>
                     <Input
                         name="date"
                         onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
@@ -301,19 +308,13 @@ const Update = ({ reFetchData, id }) => {
                         }}> Xem hồ sơ </Button>
                     </div>
                 </div>
-                <ThemHoSo
-                    open={openModalAddFile}
-                    setOpen={setOpenModalAddFile}
-                    selectedFiles={selectedFiles}
-                    setSelectedFiles={setSelectedFiles}
-                />
             </Modal>
         </div>
     );
 };
 
 
-const BienBanBanGiao = () => {
+const DuyetBoSungHoSoTaiLieuDaLuuKho = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [plan, setPlan] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -322,49 +323,42 @@ const BienBanBanGiao = () => {
 
     const BUTTON_ACTIONS = [
         {
-            title: "Tạo biên bản",
-            btn_class_name: "custom-btn-add-file",
-            icon: <i className="fa-solid fa-plus"></i>,
-            onClick: () => {
-                setModalOpen(true);
-            },
-        },
-        {
-            title: "Gửi biên bản",
+            title: "Duyệt yêu cầu",
             btn_class_name: "custom-btn-clear-filter",
             icon: <i className="fa-solid fa-sync"></i>,
-            onClick: () =>{
-                notifySuccess("Gửi biên bản thành công")
+            onClick: async () => {
+                // const sentPlan = async () => {
+                //     for (const item of selectedPlan) {
+                //         const id = item.split("checkbox")[1]
+                //         const { data } = await axiosHttpService.get(API_DELETE_PLAN + id);
+                //         data.state = "Chờ Duyệt"
+                //         delete data["id"]
+                //         await axiosHttpService.put(API_DELETE_PLAN + id, data);
+                //     }
+                // }
+                // await sentPlan()
+                // setTimeout(() => {
+                //     reFetchData()
+                // }, 500)
+                notifySuccess("Duyệt yêu cầu thành công")
             }
-        },
-        {
-            title: "In biên bản",
-            btn_class_name: "custom-btn-export-excel",
-            icon: <i className="fa-solid fa-file-csv"></i>,
-            
         }
     ]
 
     const reFetchData = useCallback(async () => {
         setIsLoading(true);
-        const res = await axiosHttpService.get(`${API_DELETE_PLAN}`);
-        const rawDatas = res.data;
         const plans = [];
-        for (const rawData of rawDatas) {
-            const row = {
-                id: rawData.id,
-                name: rawData.name,
-                date: rawData.date,
-                organ: rawData.organ,
-                function: (
-                    <div className="flex">
-                        <Delete id={rawData.id} reFetchData={reFetchData} />
-                        <Update id={rawData.id} reFetchData={reFetchData} />
-                    </div>
-                ),
-            };
-            plans.push(row);
-        }
+        const row = {
+            id: 1,
+            name: "Quyết định bổ sung tài liệu hồ sơ về bảo trì bào tàng",
+            date: "2023-10-14",
+            organ: "Sở thông tin và truyền thông",
+            docs: (
+                <Button> Xem danh sách văn bản
+                </Button>
+            ),
+        };
+        plans.push(row);
         setPlan(plans);
         setIsLoading(false);
     }, []);
@@ -394,4 +388,4 @@ const BienBanBanGiao = () => {
     )
 }
 
-export default BienBanBanGiao;
+export default DuyetBoSungHoSoTaiLieuDaLuuKho;
