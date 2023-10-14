@@ -65,10 +65,36 @@ const LoginButton = styled(Button)`
 const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+  const handleLogin = () => {
+    const hardcodedUsername = "admin@quangngai.gov.vn";
+    const hardcodedPassword = "lttl@2023";
+
+    if (username === hardcodedUsername && password === hardcodedPassword) {
+  
+      window.location.replace("https://luutrutailieu.cloud/logged-in/0");
+    } else {
+      setError("Tên đăng nhập hoặc mật khẩu không đúng!");
+    }
+  };
+  
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleLogin();
+    }
+  };
+  
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
+
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
   };
 
   return (
@@ -82,6 +108,8 @@ const Login = () => {
           variant="outlined"
           fullWidth
           margin="normal"
+          value={username}
+          onChange={handleUsernameChange}
           
         />
         <TextField
@@ -92,6 +120,7 @@ const Login = () => {
           type={showPassword ? "text" : "password"} 
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          onKeyPress={handleKeyPress}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -110,7 +139,7 @@ const Login = () => {
           }}
         />
         <ButtonContainer>
-          <LoginButton onClick={() => { /* Handle regular login here */ }}>
+          <LoginButton onClick={handleLogin}>
             Đăng nhập
           </LoginButton>
           <SsoButton
