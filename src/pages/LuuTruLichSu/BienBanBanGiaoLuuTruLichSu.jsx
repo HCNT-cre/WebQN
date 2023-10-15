@@ -7,7 +7,7 @@ import ThemHoSo from "src/pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSo";
 import { notifySuccess } from "src/custom/Function";
 
 const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
-const API_DELETE_PLAN = import.meta.env.VITE_API_DELETE_PLAN
+const API_STORE_HISTORY_DELIVERY_RECORDS = import.meta.env.VITE_API_STORE_HISTORY_DELIVERY_RECORDS
 
 const parent =
     { title: "Lưu trữ lịch sử", link: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap" }
@@ -45,7 +45,7 @@ const Create = ({
     }, []);
 
     const handleOk = async () => {
-        await axiosHttpService.post(`${API_DELETE_PLAN}`, request);
+        await axiosHttpService.post(`${API_STORE_HISTORY_DELIVERY_RECORDS}`, request);
         setTimeout(() => {
             reFetchData();
             setRequest({
@@ -87,8 +87,10 @@ const Create = ({
                         <span>Tên biên bản</span>
                         <Input
                             name="name"
+                            onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
                             type="text"
                             className="w-[70%]"
+                            value={request["name"]}
                         />
                     </div>
 
@@ -96,8 +98,10 @@ const Create = ({
                         <span>Ngày tạo biên bản</span>
                         <Input
                             name="date"
+                            onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
                             type="date"
                             className="w-[70%]"
+                            value={request["date"]}
                         />
                     </div>
 
@@ -105,7 +109,9 @@ const Create = ({
                         <span>Cơ quan / Đơn vị  </span>
                         <Select
                             name="organ"
+                            onChange={(value) => handleChangeRequest("organ", value)}
                             className="w-[70%]"
+                            value={request["organ"]}
                             options={organ}
                         />
                     </div>
@@ -151,7 +157,7 @@ const Delete = ({ id, reFetchData }) => {
 
     const handleConfirm = async () => {
         const deletePlan = async () => {
-            await axiosHttpService.delete(API_DELETE_PLAN + id);
+            await axiosHttpService.delete(API_STORE_HISTORY_DELIVERY_RECORDS + id);
         };
 
         deletePlan();
@@ -211,7 +217,7 @@ const Update = ({ reFetchData, id }) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
 
     const getPlan = async () => {
-        const { data } = await axiosHttpService.get(API_DELETE_PLAN + id);
+        const { data } = await axiosHttpService.get(API_STORE_HISTORY_DELIVERY_RECORDS + id);
         setRequest({
             name: data.name,
             date: data.date,
@@ -237,7 +243,7 @@ const Update = ({ reFetchData, id }) => {
     };
 
     const handleOk = async () => {
-        await axiosHttpService.put(API_DELETE_PLAN + id, request);
+        await axiosHttpService.put(API_STORE_HISTORY_DELIVERY_RECORDS + id, request);
         setModalOpen(false);
         reFetchData();
     };
@@ -333,13 +339,13 @@ const BienBanBanGiaoLuuTruLichSu = () => {
             title: "In biên bản",
             btn_class_name: "custom-btn-export-excel",
             icon: <i className="fa-solid fa-file-csv"></i>,
-            
+
         }
     ]
 
     const reFetchData = useCallback(async () => {
         setIsLoading(true);
-        const res = await axiosHttpService.get(`${API_DELETE_PLAN}`);
+        const res = await axiosHttpService.get(`${API_STORE_HISTORY_DELIVERY_RECORDS}`);
         const rawDatas = res.data;
         const plans = [];
         for (const rawData of rawDatas) {

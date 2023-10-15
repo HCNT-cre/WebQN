@@ -281,7 +281,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
     return (
         <div>
             <Modal
-                title="Duyệt hồ sơ vào kho"
+                title="Xếp hồ sơ vào kho"
                 footer={null}
                 style={{
                     top: 200,

@@ -21,8 +21,8 @@ const parent = [
 ];
 
 const current = {
-    link: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu",
-    title: "Phê duyệt bổ sung tài liệu đã lưu kho",
+    link: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu-da-luu-kho",
+    title: "Phê duyệt bổ sung tài liệu",
 };
 
 const Create = ({
@@ -314,7 +314,7 @@ const Update = ({ reFetchData, id }) => {
 };
 
 
-const DuyetBoSungHoSoTaiLieuDaLuuKho = () => {
+const DuyetBoSungHoSoTaiLieu = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [plan, setPlan] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -350,7 +350,7 @@ const DuyetBoSungHoSoTaiLieuDaLuuKho = () => {
         const plans = [];
         const row = {
             id: 1,
-            name: "Quyết định bổ sung tài liệu hồ sơ về bảo trì bào tàng",
+            name: "Quyết định bổ sung tài liệu hồ sơ về công tác phòng cháy chữa cháy",
             date: "2023-10-14",
             organ: "Sở thông tin và truyền thông",
             docs: (
@@ -388,4 +388,4 @@ const DuyetBoSungHoSoTaiLieuDaLuuKho = () => {
     )
 }
 
-export default DuyetBoSungHoSoTaiLieuDaLuuKho;
+export default DuyetBoSungHoSoTaiLieu;

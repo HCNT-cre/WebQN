@@ -55,16 +55,16 @@ export const TABS_SIDEBAR = [
 				key: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 			},
 
-			{
-				title: "Phê duyệt kế hoạch thu thập",
-				to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
-				key: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
-			},
-			{
-				title: "Kế hoạch thu thập bị từ chối",
-				to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
-				key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
-			},
+			// {
+			// 	title: "Phê duyệt kế hoạch thu thập",
+			// 	to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+			// 	key: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+			// },
+			// {
+			// 	title: "Kế hoạch thu thập bị từ chối",
+			// 	to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+			// 	key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+			// },
 			{
 				title: "Thu thập hồ sơ",
 				to: "/thu-thap-va-nop-luu/thu-thap-ho-so",
@@ -81,11 +81,11 @@ export const TABS_SIDEBAR = [
 				to: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
 				key: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
 			},
-			{
-				title: "Hồ sơ nộp lưu bị trả về",
-				to: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
-				key: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
-			},
+			// {
+			// 	title: "Hồ sơ nộp lưu bị trả về",
+			// 	to: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
+			// 	key: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
+			// },
 			{
 				title: "Biên bản bàn giao",
 				to: "/thu-thap-va-nop-luu/bien-ban-ban-giao",
@@ -203,15 +203,15 @@ export const TABS_SIDEBAR = [
 			},
 		],
 	},
-	{
-		isExpand: false,
-		icon: '<i class="fa-solid fa-check"></i>',
-		title: "Duyệt chỉnh lý",
-		numChildTabs: 0,
-		to: "/duyet-chinh-ly",
-		key: "/duyet-chinh-ly",
-		display: true,
-	},
+	// {
+	// 	isExpand: false,
+	// 	icon: '<i class="fa-solid fa-check"></i>',
+	// 	title: "Duyệt chỉnh lý",
+	// 	numChildTabs: 0,
+	// 	to: "/duyet-chinh-ly",
+	// 	key: "/duyet-chinh-ly",
+	// 	display: true,
+	// },
 	{
 		isExpand: false,
 		icon: '<i class="fa-solid fa-copy"></i>',

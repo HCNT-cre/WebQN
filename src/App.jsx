@@ -75,6 +75,7 @@ import BienBanBanGiaoLuuTruLichSu from "./pages/LuuTruLichSu/BienBanBanGiaoLuuTr
 import TimKiemNangCao from "./pages/QuanLiKhaiThac/TimKiemNangCao";
 import TimKiemTaiLieuTheoTieuDeHoSo from "./pages/QuanLiKhaiThac/TimKiemTaiLieuTheoTieuDeHoSo";
 import GioTaiLieu from "./pages/QuanLiKhaiThac/GioTaiLieu";
+import DuyetBoSungHoSoTaiLieu from "./pages/BienMucChinhLy/PheDuyetLuuKhoBoSung/DuyetBoSungHoSoTaiLieu";
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
 function LoggedIn() {
@@ -443,6 +444,10 @@ const App = () => {
             path: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
             element: <GioTaiLieu />
         },
+        {
+            path: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu",
+            element: <DuyetBoSungHoSoTaiLieu />
+        }
         // {
         //     path: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
         //     element: <PheDuyetKeHoachLuuTruLichSu />
