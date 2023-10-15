@@ -73,7 +73,7 @@ const Login = () => {
   };
   const handleLogin = () => {
     const hardcodedUsername = "admin@quangngai.gov.vn";
-    const hardcodedPassword = "lttl@2023";
+    const hardcodedPassword = "1111111";
 
     if (username === hardcodedUsername && password === hardcodedPassword) {
   
