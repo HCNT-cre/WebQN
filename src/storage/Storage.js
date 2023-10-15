@@ -26,6 +26,7 @@ export const ENUM_STATE_BMCL = {
 	BMCL_PHE_DUYET_LUU_KHO: "BMCL_PHE_DUYET_LUU_KHO",
 	BMCL_BO_SUNG_HO_SO_TAI_LIEU: "BMCL_BO_SUNG_HO_SO_TAI_LIEU",
 	BMCL_DA_BO_SUNG_TAI_LIEU: "BMCL_DA_BO_SUNG_TAI_LIEU",
+	BMCL_YEU_CAU_BO_SUNG_TAI_LIEU_DA_LUU_KHO: "BMCL_YEU_CAU_BO_SUNG_TAI_LIEU_DA_LUU_KHO",
 }
 
 export const TABS_SIDEBAR = [
@@ -217,8 +218,23 @@ export const TABS_SIDEBAR = [
 		title: "Quản lí thông tin khai thác",
 		display: false,
 		type: ["hoso"],
-		numChildTabs: 2,
+		numChildTabs: 3,
 		childTabs: [
+			{
+				title: "Tìm kiếm tài liệu theo tiêu đề hồ sơ",
+				to: "/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so",
+				key: "/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so",
+			},
+			{
+				title: "Giỏ tài liệu",
+				to: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
+				key: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
+			},
+			// {
+			// 	title: "Tìm kiếm nâng cao",
+			// 	to: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
+			// 	key: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
+			// },
 			{
 				title: "Danh sách yêu cầu sao hồ sơ, tài liệu",
 				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
@@ -269,8 +285,23 @@ export const TABS_SIDEBAR = [
 		display: false,
 		type: ["hoso"],
 		title: "Lưu trữ lịch sử",
-		numChildTabs: 2,
+		numChildTabs: 3,
 		childTabs: [
+			{
+				title: "Tạo kế hoạch nộp lưu lịch sử",
+				to: "/luu-tru-lich-su/tao-ke-hoach-nop-luu-lich-su",
+				key: "/luu-tru-lich-su/tao-ke-hoach-nop-luu-lich-su",
+			},
+			// {
+			// 	title: "Phê duyệt kế hoạch lưu trữ lịch sử",
+			// 	to: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
+			// 	key: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
+			// },
+			// {
+			// 	title: "Kế hoạch lưu trữ lịch sử bị từ chối",
+			// 	to: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
+			// 	key: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
+			// },
 			{
 				title: "Hồ sơ tài liệu giao nộp",
 				to: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop",
@@ -280,6 +311,11 @@ export const TABS_SIDEBAR = [
 				title: "Kho lưu trữ lịch sử",
 				to: "/luu-tru-lich-su/kho-luu-tru-lich-su",
 				key: "/luu-tru-lich-su/kho-luu-tru-lich-su",
+			},
+			{
+				title: "Biên bản bàn giao",
+				to: "/luu-tru-lich-su/bien-ban-ban-giao",
+				key: "/luu-tru-lich-su/bien-ban-ban-giao",
 			},
 		],
 	},
@@ -576,3 +612,16 @@ export const FOND_INPUT = [
 	{ type: "number", require: true, name: "copy_number", label: "Số lượng trang tài liệu đã lập bản sao bảo hiểm" },
 	{ type: "text", require: true, name: "description", label: "Ghi chú" },
 ];
+
+export const FIELDS_TABLE_SEARCH_FILE = [
+    { title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
+    { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
+    { title: "Phông", key: "organ_id", width: "100%" },
+    { title: "Số lượng tờ", key: "sheet_number", width: "70px" },
+    { title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
+    { title: "Thời gian bắt đầu", key: "start_date", width: "100%" },
+    { title: "Thời gian kết thúc", key: "end_date", width: "100%" },
+    { title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
+    { title: "Chế độ sử dụng", key: "rights", width: "100%" },
+    { title: "", key: "borrow", width: "100px" },
+]

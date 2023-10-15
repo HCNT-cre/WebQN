@@ -65,6 +65,16 @@ import DuyetKeHoachChinhLy from "./pages/BienMucChinhLy/DuyetKeHoachChinhLy";
 import KeHoachChinhLyBiTuChoi from "./pages/BienMucChinhLy/KeHoachChinhLyBiTuChoi";
 import BoSungHoSoTaiLieu from "./pages/BienMucChinhLy/BienMucBoSung/BoSungHoSoTaiLieu";
 import HoSoTaiLieuDaDuocBoSung from "./pages/BienMucChinhLy/BienMucBoSung/HoSoTaiLieuDaDuocBoSung";
+import TaoKeHoachLuuTruLichSu from "./pages/LuuTruLichSu/TaoKeHoachNopLuuLichSu";
+import PheDuyetKeHoachLuuTruLichSu from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu";
+import KeHoachLuuTruLichSuBiTuChoi from "./pages/LuuTruLichSu/KeHoachLuuTruLichSuBiTuChoi";
+import BoSungHoSoTaiLieuDaLuuKho from "./pages/BienMucChinhLy/BienMucBoSung/BoSungHoSoTaiLieuDaLuuKho";
+import YeuCauBoSungHoSoTaiLieuDaLuuKho from "./pages/BienMucChinhLy/BienMucBoSung/YeuCauBoSungHoSoTaiLieuDaLuuKho";
+import DuyetBoSungHoSoTaiLieuDaLuuKho from "./pages/BienMucChinhLy/PheDuyetLuuKhoBoSung/DuyetBoSungHoSoTaiLieuDaLuuKho";
+import BienBanBanGiaoLuuTruLichSu from "./pages/LuuTruLichSu/BienBanBanGiaoLuuTruLichSu";
+import TimKiemNangCao from "./pages/QuanLiKhaiThac/TimKiemNangCao";
+import TimKiemTaiLieuTheoTieuDeHoSo from "./pages/QuanLiKhaiThac/TimKiemTaiLieuTheoTieuDeHoSo";
+import GioTaiLieu from "./pages/QuanLiKhaiThac/GioTaiLieu";
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
 function LoggedIn() {
@@ -377,14 +387,14 @@ const App = () => {
             path: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
             element: <HoSoNopLuuBiTraVe />
         },
-        {
-            path: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
-            element: <KeHoachThuThapBiTuChoi />
-        },
-        {
-            path: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
-            element: <PheDuyetKeHoachThuThap />
-        },
+        // {
+        //     path: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+        //     element: <KeHoachThuThapBiTuChoi />
+        // },
+        // {
+        //     path: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+        //     element: <PheDuyetKeHoachThuThap />
+        // },
         {
             path: "/bien-muc-chinh-ly/duyet-ke-hoach-chinh-ly",
             element: <DuyetKeHoachChinhLy />
@@ -398,16 +408,56 @@ const App = () => {
             element: <BoSungHoSoTaiLieu />
         },
         {
+            path: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu-da-luu-kho",
+            element: <BoSungHoSoTaiLieuDaLuuKho />
+        },
+        {
+            path: "/bien-muc-chinh-ly/bien-muc-bo-sung/yeu-cau-bo-sung-ho-so-tai-lieu-da-luu-kho",
+            element: <YeuCauBoSungHoSoTaiLieuDaLuuKho />
+        },
+        {
+            path: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu-da-luu-kho",
+            element: <DuyetBoSungHoSoTaiLieuDaLuuKho />
+        },
+        {
             path: "/bien-muc-chinh-ly/bien-muc-bo-sung/ho-so-tai-lieu-da-duoc-bo-sung",
             element: <HoSoTaiLieuDaDuocBoSung />
         },
+        {
+            path: "/luu-tru-lich-su/tao-ke-hoach-nop-luu-lich-su",
+            element: <TaoKeHoachLuuTruLichSu />
+        },
+        {
+            path: "/luu-tru-lich-su/bien-ban-ban-giao",
+            element: <BienBanBanGiaoLuuTruLichSu />
+        },
+        {
+            path: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
+            element: <TimKiemNangCao />
+        },
+        {
+            path: "/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so",
+            element: <TimKiemTaiLieuTheoTieuDeHoSo />
+        },
+        {
+            path: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
+            element: <GioTaiLieu />
+        },
+        // {
+        //     path: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
+        //     element: <PheDuyetKeHoachLuuTruLichSu />
+        // },
+        // {
+        //     path: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
+        //     element: <KeHoachLuuTruLichSuBiTuChoi />
+        // },
     ];
 
     return (
         <>
             <ToastContainer
                 position="top-center"
-                autoClose={5000}
+                autoClose={10000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick

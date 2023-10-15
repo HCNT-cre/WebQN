@@ -12,7 +12,9 @@ import { Input, Button } from "antd"
 import { ValidateFormDoc } from '../../../custom/Function';
 import { FirstLower } from '../../../custom/Function';
 import { SetNull } from '../../../custom/Function';
-
+import { useButtonClickOutside } from 'src/custom/Hook';
+import sign from 'src/assets/img/sign.jpg'
+import sign2 from 'src/assets/img/sign2.png'
 const API_EXTRACT_OCR = import.meta.env.VITE_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = import.meta.env.VITE_API_DOCUMENT_UPLOAD
 
@@ -52,6 +54,14 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
     const allowedFiles = ['application/pdf']
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [isLoading, setIsLoading] = useState(false)
+    const [openSign, setOpenSign] = useState(false)
+
+
+    const handleClose = () => {
+        setOpenSign(false)
+    }
+    const [buttonRef, contentRef, toggleContent, showContent] =
+        useButtonClickOutside(false, handleClose);
 
 
     useEffect(() => {
@@ -275,6 +285,32 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
                                         </div>
                                         <div className='h-full w-[50%] pl-[12px] mr-[12px] '>
                                             <div className='w-full flex justify-end'>
+                                                <div className="text-white text-center px-[5px] rounded-[5px]  relative">
+                                                    <Button
+                                                        onClick={toggleContent}
+                                                        ref={buttonRef}
+                                                        className=" disabled:opacity-30 rounded-[5px] flex justify-center items-center py-[6px] text-[12px] bg-sky-500 "
+                                                    >
+                                                        Ký số
+                                                        <div className="ml-[4px]">
+                                                            <i className="fa-solid fa-chevron-down"></i>
+                                                        </div>
+                                                    </Button>
+
+                                                    {showContent && (
+                                                        <div
+                                                            ref={(el) => {
+                                                                contentRef.current[0] = el;
+                                                            }}
+                                                            className="rounded-[2px] text-left top-[40px] w-[204px] absolute bg-sky-500 text-[14px] z-10"
+                                                        >
+                                                            <div className='p-[2px]'>
+                                                                <img className='borer-2 block border-sky-100 w-[200px] max-w-[1000px]' alt='sign' src={sign} />
+                                                                <img className='borer-2 block border-sky-100 mt-[2px] w-[200px] max-w-[1000px]' alt='sign' src={sign2} />
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
                                                 <Button onClick={extractDataOCR} className=' h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px] custom-btn-search '>Trích xuất thông tin</Button>
                                                 <Button htmlType="submit" form="add-doc-form" className='bg-green-400 h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-black font-medium text-[12px] '>Lưu</Button>
                                             </div>
