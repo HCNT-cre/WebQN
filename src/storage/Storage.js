@@ -221,9 +221,14 @@ export const TABS_SIDEBAR = [
 		numChildTabs: 3,
 		childTabs: [
 			{
-				title: "Tìm kiếm tài liệu theo tiêu đề hồ sơ",
-				to: "/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so",
-				key: "/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so",
+				title: "Tìm kiếm và đăng ký mượn hồ sơ",
+				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
+				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
+			},
+			{
+				title: "Tìm kiếm và đăng ký mượn văn bản",
+				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
+				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
 			},
 			{
 				title: "Giỏ tài liệu",

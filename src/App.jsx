@@ -73,9 +73,10 @@ import YeuCauBoSungHoSoTaiLieuDaLuuKho from "./pages/BienMucChinhLy/BienMucBoSun
 import DuyetBoSungHoSoTaiLieuDaLuuKho from "./pages/BienMucChinhLy/PheDuyetLuuKhoBoSung/DuyetBoSungHoSoTaiLieuDaLuuKho";
 import BienBanBanGiaoLuuTruLichSu from "./pages/LuuTruLichSu/BienBanBanGiaoLuuTruLichSu";
 import TimKiemNangCao from "./pages/QuanLiKhaiThac/TimKiemNangCao";
-import TimKiemTaiLieuTheoTieuDeHoSo from "./pages/QuanLiKhaiThac/TimKiemTaiLieuTheoTieuDeHoSo";
+import TimKiemVaDangKyMuonHoSo from "./pages/QuanLiKhaiThac/TimKiemVaDangKyMuonHoSo";
 import GioTaiLieu from "./pages/QuanLiKhaiThac/GioTaiLieu";
 import DuyetBoSungHoSoTaiLieu from "./pages/BienMucChinhLy/PheDuyetLuuKhoBoSung/DuyetBoSungHoSoTaiLieu";
+import TimKiemVaDangKyMuonVanBan from "./pages/QuanLiKhaiThac/TimKiemVaDangKyMuonVanBan";
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
 function LoggedIn() {
@@ -437,8 +438,12 @@ const App = () => {
             element: <TimKiemNangCao />
         },
         {
-            path: "/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so",
-            element: <TimKiemTaiLieuTheoTieuDeHoSo />
+            path: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
+            element: <TimKiemVaDangKyMuonHoSo />
+        },
+        {
+            path: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
+            element: <TimKiemVaDangKyMuonVanBan />
         },
         {
             path: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",

@@ -119,19 +119,19 @@ const TimKiemTaiLieuTheoTieuDeHoSo = ({
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
                 <p className="text-[14px] font-300 cursor-pointer ">
                     <span className="text-[rgba(160,158,158,0.45)]">
-                        <Link to="/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so">
+                        <Link to="/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so">
                             Quản lý thông tin khai thác / &nbsp;
                         </Link>
                     </span>
                     <span>
-                        <Link to="/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so">Tìm kiếm tài liệu theo tiêu đề hồ sơ</Link>
+                        <Link to="/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so">Tìm kiếm và đăng ký mượn hồ sơ</Link>
                     </span>
 
                 </p>
             </div>
 
             <div className="w-full px-[24px] pb-[16px] bg-white">
-                <p className="text-[20px] font-bold ">Tìm kiếm tài liệu theo tiêu đề hồ sơ</p>
+                <p className="text-[20px] font-bold ">Tìm kiếm và đăng ký mượn hồ sơ</p>
             </div>
             {showTable && (
                 <div>
