@@ -37,10 +37,13 @@ const BoSungHoSoTaiLieuDaLuuKho = () => {
         <BasePage
             parent={parent}
             current={current}
-            addNewFile={true}
             filter={filter}
             eOffice={false}
-            buttonFuctions={<ButtonFuctions />}
+            buttonFuctions={
+                <ButtonFuctions 
+                clickApprove={false}
+                buttonName="Tạo yêu cầu"
+                />}
             currentStateModal={ENUM_STATE_BMCL.BMCL_YEU_CAU_BO_SUNG_TAI_LIEU_DA_LUU_KHO}
         />
     );

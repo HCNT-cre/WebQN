@@ -733,7 +733,7 @@ export const ModalModificationDocumentRequireAddDoc = () => {
         <>
             <Modal
                 footer={null}
-                title="Tạo yêu cầu"
+                title="Tạo yêu cầu bổ sung tài liệu"
                 style={{
                     top: 200,
                 }}
