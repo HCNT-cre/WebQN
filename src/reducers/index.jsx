@@ -17,6 +17,7 @@ import modalModificationDocumentConfirmStoreReducer from './modalModificationDoc
 import ModalModificationDocumentAddDocumentReducer from './modalModificationDocumentAddDocument'
 import modalModificationDocumentAddedDocumentReducer from './modalModificationDocumentAddedDocument'
 import ModalModificationDocumentRequireAddDocReducer from './modalModificationDocumentRequireAddDoc'
+import cartReducer from 'src/service/reducers/cartReducer'
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
     modalModificationDocumentAddDocument: ModalModificationDocumentAddDocumentReducer,
     modalModificationDocumentAddedDocument: modalModificationDocumentAddedDocumentReducer,
     modalModificationDocumentRequireAddDocReducer: ModalModificationDocumentRequireAddDocReducer,
+    cart: cartReducer
 })
 
 export default rootReducer

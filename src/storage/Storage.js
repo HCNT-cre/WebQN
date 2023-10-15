@@ -226,10 +226,15 @@ export const TABS_SIDEBAR = [
 				key: "/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so",
 			},
 			{
-				title: "Tìm kiếm nâng cao",
-				to: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
-				key: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
+				title: "Giỏ tài liệu",
+				to: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
+				key: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
 			},
+			// {
+			// 	title: "Tìm kiếm nâng cao",
+			// 	to: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
+			// 	key: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
+			// },
 			{
 				title: "Danh sách yêu cầu sao hồ sơ, tài liệu",
 				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",

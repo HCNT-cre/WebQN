@@ -25,6 +25,7 @@
     "dotenv-webpack": "^8.0.1",
     "export-to-csv": "^0.2.1",
     "i": "^0.3.7",
+    "immutability-helper": "^3.1.1",
     "jquery": "^3.6.4",
     "material-react-table": "^1.9.2",
     "npm": "^9.6.4",

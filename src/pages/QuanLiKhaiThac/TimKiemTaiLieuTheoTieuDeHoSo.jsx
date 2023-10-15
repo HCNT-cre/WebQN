@@ -4,12 +4,15 @@ import { Table } from "src/custom/Components";
 import "react-toastify/dist/ReactToastify.css";
 import { FIELDS_TABLE_SEARCH_FILE } from "src/storage/Storage";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import FileAPIService from "src/service/api/FileAPIService";
+import { useDispatch, useSelector } from "react-redux";
+import { addFileToCart } from "src/service/actions/cartAction";
 import { Input, Button as BtnAntd } from "antd";
 import { Button } from "@mui/material";
+import { notifySuccess } from "src/custom/Function";
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import SearchIcon from '@mui/icons-material/Search';
-import { notifySuccess } from "src/custom/Function";
+import { Link } from "react-router-dom";
 const parseQuery = (params) => {
     let request = "";
     Object.keys(params).forEach((key) => {
@@ -33,6 +36,7 @@ const TimKiemTaiLieuTheoTieuDeHoSo = ({
     const [isLoading, setIsLoading] = useState(true);
     const [stateCheckBox, setStateCheckBox] = useState([]);
     const [search, setSearch] = useState({});
+    const cart = useSelector((state) => state.cart);
 
     const handleClickViewFile = (id) => {
         navigate(`/ho-so/${id}`);
@@ -114,24 +118,20 @@ const TimKiemTaiLieuTheoTieuDeHoSo = ({
         <>
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
                 <p className="text-[14px] font-300 cursor-pointer ">
-                    {/*<span className="text-[rgba(160,158,158,0.45)]">
-                        {parent.map((item, index) => {
-                            return (
-                                <Link key={index} to={item.link}>
-                                    {item.title} /{" "}
-                                </Link>
-                            );
-                        })}
+                    <span className="text-[rgba(160,158,158,0.45)]">
+                        <Link to="/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so">
+                            Quản lý thông tin khai thác / &nbsp;
+                        </Link>
                     </span>
                     <span>
-                        <Link to={current.link}>{current.title}</Link>
+                        <Link to="/quan-li-thong-tin-khai-thac/tim-kiem-tai-lieu-theo-tieu-de-ho-so">Tìm kiếm tài liệu theo tiêu đề hồ sơ</Link>
                     </span>
-                    */}
+
                 </p>
             </div>
 
             <div className="w-full px-[24px] pb-[16px] bg-white">
-                <p className="text-[20px] font-bold ">Danh sách hồ sơ</p>
+                <p className="text-[20px] font-bold ">Tìm kiếm tài liệu theo tiêu đề hồ sơ</p>
             </div>
             {showTable && (
                 <div>
