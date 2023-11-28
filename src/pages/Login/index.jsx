@@ -77,7 +77,7 @@ const Login = () => {
 
     if (username === hardcodedUsername && password === hardcodedPassword) {
   
-      window.location.replace("https://luutrutailieu.cloud/logged-in/0");
+      window.location.replace("https://luutrudientu.quangngai.gov.vn/logged-in/0");
     } else {
       setError("Tên đăng nhập hoặc mật khẩu không đúng!");
     }
