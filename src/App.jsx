@@ -389,14 +389,14 @@ const App = () => {
             path: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
             element: <HoSoNopLuuBiTraVe />
         },
-        // {
-        //     path: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
-        //     element: <KeHoachThuThapBiTuChoi />
-        // },
-        // {
-        //     path: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
-        //     element: <PheDuyetKeHoachThuThap />
-        // },
+        {
+            path: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+            element: <KeHoachThuThapBiTuChoi />
+        },
+        {
+            path: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+            element: <PheDuyetKeHoachThuThap />
+        },
         {
             path: "/bien-muc-chinh-ly/duyet-ke-hoach-chinh-ly",
             element: <DuyetKeHoachChinhLy />
@@ -452,15 +452,15 @@ const App = () => {
         {
             path: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu",
             element: <DuyetBoSungHoSoTaiLieu />
-        }
-        // {
-        //     path: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
-        //     element: <PheDuyetKeHoachLuuTruLichSu />
-        // },
-        // {
-        //     path: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
-        //     element: <KeHoachLuuTruLichSuBiTuChoi />
-        // },
+        },
+        {
+            path: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
+            element: <PheDuyetKeHoachLuuTruLichSu />
+        },
+        {
+            path: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
+            element: <KeHoachLuuTruLichSuBiTuChoi />
+        },
     ];
 
     return (
