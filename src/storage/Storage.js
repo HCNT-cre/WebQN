@@ -66,6 +66,11 @@ export const TABS_SIDEBAR = [
 				key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
 			},
 			{
+				title:"Kế hoạch thu thập được phê duyệt",
+				to:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
+				key:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
+			},
+			{
 				title: "Thu thập hồ sơ",
 				to: "/thu-thap-va-nop-luu/thu-thap-ho-so",
 				key: "/thu-thap-va-nop-luu/thu-thap-ho-so",
@@ -323,6 +328,37 @@ export const TABS_SIDEBAR = [
 				key: "/luu-tru-lich-su/bien-ban-ban-giao",
 			},
 		],
+	},
+	{
+		key: "/kho-luu-tru-to-chuc-ca-nhan/",
+		isExpand: false,
+		icon: `<i class="fa-solid fa-database"></i>`,
+		display: false,
+		type: ["hoso"],
+		title: "Lưu trữ tổ chức, cá nhân",
+		numChildTabs: 4,
+		childTabs: [
+			{
+				title: "Tạo hồ sơ thực hiện thủ tục hành chính",
+				to: "/kho-luu-tru-to-chuc-ca-nhan/tao-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+				key: "/kho-luu-tru-to-chuc-ca-nhan/tao-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+			},
+			{
+				title: "Duyệt hồ sơ thực hiện thủ tục hành chính",
+				to: "/kho-luu-tru-to-chuc-ca-nhan/duyet-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+				key: "/kho-luu-tru-to-chuc-ca-nhan/duyet-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+			},
+			{
+				title:"Hồ sơ thực hiện thủ tục hành chính bị từ chối",
+				to:"/kho-luu-tru-to-chuc-ca-nhan/ho-so-thuc-hien-thu-tuc-hanh-chinh-bi-tu-choi",
+				key:"/kho-luu-tru-to-chuc-ca-nhan/ho-so-thuc-hien-thu-tuc-hanh-chinh-bi-tu-choi",
+			},
+			{
+				title: "Kho hồ sơ thực hiện thủ tục hành chính",
+				to: "/kho-luu-tru-to-chuc-ca-nhan/kho-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+				key: "/kho-luu-tru-to-chuc-ca-nhan/kho-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+			},
+		]
 	},
 
 	{

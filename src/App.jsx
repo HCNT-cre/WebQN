@@ -77,6 +77,11 @@ import TimKiemVaDangKyMuonHoSo from "./pages/QuanLiKhaiThac/TimKiemVaDangKyMuonH
 import GioTaiLieu from "./pages/QuanLiKhaiThac/GioTaiLieu";
 import DuyetBoSungHoSoTaiLieu from "./pages/BienMucChinhLy/PheDuyetLuuKhoBoSung/DuyetBoSungHoSoTaiLieu";
 import TimKiemVaDangKyMuonVanBan from "./pages/QuanLiKhaiThac/TimKiemVaDangKyMuonVanBan";
+import KeHoachThuThapDuocDuyet from "./pages/ThuThapVaNopLuu/KeHoachThuThapDuocDuyet";
+import TaoHoSoTTHC from "./pages/LuuTruToChucCaNhan/TaoHoSoTTHC";
+import DuyetHoSoTTHC from "./pages/LuuTruToChucCaNhan/DuyetHoSoTTHC";
+import HoSoTTHCBiTuChoi from "./pages/LuuTruToChucCaNhan/HoSoTTHCBiTuChoi";
+import KhoHoSoTTHC from "./pages/LuuTruToChucCaNhan/KhoHoSoTTHC";
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
 function LoggedIn() {
@@ -460,6 +465,26 @@ const App = () => {
         {
             path: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
             element: <KeHoachLuuTruLichSuBiTuChoi />
+        },
+        {
+            path: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
+            element: <KeHoachThuThapDuocDuyet />
+        },
+        {
+            path: "/kho-luu-tru-to-chuc-ca-nhan/tao-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+            element: <TaoHoSoTTHC />
+        },
+        {
+            path: "/kho-luu-tru-to-chuc-ca-nhan/duyet-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+            element: <DuyetHoSoTTHC/>
+        },
+        {
+            path: "/kho-luu-tru-to-chuc-ca-nhan/ho-so-thuc-hien-thu-tuc-hanh-chinh-bi-tu-choi",
+            element: <HoSoTTHCBiTuChoi/>
+        },
+        {
+            path:  "/kho-luu-tru-to-chuc-ca-nhan/kho-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+            element: <KhoHoSoTTHC/>
         },
     ];
 
