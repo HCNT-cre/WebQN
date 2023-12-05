@@ -369,7 +369,7 @@ const BasePage = ({
 	};
 
 	const getFileFromResponse = (response) => {
-		const rawDatas = response.data;
+		const rawDatas = response.data.reverse();
 		setFileSheet(rawDatas);
 		let filesArray = [];
 		for (const rawData of rawDatas) {
