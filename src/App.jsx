@@ -82,6 +82,7 @@ import TaoHoSoTTHC from "./pages/LuuTruToChucCaNhan/TaoHoSoTTHC";
 import DuyetHoSoTTHC from "./pages/LuuTruToChucCaNhan/DuyetHoSoTTHC";
 import HoSoTTHCBiTuChoi from "./pages/LuuTruToChucCaNhan/HoSoTTHCBiTuChoi";
 import KhoHoSoTTHC from "./pages/LuuTruToChucCaNhan/KhoHoSoTTHC";
+import HoSoDenHanNopLuu from "./pages/ThuThapVaNopLuu/HoSoDenHanNopLuu";
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
 function LoggedIn() {
@@ -213,7 +214,8 @@ const App = () => {
         { path: "/ho-so/tao-ho-so-dien-tu", element: <AddFile /> },
         { path: "/ho-so/so-hoa-ho-so-tai-lieu", element: <DigitizingFile /> },
         { path: "/ho-so/ho-so-den-han-nop-luu", element: <DueFile /> },
-        { path: "/ho-so/ho-so-bi-tra-ve", element: <ReturnFile /> },
+        { path: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve", element: <HoSoNopLuuBiTraVe /> },
+        { path: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu", element: <HoSoDenHanNopLuu /> },
         {
             path: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
             element: <HoSoTaiLieuGiaoNop />,

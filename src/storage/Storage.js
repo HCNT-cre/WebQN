@@ -82,6 +82,16 @@ export const TABS_SIDEBAR = [
 				key: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu",
 			},
 			{
+				title: "Hồ sơ nộp lưu bị trả về",
+				to: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
+				key: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
+			},
+			{
+				title: "Hồ sơ đến hạn nộp lưu",
+				to: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu",
+				key: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu",
+			},
+			{
 				title: "Hồ sơ đã nhận nộp lưu",
 				to: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
 				key: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
@@ -181,33 +191,7 @@ export const TABS_SIDEBAR = [
 			}
 		],
 	},
-	{
-		key: "/ho-so/tao-ho-so-dien-tu",
-		isExpand: false,
-		icon: '<i class="fa-regular fa-file"></i>',
-		display: false,
-		type: ["hoso"],
-		title: "Hồ sơ tài liệu",
-		numChildTabs: 3,
-		childTabs: [
-			{
-				title: "Danh sách hồ sơ",
-				to: "/ho-so/tao-ho-so-dien-tu",
-				key: "/ho-so/tao-ho-so-dien-tu",
-			},
-			// { title: "Số hóa hồ sơ tài liệu", to: "/ho-so/so-hoa-ho-so-tai-lieu", key: "/ho-so/so-hoa-ho-so-tai-lieu" },
-			{
-				title: "HS đến hạn nộp lưu",
-				to: "/ho-so/ho-so-den-han-nop-luu",
-				key: "/ho-so/ho-so-den-han-nop-luu",
-			},
-			{
-				title: "Hồ sơ bị trả về",
-				to: "/ho-so/ho-so-bi-tra-ve",
-				key: "/ho-so/ho-so-bi-tra-ve",
-			},
-		],
-	},
+	
 	// {
 	// 	isExpand: false,
 	// 	icon: '<i class="fa-solid fa-check"></i>',
@@ -360,7 +344,97 @@ export const TABS_SIDEBAR = [
 			},
 		]
 	},
-
+	{
+		key: "/tieu-huy-ho-so/",
+		isExpand: false,
+		icon: '<i class="fa-solid fa-trash"></i>',
+		display: false,
+		type: ["hoso"],
+		title: "Tiêu hủy hồ sơ",
+		numChildTabs: 3,
+		childTabs: [
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Hồ sơ chờ tiêu hủy",
+				key: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy",
+				display: false,
+				type: ["hoso"],
+				isExpand: false,
+				numChildTabs: 2,
+				childTabs: [
+					{
+						title: "Hết thời hạn bảo quản",
+						to: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/het-thoi-han-bao-quan",
+						key: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/het-thoi-han-bao-quan",
+						numChildTabs: 0,
+					},
+					{
+						title: "Thời gian kết thúc",
+						to: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/thoi-gian-ket-thuc",
+						key: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/thoi-gian-ket-thuc",
+						numChildTabs: 0,
+					}
+				],
+			},
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Quyết định",
+				key: "/tieu-huy-ho-so/quyet-dinh",
+				display: false,
+				type: ["hoso"],
+				numChildTabs: 3,
+				isExpand: false,
+				childTabs: [
+					{
+						title: "Tạo quyết định",
+						to: "/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh",
+						key: "/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh",
+						numChildTabs: 0,
+					},
+					{
+						title: "Duyệt quyết định",
+						to: "/tieu-huy-ho-so/quyet-dinh/duyet-quyet-dinh",
+						key: "/tieu-huy-ho-so/quyet-dinh/duyet-quyet-dinh",
+						numChildTabs: 0,
+					},
+					{
+						title: "Trả về",
+						to: "/tieu-huy-ho-so/quyet-dinh/tra-ve",
+						key: "/tieu-huy-ho-so/quyet-dinh/tra-ve",
+						numChildTabs: 0,
+					}
+				],
+			},
+			{
+				title: "Khôi phục",
+				key: "/tieu-huy-ho-so/khoi-phuc",
+				display: false,
+				type: ["kho"],
+				numChildTabs: 3,
+				isExpand: false,
+				childTabs: [
+					{
+						title: "Tạo quyết định",
+						to: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh",
+						key: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh",
+						numChildTabs: 0,
+					},
+					{
+						title: "Duyệt quyết định",
+						to: "/tieu-huy-ho-so/khoi-phuc/duyet-quyet-dinh",
+						key: "/tieu-huy-ho-so/khoi-phuc/duyet-quyet-dinh",
+						numChildTabs: 0,
+					},
+					{
+						title: "Trả về",
+						to: "/tieu-huy-ho-so/khoi-phuc/tra-ve",
+						key: "/tieu-huy-ho-so/khoi-phuc/tra-ve",
+						numChildTabs: 0,
+					}
+				],
+			},
+		],
+	},
 	{
 		key: "/khai-bao-danh-muc/",
 		isExpand: false,
@@ -454,101 +528,20 @@ export const TABS_SIDEBAR = [
 			},
 		],
 	},
+	
 	{
-		key: "/tieu-huy-ho-so/",
 		isExpand: false,
-		icon: '<i class="fa-solid fa-trash"></i>',
-		display: false,
-		type: ["hoso"],
-		title: "Tiêu hủy hồ sơ",
-		numChildTabs: 3,
-		childTabs: [
-			{
-				icon: '<i class="fa-regular fa-newspaper"></i>',
-				title: "Hồ sơ chờ tiêu hủy",
-				key: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy",
-				display: false,
-				type: ["hoso"],
-				isExpand: false,
-				numChildTabs: 2,
-				childTabs: [
-					{
-						title: "Hết thời hạn bảo quản",
-						to: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/het-thoi-han-bao-quan",
-						key: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/het-thoi-han-bao-quan",
-						numChildTabs: 0,
-					},
-					{
-						title: "Thời gian kết thúc",
-						to: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/thoi-gian-ket-thuc",
-						key: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/thoi-gian-ket-thuc",
-						numChildTabs: 0,
-					}
-				],
-			},
-			{
-				icon: '<i class="fa-regular fa-newspaper"></i>',
-				title: "Quyết định",
-				key: "/tieu-huy-ho-so/quyet-dinh",
-				display: false,
-				type: ["hoso"],
-				numChildTabs: 3,
-				isExpand: false,
-				childTabs: [
-					{
-						title: "Tạo quyết định",
-						to: "/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh",
-						key: "/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh",
-						numChildTabs: 0,
-					},
-					{
-						title: "Duyệt quyết định",
-						to: "/tieu-huy-ho-so/quyet-dinh/duyet-quyet-dinh",
-						key: "/tieu-huy-ho-so/quyet-dinh/duyet-quyet-dinh",
-						numChildTabs: 0,
-					},
-					{
-						title: "Trả về",
-						to: "/tieu-huy-ho-so/quyet-dinh/tra-ve",
-						key: "/tieu-huy-ho-so/quyet-dinh/tra-ve",
-						numChildTabs: 0,
-					}
-				],
-			},
-			{
-				title: "Khôi phục",
-				key: "/tieu-huy-ho-so/khoi-phuc",
-				display: false,
-				type: ["kho"],
-				numChildTabs: 3,
-				isExpand: false,
-				childTabs: [
-					{
-						title: "Tạo quyết định",
-						to: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh",
-						key: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh",
-						numChildTabs: 0,
-					},
-					{
-						title: "Duyệt quyết định",
-						to: "/tieu-huy-ho-so/khoi-phuc/duyet-quyet-dinh",
-						key: "/tieu-huy-ho-so/khoi-phuc/duyet-quyet-dinh",
-						numChildTabs: 0,
-					},
-					{
-						title: "Trả về",
-						to: "/tieu-huy-ho-so/khoi-phuc/tra-ve",
-						key: "/tieu-huy-ho-so/khoi-phuc/tra-ve",
-						numChildTabs: 0,
-					}
-				],
-			},
-		],
+		icon: '<i class="fa-regular fa-file"></i>',
+		title: "Tìm kiếm nâng cao",
+		numChildTabs: 0,
+		to: "/ho-so/tao-ho-so-dien-tu",
+		key: "/ho-so/tao-ho-so-dien-tu",
+		display: true,
 	},
 	{
 		isExpand: false,
 		icon: '<i class="fa-solid fa-magnifying-glass"></i>',
-		title: "Tra cứu và tìm kiếm",
+		title: "Tìm kiếm hồ sơ",
 		numChildTabs: 0,
 		to: "/tra-cuu-va-tim-kiem",
 		key: "/tra-cuu-va-tim-kiem",
