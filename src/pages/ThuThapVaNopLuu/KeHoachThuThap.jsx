@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Popconfirm, Select } from "antd";
+import { Button, Input, Modal, Popconfirm, Select, Upload } from "antd";
 import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
@@ -19,7 +19,20 @@ const FIELDS_TABLE = [
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [request, setRequest] = useState({});
 	const [organ, setOrgan] = useState([]);
-
+	const [fileList, setFileList] = useState([]);
+	const props = {
+		onRemove: (file) => {
+			const index = fileList.indexOf(file);
+			const newFileList = fileList.slice();
+			newFileList.splice(index, 1);
+			setFileList(newFileList);
+		},
+		beforeUpload: (file) => {
+			setFileList([...fileList, file]);
+			return false;
+		},
+		fileList,
+	};
 	useEffect(() => {
 		const getOrgan = async () => {
 			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
@@ -36,8 +49,15 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	}, []);
 
 	const handleOk = async () => {
+		const formData = new FormData();
+		fileList.forEach((file) => {
+			formData.append('files[]', file);
+		});
 		request["state"] = "Mới lập";
-		await axiosHttpService.post(`${API_COLLECTION_PLAN}`, request);
+		request["files"] = formData;
+		await axiosHttpService.post(`${API_COLLECTION_PLAN}`, request, {
+			headers: { "Content-Type": "multipart/form-data" }
+		});
 		setTimeout(() => {
 			reFetchData();
 			setRequest({});
@@ -55,6 +75,8 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 			[name]: value,
 		});
 	};
+
+
 
 	return (
 		<Modal
@@ -98,6 +120,18 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 						value={request["organ"]}
 						options={organ}
 					/>
+				</div>
+
+
+				<div className="flex justify-between py-[12px]">
+					<span>Văn bản đính kèm</span>
+					<Upload
+						{...props}
+						className="w-[70%]"
+						name="file"
+					>
+						<Button>Tải tệp lên</Button>
+					</Upload>
 				</div>
 			</div>
 		</Modal>
@@ -166,9 +200,27 @@ const Delete = ({ id, reFetchData }) => {
 	);
 };
 
-const Update = ({ reFetchData, id }) => {
+const Update = ({
+	reFetchData,
+	id,
+	modalOpen,
+	setModalOpen }) => {
 	const [request, setRequest] = useState({});
-	const [modalOpen, setModalOpen] = useState(false);
+
+	const [fileList, setFileList] = useState([]);
+	const props = {
+		onRemove: (file) => {
+			const index = fileList.indexOf(file);
+			const newFileList = fileList.slice();
+			newFileList.splice(index, 1);
+			setFileList(newFileList);
+		},
+		beforeUpload: (file) => {
+			setFileList([...fileList, file]);
+			return false;
+		},
+		fileList,
+	};
 
 	useEffect(() => {
 		const getPlan = async () => {
@@ -189,10 +241,6 @@ const Update = ({ reFetchData, id }) => {
 		});
 	};
 
-	const handleClick = () => {
-		setModalOpen(true);
-	};
-
 	const handleOk = async () => {
 		await axiosHttpService.put(API_COLLECTION_PLAN + id, request);
 		setModalOpen(false);
@@ -205,9 +253,7 @@ const Update = ({ reFetchData, id }) => {
 
 	return (
 		<div>
-			<Button onClick={handleClick} className="border-none">
-				<i className="fa-regular fa-pen-to-square"></i>
-			</Button>
+
 			<Modal
 				open={modalOpen}
 				title="Sửa"
@@ -243,11 +289,24 @@ const Update = ({ reFetchData, id }) => {
 						value={request["organ"]}
 					/>
 				</div>
+
+				<div className="flex justify-between py-[12px]">
+					<span>Văn bản đính kèm</span>
+					<Upload
+						{...props}
+						className="w-[70%]"
+						name="file"
+					>
+						<Button>Tải tệp lên</Button>
+					</Upload>
+				</div>
 			</Modal>
 		</div>
 	);
 };
 const KeHoachThuThap = () => {
+	const [id, setId] = useState(null);
+	const [updateOpen, setUpdateOpen] = useState(false);
 	const [modalOpen, setModalOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [stateCheckBox, setStateCheckBox] = useState([]);
@@ -279,6 +338,11 @@ const KeHoachThuThap = () => {
 		},
 	];
 
+	const handleClickUpdate = (id) => {
+		setUpdateOpen(true);
+		setId(id);
+	}
+
 	const reFetchData = async () => {
 		setIsLoading(true);
 		const res = await axiosHttpService.get(`${API_COLLECTION_PLAN}`);
@@ -287,14 +351,20 @@ const KeHoachThuThap = () => {
 		for (const rawData of rawDatas) {
 			const row = {
 				id: rawData.id,
-				name: rawData.name,
+				name: <p
+					onClick={() => handleClickUpdate(rawData.id)}
+					className="cursor-pointer hover:underline"
+				> {rawData.name} </p>,
 				date: rawData.date,
 				organ: rawData.organ,
 				state: <button>{rawData.state}</button>,
 				function: (
 					<div className="flex ">
 						<Delete id={rawData.id} reFetchData={reFetchData} />
-						<Update id={rawData.id} reFetchData={reFetchData} />
+						<Button onClick={() => handleClickUpdate(rawData.id)} className="border-none">
+							<i className="fa-regular fa-pen-to-square"></i>
+						</Button>
+
 					</div>
 				),
 			};
@@ -386,6 +456,13 @@ const KeHoachThuThap = () => {
 				modalOpen={modalOpen}
 				setModelOpen={setModalOpen}
 				reFetchData={reFetchData}
+			/>
+
+			<Update
+				id={id}
+				reFetchData={reFetchData}
+				modalOpen={updateOpen}
+				setModalOpen={setUpdateOpen}
 			/>
 		</div>
 	);
