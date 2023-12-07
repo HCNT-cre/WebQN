@@ -177,6 +177,7 @@ const Update = ({ reFetchData, id }) => {
 				name: data.name,
 				date: data.date,
 				organ: data.organ,
+				state: data.state,
 			});
 		};
 		getPlan();
