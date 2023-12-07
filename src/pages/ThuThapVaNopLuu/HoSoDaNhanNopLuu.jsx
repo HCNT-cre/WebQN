@@ -30,6 +30,7 @@ const HoSoDaNhanNopLuu = () => {
       addNewFile={false}
       filter={filter}
       eOffice={false}
+      XepVaoKho={true}
       haveActionButton={false}
     />
   );

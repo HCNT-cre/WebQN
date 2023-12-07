@@ -29,6 +29,7 @@ const DuyetHoSoNopLuu = () => {
         isCheckBox={false}
         buttonFuctions={<ButtonFuctions />}
         eOffice={false}
+        haveActionButton={false}
     />
 }
 

@@ -341,7 +341,9 @@ const BasePage = ({
 	eOffice = true,
 	currentStateModal = ENUM_STATE_FILE.NOP_LUU_CO_QUAN,
 	currentTab = null,
-	haveActionButton = true
+	haveActionButton = true,
+	XepVaoKho =false,
+	BMCL_GuiDuyetHoSo = false,
 }) => {
 	const dispatch = useDispatch();
 	const [modalOpen, setModalOpen] = useState(false);
@@ -620,7 +622,13 @@ const BasePage = ({
 		else setFieldsTable(fieldsTableCustom);
 	}, [fieldsTableCustom]);
 
-
+	
+	const handleBMCL_GuiDuyetHoSo = () =>{
+		notifySuccess("Gửi duyệt hồ sơ thành công");
+	}
+	const handleXepVaoKho =() =>{
+		notifySuccess("Gửi duyệt xếp vào kho thành công");
+	}
 	const handleExportDocToExcel = () => {
 		const getExcel = async () => {
 			const response = await axiosHttpService.post(API_EXPORT_EXCEL, {
@@ -813,6 +821,28 @@ const BasePage = ({
 									</div>
 								);
 							})}
+							{BMCL_GuiDuyetHoSo && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+								<Button
+									onClick={() => { handleBMCL_GuiDuyetHoSo() }}
+									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center"
+								>
+									<div className="mr-[8px]">
+										<i className="fa-solid fa-file-export"></i>
+									</div>
+									Gửi duyệt hồ sơ
+								</Button>
+							</div>}
+							{XepVaoKho && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+								<Button
+									onClick= {()=> handleXepVaoKho()}
+									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[70px] py-[1px] text-[12px] text-white items-center"
+								>
+									<div className="mr-[8px]">
+										<i className="fa-solid fa-warehouse"></i>
+									</div>
+									Duyệt xếp vào kho
+								</Button>
+							</div>}
 							{haveActionButton &&
 								<div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  relative">
 									<Button

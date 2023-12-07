@@ -33,6 +33,8 @@ const BienMucHoSo = () => {
             filter={filter}
             apiPlan={API_DOCUMENT_MODIFICATION_PLAN}
             eOffice={false}
+            haveActionButton={false}
+            BMCL_GuiDuyetHoSo={true}
         />
     );
 };

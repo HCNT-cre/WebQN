@@ -63,6 +63,7 @@ const PheDuyetLuuKho = () => {
         isCheckBox={false}
         buttonFuctions={<ButtonFuctions />}
         currentStateModal={ENUM_STATE_BMCL.BMCL_PHE_DUYET_LUU_KHO}
+        haveActionButton={false}
         eOffice={false} />
 }
 
