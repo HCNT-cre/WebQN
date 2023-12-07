@@ -59,7 +59,8 @@ const KhoLuuTruCoQuan = () => {
     }
 
 
-    const filter = useCallback((files) => {
+    // const filter = useCallback((files) => {
+    const filter = (files) => {
         if (!allOrganStorageFiles.length) return files
         const existFiles = {}
         const newFiles = []
@@ -74,7 +75,8 @@ const KhoLuuTruCoQuan = () => {
             }
         }
         return newFiles
-    }, [allOrganStorageFiles]);
+    }
+    // }, [allOrganStorageFiles]);
 
 
     return <BasePage parent={parent} current={current} filter={filter} fieldsTableCustom={FIELDS_TABLE} />

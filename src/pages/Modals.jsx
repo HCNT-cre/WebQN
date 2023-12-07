@@ -300,6 +300,9 @@ export const ModalConfirmLuuTruCoQuan = () => {
             }
         }
 
+        await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [
+            { id: IDFile, current_state: 10, new_state: 4 } // CHO_XEP_KHO -> LUU_TRU_CO_QUAN
+        ]);
         await axiosHttpService.post(API_STORAGE_POST_FILE_ORGAN_STORAGE, { ...request, file_id: IDFile })
         dispatch({ type: "close_modal_confirm_luutrucoquan", id: null })
         notifySuccess("Duyệt thành công")
@@ -399,7 +402,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                     />
                 </div>
                 <div className="flex justify-center">
-                    <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
+                    <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Xếp vào kho</Button>
                 </div>
             </Modal>
         </div>
