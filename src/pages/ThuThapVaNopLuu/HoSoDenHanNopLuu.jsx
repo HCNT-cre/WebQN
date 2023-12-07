@@ -1,15 +1,13 @@
 import BasePage from "../BasePage";
 
-import { ENUM_STATE_FILE } from "src/storage/Storage";
-
-const HSdenhannopluuLS = ()=>{
+const HoSoDenHanNopLuu = () => {
     const parent = [
-        {title: "Lưu trữ cơ quan", link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop"},
+        { title: "Thu thập và nộp lưu", link: "/thu-thap-va-nop-luu/thu-thap-ho-so" },
     ]
 
     const current = {
-        link: "/luu-tru-co-quan/ho-so-den-han-nop-luu-lich-su",
-        title: "Hồ sơ đến hạn nộp lưu lịch sử"
+        link: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu",
+        title: "Hồ sơ đến hạn nộp lưu"
     }
 
     const filter = (files) => {
@@ -30,9 +28,9 @@ const HSdenhannopluuLS = ()=>{
         }
 
         for (const file of files) {
-            if (file.end_date === null || file.end_date === undefined || (file.state.props.children !== ENUM_STATE_FILE.LUU_TRU_CO_QUAN || file.maintenance !== "Vĩnh viễn"))
-                continue
-            if (dateDiff(file.end_date) >= 10)
+            if (file.end_date === null || file.end_date === undefined || ( file.state.props.children !== 'Đóng') ) continue
+
+            if (dateDiff(file.end_date) >= 1)
                 newFiles.push(file)
         }
 
@@ -43,4 +41,4 @@ const HSdenhannopluuLS = ()=>{
     return <BasePage parent={parent} current={current} filter={filter} />
 }
 
-export default HSdenhannopluuLS;
+export default HoSoDenHanNopLuu;

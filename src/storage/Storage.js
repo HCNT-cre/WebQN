@@ -82,6 +82,16 @@ export const TABS_SIDEBAR = [
 				key: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu",
 			},
 			{
+				title: "Hồ sơ nộp lưu bị trả về",
+				to: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
+				key: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
+			},
+			{
+				title: "Hồ sơ đến hạn nộp lưu",
+				to: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu",
+				key: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu",
+			},
+			{
 				title: "Hồ sơ đã nhận nộp lưu",
 				to: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
 				key: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
@@ -181,33 +191,7 @@ export const TABS_SIDEBAR = [
 			}
 		],
 	},
-	{
-		key: "/ho-so/tao-ho-so-dien-tu",
-		isExpand: false,
-		icon: '<i class="fa-regular fa-file"></i>',
-		display: false,
-		type: ["hoso"],
-		title: "Hồ sơ tài liệu",
-		numChildTabs: 3,
-		childTabs: [
-			{
-				title: "Danh sách hồ sơ",
-				to: "/ho-so/tao-ho-so-dien-tu",
-				key: "/ho-so/tao-ho-so-dien-tu",
-			},
-			// { title: "Số hóa hồ sơ tài liệu", to: "/ho-so/so-hoa-ho-so-tai-lieu", key: "/ho-so/so-hoa-ho-so-tai-lieu" },
-			{
-				title: "HS đến hạn nộp lưu",
-				to: "/ho-so/ho-so-den-han-nop-luu",
-				key: "/ho-so/ho-so-den-han-nop-luu",
-			},
-			{
-				title: "Hồ sơ bị trả về",
-				to: "/ho-so/ho-so-bi-tra-ve",
-				key: "/ho-so/ho-so-bi-tra-ve",
-			},
-		],
-	},
+	
 	// {
 	// 	isExpand: false,
 	// 	icon: '<i class="fa-solid fa-check"></i>',
@@ -217,46 +201,7 @@ export const TABS_SIDEBAR = [
 	// 	key: "/duyet-chinh-ly",
 	// 	display: true,
 	// },
-	{
-		isExpand: false,
-		icon: '<i class="fa-solid fa-copy"></i>',
-		title: "Quản lí thông tin khai thác",
-		display: false,
-		type: ["hoso"],
-		numChildTabs: 3,
-		childTabs: [
-			{
-				title: "Tìm kiếm và đăng ký mượn hồ sơ",
-				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
-				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
-			},
-			{
-				title: "Tìm kiếm và đăng ký mượn văn bản",
-				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
-				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
-			},
-			{
-				title: "Giỏ tài liệu",
-				to: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
-				key: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
-			},
-			// {
-			// 	title: "Tìm kiếm nâng cao",
-			// 	to: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
-			// 	key: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
-			// },
-			{
-				title: "Danh sách yêu cầu sao hồ sơ, tài liệu",
-				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
-				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
-			},
-			{
-				title: "Danh sách yêu cầu chứng thực",
-				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
-				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
-			}
-		],
-	},
+	
 	{
 		key: "/luu-tru-co-quan/",
 		isExpand: false,
@@ -360,100 +305,6 @@ export const TABS_SIDEBAR = [
 			},
 		]
 	},
-
-	{
-		key: "/khai-bao-danh-muc/",
-		isExpand: false,
-		icon: '<i class="fa-solid fa-list"></i>',
-		display: false,
-		type: ["coquan", "kho"],
-		title: "Khai báo danh mục",
-		numChildTabs: 3,
-		childTabs: [
-			{
-				icon: '<i class="fa-regular fa-newspaper"></i>',
-				title: "Danh mục cơ quan",
-				to: "/khai-bao-danh-muc/danh-muc-co-quan",
-				key: "/khai-bao-danh-muc/danh-muc-co-quan",
-				display: false,
-				type: ["coquan"],
-			},
-			{
-				icon: '<i class="fa-regular fa-newspaper"></i>',
-				title: "Danh mục phông",
-				to: "/khai-bao-danh-muc/danh-muc-phong",
-				key: "/khai-bao-danh-muc/danh-muc-phong",
-				display: false,
-				type: ["coquan"],
-			},
-			{
-				icon: '<i class="fa-regular fa-newspaper"></i>',
-				title: "Danh mục hồ sơ",
-				to: "/khai-bao-danh-muc/danh-muc-ho-so",
-				key: "/khai-bao-danh-muc/danh-muc-ho-so",
-				display: false,
-				type: ["coquan"],
-			},
-			{
-				icon: '<i class="fa-regular fa-newspaper"></i>',
-				title: "Danh mục ngôn ngữ",
-				to: "/khai-bao-danh-muc/danh-muc-ngon-ngu",
-				key: "/khai-bao-danh-muc/danh-muc-ngon-ngu",
-				display: false,
-				type: ["coquan"],
-			},
-			{
-				icon: '<i class="fa-regular fa-newspaper"></i>',
-				title: "Danh mục thời hạn bảo quản",
-				to: "/khai-bao-danh-muc/danh-muc-thoi-han-bao-quan",
-				key: "/khai-bao-danh-muc/danh-muc-thoi-han-bao-quan",
-				display: false,
-				type: ["coquan"],
-			},
-			{
-				icon: '<i class="fa-regular fa-newspaper"></i>',
-				title: "Danh mục tình trạng vật lý",
-				to: "/khai-bao-danh-muc/danh-muc-tinh-trang-vat-ly",
-				key: "/khai-bao-danh-muc/danh-muc-tinh-trang-vat-ly",
-				display: false,
-				type: ["coquan"],
-			},
-			{
-				title: "Danh mục kho lưu trữ",
-				key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru",
-				isExpand: false,
-				numChildTabs: 3,
-				display: false,
-				type: ["kho"],
-				childTabs: [
-					{
-						title: "Kho",
-						to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho",
-						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho",
-						numChildTabs: 0,
-					},
-					{
-						title: "Phòng kho",
-						to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho",
-						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho",
-						numChildTabs: 0,
-					},
-					{
-						title: "Kệ",
-						to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke",
-						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke",
-						numChildTabs: 0,
-					},
-					{
-						title: "Hộp",
-						to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop",
-						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop",
-						numChildTabs: 0,
-					},
-				],
-			},
-		],
-	},
 	{
 		key: "/tieu-huy-ho-so/",
 		isExpand: false,
@@ -547,8 +398,151 @@ export const TABS_SIDEBAR = [
 	},
 	{
 		isExpand: false,
+		icon: '<i class="fa-solid fa-copy"></i>',
+		title: "Quản lí thông tin khai thác",
+		display: false,
+		type: ["hoso"],
+		numChildTabs: 3,
+		childTabs: [
+			{
+				title: "Tìm kiếm và đăng ký mượn hồ sơ",
+				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
+				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
+			},
+			{
+				title: "Tìm kiếm và đăng ký mượn văn bản",
+				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
+				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
+			},
+			{
+				title: "Giỏ tài liệu",
+				to: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
+				key: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
+			},
+			// {
+			// 	title: "Tìm kiếm nâng cao",
+			// 	to: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
+			// 	key: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
+			// },
+			{
+				title: "Danh sách yêu cầu sao hồ sơ, tài liệu",
+				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
+				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
+			},
+			{
+				title: "Danh sách yêu cầu chứng thực",
+				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
+				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
+			}
+		],
+	},
+	{
+		key: "/khai-bao-danh-muc/",
+		isExpand: false,
+		icon: '<i class="fa-solid fa-list"></i>',
+		display: false,
+		type: ["coquan", "kho"],
+		title: "Khai báo danh mục",
+		numChildTabs: 3,
+		childTabs: [
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Danh mục cơ quan",
+				to: "/khai-bao-danh-muc/danh-muc-co-quan",
+				key: "/khai-bao-danh-muc/danh-muc-co-quan",
+				display: false,
+				type: ["coquan"],
+			},
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Danh mục phông",
+				to: "/khai-bao-danh-muc/danh-muc-phong",
+				key: "/khai-bao-danh-muc/danh-muc-phong",
+				display: false,
+				type: ["coquan"],
+			},
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Danh mục hồ sơ",
+				to: "/khai-bao-danh-muc/danh-muc-ho-so",
+				key: "/khai-bao-danh-muc/danh-muc-ho-so",
+				display: false,
+				type: ["coquan"],
+			},
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Danh mục ngôn ngữ",
+				to: "/khai-bao-danh-muc/danh-muc-ngon-ngu",
+				key: "/khai-bao-danh-muc/danh-muc-ngon-ngu",
+				display: false,
+				type: ["coquan"],
+			},
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Danh mục thời hạn bảo quản",
+				to: "/khai-bao-danh-muc/danh-muc-thoi-han-bao-quan",
+				key: "/khai-bao-danh-muc/danh-muc-thoi-han-bao-quan",
+				display: false,
+				type: ["coquan"],
+			},
+			{
+				icon: '<i class="fa-regular fa-newspaper"></i>',
+				title: "Danh mục tình trạng vật lý",
+				to: "/khai-bao-danh-muc/danh-muc-tinh-trang-vat-ly",
+				key: "/khai-bao-danh-muc/danh-muc-tinh-trang-vat-ly",
+				display: false,
+				type: ["coquan"],
+			},
+			{
+				title: "Danh mục kho lưu trữ",
+				key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru",
+				isExpand: false,
+				numChildTabs: 3,
+				display: false,
+				type: ["kho"],
+				childTabs: [
+					{
+						title: "Kho",
+						to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho",
+						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho",
+						numChildTabs: 0,
+					},
+					{
+						title: "Phòng kho",
+						to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho",
+						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho",
+						numChildTabs: 0,
+					},
+					{
+						title: "Kệ",
+						to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke",
+						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke",
+						numChildTabs: 0,
+					},
+					{
+						title: "Hộp",
+						to: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop",
+						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop",
+						numChildTabs: 0,
+					},
+				],
+			},
+		],
+	},
+	
+	{
+		isExpand: false,
+		icon: '<i class="fa-regular fa-file"></i>',
+		title: "Tìm kiếm nâng cao",
+		numChildTabs: 0,
+		to: "/ho-so/tao-ho-so-dien-tu",
+		key: "/ho-so/tao-ho-so-dien-tu",
+		display: true,
+	},
+	{
+		isExpand: false,
 		icon: '<i class="fa-solid fa-magnifying-glass"></i>',
-		title: "Tra cứu và tìm kiếm",
+		title: "Tìm kiếm hồ sơ",
 		numChildTabs: 0,
 		to: "/tra-cuu-va-tim-kiem",
 		key: "/tra-cuu-va-tim-kiem",

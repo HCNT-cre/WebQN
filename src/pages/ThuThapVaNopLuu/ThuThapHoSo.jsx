@@ -33,7 +33,7 @@ const ThuThapHoSo = () => {
             current={current}
             addNewFile={true}
             filter={filter}
-            eOffice={false}
+            eOffice={true}
         />
     );
 };

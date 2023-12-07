@@ -307,19 +307,18 @@ const DocCategory = ({ eOffice = true }) => {
                   </div>
 
                   <div className="w-[12.5%] text-white text-center px-[5px] flex">
-                    {eOffice && (
+                    
                       <button
                         className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]"
                         onClick={() => setStateEoffice(true)}
                       >
                         <div className="mr-[8px]">
-                          <i className="fa-solid fa-magnifying-glass"></i>
                         </div>
                         Thêm VB từ EOFFICE
                       </button>
-                    )}
-
-                    {!eOffice && (
+                    </div>
+                    <div className="w-[12.5%] text-white text-center px-[5px] flex">
+                    
                       <button
                         className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]"
                         onClick={handleExportExcel}
@@ -329,7 +328,7 @@ const DocCategory = ({ eOffice = true }) => {
                         </div>
                         Xuất Excel
                       </button>
-                    )}
+                    
                   </div>
                 </div>
                 <Table
