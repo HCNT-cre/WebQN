@@ -834,13 +834,13 @@ const BasePage = ({
 							</div>}
 							{XepVaoKho && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
-									onClick= {()=> handleXepVaoKho()}
-									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[70px] py-[1px] text-[12px] text-white items-center"
+									onClick= {()=> handleChangeStateFile(10)} // DA_NHAP_NOP_LUU --> CHO_XEP_KHO
+									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
 								>
 									<div className="mr-[8px]">
 										<i className="fa-solid fa-warehouse"></i>
 									</div>
-									Duyệt xếp vào kho
+									Đẩy vào hàng đợi xếp kho
 								</Button>
 							</div>}
 							{haveActionButton &&

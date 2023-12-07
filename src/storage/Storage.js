@@ -8,6 +8,11 @@ export const STATE = [
 	"Lưu trữ lịch sử",
 	"Nộp lưu cơ quan bị trả về",
 	"Nộp lưu lịch sử bị trả về",
+	"Đã nhận nộp lưu",
+	"Chờ xếp kho",
+	"HSCL tạo mới",
+	"HSCL giao nộp",
+	"HSCL bị trả về",
 ];
 
 export const ENUM_STATE_FILE = {
@@ -20,6 +25,11 @@ export const ENUM_STATE_FILE = {
 	LUU_TRU_LICH_SU: "Lưu trữ lịch sử",
 	NOP_LUU_CO_QUAN_BI_TRA_VE: "Nộp lưu cơ quan bị trả về",
 	NOP_LUU_LICH_SU_BI_TRA_VE: "Nộp lưu lịch sử bị trả về",
+	DA_NHAN_NOP_LUU: "Đã nhận nộp lưu",
+	CHO_XEP_KHO: "Chờ xếp kho",
+	HSCL_TAO_MOI: "HSCL tạo mới",
+	HSCL_GIAO_NOP: "HSCL giao nộp",
+	HSCL_BI_TRA_VE: "HSCL bị trả về",
 };
 
 export const ENUM_STATE_BMCL = {

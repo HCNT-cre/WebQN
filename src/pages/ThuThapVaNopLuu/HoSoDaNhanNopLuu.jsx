@@ -17,7 +17,7 @@ const HoSoDaNhanNopLuu = () => {
   const filter = (files) => {
     const newFiles = [];
     for (const file of files) {
-      if (file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN)
+      if (file.state.props.children === ENUM_STATE_FILE.DA_NHAN_NOP_LUU)
         newFiles.push(file);
     }
     return newFiles;

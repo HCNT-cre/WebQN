@@ -42,6 +42,8 @@ const ConvertDataToArrayForRenderTableCell = (table) => {
                         color = "bg-pink-500";
                     } else if (row[key].props.children === "Nộp lưu lịch sử bị trả về") {
                         color = "bg-orange-500";
+                    } else if (row[key].props.children === "Đã nhận nộp lưu") {
+                        color = "bg-emerald-500";
                     }
 
 

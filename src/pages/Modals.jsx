@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { OpenFile } from "../actions/formFile";
 import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../custom/Function";
+import { ENUM_STATE_BMCL, ENUM_STATE_FILE, STATE } from "../storage/Storage";
+import { current } from "@reduxjs/toolkit";
 
 const API_GOV_FILE_UPDATE_STATE = import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE
 const API_STORAGE_GET_SHELF_ALL = import.meta.env.VITE_API_STORAGE_GET_SHELF_ALL
@@ -74,10 +76,36 @@ export const ModalCensorship = () => {
         dispatch({ type: "open", id: IDFile })
     }
 
+    const getNextState = (current_state) => {
+        if (STATE[current_state] === ENUM_STATE_FILE.NOP_LUU_CO_QUAN) {
+            return 9; // DA_NHAN_NOP_LUU
+        }
+        if (STATE[current_state] === ENUM_STATE_FILE.NOP_LUU_LICH_SU) {
+            return 6; // LUU_TRU_LICH_SU
+        }
+        if (STATE[current_state] === ENUM_STATE_FILE.HSCL_GIAO_NOP) {
+            return 10; // CHO_XEP_KHO
+        }
+        return current_state + 1;
+    }
+
+    const getRejectState = (current_state) => {
+        if (STATE[current_state] === ENUM_STATE_FILE.NOP_LUU_CO_QUAN) {
+            return 7; // NOP_LUU_CO_QUAN_BI_TRA_VE
+        }
+        if (STATE[current_state] === ENUM_STATE_FILE.NOP_LUU_LICH_SU) {
+            return 8; // NOP_LUU_LICH_SU_BI_TRA_VE
+        }
+        if (STATE[current_state] === ENUM_STATE_FILE.HSCL_GIAO_NOP) {
+            return 13; // HSCL_GIAO_NOP_BI_TRA_VE
+        }
+        return current_state - 1;
+    }
+
     const handleClickApprove = async () => {
         await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
             id: IDFile, current_state: current_state,
-            new_state: current_state + 1
+            new_state: getNextState(current_state)
         }])
         notifySuccess("Duyệt thành công")
         reFetchFile()
@@ -86,7 +114,7 @@ export const ModalCensorship = () => {
 
     const handleClickReject = () => {
         axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [
-            { id: IDFile, current_state: current_state, new_state: current_state === 3 ? 7 : 8 }])
+            { id: IDFile, current_state: current_state, new_state: getRejectState(current_state) }]) // TODO
         notifySuccess("Đã trả về hồ sơ")
         dispatch({ type: "close_modal_confirm_nopluucoquan", id: null })
 
