@@ -181,6 +181,22 @@ const Update = ({ reFetchData, id }) => {
 		};
 		getPlan();
 	}, [id]);
+	const [organ, setOrgan] = useState([]);
+
+	useEffect(() => {
+		const getOrgan = async () => {
+			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
+			const _ = data.map((item) => {
+				return {
+					label: item.name,
+					value: item.name,
+				};
+			});
+			setOrgan(_);
+		};
+
+		getOrgan();
+	}, []);
 
 	const handleChangeRequest = (name, value) => {
 		return setRequest({
@@ -234,13 +250,13 @@ const Update = ({ reFetchData, id }) => {
 					/>
 				</div>
 				<div className="flex justify-between py-[12px]">
-					<span>Cơ quan / Đơn vị</span>
-					<Input
+					<span>Cơ quan / Đơn vị </span>
+					<Select
 						name="organ"
-						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
-						type="text"
+						onChange={(value) => handleChangeRequest("organ", value)}
 						className="w-[70%]"
 						value={request["organ"]}
+						options={organ}
 					/>
 				</div>
 			</Modal>

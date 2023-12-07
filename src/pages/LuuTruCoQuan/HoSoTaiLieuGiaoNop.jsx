@@ -17,7 +17,7 @@ const HoSoTaiLieuGiaoNop = () => {
         const newFiles = []
         console.log(files)
         for (const file of files) {
-            if (file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN)
+            if (file.state.props.children === ENUM_STATE_FILE.NOP_LUU_CO_QUAN)
                 newFiles.push(file)
         }
         return newFiles

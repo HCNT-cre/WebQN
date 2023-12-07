@@ -2,15 +2,15 @@ import BasePage from "../BasePage";
 
 const AddFile = ()=>{
     const parent = [
-        {title: "Hồ sơ tài liệu", link: "/ho-so/tao-ho-so-dien-tu"},
+        {title: "Tìm kiếm nâng cao", link: "/ho-so/tao-ho-so-dien-tu"},
     ]
 
     const current = {
         link: "/ho-so/tao-ho-so-dien-tu",
-        title: "Danh sách hồ sơ"
+        title: "Tìm kiếm nâng cao"
     }
 
-    return <BasePage parent={parent} current={current} addNewFile={true}/>
+    return <BasePage parent={parent} current={current} addNewFile={false} />
 }
 
 export default AddFile;

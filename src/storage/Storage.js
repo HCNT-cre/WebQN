@@ -201,46 +201,7 @@ export const TABS_SIDEBAR = [
 	// 	key: "/duyet-chinh-ly",
 	// 	display: true,
 	// },
-	{
-		isExpand: false,
-		icon: '<i class="fa-solid fa-copy"></i>',
-		title: "Quản lí thông tin khai thác",
-		display: false,
-		type: ["hoso"],
-		numChildTabs: 3,
-		childTabs: [
-			{
-				title: "Tìm kiếm và đăng ký mượn hồ sơ",
-				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
-				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
-			},
-			{
-				title: "Tìm kiếm và đăng ký mượn văn bản",
-				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
-				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
-			},
-			{
-				title: "Giỏ tài liệu",
-				to: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
-				key: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
-			},
-			// {
-			// 	title: "Tìm kiếm nâng cao",
-			// 	to: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
-			// 	key: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
-			// },
-			{
-				title: "Danh sách yêu cầu sao hồ sơ, tài liệu",
-				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
-				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
-			},
-			{
-				title: "Danh sách yêu cầu chứng thực",
-				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
-				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
-			}
-		],
-	},
+	
 	{
 		key: "/luu-tru-co-quan/",
 		isExpand: false,
@@ -433,6 +394,46 @@ export const TABS_SIDEBAR = [
 					}
 				],
 			},
+		],
+	},
+	{
+		isExpand: false,
+		icon: '<i class="fa-solid fa-copy"></i>',
+		title: "Quản lí thông tin khai thác",
+		display: false,
+		type: ["hoso"],
+		numChildTabs: 3,
+		childTabs: [
+			{
+				title: "Tìm kiếm và đăng ký mượn hồ sơ",
+				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
+				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
+			},
+			{
+				title: "Tìm kiếm và đăng ký mượn văn bản",
+				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
+				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
+			},
+			{
+				title: "Giỏ tài liệu",
+				to: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
+				key: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
+			},
+			// {
+			// 	title: "Tìm kiếm nâng cao",
+			// 	to: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
+			// 	key: "/quan-li-thong-tin-khai-thac/tim-kiem-nang-cao",
+			// },
+			{
+				title: "Danh sách yêu cầu sao hồ sơ, tài liệu",
+				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
+				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
+			},
+			{
+				title: "Danh sách yêu cầu chứng thực",
+				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
+				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
+			}
 		],
 	},
 	{

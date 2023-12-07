@@ -27,7 +27,7 @@ const HoSoDaNhanNopLuu = () => {
     <BasePage
       parent={parent}
       current={current}
-      addNewFile={true}
+      addNewFile={false}
       filter={filter}
       eOffice={false}
     />

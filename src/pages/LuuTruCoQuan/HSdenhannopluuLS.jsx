@@ -1,5 +1,7 @@
 import BasePage from "../BasePage";
 
+import { ENUM_STATE_FILE } from "src/storage/Storage";
+
 const HSdenhannopluuLS = ()=>{
     const parent = [
         {title: "Lưu trữ cơ quan", link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop"},
@@ -28,7 +30,7 @@ const HSdenhannopluuLS = ()=>{
         }
 
         for (const file of files) {
-            if (file.end_date === null || file.end_date === undefined || (file.state.props.children !== 'Lưu trữ cơ quan' || file.maintenance !== "Vĩnh viễn"))
+            if (file.end_date === null || file.end_date === undefined || (file.state.props.children !== ENUM_STATE_FILE.LUU_TRU_CO_QUAN || file.maintenance !== "Vĩnh viễn"))
                 continue
             if (dateDiff(file.end_date) >= 10)
                 newFiles.push(file)
