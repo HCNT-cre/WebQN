@@ -34,7 +34,8 @@ const PheDuyetLuuKho = () => {
         title: "Phê duyệt lưu kho"
     }
 
-    const filter = useCallback((files) => {
+    // const filter = useCallback((files) => {
+    const filter = (files) => {
         if (fileIds === null || fileIdsAdded === null) return files
         const existFiles = {}
         const newFiles = []
@@ -51,7 +52,8 @@ const PheDuyetLuuKho = () => {
             }
         }
         return newFiles
-    }, [fileIds]);
+    };
+    // }, [fileIds]);
 
 
     return <BasePage
