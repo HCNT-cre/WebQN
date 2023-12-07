@@ -82,6 +82,7 @@ import TaoHoSoTTHC from "./pages/LuuTruToChucCaNhan/TaoHoSoTTHC";
 import DuyetHoSoTTHC from "./pages/LuuTruToChucCaNhan/DuyetHoSoTTHC";
 import HoSoTTHCBiTuChoi from "./pages/LuuTruToChucCaNhan/HoSoTTHCBiTuChoi";
 import KhoHoSoTTHC from "./pages/LuuTruToChucCaNhan/KhoHoSoTTHC";
+import HoSoChinhLyBiTraVe from "./pages/BienMucChinhLy/HoSoChinhLyBiTraVe";
 import HoSoDenHanNopLuu from "./pages/ThuThapVaNopLuu/HoSoDenHanNopLuu";
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
@@ -407,6 +408,10 @@ const App = () => {
         {
             path: "/bien-muc-chinh-ly/duyet-ke-hoach-chinh-ly",
             element: <DuyetKeHoachChinhLy />
+        },
+        {
+            path: "/bien-muc-chinh-ly/ho-so-chinh-ly-bi-tra-ve",
+            element: <HoSoChinhLyBiTraVe />
         },
         {
             path: "/bien-muc-chinh-ly/ke-hoach-chinh-ly-bi-tu-choi",

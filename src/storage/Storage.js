@@ -55,21 +55,21 @@ export const TABS_SIDEBAR = [
 				key: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 			},
 
-			{
-				title: "Phê duyệt kế hoạch thu thập",
-				to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
-				key: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
-			},
-			{
-				title: "Kế hoạch thu thập bị từ chối",
-				to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
-				key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
-			},
-			{
-				title:"Kế hoạch thu thập được phê duyệt",
-				to:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
-				key:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
-			},
+			// {
+			// 	title: "Phê duyệt kế hoạch thu thập",
+			// 	to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+			// 	key: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+			// },
+			// {
+			// 	title: "Kế hoạch thu thập bị từ chối",
+			// 	to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+			// 	key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+			// },
+			// {
+			// 	title:"Kế hoạch thu thập được phê duyệt",
+			// 	to:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
+			// 	key:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
+			// },
 			{
 				title: "Thu thập hồ sơ",
 				to: "/thu-thap-va-nop-luu/thu-thap-ho-so",
@@ -132,6 +132,11 @@ export const TABS_SIDEBAR = [
 				title: "Phê duyệt lưu kho",
 				to: "/bien-muc-chinh-ly/phe-duyet-luu-kho",
 				key: "/bien-muc-chinh-ly/phe-duyet-luu-kho",
+			},
+			{
+				title: "Hồ sơ chỉnh lý bị trả về",
+				to: "/bien-muc-chinh-ly/ho-so-chinh-ly-bi-tra-ve",
+				key: "/bien-muc-chinh-ly/ho-so-chinh-ly-bi-tra-ve",
 			},
 			{
 				title: "Biên mục bổ sung",
@@ -247,16 +252,16 @@ export const TABS_SIDEBAR = [
 				to: "/luu-tru-lich-su/tao-ke-hoach-nop-luu-lich-su",
 				key: "/luu-tru-lich-su/tao-ke-hoach-nop-luu-lich-su",
 			},
-			{
-				title: "Phê duyệt kế hoạch lưu trữ lịch sử",
-				to: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
-				key: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
-			},
-			{
-				title: "Kế hoạch lưu trữ lịch sử bị từ chối",
-				to: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
-				key: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
-			},
+			// {
+			// 	title: "Phê duyệt kế hoạch lưu trữ lịch sử",
+			// 	to: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
+			// 	key: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
+			// },
+			// {
+			// 	title: "Kế hoạch lưu trữ lịch sử bị từ chối",
+			// 	to: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
+			// 	key: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
+			// },
 			{
 				title: "Hồ sơ tài liệu giao nộp",
 				to: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop",

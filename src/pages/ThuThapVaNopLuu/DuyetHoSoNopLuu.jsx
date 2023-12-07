@@ -4,12 +4,14 @@ import ButtonFuctions from "src/pages/LuuTruCoQuan/Button";
 
 const DuyetHoSoNopLuu = () => {
     const parent = [
-        { title: "Lưu trữ cơ quan", link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop" },
+        { title: "Thu thập và nộp lưu",
+        link: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
+    },
     ]
 
     const current = {
-        link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
-        title: "Hồ sơ tài liệu giao nộp"
+        link: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu",
+        title: "Duyệt hồ sơ nộp lưu"
     }
 
     const filter = (files) => {
