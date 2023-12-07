@@ -9,7 +9,7 @@ const parent = [
 
 const current = {
     link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
-    title: "Hồ sơ tài liệu giao nộp"
+    title: "Hồ sơ tài liệu giao nộp (chờ xếp kho)"
 }
 
 const HoSoTaiLieuGiaoNop = () => {
@@ -17,7 +17,7 @@ const HoSoTaiLieuGiaoNop = () => {
         const newFiles = []
         console.log(files)
         for (const file of files) {
-            if (file.state.props.children === ENUM_STATE_FILE.NOP_LUU_CO_QUAN)
+            if (file.state.props.children === ENUM_STATE_FILE.CHO_XEP_KHO)
                 newFiles.push(file)
         }
         return newFiles

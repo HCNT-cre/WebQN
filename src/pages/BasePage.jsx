@@ -834,7 +834,7 @@ const BasePage = ({
 							</div>}
 							{XepVaoKho && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
-									onClick= {()=> handleChangeStateFile(10)} // DA_NHAP_NOP_LUU --> CHO_XEP_KHO
+									onClick= {()=> handleChangeStateFile({"current_state": 9, "new_state": 10})} // DA_NHAP_NOP_LUU --> CHO_XEP_KHO
 									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
 								>
 									<div className="mr-[8px]">
