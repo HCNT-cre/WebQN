@@ -25,6 +25,14 @@ const APPLICANT = {
                 current_state: 2,
                 new_state: 3
             }
+        },
+        {
+            permission_title: "Nộp lưu lịch sử",
+            icon_class: "fa-solid fa-book mr-2",
+            update_state: {
+                current_state: 4,
+                new_state: 5
+            }
         }
     ]
 }

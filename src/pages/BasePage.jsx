@@ -800,7 +800,7 @@ const BasePage = ({
 										{
 											value: 6,
 											label: "Lưu trữ lịch sử",
-										},
+										}, // TODO: add 7 -> 13
 									]}
 								/>
 							</div>

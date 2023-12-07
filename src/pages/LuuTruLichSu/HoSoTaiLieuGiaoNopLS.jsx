@@ -8,7 +8,7 @@ const HoSoTaiLieuGiaoNopLS = () => {
 
     const current = {
         link: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop",
-        title: "Hồ sơ tài liệu giao nộp"
+        title: "Hồ sơ tài liệu giao nộp (Lịch sử)"
     }
 
     const filter = (files) => {
@@ -29,10 +29,11 @@ const HoSoTaiLieuGiaoNopLS = () => {
         }
 
         for (const file of files) {
-            if (file.end_date === null || file.end_date === undefined || (file.state.props.children !== 'Nộp lưu lịch sử' || file.maintenance !== "Vĩnh viễn"))
-                continue
-            if (dateDiff(file.end_date) >= 10)
-                newFiles.push(file)
+            if (file.state.props.children !== 'Nộp lưu lịch sử') continue;
+            // if (file.end_date === null || file.end_date === undefined || (file.state.props.children !== 'Nộp lưu lịch sử' || file.maintenance !== "Vĩnh viễn"))
+            //     continue
+            // if (dateDiff(file.end_date) >= 10)
+            newFiles.push(file)
         }
 
         return newFiles
