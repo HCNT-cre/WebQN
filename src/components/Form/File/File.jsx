@@ -151,7 +151,7 @@ const File = ({
         file_catalog: null,
         file_notation: null,
         title: null,
-        maintenance: "5 năm",
+        maintenance: "Vĩnh viễn",
         language: "Tiếng Việt",
         start_date: null,
         end_date: null,
@@ -173,7 +173,7 @@ const File = ({
             updatedRequest['identifier'] = "Trung tâm Lưu trữ lịch sử"
             updatedRequest['rights'] = "Công Khai"
             updatedRequest['organ_id'] = "Phông trung tâm Lưu trữ lịch sử"
-            updatedRequest['maintenance'] = "5 năm"
+            updatedRequest['maintenance'] = "Vĩnh viễn"
             updatedRequest['language'] = "Tiếng Việt"
             updatedRequest['format'] = "Bình thường"
             setRequest(prev => updatedRequest)

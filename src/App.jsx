@@ -125,6 +125,10 @@ const getLanguages = async () => {
 const getMaintance = async () => {
     const res = await axiosHttpService.get(import.meta.env.VITE_API_STORAGE_DURATION);
     const maintance = res.data.map((item) => {
+        if (item.duration === "Vĩnh viễn") return {
+            label: item.duration,
+            value: item.duration
+        }
         return {
             label: item.duration + " năm",
             value: item.duration + " năm"
