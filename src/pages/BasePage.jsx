@@ -341,6 +341,7 @@ const BasePage = ({
 	eOffice = true,
 	currentStateModal = ENUM_STATE_FILE.NOP_LUU_CO_QUAN,
 	currentTab = null,
+	haveActionButton = true
 }) => {
 	const dispatch = useDispatch();
 	const [modalOpen, setModalOpen] = useState(false);
@@ -812,43 +813,44 @@ const BasePage = ({
 									</div>
 								);
 							})}
-
-							<div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  relative">
-								<Button
-									disabled={!(stateCheckBox.length > 0)}
-									onClick={toggleContent}
-									ref={buttonRef}
-									className=" disabled:opacity-30 rounded-[5px] flex justify-center items-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] custom-btn-show-action "
-								>
-									Hành động
-									<div className="ml-[4px]">
-										<i className="fa-solid fa-chevron-down"></i>
-									</div>
-								</Button>
-
-								{showContent && (
-									<div
-										ref={(el) => {
-											contentRef.current[0] = el;
-										}}
-										className="rounded-[5px]  text-left top-[40px] absolute bg-purple-400 w-full text-[14px] z-10"
+							{haveActionButton &&
+								<div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px]  relative">
+									<Button
+										disabled={!(stateCheckBox.length > 0)}
+										onClick={toggleContent}
+										ref={buttonRef}
+										className=" disabled:opacity-30 rounded-[5px] flex justify-center items-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] custom-btn-show-action "
 									>
-										{userPermissions.map((permission, index) => {
-											return (
-												<button
-													className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-black font-medium border-none truncate"
-													onClick={() =>
-														handleChangeStateFile(permission.update_state)
-													}
-												>
-													<i className={permission.icon_class}></i>
-													{permission.permission_title}
-												</button>
-											);
-										})}
-									</div>
-								)}
-							</div>
+										Hành động
+										<div className="ml-[4px]">
+											<i className="fa-solid fa-chevron-down"></i>
+										</div>
+									</Button>
+
+									{showContent && (
+										<div
+											ref={(el) => {
+												contentRef.current[0] = el;
+											}}
+											className="rounded-[5px]  text-left top-[40px] absolute bg-purple-400 w-full text-[14px] z-10"
+										>
+											{userPermissions.map((permission, index) => {
+												return (
+													<button
+														className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-black font-medium border-none truncate"
+														onClick={() =>
+															handleChangeStateFile(permission.update_state)
+														}
+													>
+														<i className={permission.icon_class}></i>
+														{permission.permission_title}
+													</button>
+												);
+											})}
+										</div>
+									)}
+								</div>
+							}
 						</div>
 						<Table
 							setStateCheckBox={setStateCheckBox}
