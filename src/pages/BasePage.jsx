@@ -621,14 +621,6 @@ const BasePage = ({
 		if (fieldsTableCustom === null) setFieldsTable(FIELDS_TABLE);
 		else setFieldsTable(fieldsTableCustom);
 	}, [fieldsTableCustom]);
-
-	
-	const handleBMCL_GuiDuyetHoSo = () =>{
-		notifySuccess("Gửi duyệt hồ sơ thành công");
-	}
-	const handleXepVaoKho =() =>{
-		notifySuccess("Gửi duyệt xếp vào kho thành công");
-	}
 	const handleExportDocToExcel = () => {
 		const getExcel = async () => {
 			const response = await axiosHttpService.post(API_EXPORT_EXCEL, {

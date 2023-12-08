@@ -300,7 +300,7 @@ const KeHoachChinhLy = () => {
 	const reFetchData = async () => {
 		setIsLoading(true);
 		const res = await axiosHttpService.get(`${API_DOCUMENT_MODIFICATION_PLAN}`);
-		const rawDatas = res.data;
+		const rawDatas = res.data.reverse();
 		const plan = [];
 		for (const rawData of rawDatas) {
 			const row = {
