@@ -75,7 +75,7 @@ const KhoLuuTruLichSu = () => {
         return newFiles
     }, [allOrganStorageFiles]);
 
-    return <BasePage parent={parent} current={current} filter={filter} fieldsTableCustom={FIELDS_TABLE} />
+    return <BasePage parent={parent} current={current} filter={filter} fieldsTableCustom={FIELDS_TABLE} haveActionButton={false} />
 
 }
 
