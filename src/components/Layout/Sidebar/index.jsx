@@ -21,7 +21,7 @@ const SideBar = ({ sideBarWidth }) => {
         if (userID === "0") {
             const newSidebarTabs = structuredClone(TABS_SIDEBAR);
             for (const tab of newSidebarTabs) {
-                tab.display = true
+                tab.display = true 
                 if (tab.numChildTabs > 0) {
                     for (const child of tab.childTabs) {
                         if (!child.type) continue
