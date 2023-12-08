@@ -19,7 +19,7 @@ const BienMucHoSo = () => {
     const filter = (files) => {
         const newFiles = []
         for (const file of files) {
-            if (file.state.props.children === ENUM_STATE_FILE.NOP_LUU_CO_QUAN)
+            if (file.state.props.children === ENUM_STATE_FILE.HSCL_TAO_MOI)
                 newFiles.push(file)
         }
         return newFiles

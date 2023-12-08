@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axiosHttpService from "src/utils/httpService";
+
+import { Link, useLocation } from "react-router-dom"
 import { useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector, } from "react-redux";
@@ -11,11 +13,14 @@ import { FirstLower, notifyError, notifySuccess } from "../../../custom/Function
 const API_GOV_FILE_CREATE = import.meta.env.VITE_API_GOV_FILE_CREATE
 const API_GOV_FILE_GET = import.meta.env.VITE_API_GOV_FILE_GET
 const API_GOV_FILE_UPDATE = import.meta.env.VITE_API_GOV_FILE_UPDATE
+const API_UPDATE_STATE_GOV_FILE =
+	import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE;
 
 const File = ({
     reset,
-    currentTab = null
 }) => {
+    const location = useLocation();
+    const [currentTab, setCurrentTab] = useState(location.pathname.toLocaleLowerCase());
     const userPermissionId = useSelector(state => state.user.permission_id)
     const stateForm = useSelector((state) => state.formFile.state)
     const fileID = useSelector((state) => state.formFile.id)
@@ -23,7 +28,7 @@ const File = ({
     const format = useSelector((state) => state.format.format)
     const maintance = useSelector((state) => state.maintance.maintance)
     const organId = useSelector((state) => state.organId.organId)
-
+    const [idFileCreate, setIdFileCreate] = useState(null);
 
     const FIELDS_LEFT = [
         {
@@ -215,18 +220,35 @@ const File = ({
                 return
             }
         }
+        const handleChangeStateFile = async (id) => {
+            console.log("bmcl id file: ", id);
+            const bmclFile = {
+                current_state: 1,
+                new_state: 11,
+                id: id,
+                perm_token: userPermissionId,
+
+            }
+            const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, [bmclFile]);
+            console.log(response);
+            
+            window.location.reload();
+        };
 
         const gov_file_code = IDENTIFIER_CODE[request["identifier"]] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
 
         const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : API_GOV_FILE_UPDATE
 
+        
         try {
             const response = await axiosHttpService.post(API, { ...request, gov_file_code: gov_file_code, perm_token: userPermissionId })
             console.log(response)
             const error_code = response.data.error_code
+            console.log(error_code);
+            console.log(error_code === undefined);
             if (error_code === undefined) {
-                if (currentTab === "BIEN_MUC_CHINH_LY_BIEN_MUC_HO_SO") {
-                    
+                if (currentTab === "/bien-muc-chinh-ly/bien-muc-ho-so") {
+                    handleChangeStateFile(response.data.id);
                 }
                 notifySuccess(title + ' thành công');
                 setRequest((prev) => {

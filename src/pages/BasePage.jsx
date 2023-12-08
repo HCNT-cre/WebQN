@@ -823,7 +823,7 @@ const BasePage = ({
 							})}
 							{BMCL_GuiDuyetHoSo && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
-									onClick={() => { handleBMCL_GuiDuyetHoSo() }}
+									onClick={() => handleChangeStateFile({"current_state": 11, "new_state": 12})}
 									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center"
 								>
 									<div className="mr-[8px]">

@@ -35,24 +35,14 @@ const PheDuyetLuuKho = () => {
     }
 
     // const filter = useCallback((files) => {
-    const filter = (files) => {
-        if (fileIds === null || fileIdsAdded === null) return files
-        const existFiles = {}
-        const newFiles = []
-        for (const file of files) {
-            if (file.state.props.children === ENUM_STATE_FILE.NOP_LUU_CO_QUAN) {
-                const id = file.id
-                const existInAdded = fileIdsAdded.find((item) => item.idFile === id)
-                const existInReject = fileIds.find((item) => item.idFile === id)
-
-                if (!existFiles[id] && existInAdded === undefined && existInReject === undefined) {
+        const filter = (files) => {
+            const newFiles = []
+            for (const file of files) {
+                if (file.state.props.children === ENUM_STATE_FILE.HSCL_GIAO_NOP)
                     newFiles.push(file)
-                    existFiles[id] = true
-                }
             }
+            return newFiles
         }
-        return newFiles
-    };
     // }, [fileIds]);
 
 

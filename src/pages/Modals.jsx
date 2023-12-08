@@ -158,7 +158,7 @@ export const ModalCensorship = () => {
                     </div>
                 </div>
                 <div className="flex justify-center">
-                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
+                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt KKK</Button>
                     <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
                 </div>
             </Modal>
@@ -448,11 +448,24 @@ export const ModalModificationDocumentConfirmStore = () => {
         dispatch({ type: "open", id: IDFile })
     }
 
+    const getNextState = (current_state) => {
+        if (STATE[current_state] === ENUM_STATE_FILE.NOP_LUU_CO_QUAN) {
+            return 9; // DA_NHAN_NOP_LUU
+        }
+        if (STATE[current_state] === ENUM_STATE_FILE.NOP_LUU_LICH_SU) {
+            return 6; // LUU_TRU_LICH_SU
+        }
+        if (STATE[current_state] === ENUM_STATE_FILE.HSCL_GIAO_NOP) {
+            return 10; // CHO_XEP_KHO
+        }
+        return current_state + 1;
+    }
+
     const handleClickApprove = async () => {
         await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
         await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
-            id: IDFile, current_state: 3,
-            new_state: 3 + 1
+            id: IDFile, current_state: 12,
+            new_state: getNextState(12) // HSCL_GIAO_NOP -> CHO_XEP_KHO
         }])
         notifySuccess("Duyệt thành công")
         dispatch({ type: "close_modal_confirm_bmcl_pheduyetluukho", id: null })
@@ -464,6 +477,10 @@ export const ModalModificationDocumentConfirmStore = () => {
 
     const handleClickReject = async () => {
         await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
+        await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
+            id: IDFile, current_state: 12,
+            new_state: 13 // HSCL_GIAO_NOP -> HSCL_BI_TRA_VE
+        }])
         notifySuccess("Đã trả về hồ sơ")
         dispatch({ type: "close_modal_confirm_bmcl_pheduyetluukho", id: null })
         setTimeout(() => {
@@ -506,7 +523,7 @@ export const ModalModificationDocumentConfirmStore = () => {
                     </div>
                 </div>
                 <div className="flex justify-center">
-                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
+                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt tt</Button>
                     <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
                 </div>
             </Modal>
@@ -689,7 +706,7 @@ export const ModalModificationDocumentAddedDocument = () => {
                     </div>
                 </div>
                 <div className="flex justify-center">
-                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
+                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt kk</Button>
                     <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
                 </div>
             </Modal>
