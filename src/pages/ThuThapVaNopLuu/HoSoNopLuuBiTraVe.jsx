@@ -2,7 +2,9 @@ import BasePage from "../BasePage";
 
 const HoSoNopLuuBiTraVe = () => {
     const parent = [
-        { title: "Thu thập và nộp lưu", link: "/thu-thap-va-nop-luu/thu-thap-ho-so" },
+        { title: "Thu thập và nộp lưu",
+          //link: "/thu-thap-va-nop-luu/thu-thap-ho-so"
+         },
     ]
 
     const current = {

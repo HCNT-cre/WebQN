@@ -26,7 +26,9 @@ const PheDuyetLuuKho = () => {
     }, [])
 
     const parent = [
-        { title: "Biên mục chỉnh lý", link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly" },
+        { title: "Biên mục chỉnh lý", 
+        // link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly" 
+    },
     ]
 
     const current = {

@@ -4,7 +4,9 @@ import ButtonFuctions from "src/pages/LuuTruCoQuan/Button";
 import { ENUM_STATE_FILE } from "src/storage/Storage";
 
 const parent = [
-    { title: "Lưu trữ cơ quan", link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop" },
+    { title: "Lưu trữ cơ quan", 
+    // link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop" 
+},
 ]
 
 const current = {

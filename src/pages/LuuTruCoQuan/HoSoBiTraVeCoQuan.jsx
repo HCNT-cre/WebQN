@@ -3,7 +3,9 @@ import BasePage from "../BasePage";
 
 const HoSoBiTraVeCoQuan = () => {
     const parent = [
-        { title: "Lưu trữ cơ quan", link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop" },
+        { title: "Lưu trữ cơ quan", 
+         //link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop" 
+    },
     ]
 
     const current = {

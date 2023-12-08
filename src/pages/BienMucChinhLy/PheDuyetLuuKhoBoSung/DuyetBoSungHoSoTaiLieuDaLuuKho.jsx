@@ -12,11 +12,11 @@ const API_DELETE_PLAN = import.meta.env.VITE_API_DELETE_PLAN
 const parent = [
     {
         title: "Biên mục chỉnh lý",
-        link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
+         //link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
     },
     {
         title: "Phê duyệt lưu kho bổ sung",
-        link: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu",
+       //  link: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu",
     },
 ];
 

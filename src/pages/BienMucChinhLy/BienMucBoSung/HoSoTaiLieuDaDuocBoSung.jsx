@@ -7,8 +7,12 @@ import axiosHttpService from "src/utils/httpService";
 const API_DOCUMENT_MODIFICATION_REJECT_ADDED = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT_ADDED
 
 const parent = [
-    { title: "Biên mục chỉnh lý", link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly" },
-    { title: "Biên mục biên mục bổ sung", link: "http://localhost:5173/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu" },
+    { title: "Biên mục chỉnh lý", 
+     //link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly"
+ },
+    { title: "Biên mục biên mục bổ sung", 
+     //link: "http://localhost:5173/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu" 
+    },
 ]
 
 const current = {

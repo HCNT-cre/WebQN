@@ -22,7 +22,9 @@ export const FIELDS_TABLE = [
 const KhoLuuTruCoQuan = () => {
     const [allOrganStorageFiles, setAllOrganStorageFiles] = useState([])
     const parent = [
-        { title: "Lưu trữ cơ quan", link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop" },
+        { title: "Lưu trữ cơ quan", 
+        // link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop"
+     },
     ]
 
     const current = {

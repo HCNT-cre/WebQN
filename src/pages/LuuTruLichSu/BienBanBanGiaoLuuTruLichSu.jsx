@@ -10,7 +10,9 @@ const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL
 const API_STORE_HISTORY_DELIVERY_RECORDS = import.meta.env.VITE_API_STORE_HISTORY_DELIVERY_RECORDS
 
 const parent =
-    { title: "Lưu trữ lịch sử", link: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap" }
+    { title: "Lưu trữ lịch sử", 
+    // link: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap" 
+}
 
 const current = {
     link: "/thu-thap-va-nop-luu/bien-ban-ban-giao",
