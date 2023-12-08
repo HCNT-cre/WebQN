@@ -32,6 +32,20 @@ export const ENUM_STATE_FILE = {
 	HSCL_BI_TRA_VE: "HSCL bị trả về",
 };
 
+export const ENUM_TYPE_PLAN = {
+	THU_THAP_NOP_LUU: 1,
+	BIEN_MUC_CHINH_LY: 2,
+	QUYET_DINH_TIEU_HUY: 3,
+	NOP_LUU_LICH_SU: 4,
+}
+
+export const ENUM_STATE_PLAN = {
+	TAO_MOI: "Mới lập",
+	CHO_DUYET: "Chờ duyệt",
+	TU_CHOI: "Từ chối",
+	CHAP_NHAN: "Chấp nhận",
+}
+
 export const ENUM_STATE_BMCL = {
 	BMCL_PHE_DUYET_LUU_KHO: "BMCL_PHE_DUYET_LUU_KHO",
 	BMCL_BO_SUNG_HO_SO_TAI_LIEU: "BMCL_BO_SUNG_HO_SO_TAI_LIEU",

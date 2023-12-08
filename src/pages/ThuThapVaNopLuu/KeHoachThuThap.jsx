@@ -3,8 +3,9 @@ import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
+import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
-const API_COLLECTION_PLAN = import.meta.env.VITE_API_COLLECTION_PLAN;
+const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
 const API_STORAGE_GET_ORGAN_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 
@@ -53,11 +54,11 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		fileList.forEach((file) => {
 			formData.append('files[]', file);
 		});
-		request["state"] = "Mới lập";
+		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
 		request["files"] = formData;
-		await axiosHttpService.post(`${API_COLLECTION_PLAN}`, request, {
-			headers: { "Content-Type": "multipart/form-data" }
-		});
+		request["type"] = ENUM_TYPE_PLAN.THU_THAP_NOP_LUU;
+
+		await axiosHttpService.post(`${API_COLLECTION_PLAN}`, request);
 		setTimeout(() => {
 			reFetchData();
 			setRequest({});
@@ -225,6 +226,7 @@ const Update = ({
 	useEffect(() => {
 		const getPlan = async () => {
 			const { data } = await axiosHttpService.get(API_COLLECTION_PLAN + id);
+			console.log(data);
 			setRequest({
 				name: data.name,
 				date: data.date,
@@ -321,6 +323,7 @@ const Update = ({
 		</div>
 	);
 };
+
 const KeHoachThuThap = () => {
 	const [id, setId] = useState(null);
 	const [updateOpen, setUpdateOpen] = useState(false);
@@ -348,7 +351,7 @@ const KeHoachThuThap = () => {
 			btn_class_name: "custom-btn-clear-filter",
 			icon: <i className="fa-solid fa-sync"></i>,
 		},
-		
+
 	];
 
 	const handleClickUpdate = (id) => {
@@ -358,9 +361,10 @@ const KeHoachThuThap = () => {
 
 	const reFetchData = async () => {
 		setIsLoading(true);
+		console.log(API_COLLECTION_PLAN);
 		const res = await axiosHttpService.get(`${API_COLLECTION_PLAN}`);
 		const rawDatas = res.data.reverse();
-		
+
 		const plan = [];
 		for (const rawData of rawDatas) {
 			const row = {
