@@ -1,6 +1,6 @@
 import { Button, Input, Modal, Popconfirm, Select, Upload } from "antd";
 import { Table } from "src/custom/Components/Table";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
@@ -271,7 +271,7 @@ const PheDuyetKeHoachThuThap = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
-
+	const ref = useRef();
 	const reFetchData = async () => {
 		setIsLoading(true);
 		console.log(API_COLLECTION_PLAN);
@@ -282,6 +282,7 @@ const PheDuyetKeHoachThuThap = () => {
 		});
 
 		const plan = [];
+		console.log(rawDatas);
 		for (const rawData of rawDatas) {
 			const row = {
 				id: rawData.id,
@@ -302,15 +303,27 @@ const PheDuyetKeHoachThuThap = () => {
 			};
 			plan.push(row);
 		}
+		ref.current = rawDatas;
 		setPlan(plan);
 		setIsLoading(false);
 	};
 
+
+
 	const handleClickActionPlan = async (id) => {
-		dispatch({
+		const oldState = ref.current.find((item) => Number(item.id) === id);
+		console.log({
+			oldState,
 			type: "open_modal_collect_plan",
-			id: id,
-			reFetchData: reFetchData,
+			id,
+			reFetchData: reFetchData
+		});
+
+		dispatch({
+			oldState,
+			type: "open_modal_collect_plan",
+			id,
+			reFetchData: reFetchData
 		})
 	}
 

@@ -55,9 +55,10 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 			formData.append('files[]', file);
 		});
 		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
-		request["files"] = formData;
+		request["attachment"] = formData;
 		request["type"] = ENUM_TYPE_PLAN.THU_THAP_NOP_LUU;
 
+		console.log(request);
 		await axiosHttpService.post(`${API_COLLECTION_PLAN}`, request);
 		setTimeout(() => {
 			reFetchData();
@@ -333,16 +334,23 @@ const KeHoachThuThap = () => {
 	const [plan, setPlan] = useState([]);
 
 	const handleSendCollectPlan = async () => {
-		console.log(stateCheckBox);
 		const planIds = stateCheckBox.map((item) => {
 			return Number(item.split("checkbox")[1]);
 		})
-
-		planIds.forEach(async (id) => {
-			await axiosHttpService.put(API_COLLECTION_PLAN + id, {
-				state: ENUM_STATE_PLAN.CHO_DUYET
+		
+		console.log(planIds);
+		console.log(plan);
+		plan.forEach(async (pl) => {
+			if (planIds.findIndex((id) => id === pl.id) === -1) return;
+			console.log(pl.name.props.children);
+			await axiosHttpService.put(API_COLLECTION_PLAN + pl.id, {
+				name: pl.name.props.children[1],
+				date: pl.date,
+				organ: pl.organ,
+				state: ENUM_STATE_PLAN.CHO_DUYET,
+				attachment: pl.attachment
 			});
-		})
+		});
 
 		setTimeout(() => {
 			reFetchData();
