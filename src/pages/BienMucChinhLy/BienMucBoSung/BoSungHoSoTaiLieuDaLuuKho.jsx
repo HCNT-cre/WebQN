@@ -6,11 +6,11 @@ const BoSungHoSoTaiLieuDaLuuKho = () => {
     const parent = [
         {
             title: "Biên mục chỉnh lý",
-            link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
+            // link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
         },
         {
             title: "Biên mục bổ sung",
-            link: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu",
+           //  link: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu",
         },
     ];
 

@@ -7,7 +7,7 @@ const DuyetHoSoTTHC = () => {
     const parent = [
         {
             title: "Lưu trữ tổ chức, cá nhân",
-            link: "/kho-luu-tru-to-chuc-ca-nhan/duyet-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+            // link: "/kho-luu-tru-to-chuc-ca-nhan/duyet-ho-so-thuc-hien-thu-tuc-hanh-chinh",
         },
     ];
 

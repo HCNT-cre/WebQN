@@ -2,7 +2,9 @@ import BasePage from "../BasePage";
 import { ENUM_STATE_FILE } from "src/storage/Storage";
 const HoSoDenHanNopLuu = () => {
     const parent = [
-        { title: "Thu thập và nộp lưu", link: "/thu-thap-va-nop-luu/thu-thap-ho-so" },
+        { title: "Thu thập và nộp lưu", 
+         //link: "/thu-thap-va-nop-luu/thu-thap-ho-so" 
+        },
     ]
 
     const current = {

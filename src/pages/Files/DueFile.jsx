@@ -2,7 +2,9 @@ import BasePage from "../BasePage";
 
 const DueFile = () => {
     const parent = [
-        { title: "Hồ sơ tài liệu", link: "/ho-so/ho-so-den-han-nop-luu" },
+        { title: "Hồ sơ tài liệu", 
+        // link: "/ho-so/ho-so-den-han-nop-luu" 
+    },
     ]
 
     const current = {

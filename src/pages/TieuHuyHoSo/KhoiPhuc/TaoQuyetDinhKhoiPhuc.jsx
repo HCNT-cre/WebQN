@@ -9,7 +9,9 @@ const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL
 const API_RESTORE_PLAN = import.meta.env.VITE_API_RESTORE_PLAN
 
 const parent =
-    { title: "Tiêu hủy hồ sơ", link: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh" }
+    { title: "Tiêu hủy hồ sơ", 
+    // link: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh"
+ }
 
 const current = {
     link: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh",

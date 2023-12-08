@@ -2,7 +2,9 @@ import BasePage from "src/pages/BasePage";
 
 const HetThoiHanBaoQuan = ()=>{
     const parent = [
-        {title: "Tiêu Hủy Hồ Sơ / Danh sách hồ sơ chờ tiêu hủy", link: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/het-thoi-han-bao-quan"},
+        {title: "Tiêu Hủy Hồ Sơ / Danh sách hồ sơ chờ tiêu hủy", 
+         //link: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/het-thoi-han-bao-quan"
+        },
     ]
 
     const current = {

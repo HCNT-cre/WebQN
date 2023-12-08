@@ -22,7 +22,9 @@ const KhoLuuTruLichSu = () => {
     const [allOrganStorageFiles, setAllOrganStorageFiles] = useState([])
 
     const parent = [
-        { title: "Lưu trữ lịch sử", link: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop" },
+        { title: "Lưu trữ lịch sử",
+          //link: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop" 
+        },
     ]
 
     const current = {

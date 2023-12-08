@@ -46,7 +46,10 @@ const ConvertDataToArrayForRenderTableCell = (table) => {
                         color = "bg-emerald-500";
                     } else if (row[key].props.children === "Chờ xếp kho") {
                         color = "bg-lime-500";
+                    } else if (row[key].props.children === "HSCL giao nộp") {
+                        color = "bg-indigo-700";
                     }
+                    
 
 
                     data.push(<td className="text-white px-[12px] py-[16px] break-words text-center" >

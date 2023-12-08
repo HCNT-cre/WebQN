@@ -2,7 +2,9 @@ import BasePage from "../BasePage";
 
 const AddFile = ()=>{
     const parent = [
-        {title: "Tìm kiếm nâng cao", link: "/ho-so/tao-ho-so-dien-tu"},
+        {title: "Tìm kiếm nâng cao",
+         // link: "/ho-so/tao-ho-so-dien-tu"
+        },
     ]
 
     const current = {

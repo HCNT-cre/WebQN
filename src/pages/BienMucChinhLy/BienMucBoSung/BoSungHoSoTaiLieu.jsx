@@ -13,7 +13,7 @@ const BoSungHoSoTaiLieu = () => {
     const parent = [
         {
             title: "Biên mục chỉnh lý",
-            link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
+            // link: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
         },
         {
             title: "Biên mục bổ sung",

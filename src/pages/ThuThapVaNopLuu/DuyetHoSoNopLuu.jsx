@@ -5,7 +5,7 @@ import ButtonFuctions from "src/pages/LuuTruCoQuan/Button";
 const DuyetHoSoNopLuu = () => {
     const parent = [
         { title: "Thu thập và nộp lưu",
-        link: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
+        // link: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
     },
     ]
 
