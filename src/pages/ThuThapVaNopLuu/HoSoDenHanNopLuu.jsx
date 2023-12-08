@@ -1,5 +1,5 @@
 import BasePage from "../BasePage";
-
+import { ENUM_STATE_FILE } from "src/storage/Storage";
 const HoSoDenHanNopLuu = () => {
     const parent = [
         { title: "Thu thập và nộp lưu", link: "/thu-thap-va-nop-luu/thu-thap-ho-so" },
@@ -28,7 +28,7 @@ const HoSoDenHanNopLuu = () => {
         }
 
         for (const file of files) {
-            if (file.end_date === null || file.end_date === undefined || ( file.state.props.children !== 'Đóng') ) continue
+            if (file.end_date === null || file.end_date === undefined || ( file.state.props.children !== ENUM_STATE_FILE.DONG) ) continue
 
             if (dateDiff(file.end_date) >= 1)
                 newFiles.push(file)

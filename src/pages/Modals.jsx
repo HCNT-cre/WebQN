@@ -158,7 +158,7 @@ export const ModalCensorship = () => {
                     </div>
                 </div>
                 <div className="flex justify-center">
-                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt KKK</Button>
+                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
                     <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
                 </div>
             </Modal>
@@ -523,7 +523,7 @@ export const ModalModificationDocumentConfirmStore = () => {
                     </div>
                 </div>
                 <div className="flex justify-center">
-                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt tt</Button>
+                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
                     <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
                 </div>
             </Modal>
@@ -706,7 +706,7 @@ export const ModalModificationDocumentAddedDocument = () => {
                     </div>
                 </div>
                 <div className="flex justify-center">
-                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt kk</Button>
+                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
                     <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
                 </div>
             </Modal>
