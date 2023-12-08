@@ -79,21 +79,21 @@ export const TABS_SIDEBAR = [
 				key: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 			},
 
-			// {
-			// 	title: "Phê duyệt kế hoạch thu thập",
-			// 	to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
-			// 	key: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
-			// },
-			// {
-			// 	title: "Kế hoạch thu thập bị từ chối",
-			// 	to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
-			// 	key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
-			// },
-			// {
-			// 	title:"Kế hoạch thu thập được phê duyệt",
-			// 	to:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
-			// 	key:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
-			// },
+			{
+				title: "Phê duyệt kế hoạch thu thập",
+				to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+				key: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
+			},
+			{
+				title: "Kế hoạch thu thập bị từ chối",
+				to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+				key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
+			},
+			{
+				title:"Kế hoạch thu thập được phê duyệt",
+				to:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
+				key:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
+			},
 			{
 				title: "Thu thập hồ sơ",
 				to: "/thu-thap-va-nop-luu/thu-thap-ho-so",
