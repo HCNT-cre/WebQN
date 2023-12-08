@@ -332,6 +332,23 @@ const KeHoachThuThap = () => {
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
 
+	const handleSendCollectPlan = async () => {
+		console.log(stateCheckBox);
+		const planIds = stateCheckBox.map((item) => {
+			return Number(item.split("checkbox")[1]);
+		})
+
+		planIds.forEach(async (id) => {
+			await axiosHttpService.put(API_COLLECTION_PLAN + id, {
+				state: ENUM_STATE_PLAN.CHO_DUYET
+			});
+		})
+
+		setTimeout(() => {
+			reFetchData();
+		}, 600);
+	}
+
 	const BUTTON_ACTIONS = [
 		{
 			title: "Tìm kiếm",
@@ -349,9 +366,9 @@ const KeHoachThuThap = () => {
 		{
 			title: "Gửi kế hoạch",
 			btn_class_name: "custom-btn-clear-filter",
+			onClick: handleSendCollectPlan,
 			icon: <i className="fa-solid fa-sync"></i>,
 		},
-
 	];
 
 	const handleClickUpdate = (id) => {
@@ -363,7 +380,10 @@ const KeHoachThuThap = () => {
 		setIsLoading(true);
 		console.log(API_COLLECTION_PLAN);
 		const res = await axiosHttpService.get(`${API_COLLECTION_PLAN}`);
-		const rawDatas = res.data.reverse();
+
+		const rawDatas = res.data.reverse().filter((data) => {
+			return data.state === ENUM_STATE_PLAN.TAO_MOI;
+		});
 
 		const plan = [];
 		for (const rawData of rawDatas) {

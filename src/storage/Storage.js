@@ -43,7 +43,7 @@ export const ENUM_STATE_PLAN = {
 	TAO_MOI: "Mới lập",
 	CHO_DUYET: "Chờ duyệt",
 	TU_CHOI: "Từ chối",
-	CHAP_NHAN: "Chấp nhận",
+	CHAP_NHAN: "Đã duyệt",
 }
 
 export const ENUM_STATE_BMCL = {

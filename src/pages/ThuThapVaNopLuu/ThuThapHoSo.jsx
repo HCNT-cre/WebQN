@@ -1,4 +1,12 @@
+import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import BasePage from "../BasePage";
+
+const API_PLAN = import.meta.env.VITE_API_PLAN;
+
+const filtePlanCondition = (file) => {
+    const state = (file.type === ENUM_TYPE_PLAN.THU_THAP_NOP_LUU && file.state === ENUM_STATE_PLAN.CHAP_NHAN);
+    return state;
+}
 
 const ThuThapHoSo = () => {
     const parent = [
@@ -34,6 +42,8 @@ const ThuThapHoSo = () => {
             addNewFile={true}
             filter={filter}
             eOffice={true}
+            apiPlan={API_PLAN}
+            filtePlanCondition={filtePlanCondition}
         />
     );
 };

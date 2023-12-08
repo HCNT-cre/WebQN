@@ -6,7 +6,7 @@ import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../custom/Function";
 import { ENUM_STATE_BMCL, ENUM_STATE_FILE, STATE } from "../storage/Storage";
 import { current } from "@reduxjs/toolkit";
-
+import { ENUM_TYPE_PLAN, ENUM_STATE_PLAN } from "../storage/Storage";
 const API_GOV_FILE_UPDATE_STATE = import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE
 const API_STORAGE_GET_SHELF_ALL = import.meta.env.VITE_API_STORAGE_GET_SHELF_ALL
 const API_STORAGE_GET_WAREHOUSEROOM_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSEROOM_ALL
@@ -21,6 +21,9 @@ const API_DOCUMENT_MODIFICATION_APPROVE = import.meta.env.VITE_API_DOCUMENT_MODI
 const API_DOCUMENT_MODIFICATION_REJECT = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT
 
 const API_DOCUMENT_MODIFICATION_REJECT_ADDED = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT_ADDED
+
+const API_PLAN = import.meta.env.VITE_API_PLAN;
+
 const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
         <Checkbox
@@ -124,47 +127,43 @@ export const ModalCensorship = () => {
     }
 
     return (
-        <>
-            <Modal
-                footer={null}
-                title="Duyệt hồ sơ"
-                style={{
-                    top: 200,
-                }}
-                open={modalOpen}
-                onOk={handleOk}
-                onCancel={handleCancle}
-            >
-                <div className="my-[12px]">
-                    <div className="flex">
-                        <CheckBoxx handleClickCheckBox={handleClickCheckBox} isChecked={isCheck.includes("cb1")} id="cb1" type="checkbox" />
-                        <div className="ml-[12px]">
-                            Đã thẩm định&nbsp;
-                            <span onClick={handleClickViewFile} className="cursor-pointer underline font-bold">
-                                thông tin hồ sơ
-                            </span>
-                        </div>
+        <Modal
+            footer={null}
+            title="Duyệt hồ sơ"
+            style={{
+                top: 200,
+            }}
+            open={modalOpen}
+            onOk={handleOk}
+            onCancel={handleCancle}
+        >
+            <div className="my-[12px]">
+                <div className="flex">
+                    <CheckBoxx handleClickCheckBox={handleClickCheckBox} isChecked={isCheck.includes("cb1")} id="cb1" type="checkbox" />
+                    <div className="ml-[12px]">
+                        Đã thẩm định&nbsp;
+                        <span onClick={handleClickViewFile} className="cursor-pointer underline font-bold">
+                            thông tin hồ sơ
+                        </span>
                     </div>
                 </div>
-                <div className="my-[12px]">
-                    <div className="flex">
-                        <CheckBoxx handleClickCheckBox={handleClickCheckBox} isChecked={isCheck.includes("cb2")} id="cb2" type="checkbox" />
-                        <div className="ml-[12px]">
-                            Đã thẩm định&nbsp;
-                            <span onClick={handleClickViewDocCategory} className="cursor-pointer underline font-bold">
-                                văn bản hồ sơ
-                            </span>
-                        </div>
+            </div>
+            <div className="my-[12px]">
+                <div className="flex">
+                    <CheckBoxx handleClickCheckBox={handleClickCheckBox} isChecked={isCheck.includes("cb2")} id="cb2" type="checkbox" />
+                    <div className="ml-[12px]">
+                        Đã thẩm định&nbsp;
+                        <span onClick={handleClickViewDocCategory} className="cursor-pointer underline font-bold">
+                            văn bản hồ sơ
+                        </span>
                     </div>
                 </div>
-                <div className="flex justify-center">
-                    <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
-                    <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
-                </div>
-            </Modal>
-
-
-        </>
+            </div>
+            <div className="flex justify-center">
+                <Button disabled={isCheck.length < 2} className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Duyệt</Button>
+                <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
+            </div>
+        </Modal>
 
     )
 }
@@ -489,7 +488,6 @@ export const ModalModificationDocumentConfirmStore = () => {
     }
 
     return (
-        <>
             <Modal
                 footer={null}
                 title="Duyệt hồ sơ"
@@ -527,10 +525,6 @@ export const ModalModificationDocumentConfirmStore = () => {
                     <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
                 </div>
             </Modal>
-
-
-        </>
-
     )
 }
 
@@ -568,7 +562,6 @@ export const ModalModificationDocumentAddDocument = () => {
     }
 
     return (
-        <>
             <Modal
                 footer={null}
                 title="Nộp hồ sơ"
@@ -592,10 +585,6 @@ export const ModalModificationDocumentAddDocument = () => {
 
                 </div>
             </Modal>
-
-
-        </>
-
     )
 }
 
@@ -672,7 +661,6 @@ export const ModalModificationDocumentAddedDocument = () => {
     }
 
     return (
-        <>
             <Modal
                 footer={null}
                 title="Duyệt hồ sơ"
@@ -710,12 +698,8 @@ export const ModalModificationDocumentAddedDocument = () => {
                     <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Từ chối</Button>
                 </div>
             </Modal>
-        </>
-
     )
 }
-
-
 
 export const ModalModificationDocumentRequireAddDoc = () => {
     const open = useSelector(state => state.modalModificationDocumentRequireAddDocReducer.state)
@@ -778,7 +762,6 @@ export const ModalModificationDocumentRequireAddDoc = () => {
     }
 
     return (
-        <>
             <Modal
                 footer={null}
                 title="Tạo yêu cầu bổ sung tài liệu"
@@ -840,7 +823,62 @@ export const ModalModificationDocumentRequireAddDoc = () => {
 
 
             </Modal >
-        </>
 
+    )
+}
+
+export const ModalPlan = () => {
+    const dispatch = useDispatch();
+    const open = useSelector(state => state.modalPlanReducer.state);
+    const type = useSelector(state => state.modalPlanReducer.type);
+    const id = useSelector(state => state.modalPlanReducer.id);
+    const reFetchData = useSelector(state => state.modalPlanReducer.reFetchData);
+
+    const handleOk = async () => {
+        await axiosHttpService.put(API_PLAN + id, {
+            state: ENUM_STATE_PLAN.CHAP_NHAN,
+            type: type
+        });
+
+        notifySuccess("Đã duyệt kế hoạch");
+        dispatch({
+            type: "close_modal_plan"
+        });
+        setTimeout(() => {
+            reFetchData();
+        },500);
+    }
+
+    const handleCancle = async () => {
+        await axiosHttpService.put(API_PLAN + id, {
+            state: ENUM_STATE_PLAN.TU_CHOI,
+            type: type
+        });
+
+        notifySuccess("Đã từ chối kế hoạch");
+        dispatch({
+            type: "close_modal_plan"
+        });
+        setTimeout(() => {
+            reFetchData();
+        },500);
+    }
+
+    return (
+        <Modal
+            footer={null}
+            title="Đồng ý duyệt hồ sơ"
+            style={{
+                top: 200,
+            }}
+            open={open}
+            onOk={handleOk}
+            onCancel={handleCancle}
+        >
+            <div className="flex justify-center">
+                <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleOk}>Duyệt</Button>
+                <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleCancle}>Từ chối</Button>
+            </div>
+        </Modal >
     )
 }

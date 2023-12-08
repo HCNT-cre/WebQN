@@ -85,6 +85,7 @@ export const Table = ({
     const [isCheck, setIsCheck] = useState([]);
     const dataTableRenderForTableCell = ConvertDataToArrayForRenderTableCell(fieldDatas)
 
+    console.log(fieldDatas);
     let doesNeedOrder = true
 
     for (let i = 0; i < fieldNames.length; i++)

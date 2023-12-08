@@ -31,7 +31,12 @@ const CATEGORY_FILE_API = import.meta.env.VITE_CATEGORY_FILE_API;
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_COLLECTION_PLAN;
 const API_EXPORT_EXCEL = import.meta.env.VITE_API_EXPORT_EXCEL;
 
-const PlanAndCategoryFile = ({ open, setOpen, API_PLAN }) => {
+const PlanAndCategoryFile = ({
+	open,
+	setOpen,
+	API_PLAN,
+	filtePlanCondition
+}) => {
 	const dispatch = useDispatch();
 	const [categoryFile, setCategoryFile] = useState([]);
 	const [collectionPlan, setCollectionPlan] = useState([]);
@@ -66,7 +71,11 @@ const PlanAndCategoryFile = ({ open, setOpen, API_PLAN }) => {
 
 		const getCollectionPlan = async () => {
 			const { data } = await axiosHttpService.get(API_PLAN);
-			const _ = data.map((item) => {
+			const filterdData = data.filter((item) => {
+				return filtePlanCondition(item);
+			});
+
+			const _ = filterdData.map((item) => {
 				return {
 					value: item.name,
 					label: item.name,
@@ -342,8 +351,9 @@ const BasePage = ({
 	currentStateModal = ENUM_STATE_FILE.NOP_LUU_CO_QUAN,
 	currentTab = null,
 	haveActionButton = true,
-	XepVaoKho =false,
+	XepVaoKho = false,
 	BMCL_GuiDuyetHoSo = false,
+	filtePlanCondition = null
 }) => {
 	const dispatch = useDispatch();
 	const [modalOpen, setModalOpen] = useState(false);
@@ -815,7 +825,7 @@ const BasePage = ({
 							})}
 							{BMCL_GuiDuyetHoSo && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
-									onClick={() => handleChangeStateFile({"current_state": 11, "new_state": 12})}
+									onClick={() => handleChangeStateFile({ "current_state": 11, "new_state": 12 })}
 									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center"
 								>
 									<div className="mr-[8px]">
@@ -826,7 +836,7 @@ const BasePage = ({
 							</div>}
 							{XepVaoKho && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
-									onClick= {()=> handleChangeStateFile({"current_state": 9, "new_state": 10})} // DA_NHAP_NOP_LUU --> CHO_XEP_KHO
+									onClick={() => handleChangeStateFile({ "current_state": 9, "new_state": 10 })} // DA_NHAP_NOP_LUU --> CHO_XEP_KHO
 									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
 								>
 									<div className="mr-[8px]">
@@ -898,9 +908,12 @@ const BasePage = ({
 					<ModalModificationDocumentAddDocument />
 					<ModalModificationDocumentAddedDocument />
 					<ModalModificationDocumentRequireAddDoc />
-					<PlanAndCategoryFile open={modalOpen} setOpen={setModalOpen} API_PLAN={
-						apiPlan
-					} />
+					<PlanAndCategoryFile
+						open={modalOpen}
+						setOpen={setModalOpen}
+						API_PLAN={apiPlan}
+						filtePlanCondition={filtePlanCondition}
+					/>
 				</div>
 			)}
 		</>
