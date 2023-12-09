@@ -357,7 +357,7 @@ const PheDuyetKeHoachThuThap = () => {
 					</span>
 					<span>
 						<Link to="/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap">
-							Phế duyệt kế hoạch thu thập
+							Phê duyệt kế hoạch thu thập
 						</Link>
 					</span>
 				</p>
