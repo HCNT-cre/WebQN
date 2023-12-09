@@ -364,7 +364,7 @@ const PheDuyetKeHoachThuThap = () => {
 			</div>
 
 			<div className="w-full px-[24px] pb-[16px] bg-white flex justify-between">
-				<p className="text-[20px] font-bold ">Phế duyệt kế hoạch thu thập</p>
+				<p className="text-[20px] font-bold ">Phê duyệt kế hoạch thu thập</p>
 			</div>
 
 			<div className="mt-[16px] mx-[24px] flex ">
