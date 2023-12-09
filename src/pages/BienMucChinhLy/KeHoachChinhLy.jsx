@@ -5,7 +5,7 @@ import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 import { KE_HOACH_CHINH_LY_INPUT, KE_HOACH_CHINH_LY_FIELD_TABLE } from "src/storage/BienMucChinhLy";
 import { useSelector } from "react-redux";
-const API_DOCUMENT_MODIFICATION_PLAN = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_PLAN;
+const API_PLAN = import.meta.env.VITE_API_PLAN;
 const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 
 
@@ -19,6 +19,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		organId: organId,
 		organ: organ,
 	}
+	
 	useEffect(() => {
 		const getOrgan = async () => {
 			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
@@ -36,7 +37,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 
 	const handleOk = async () => {
 		request["state"] = "Mới lập";
-		await axiosHttpService.post(`${API_DOCUMENT_MODIFICATION_PLAN}`, request);
+		await axiosHttpService.post(`${API_PLAN}`, request);
 		setTimeout(() => {
 			reFetchData();
 			setRequest({});
@@ -68,7 +69,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 			<div>
 				{KE_HOACH_CHINH_LY_INPUT.map((item, index) => {
 					return (
-						<div>
+						<div key={index}>
 							{
 								item.type === "select" ?
 									<div className="flex justify-between py-[12px]">
@@ -110,7 +111,7 @@ const Delete = ({ id, reFetchData }) => {
 
 	const handleConfirm = async () => {
 		const deletePlan = async () => {
-			await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_PLAN + id);
+			await axiosHttpService.delete(API_PLAN + id);
 		};
 
 		deletePlan();
@@ -176,7 +177,7 @@ const Update = ({ reFetchData, id }) => {
 
 	useEffect(() => {
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_PLAN + id);
+			const { data } = await axiosHttpService.get(API_PLAN + id);
 			setRequest({
 				
 				code: data.code,
@@ -217,7 +218,7 @@ const Update = ({ reFetchData, id }) => {
 	};
 
 	const handleOk = async () => {
-		await axiosHttpService.put(API_DOCUMENT_MODIFICATION_PLAN + id, request);
+		await axiosHttpService.put(API_PLAN + id, request);
 		setModalOpen(false);
 		reFetchData();
 	};
@@ -240,7 +241,7 @@ const Update = ({ reFetchData, id }) => {
 				<div>
 					{KE_HOACH_CHINH_LY_INPUT.map((item, index) => {
 						return (
-							<div>
+							<div key={index}>
 								{
 									item.type === "select" ?
 										<div className="flex justify-between py-[12px]">
@@ -277,7 +278,6 @@ const Update = ({ reFetchData, id }) => {
 const KeHoachChinhLy = () => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
 
 	const BUTTON_ACTIONS = [
@@ -299,7 +299,7 @@ const KeHoachChinhLy = () => {
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		const res = await axiosHttpService.get(`${API_DOCUMENT_MODIFICATION_PLAN}`);
+		const res = await axiosHttpService.get(`${API_PLAN}`);
 		const rawDatas = res.data.reverse();
 		const plan = [];
 		for (const rawData of rawDatas) {
@@ -395,11 +395,9 @@ const KeHoachChinhLy = () => {
 			</div>
 
 			<Table
-				setStateCheckBox={setStateCheckBox}
 				fieldNames={KE_HOACH_CHINH_LY_FIELD_TABLE}
 				fieldDatas={plan}
 				isLoading={isLoading}
-				isCheckBox={true}
 			/>
 
 			<Create

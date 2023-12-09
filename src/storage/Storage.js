@@ -739,7 +739,7 @@ export const FOND = [
 
 export const FOND_INPUT = [
 	{ type: "text", require: true, name: "identifier", label: "Mã cơ quan lưu trữ" },
-	{ type: "text", require: true, name: "organ_id", label: "Mã phông/công trình/sưu tập lưu trữ" },
+	{ type: "select", require: true, name: "organ_id", label: "Mã phông/công trình/sưu tập lưu trữ" },
 	{ type: "text", require: true, name: "fond_name", label: "Tên phông/công trình/sưu tập lưu trữ" },
 	{ type: "text", require: true, name: "fond_history", label: "Lịch sử đơn vị hình thành phông" },
 	{ type: "text", require: true, name: "archives_time", label: "Thời gian tài liệu" },

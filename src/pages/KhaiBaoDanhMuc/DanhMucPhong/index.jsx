@@ -9,13 +9,13 @@ import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
-
+const API_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const Search = Input.Search
 const API_FOND = import.meta.env.VITE_API_FOND
 
 const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
-    const [request, setRequest] = useState({})
-
+    const [request, setRequest] = useState({});
+    const [organ, setOrgan] = useState([]);
     const handleChangeRequest = (name, value) => {
         setRequest(prev => ({
             ...prev,
@@ -37,6 +37,21 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         fetchData()
     }, [id])
 
+    useEffect(() => {
+        const getOrgan = async () => {
+            const { data } = await axiosHttpService.get(API_ORGAN);
+            const _ = data.map((item) => {
+                return {
+                    label: item.code,
+                    value: item.code,
+                };
+            });
+            setOrgan(_);
+        };
+        getOrgan();
+    }, [])
+
+    console.log(organ);
 
     const handleCancle = () => {
         setModalOpen(false)
@@ -83,29 +98,36 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
             footer={null}
         >
 
-            {FOND_INPUT.map((input) => {
+            {FOND_INPUT.map((input, index) => {
                 return (
-                    <div className="flex mb-[30px]">
+                    <div className="flex mb-[30px]" key={index}>
                         <div className={`w-[30%] after-form`}>
                             {input.label}
                         </div>
                         <div className="w-[70%]">
-                        {input.type === "number" ? 
-                            <Input 
-                                type="number"
-                                name={input.name}
-                                value={request[input.name]}
-                                onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
-                                className="w-[70px]"
-                                min={0}
-                            /> :
-                            <Input
-                                type="text"
-                                name={input.name}
-                                value={request[input.name]}
-                                onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
-                            />
-                    }
+                            {input.type === "number" ?
+                                <Input
+                                    type="number"
+                                    name={input.name}
+                                    value={request[input.name]}
+                                    onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
+                                    className="w-[70px]"
+                                    min={0}
+                                /> :
+                                input.type === "select" ?
+                                    <Select
+                                        name={input.name}
+                                        value={request[input.name]}
+                                        className="w-full"
+                                        options={organ}
+                                        onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
+                                    /> :
+                                    <Input
+                                        name={input.name}
+                                        type="text"
+                                        value={request[input.name]}
+                                        onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)} />
+                            }
                         </div>
                     </div>
                 )

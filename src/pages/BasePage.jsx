@@ -132,6 +132,7 @@ const ButtonFunctionOfEachFile = ({
 	};
 
 	const handleConfirm = () => {
+		console.log("IDFile", IDFile);
 		const DeleteOrganFile = async () => {
 			const files = axiosHttpService.get(API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL);
 			for (const file of files) {
@@ -229,24 +230,9 @@ const ButtonFunctionOfEachFile = ({
 		{
 			popup: true,
 			element: (
-				<Popconfirm
-					title="Xóa hồ sơ"
-					open={open}
-					description="Bạn có chắc chắn xóa?"
-					onConfirm={handleConfirm}
-					onCancel={handleClose}
-					key={GetKey()}
-				>
-					<Button
-						onClick={() => {
-							setOpen(true);
-						}}
-						className={`hover:bg-blue-300 cursor-pointer basis-1/4 max-w-[25%] text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`}
-						title="Xóa hồ sơ"
-					>
-						<i className="fa-solid fa-trash-can"></i>
-					</Button>
-				</Popconfirm>
+					<div className="absolute w-[200px] h-[200px] bg-black bottom-0">
+					
+					</div>
 			),
 		},
 
@@ -355,6 +341,7 @@ const BasePage = ({
 	BMCL_GuiDuyetHoSo = false,
 	filtePlanCondition = null
 }) => {
+	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
 	const [modalOpen, setModalOpen] = useState(false);
 	const [fieldsTable, setFieldsTable] = useState(FIELDS_TABLE);
@@ -548,6 +535,21 @@ const BasePage = ({
 
 	useEffect(() => {
 		dispatch({ type: "ADD_FETCH_FILE_ACTION", fetchFileFunction: reset });
+		const getPlan = async () => {
+			const { data } = await axiosHttpService.get(apiPlan);
+			const filterdData = data.filter((item) => {
+				return filtePlanCondition(item);
+			});
+
+			const _ = filterdData.map((item) => {
+				return {
+					value: item.name,
+					label: item.name,
+				};
+			});
+			setPlan(_);
+		}
+		getPlan();
 	}, []);
 
 	const handleSearch = async (ev) => {
@@ -757,55 +759,13 @@ const BasePage = ({
 								></Input>
 							</div>
 							<div className="w-[11.11111%] px-[5px]">
-								<Input
-									placeholder="Kế hoạch"
-									type="text"
-									className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"
-								></Input>
-							</div>
-							<div className="w-[11.11111%] px-[5px] rounded-none">
 								<Select
-									name="state"
-									className="w-full bg-white outline-none rounded-md"
-									showSearch
-									defaultValue="Tất cả"
-									value={search["state"]}
-									optionFilterProp="children"
-									onChange={(value) => handleChangeSearch("state", value)}
-									filterOption={(input, option) =>
-										(option?.label ?? "")
-											.toLowerCase()
-											.includes(input.toLowerCase())
-									}
-									options={[
-										{ value: 0, label: "Tất cả" },
-										{
-											value: 1,
-											label: "Mở",
-										},
-										{
-											value: 2,
-											label: "Đóng",
-										},
-										{
-											value: 3,
-											label: "Nộp lưu cơ quan",
-										},
-										{
-											value: 4,
-											label: "Lưu trữ cơ quan",
-										},
-										{
-											value: 5,
-											label: "Nộp lưu lịch sử",
-										},
-										{
-											value: 6,
-											label: "Lưu trữ lịch sử",
-										}, // TODO: add 7 -> 13
-									]}
-								/>
+									options={plan}
+									placeholder="Kế hoạch"
+									className="border-[0.1rem] text-[12px] w-full truncate h-[32px]"
+								></Select>
 							</div>
+
 
 							{BUTTON_ACTIONS.map((item, index) => {
 								return (
@@ -868,7 +828,7 @@ const BasePage = ({
 										>
 											{userPermissions.map((permission, index) => {
 												return (
-													<button
+													<button key={index}
 														className="hover:text-white rounded-[5px]  px-[12px] py-[6px] w-full h-full text-left text-[12px] text-black font-medium border-none truncate"
 														onClick={() =>
 															handleChangeStateFile(permission.update_state)
