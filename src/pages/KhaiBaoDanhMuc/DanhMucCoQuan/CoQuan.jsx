@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 
 const Search = Input.Search
 const API_STORAGE_POST_ORGAN = import.meta.env.VITE_API_STORAGE_POST_ORGAN
-const API_STORAGE_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN
+const API_STORAGE_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL
 
 const API_PROVINCES = import.meta.env.VITE_API_PROVINCES
 const API_DISTRICTS = import.meta.env.VITE_API_DISTRICTS

@@ -2,7 +2,7 @@ export const DEPARTMENT = [
     { title: "Tên", key: "name", width: "100%" },
     { title: "Mã", key: "code", width: "100%" },
     { title: "Cơ quan", key: "organ", width: "100%" },
-    { title: "Tổng nhân viên", key: "total_staff", width: "100%" },
+    //{ title: "Tổng nhân viên", key: "total_staff", width: "100%" },
     // { title: "Phân quyền", key: "permission", width: "100%" },
     { title: "", key: "update", width: "100%" },
 ]
@@ -10,7 +10,6 @@ export const DEPARTMENT = [
 export const STAFF = [
     { title: "Tên", key: "name", width: "100%" },
     { title: "Email", key: "email", width: "100%" },
-    { title: "Địa chỉ", key: "address", width: "100%" },
     { title: "Số điện thoại", key: "phone", width: "100%" },
     { title: "Cơ quan", key: "organ", width: "100%" },
     { title: "Phòng ban", key: "department", width: "100%" },
@@ -86,10 +85,10 @@ export const STAFF_DECENTRALIZATION = [
     { type: "email", require: true, name: "email", label: "Email" },
     { type: "password", require: true, name: "password", label: "Mật khẩu" },
     { type: "number", require: true, name: "phone", label: "Số điện thoại" },
-    { type: "input", require: true, name: "address", label: "Địa chỉ" },
     // { type: "input", require: true, name: "position", label: "Vị trí" },
-    { type: "select", require: true, name: "role", label: "Chức vụ" },
+    
     { type: "select", require: true, name: "department", label: "Phòng ban" },
+    { type: "select", require: true, name: "role", label: "Chức vụ" },
 ]
 
 export const ORGAN_DECENTRALIZATION_INPUTS = [

@@ -12,7 +12,7 @@ import { getOrganbyId } from "./helper";
 const Search = Input.Search
 
 const API_STORAGE_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN
-const API_ORGAN_POST_DEPARTMENT = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT
+const API_ORGAN_POST_DEPARTMENT = import.meta.env.VITE_API_ORGAN_POST_DEPARTMENT
 const API_ORGAN_GET_DEPARTMENT = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT
 
 const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = null }) => {
@@ -175,18 +175,16 @@ const PhongBan = () => {
 
     const fetchFieldData = async () => {
         setIsLoading(true)
-        const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT)
+        const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT+params.id)
         const datas = res.data
-
         const newData = []
         for (const data of datas) {
-            if (data.organ_id !== params.id) continue;
             newData.push({
                 "id": data.id,
                 "name": <Link to={`./${data.id}`} className="cursor-pointer">{data.name}</Link>,
                 "code": data.code,
                 "organ": data.organ,
-                "total_staff": data.total_staff,
+               // "total_staff": data.total_staff,
                 "update":
                     <span className="flex items-center justify-center">
                         <span className="text-teal-500 px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button cursor-pointer "
@@ -233,7 +231,7 @@ const PhongBan = () => {
     const fetchOrgan = async () => {
         const organ = await getOrganbyId(params.id);
         setOrgan(organ);
-        console.log(organ);
+      //  console.log(organ);
     }
 
     useEffect(() => {

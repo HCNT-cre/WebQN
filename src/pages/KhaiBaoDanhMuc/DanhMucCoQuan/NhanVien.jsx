@@ -32,7 +32,7 @@ const Form = ({ modalOpen,
 
     useEffect(() => {
         const fetchDepartment = async () => {
-            const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT)
+            const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT + 23)
             const datas = res.data
 
             const department = []
@@ -282,22 +282,16 @@ const NhanVien = () => {
 
     const fetchFieldData = async () => {
         setIsLoading(true)
-        const res = await axiosHttpService.get(API_ORGAN_GET_STAFF)
+        const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + params.department_id)
         const datas = res.data
 
         const newData = []
         for (const data of datas) {
-            if (data.department_id !== params.department_id) continue
+           // if (data.department_id !== params.department_id) continue
             newData.push({
                 "id": data.id,
-                "name": <span
-                    className="cursor-pointer"
-                    onClick={() => {
-                        setModalOpenRead(true)
-                        setId(data.id)
-                    }}> {data.name}</span>,
+                "name": data.full_name,
                 "email": data.email,
-                "address": data.address,
                 "phone": data.phone,
                 "organ": data.organ,
                 "department": data.department,
