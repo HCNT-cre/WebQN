@@ -1,7 +1,7 @@
 import axiosHttpService from "src/utils/httpService";
 
 const API_LOGIN = import.meta.env.VITE_API_LOGIN;
-
+const API_LOGOUT = import.meta.env.VITE_API_LOGOUT;
 const AuthenAPIService = {
     login: async (email, password) => {
         try {
@@ -16,15 +16,15 @@ const AuthenAPIService = {
         }
     },
 
-    // logout: async () => {
-    //     try {
-    //         const response = await axiosHttpService.post(API_LOGOUT, {});
-    //         return response.data;
-    //     } catch (err) {
-    //         console.log(err);
-    //         return null;
-    //     }
-    // },
+    logout: async () => {
+        try {
+            const response = await axiosHttpService.post(API_LOGOUT, {});
+            return response.data;
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    },
 
     // register: async (email, username, password) => {
     //     try {

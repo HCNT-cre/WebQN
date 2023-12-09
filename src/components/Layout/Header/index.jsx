@@ -206,7 +206,7 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
     const p = useSelector(state => state.userPermission)
     const userID = localStorage.getItem("userID")
     const [stateBoxUserRole, setStateBoxUserRole] = useState(false)
-    
+    const username = useSelector(state => state.authen.username);
     const handleLogOut = () =>{
         dispatch({type: "LOGOUT"})
     }
@@ -244,7 +244,7 @@ const Header = ({ sideBarWidth, setSideBarWidth }) => {
                         <i className="fa-regular fa-user"></i>
                     </div>
                     <p className="text-black font-medium w-[calc(100%-36px)] text-center">
-                        {userName[userID]   }
+                        {username}
                     </p>
 
                     {
