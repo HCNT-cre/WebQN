@@ -510,7 +510,7 @@ const App = () => {
     ];
 
     return (
-        <Spin spinning={isLoading}>
+    <>
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
@@ -541,9 +541,7 @@ const App = () => {
                     ))}
                 </Routes>
             </BrowserRouter>
-        </Spin>
-
-
+            </>
     );
 };
 

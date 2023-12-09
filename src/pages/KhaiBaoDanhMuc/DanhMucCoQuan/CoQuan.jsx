@@ -76,7 +76,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         const fetchData = async () => {
             if (!id) return
             try {
-                const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN + id)
+                const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN + '/' + id)
                 const data = res.data
                 setRequest(data)
             } catch (err) {

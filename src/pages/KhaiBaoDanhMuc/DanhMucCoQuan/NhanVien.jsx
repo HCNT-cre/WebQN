@@ -12,10 +12,15 @@ import { getDepartmentbyId, getOrganbyId } from "./helper";
 const Search = Input.Search
 const { Panel } = Collapse
 
+
+const API_SINGLE_ORGAN =import.meta.env.VITE_API_STORAGE_GET_ORGAN;
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 const API_ORGAN_POST_STAFF = import.meta.env.VITE_API_ORGAN_POST_STAFF
-const API_ORGAN_GET_DEPARTMENT = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT
+const VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN
+const API_ORGAN_GET_SINGLE_DEPARTMENT = import.meta.env.VITE_API_ORGAN_GET_SINGLE_DEPARTMENT
 const API_GROUP_PERMISSION = import.meta.env.VITE_API_GROUP_PERMISSION
+const API_ROLE_BY_ORGAN = import.meta.env.VITE_API_ROLE_BY_ORGAN
+const API_ORGAN_ROLE = import.meta.env.VITE_API_ORGAN_ROLE
 
 const Form = ({ modalOpen,
     setModalOpen,
@@ -32,7 +37,7 @@ const Form = ({ modalOpen,
 
     useEffect(() => {
         const fetchDepartment = async () => {
-            const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT + 23)
+            const res = await axiosHttpService.get(VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN + '/' + idOrgan)
             const datas = res.data
 
             const department = []
@@ -69,7 +74,7 @@ const Form = ({ modalOpen,
         const fetchData = async () => {
             if (!id)
                 return
-            const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + id)
+            const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + '/'+ id)
             const data = res.data
 
             setRequest(data)
@@ -117,7 +122,7 @@ const Form = ({ modalOpen,
         request["department"] = department.find((item) => item.value === request.department).label
 
         if (id !== null) {
-            await axiosHttpService.put(API_ORGAN_POST_STAFF + id, request)
+            await axiosHttpService.put(API_ORGAN_POST_STAFF + '/' + id, request)
             notifySuccess("Cập nhật nhân viên thành công")
         } else {
             await axiosHttpService.post(API_ORGAN_POST_STAFF, request)
@@ -282,22 +287,23 @@ const NhanVien = () => {
 
     const fetchFieldData = async () => {
         setIsLoading(true)
-        const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + params.department_id)
+        const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + '/'+ params.department_id)
         const datas = res.data
-
+        console.log("params: ",params)
         const newData = []
+        const organData = await axiosHttpService.get(API_SINGLE_ORGAN + '/' + params.organ_id)
+        const departmentData = await axiosHttpService.get(API_ORGAN_GET_SINGLE_DEPARTMENT +'/'+ params.department_id)
         for (const data of datas) {
+            const roleData = await axiosHttpService.get(API_ORGAN_ROLE + '/'+ data.role)
            // if (data.department_id !== params.department_id) continue
             newData.push({
                 "id": data.id,
                 "name": data.full_name,
                 "email": data.email,
                 "phone": data.phone,
-                "organ": data.organ,
-                "department": data.department,
-                "role": data.role,
-                // "position": data.position,
-                // "state": 0,
+                "organ": organData.data.name,
+                "department": departmentData.data.name,
+                "role": roleData.data.name,
                 "update": <span className="cursor-pointer" onClick={() => {
                     setModalOpen(true)
                     setId(data.id)

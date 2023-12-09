@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 const API_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
+const API_SINGLE_ORGAN =import.meta.env.VITE_API_STORAGE_GET_ORGAN;
 const Search = Input.Search
 const API_FOND = import.meta.env.VITE_API_FOND
 
@@ -27,7 +28,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         const fetchData = async () => {
             if (!id) return
             try {
-                const res = await axiosHttpService.get(API_FOND + id)
+                const res = await axiosHttpService.get(API_FOND + '/' + id)
                 const data = res.data
                 setRequest(data)
             } catch (err) {
@@ -72,7 +73,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         }
 
         if (id !== null) {
-            await axiosHttpService.put(API_FOND + id, request)
+            await axiosHttpService.put(API_FOND + '/' + id, request)
             notifySuccess("Cập nhật phông thành công")
         } else {
             await axiosHttpService.post(API_FOND, request)
@@ -177,15 +178,17 @@ const KhaiBaiDanhMucPhong = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const fetchFieldData = async () => {
         setIsLoading(true)
-        const res = await axiosHttpService.get(API_FOND)
+        const res = await axiosHttpService.get(API_FOND )
+
         const datas = res.data
         const newData = []
 
         for (const data of datas) {
+            const organData = await axiosHttpService.get(API_SINGLE_ORGAN + '/' + data.organ)
             newData.push({
                 "id": data.id,
-                "identifier": data.identifier,
-                "organ_id": data.organ_id,
+                "organ_id": organData.data.name,
+                "identifier": data.identifier, 
                 "fond_name": data.fond_name,
                 "update":
                     <span className="flex items-center justify-center">
@@ -220,7 +223,7 @@ const KhaiBaiDanhMucPhong = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axiosHttpService.delete(API_FOND + id)
+            await axiosHttpService.delete(API_FOND + '/'+ id)
             notifySuccess("Xóa phông thành công")
             fetchFieldData()
         } catch (err) {
