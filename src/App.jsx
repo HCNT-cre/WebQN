@@ -56,7 +56,7 @@ import KeHoachThuThapBiTuChoi from "./pages/ThuThapVaNopLuu/KeHoachThuThapBiTuCh
 import PheDuyetKeHoachThuThap from "./pages/ThuThapVaNopLuu/PheDuyetKeHoachThuThap";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setUserPermission } from "./actions/userPermission"
 import DuyetSaoHoSo from "./pages/QuanLiKhaiThac/SaoHoSo";
 import DuyetSaoVaChungThucHoSo from "./pages/QuanLiKhaiThac/SaoVaChungThuc";
@@ -85,6 +85,10 @@ import HoSoTTHCBiTuChoi from "./pages/LuuTruToChucCaNhan/HoSoTTHCBiTuChoi";
 import KhoHoSoTTHC from "./pages/LuuTruToChucCaNhan/KhoHoSoTTHC";
 import HoSoChinhLyBiTraVe from "./pages/BienMucChinhLy/HoSoChinhLyBiTraVe";
 import HoSoDenHanNopLuu from "./pages/ThuThapVaNopLuu/HoSoDenHanNopLuu";
+import InitApp from "./init";
+import { LoginAction } from "./service/actions/authenAction";
+import { Fragment } from "react";
+import { Spin } from "antd";
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
 function LoggedIn() {
@@ -160,9 +164,31 @@ const getOrganId = async () => {
     return organId;
 }
 
-const App = () => {
-    const dispatch = useDispatch();
+const loginPage = () => {
+    const isLogin = localStorage.getItem("isLogin");
+    if (!isLogin) {
+        return <Login />
+    } else {
+        return <Navigate to="/" />
+    }
+}
 
+const loginSSOPage = () => {
+    const isLogin = localStorage.getItem("isLogin");
+    if (!isLogin)
+        return (
+            <LoginSSO />
+        )
+    return (
+        <Navigate to="/" />
+    )
+}
+
+const App = () => {
+    const [isLoading, setIsLoading] = useState(true);
+    const isLogin = localStorage.getItem("isLogin");
+
+    const dispatch = useDispatch();
     getLanguages().then((languages) => {
         dispatch({ type: "GET_LANGUAGE_SUCCESS", payload: languages })
     })
@@ -179,41 +205,20 @@ const App = () => {
         dispatch({ type: "GET_ORGAN_ID_SUCCESS", payload: organId })
     })
 
-    const isLogin = useSelector(state => state.login)
-    const userID = localStorage.getItem('userID')
-
-    const fetchPermission = async (id) => {
-        if (id === "0") {
-            dispatch(setUserPermission([]));
-            return
+    const Init = async () => {
+        const userInfo = await InitApp.initUserInfo();
+        if (userInfo) {
+            dispatch(LoginAction(userInfo.email, userInfo.full_name));
+            if(userInfo.is_superuser === true) {
+                dispatch(setUserPermission("2"));
+            }
         }
-        const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + "/" + id);
-        dispatch(setUserPermission(res.data.permission_group_id));
-    }
+        setIsLoading(false);
+    };
 
-    if (userID !== null && isLogin !== 'false') {
-        fetchPermission(userID);
-    }
-
-    function loginPage() {
-        if (isLogin !== 'true')
-            return (
-                <Login />
-            )
-        return (
-            <Navigate to="/" />
-        )
-    }
-
-    function loginSSOPage() {
-        if (isLogin !== 'true')
-            return (
-                <LoginSSO />
-            )
-        return (
-            <Navigate to="/" />
-        )
-    }
+    useEffect(() => {
+        Init();
+    }, []);
 
     const routes = [
         { path: "/", element: <Home /> },
@@ -260,7 +265,7 @@ const App = () => {
             element: <User />
         },
         {
-            path:"/khai-bao-danh-muc/danh-muc-chuc-vu",
+            path: "/khai-bao-danh-muc/danh-muc-chuc-vu",
             element: <DanhMucChucVu />
         },
         {
@@ -492,20 +497,20 @@ const App = () => {
         },
         {
             path: "/kho-luu-tru-to-chuc-ca-nhan/duyet-ho-so-thuc-hien-thu-tuc-hanh-chinh",
-            element: <DuyetHoSoTTHC/>
+            element: <DuyetHoSoTTHC />
         },
         {
             path: "/kho-luu-tru-to-chuc-ca-nhan/ho-so-thuc-hien-thu-tuc-hanh-chinh-bi-tu-choi",
-            element: <HoSoTTHCBiTuChoi/>
+            element: <HoSoTTHCBiTuChoi />
         },
         {
-            path:  "/kho-luu-tru-to-chuc-ca-nhan/kho-ho-so-thuc-hien-thu-tuc-hanh-chinh",
-            element: <KhoHoSoTTHC/>
+            path: "/kho-luu-tru-to-chuc-ca-nhan/kho-ho-so-thuc-hien-thu-tuc-hanh-chinh",
+            element: <KhoHoSoTTHC />
         },
     ];
 
     return (
-        <>
+        <Spin spinning={isLoading}>
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
@@ -531,14 +536,13 @@ const App = () => {
                         <Route
                             key={index}
                             path={route.path}
-                            element={isLogin === "true" ? <Layout>{route.element}</Layout> : <Navigate to="/dang-nhap" />}
+                            element={isLogin ? <Layout>{route.element}</Layout> : <Navigate to="/dang-nhap" />}
                         />
                     ))}
                 </Routes>
             </BrowserRouter>
+        </Spin>
 
-
-        </>
 
     );
 };

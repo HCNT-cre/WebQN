@@ -102,7 +102,7 @@ const SideBar = ({ sideBarWidth }) => {
                                 <Link to={tab.to} onClick={() => { setCurrentTab(tab.key) }} key={tab.key} className={`
                         block ${sideBarWidth === 250 ? 'sidebar-items--large ' : 'sidebar-items--small '} 
                         `}>
-                                    <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] flex relative ${tab.key === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(tab.key)}>
+                                    <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 hover:text-white rounded-[8px] flex relative ${tab.key === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(tab.key)}>
                                         <div className="flex items-center mx-[10px] w-[16px]">
                                             <span dangerouslySetInnerHTML={{ __html: tab.icon }} />
                                         </div>
@@ -126,7 +126,7 @@ const SideBar = ({ sideBarWidth }) => {
                                                         if (child.numChildTabs === undefined)
                                                             return (
                                                                 (child.display === undefined || child.display === true) &&
-                                                                <Link key={child.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] block mt-[8px] text-wrap-normal" to={child.to} >
+                                                                <Link key={child.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 hover:text-white rounded-[8px] block mt-[8px] text-wrap-normal" to={child.to} >
                                                                     {sideBarWidth === 250 && <span>{child.title}</span>}
                                                                 </Link>
                                                             )
@@ -135,7 +135,7 @@ const SideBar = ({ sideBarWidth }) => {
                                                                 (child.display === undefined || child.display === true) &&
                                                                 <Link to={child.to} onClick={() => { setCurrentTab(child.key) }} key={child.key} className={`block ${sideBarWidth === 250 ? 'sidebar-items--large' : 'sidebar-items--small'} m-0
                         `}>
-                                                                    <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#aaaaaa25]  px-[8px] border-[1.5px] border-transparent items-center justify-between hover:border-cyan-400 rounded-[8px] flex relative ${child.key === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(child.key)}>
+                                                                    <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#aaaaaa25]  px-[8px] border-[1.5px] border-transparent items-center justify-between hover:text-white hover:border-cyan-400 rounded-[8px] flex relative ${child.key === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(child.key)}>
                                                                         {sideBarWidth === 250 && <p>{child.title}</p>}
                                                                         {child.numChildTabs > 0 && sideBarWidth === 250 &&
                                                                             <span className="inline-block">
@@ -147,7 +147,7 @@ const SideBar = ({ sideBarWidth }) => {
                                                                         <div className="flex flex-col ml-[12px]">
                                                                             {child.childTabs.map((childd) => {
                                                                                 return (
-                                                                                    <Link key={childd.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 rounded-[8px] block mt-[8px] text-wrap-normal" to={childd.to} >
+                                                                                    <Link key={childd.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent  hover:text-white hover:border-cyan-400 rounded-[8px] block mt-[8px] text-wrap-normal" to={childd.to} >
                                                                                         {sideBarWidth === 250 && <span>{childd.title}</span>}
                                                                                     </Link>
                                                                                 )
