@@ -241,7 +241,7 @@ const KhaiBaiDanhMucPhong = () => {
                 fetchFieldData={fetchFieldData}
             />
             <KhaiBaoDanhMuc
-                title={<Link to="/khai-bao-danh-muc/danh-muc-thoi-han-bao-quan/"
+                title={<Link to="/khai-bao-danh-muc/danh-muc-phong/"
                     className="text-black">Danh mục phông</Link>}
                 fieldNames={FOND} fieldDatas={fieldData}
                 SearchBar={<SearchBar />}

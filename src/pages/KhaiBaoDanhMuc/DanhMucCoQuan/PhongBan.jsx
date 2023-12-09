@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import DanhMucCoQuan from "."
 import { DEPARTMENT, DEPARTMENT_DECENTRALIZATION_INPUTS } from "../../../storage/StorageOffice"
-import { Input, Select, Modal, Button, Popconfirm } from "antd";
+import { Input, Select, Modal, Button, Popconfirm, Spin } from "antd";
 import { GetKey } from "../../../custom/Function";
 import { notifyError, notifySuccess } from "../../../custom/Function";
 import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link, useParams } from "react-router-dom";
+import { getOrganbyId } from "./helper";
 
 const Search = Input.Search
 
@@ -169,11 +170,10 @@ const PhongBan = () => {
     const [idOrgan, setIdOrgan] = useState(null)
     const [id, setId] = useState(null)
     const [modalOpen, setModalOpen] = useState(false)
-
-    const params = useParams()
+    const [organ, setOrgan] = useState(null);
+    const params = useParams();
 
     const fetchFieldData = async () => {
-        console.log("fetch data")
         setIsLoading(true)
         const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT)
         const datas = res.data
@@ -230,32 +230,54 @@ const PhongBan = () => {
             notifyError("Xóa phòng ban thất bại")
         }
     }
+    const fetchOrgan = async () => {
+        const organ = await getOrganbyId(params.id);
+        setOrgan(organ);
+        console.log(organ);
+    }
 
     useEffect(() => {
-        fetchFieldData()
+        const fetchData = async () => {
+            setIsLoading(true);
+            await Promise.all([
+                fetchFieldData(),
+                fetchOrgan()
+            ]);
+            setIsLoading(false);
+        }
+        fetchData();
     }, [])
 
     return (
-        <div>
-            <DanhMucCoQuan
-                title={
-                    <span>
-                        <Link to="/khai-bao-danh-muc/danh-muc-co-quan/">Danh mục cơ quan</Link> /
-                        <span className="text-black"> Phòng ban </span>
-                    </span>
-                }
-                fieldNames={DEPARTMENT}
-                fieldDatas={fieldData}
-                SearchBar={<SearchBar />}
-                Create={<Create idOrgan={idOrgan} fetchFieldData={fetchFieldData} />}
-                isLoading={isLoading}
-            />
-            <Update
-                fetchFieldData={fetchFieldData}
-                id={id}
-                modalOpen={modalOpen}
-                setModalOpen={setModalOpen} />
-        </div>
+        <Spin spinning={isLoading}>
+            <div>
+                <DanhMucCoQuan
+                    title={
+                        <span>
+                            <span >{organ ? organ.name : "Danh mục cơ quan"}</span> /
+                            <span className="text-black"> Phòng ban </span>
+                        </span>
+                    }
+                    breadcrumb={
+                        <span>
+                            <Link to="/khai-bao-danh-muc/danh-muc-co-quan/">Danh mục cơ quan</Link> /
+                            <Link to={`/khai-bao-danh-muc/danh-muc-co-quan/${params.id}`}> Phòng ban </Link>
+                        </span>
+                    }
+                    fieldNames={DEPARTMENT}
+                    fieldDatas={fieldData}
+                    SearchBar={<SearchBar />}
+                    Create={<Create idOrgan={idOrgan} fetchFieldData={fetchFieldData} />}
+                    isLoading={isLoading}
+                />
+                <Update
+                    fetchFieldData={fetchFieldData}
+                    id={id}
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen} />
+            </div>
+        </Spin>
+
     )
 }
 

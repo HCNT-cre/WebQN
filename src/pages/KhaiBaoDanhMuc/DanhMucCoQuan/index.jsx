@@ -3,7 +3,15 @@ import { Table } from "../../../custom/Components/Table"
 import { useState } from "react"
 import { cloneElement } from "react"
 import { Link } from "react-router-dom"
-const DanhMucCoQuan = ({ fieldNames, fieldDatas, isLoading, SearchBar, Create = null, id = null, title = null }) => {
+const DanhMucCoQuan = ({ fieldNames,
+    fieldDatas,
+    isLoading,
+    SearchBar,
+    Create = null,
+    id = null,
+    title = null,
+    breadcrumb = null
+}) => {
     const [modalOpen, setModalOpen] = useState(false)
 
     if (Create !== null)
@@ -13,7 +21,7 @@ const DanhMucCoQuan = ({ fieldNames, fieldDatas, isLoading, SearchBar, Create = 
         <div className="w-full">
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
                 <p className="text-[14px] font-300 cursor-pointer ">
-                    <span className="text-[rgba(0,0,0,.45)]">Khai báo danh mục / {title}
+                    <span className="text-[rgba(0,0,0,.45)]">Khai báo danh mục / {breadcrumb}
                     </span>
                 </p>
 

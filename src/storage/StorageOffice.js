@@ -14,7 +14,8 @@ export const STAFF = [
     { title: "Số điện thoại", key: "phone", width: "100%" },
     { title: "Cơ quan", key: "organ", width: "100%" },
     { title: "Phòng ban", key: "department", width: "100%" },
-    { title: "Vị trí", key: "position", width: "100%" },
+   // { title: "Vị trí", key: "position", width: "100%" },
+    {title: "Chức vụ", key: "role", width: "100%"},
     // { title: "Trạng thái", key: "state", width: "100%" },
     { title: "", key: "update", width: "100%" },
 ]
@@ -86,7 +87,8 @@ export const STAFF_DECENTRALIZATION = [
     { type: "password", require: true, name: "password", label: "Mật khẩu" },
     { type: "number", require: true, name: "phone", label: "Số điện thoại" },
     { type: "input", require: true, name: "address", label: "Địa chỉ" },
-    { type: "input", require: true, name: "position", label: "Vị trí" },
+    // { type: "input", require: true, name: "position", label: "Vị trí" },
+    { type: "select", require: true, name: "role", label: "Chức vụ" },
     { type: "select", require: true, name: "department", label: "Phòng ban" },
 ]
 

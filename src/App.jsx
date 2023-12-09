@@ -39,6 +39,7 @@ import TaoQuyetDinh from "src/pages/TieuHuyHoSo/QuyetDinh/TaoQuyetDinh"
 import TraVe from "src/pages/TieuHuyHoSo/QuyetDinh/Trave"
 import DuyetQuyetDinh from "src/pages/TieuHuyHoSo/QuyetDinh/DuyetQuyetDinh"
 
+import DanhMucChucVu from "src/pages/KhaiBaoDanhMuc/DanhMucChucVu";
 import TaoQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/TaoQuyetDinhKhoiPhuc";
 import DuyetQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/DuyetQuyetDinhKhoiPhuc";
 import TraVeQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/TraVeQuyetDinhKhoiPhuc";
@@ -257,6 +258,10 @@ const App = () => {
         {
             path: "/quan-ly-he-thong/nguoi-dung",
             element: <User />
+        },
+        {
+            path:"/khai-bao-danh-muc/danh-muc-chuc-vu",
+            element: <DanhMucChucVu />
         },
         {
             path: "/quan-ly-he-thong/phan-quyen-he-thong",

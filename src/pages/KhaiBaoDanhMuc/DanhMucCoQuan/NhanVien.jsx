@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../../../custom/Function";
 import { Link, useParams } from "react-router-dom";
+import { getDepartmentbyId, getOrganbyId } from "./helper";
 
 const Search = Input.Search
 const { Panel } = Collapse
@@ -99,7 +100,6 @@ const Form = ({ modalOpen,
     }
 
     const onSubmit = async (e) => {
-        console.log(request)
         e.preventDefault()
         if (!request) {
             notifyError("Vui lòng nhập đầy đủ thông tin")
@@ -146,7 +146,7 @@ const Form = ({ modalOpen,
                 <div>
                     {STAFF_DECENTRALIZATION.map((input, index) => {
                         return (
-                            <div className="flex mb-[30px]" key={GetKey()}>
+                            <div className="flex mb-[30px]" >
                                 <div className={`w-[30%]  ${input.require === true ? "after-form" : ""}`}>
                                     {input.label}
                                 </div>
@@ -172,7 +172,29 @@ const Form = ({ modalOpen,
                         )
                     })}
                     <Collapse defaultActiveKey={['1']} >
-                        <Panel header="Nhóm quyền" key="1">
+                        <Panel header="Phân quyền menu" key="1">
+                            <Row className="w-full">
+                                {groupPermission.map((item) => {
+                                    return (
+                                        <Col span={12} key={GetKey()}>
+                                            <Checkbox
+                                                checked={permissionGroup.includes(item.value)}
+                                                onChange={(e) => handleChangePermission(e.target.value)}
+                                                disabled={state === "read"}
+                                                value={item.value}>
+                                                {item.label}
+                                            </Checkbox>
+                                        </Col>
+
+                                    )
+                                })}
+                            </Row>
+
+                        </Panel>
+
+                    </Collapse>
+                    <Collapse defaultActiveKey={['1']} >
+                        <Panel header="Hành động" key="1">
                             <Row className="w-full">
                                 {groupPermission.map((item) => {
                                     return (
@@ -222,6 +244,10 @@ const SearchBar = () => {
     )
 }
 
+const Create = ({ modalOpen, setModalOpen, idOrgan, idOrganDepartment, fetchFieldData }) => {
+    return <Form modalOpen={modalOpen} setModalOpen={setModalOpen} idOrgan={idOrgan} idOrganDepartment={idOrganDepartment} fetchFieldData={fetchFieldData} />
+}
+
 const Update = ({
     modalOpen,
     setModalOpen,
@@ -246,12 +272,14 @@ const NhanVien = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [fieldData, setFieldData] = useState([])
     const [id, setId] = useState(null)
+    const [idOrgan, setIdOrgan] = useState(null)
+    const [idOrganDepartment, setIdOrganDepartment] = useState(null)
     const [modalOpen, setModalOpen] = useState(false)
     const [modalOpenRead, setModalOpenRead] = useState(false)
-
+    const [organ, setOrgan] = useState(null);
     const params = useParams()
+    const [department, setDepartment] = useState(null);
 
-    console.log(params)
     const fetchFieldData = async () => {
         setIsLoading(true)
         const res = await axiosHttpService.get(API_ORGAN_GET_STAFF)
@@ -273,7 +301,8 @@ const NhanVien = () => {
                 "phone": data.phone,
                 "organ": data.organ,
                 "department": data.department,
-                "position": data.position,
+                "role": data.role,
+                // "position": data.position,
                 // "state": 0,
                 "update": <span className="cursor-pointer" onClick={() => {
                     setModalOpen(true)
@@ -283,18 +312,45 @@ const NhanVien = () => {
         }
 
         setFieldData(newData)
+        setIdOrgan(params.organ_id)
+        setIdOrganDepartment(params.department_id)
         setIsLoading(false)
+    }
 
+    const fetchDepartment = async () => {
+        const department = await getDepartmentbyId(params.department_id);
+        setDepartment(department);
+    }
+
+    const fetchOrgan = async () => {
+        const organ = await getOrganbyId(params.organ_id);
+        setOrgan(organ);
     }
 
     useEffect(() => {
-        fetchFieldData()
+        const fetchData = async () => {
+            setIsLoading(true);
+            await Promise.all([
+                fetchFieldData(),
+                fetchOrgan(),
+                fetchDepartment()
+            ]);
+            setIsLoading(false);
+        }
+        fetchData();
     }, [])
 
     return (
         <div>
             <DanhMucCoQuan
                 title={
+                    <span>
+                        <span>{organ ? organ.name : "Danh mục cơ quan"}</span> /
+                        <span> {department ? department.name : "Phòng ban" } </span> /
+                        <span className="text-black"> Nhân viên </span>
+                    </span>
+                }
+                breadcrumb={
                     <span>
                         <Link to="/khai-bao-danh-muc/danh-muc-co-quan/">Danh mục cơ quan</Link> /
                         <Link to={`/khai-bao-danh-muc/danh-muc-co-quan/${params.organ_id}`}> Phòng ban </Link> /
@@ -304,6 +360,7 @@ const NhanVien = () => {
                 fieldNames={STAFF}
                 fieldDatas={fieldData}
                 SearchBar={<SearchBar />}
+                Create={<Create idOrgan={idOrgan} idOrganDepartment={idOrganDepartment} fetchFieldData={fetchFieldData} />}
                 isLoading={isLoading}
             />
 

@@ -343,7 +343,9 @@ const CoQuan = () => {
                 fetchFieldData={fetchFieldData}
             />
             <DanhMucCoQuan
-                title={<Link to="/khai-bao-danh-muc/danh-muc-co-quan/"
+                title={<span
+                    className="text-black">Danh mục cơ quan</span>}
+                breadcrumb={<Link to="/khai-bao-danh-muc/danh-muc-co-quan/"
                     className="text-black">Danh mục cơ quan</Link>}
                 fieldNames={ORGAN} fieldDatas={fieldData}
                 SearchBar={<SearchBar />}
