@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
@@ -10,6 +10,9 @@ import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import AuthenAPIService from "src/service/api/authenAPIService";
+import { useDispatch } from "react-redux";
+
 
 const LoginContainer = styled(Box)`
   display: flex;
@@ -63,32 +66,32 @@ const LoginButton = styled(Button)`
 `;
 
 const Login = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [err, setErr] = useState("");
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  const handleLogin = () => {
-    const hardcodedUsername = "admin@quangngai.gov.vn";
-    const hardcodedPassword = "1111111";
-
-    if (username === hardcodedUsername && password === hardcodedPassword) {
-  
-      window.location.replace("https://luutrudientu.quangngai.gov.vn/logged-in/0");
+  const handleLogin = async () => {
+    const res = await AuthenAPIService.login(username, password);
+    if (res) {
+      localStorage.setItem("isLogin", 1);
+      window.location.reload();
     } else {
-      setError("Tên đăng nhập hoặc mật khẩu không đúng!");
+      setErr("Tài khoản hoặc mật khẩu không đúng");
     }
   };
-  
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleLogin();
     }
   };
-  
+
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
@@ -110,16 +113,15 @@ const Login = () => {
           margin="normal"
           value={username}
           onChange={handleUsernameChange}
-          
         />
         <TextField
           label="Mật khẩu"
           variant="outlined"
           fullWidth
           margin="normal"
-          type={showPassword ? "text" : "password"} 
+          type={showPassword ? "text" : "password"}
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={handlePasswordChange}
           onKeyPress={handleKeyPress}
           InputProps={{
             endAdornment: (
@@ -138,6 +140,9 @@ const Login = () => {
             ),
           }}
         />
+        <Typography color="error" variant="body2" component="p" gutterBottom>
+          {err}
+        </Typography>
         <ButtonContainer>
           <LoginButton onClick={handleLogin}>
             Đăng nhập
