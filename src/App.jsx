@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useParams, useLocation } from "react-router-dom";
 import Layout from "src/components/Layout";
 import Home from "src/pages/Home";
 import Login from "src/pages/Login";
@@ -209,9 +209,12 @@ const App = () => {
         const userInfo = await InitApp.initUserInfo();
         if (userInfo) {
             dispatch(LoginAction(userInfo.email, userInfo.full_name));
-            if(userInfo.is_superuser === true) {
-                dispatch(setUserPermission("2"));
+            if (userInfo.is_superuser === true) {
+                dispatch(setUserPermission([]));
             }
+        }else {
+            if(window.location.pathname === "/dang-nhap") return;
+            dispatch({ type: "LOGOUT" });
         }
         setIsLoading(false);
     };
@@ -510,7 +513,7 @@ const App = () => {
     ];
 
     return (
-        <Spin spinning={isLoading}>
+        <Fragment>
             <ToastContainer
                 position="top-center"
                 autoClose={10000}
@@ -541,8 +544,8 @@ const App = () => {
                     ))}
                 </Routes>
             </BrowserRouter>
-        </Spin>
 
+        </Fragment>
 
     );
 };

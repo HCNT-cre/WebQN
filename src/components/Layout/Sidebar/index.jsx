@@ -15,7 +15,7 @@ const SideBar = ({ sideBarWidth }) => {
     const locaiton = useLocation()
     const [sidebarTabs, setSidebarTabs] = useState([TABS_SIDEBAR])
     const transitions = ["height"];
-    const userID = localStorage.getItem('userID')
+    const userID = "0"
 
     useEffect(() => {
         if (userID === "0") {
