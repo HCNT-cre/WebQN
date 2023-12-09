@@ -11,6 +11,7 @@ import { getOrganbyId } from "./helper";
 
 const Search = Input.Search
 
+const API_ORGAN_GET_DEPARTMENT_BY_ORGAN = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN
 const API_STORAGE_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN
 const API_ORGAN_POST_DEPARTMENT = import.meta.env.VITE_API_ORGAN_POST_DEPARTMENT
 const API_ORGAN_GET_DEPARTMENT = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT
@@ -29,7 +30,7 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
     useEffect(() => {
         const fetchOrgan = async () => {
             if (!idOrgan) return
-            const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN + idOrgan)
+            const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN + '/' + idOrgan)
             const data = res.data
 
             setOrgan({
@@ -48,7 +49,7 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
         const fetchData = async () => {
             if (!id) return
             try {
-                const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT + id)
+                const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT_BY_ORGAN + '/' + id)
                 const data = res.data
                 setRequest(data)
             } catch (err) {
@@ -76,7 +77,7 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
         }
 
         if (id !== null) {
-            await axiosHttpService.put(API_ORGAN_GET_DEPARTMENT + id, request)
+            await axiosHttpService.put(API_ORGAN_GET_DEPARTMENT_BY_ORGAN + '/' + id, request)
             notifySuccess("Cập nhật phòng ban thành công")
         } else {
             await axiosHttpService.post(API_ORGAN_POST_DEPARTMENT, request)
@@ -175,15 +176,16 @@ const PhongBan = () => {
 
     const fetchFieldData = async () => {
         setIsLoading(true)
-        const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT+params.id)
+        const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT_BY_ORGAN + '/' + params.id)
         const datas = res.data
         const newData = []
+        const organData = await axiosHttpService.get(API_STORAGE_GET_ORGAN + '/' + params.id)
         for (const data of datas) {
             newData.push({
                 "id": data.id,
                 "name": <Link to={`./${data.id}`} className="cursor-pointer">{data.name}</Link>,
                 "code": data.code,
-                "organ": data.organ,
+                "organ": organData.data.name,
                // "total_staff": data.total_staff,
                 "update":
                     <span className="flex items-center justify-center">
@@ -221,7 +223,7 @@ const PhongBan = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axiosHttpService.delete(API_ORGAN_GET_DEPARTMENT + id)
+            await axiosHttpService.delete(API_ORGAN_GET_DEPARTMENT + '/' + id)
             notifySuccess("Xóa phòng ban thành công")
             fetchFieldData()
         } catch (err) {

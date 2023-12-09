@@ -544,9 +544,7 @@ const App = () => {
                     ))}
                 </Routes>
             </BrowserRouter>
-
         </Fragment>
-
     );
 };
 
