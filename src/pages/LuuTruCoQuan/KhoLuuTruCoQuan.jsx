@@ -11,7 +11,7 @@ export const FIELDS_TABLE = [
     { title: "Kho", key: "warehouse", width: "100%" },
     { title: "Phòng kho", key: "warehouseroom", width: "100%" },
     { title: "Kệ", key: "shelf", width: "100%" },
-    { title: "Tầng", key: "drawers", width: "100%" },
+    { title: "Hộp", key: "drawers", width: "100%" },
     { title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
     { title: "Chế độ sử dụng", key: "rights", width: "100%" },
     { title: "Trạng thái", key: "state", width: "130%" },
