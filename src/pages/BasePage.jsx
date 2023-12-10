@@ -93,7 +93,7 @@ const PlanAndCategoryFile = ({
 
 	return (
 		<Modal
-			title="Chọn danh mục và kê hoạch"
+			title="Chọn danh mục và kế hoạch"
 			style={{
 				top: 20,
 			}}
