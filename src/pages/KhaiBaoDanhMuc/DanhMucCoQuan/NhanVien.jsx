@@ -8,7 +8,7 @@ import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../../../custom/Function";
 import { Link, useParams } from "react-router-dom";
 import { getDepartmentbyId, getOrganbyId } from "./helper";
-
+import { ACTION_GROUP, PERMISSION_GROUP } from "src/storage/Storage";
 const Search = Input.Search
 const { Panel } = Collapse
 
@@ -38,7 +38,7 @@ const Form = ({
 
     useEffect(() => {
         const fetchDepartment = async () => {
-            if(!idOrgan) return;
+            if (!idOrgan) return;
             const res = await axiosHttpService.get(VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN + '/' + idOrgan)
             const datas = res.data
             const department = []
@@ -51,7 +51,7 @@ const Form = ({
             setDepartment(department)
         }
         const fetchRole = async () => {
-            if(!idOrgan) return;
+            if (!idOrgan) return;
             const res = await axiosHttpService.get(API_ROLE_BY_ORGAN + '/' + idOrgan)
             const datas = res.data
             const role = []
@@ -100,7 +100,7 @@ const Form = ({
     }
 
     const handleChangeRequest = (name, value) => {
-        console.log("name:", name, "value:", value)
+        console.log(name, value);
         setRequest(prev => ({
             ...prev,
             [name]: value
@@ -125,9 +125,8 @@ const Form = ({
             return
         }
 
-        if(request["is_staff"] === undefined || request["is_staff"] === null) request["is_staff"] = true;
-
-        if(request["role"] === undefined) request["role"] = null;
+        if (request["is_staff"] === undefined || request["is_staff"] === null) request["is_staff"] = true;
+        if (request["role"] === undefined) request["role"] = null;
         for (const input of STAFF_DECENTRALIZATION) {
             if (input.require && !request[input.name]) {
                 notifyError("Vui lòng nhập " + input.label)
@@ -135,7 +134,10 @@ const Form = ({
             }
         }
 
-        request["menu_permission"] = "";
+
+        request["menu_permission"] = request["permission"] + "-" + request["action"];
+        delete request["permission"];
+        delete request["action"];
 
         if (id !== null) {
             await axiosHttpService.put(API_ORGAN_POST_STAFF + '/' + id, request)
@@ -178,7 +180,15 @@ const Form = ({
                                             className="w-full"
                                             value={request[input.name]}
                                             name={input.name}
-                                            options={input.name === "department" ? department : role}
+                                            options={input.name === "department" ?
+                                                department :
+                                                input.name === "role" ?
+                                                    role :
+                                                    input.name === "permission" ?
+                                                        PERMISSION_GROUP :
+                                                        ACTION_GROUP
+
+                                            }
                                             onChange={(ev) => handleChangeRequest(input.name, ev)} /> :
                                         input.type === "checkbox" ?
                                             <Checkbox
@@ -197,50 +207,7 @@ const Form = ({
                             </div>
                         )
                     })}
-                    <Collapse defaultActiveKey={['1']} >
-                        <Panel header="Phân quyền menu" key="1">
-                            <Row className="w-full">
-                                {groupPermission.map((item) => {
-                                    return (
-                                        <Col span={12} key={GetKey()}>
-                                            <Checkbox
-                                                checked={permissionGroup.includes(item.value)}
-                                                onChange={(e) => handleChangePermission(e.target.value)}
-                                                disabled={state === "read"}
-                                                value={item.value}>
-                                                {item.label}
-                                            </Checkbox>
-                                        </Col>
-
-                                    )
-                                })}
-                            </Row>
-
-                        </Panel>
-
-                    </Collapse>
-                    <Collapse defaultActiveKey={['1']} >
-                        <Panel header="Hành động" key="1">
-                            <Row className="w-full">
-                                {groupPermission.map((item) => {
-                                    return (
-                                        <Col span={12} key={GetKey()}>
-                                            <Checkbox
-                                                checked={permissionGroup.includes(item.value)}
-                                                onChange={(e) => handleChangePermission(e.target.value)}
-                                                disabled={state === "read"}
-                                                value={item.value}>
-                                                {item.label}
-                                            </Checkbox>
-                                        </Col>
-
-                                    )
-                                })}
-                            </Row>
-
-                        </Panel>
-
-                    </Collapse>
+                  
                 </div>
                 {
                     <div className="flex justify-between mt-[30px]">
@@ -315,7 +282,7 @@ const NhanVien = () => {
         const departmentData = await axiosHttpService.get(API_ORGAN_GET_SINGLE_DEPARTMENT + '/' + params.department_id)
         for (const data of datas) {
             let roleStr = "Chưa có vai trò"
-            if(data.role !== null) {
+            if (data.role !== null) {
                 let roleData = await axiosHttpService.get(API_ORGAN_ROLE + '/' + data.role);
                 roleStr = roleData.data.name;
             }

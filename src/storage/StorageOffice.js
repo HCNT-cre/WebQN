@@ -91,7 +91,7 @@ export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
 //     "role": 1
 
 export const STAFF_DECENTRALIZATION = [
-    { type: "text", require: true, name: "full_name", label: "Tên" },
+    { type: "text", require: true, name: "full_name", label: "Họ và tên" },
     { type: "text", require: true, name: "username", label: "Tên người dùng" },
     { type: "email", require: true, name: "email", label: "Email" },
     { type: "password", require: true, name: "password", label: "Mật khẩu" },
@@ -99,6 +99,8 @@ export const STAFF_DECENTRALIZATION = [
     { type: "checkbox", require: false, name: "is_staff", label: "Quản trị viên" },
     { type: "select", require: true, name: "department", label: "Phòng ban" },
     { type: "select", require: false, name: "role", label: "Chức vụ" },
+    { type: "select", require: true, name: "permission", label: "Nhóm quyền" },
+    { type: "select", require: true, name: "action", label: "Nhóm hành động" },
 ]
 
 export const ORGAN_DECENTRALIZATION_INPUTS = [

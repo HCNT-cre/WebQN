@@ -19,7 +19,7 @@ const Home = () => {
 
   useEffect(() => {
     axiosHttpService
-      .get(API_GOV_FILE_GET_ALL + "1")
+      .get(API_GOV_FILE_GET_ALL)
       .then((response) => {
         setFileData(response.data);
       })

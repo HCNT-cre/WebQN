@@ -6,12 +6,12 @@ const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 
 const FileAPIService = {
     getFileByTitle: async (title) => {
-        const response = await axiosHttpService.get(`${API_GOV_FILE_SEARCH}1&title=${title}`)
+        const response = await axiosHttpService.get(`${API_GOV_FILE_SEARCH}title=${title}`)
         return response.data;
     },
 
     getFileById: async (id) => {
-        const response = await axiosHttpService.get(`${API_GOV_FILE_GET_ALL}1&id=${id}`)
+        const response = await axiosHttpService.get(`${API_GOV_FILE_GET_ALL}id=${id}`)
         return response.data;
     },
 

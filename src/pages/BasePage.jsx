@@ -501,7 +501,7 @@ const BasePage = ({
 	};
 
 	const resetSearch = async () => {
-		let request = API_GOV_FILE_SEARCH + userPermissionId;
+		let request = API_GOV_FILE_SEARCH;
 		const response = await axiosHttpService.get(request);
 		setFiles(getFileFromResponse(response));
 		setDoesFilter(true);
@@ -521,7 +521,7 @@ const BasePage = ({
 			try {
 				setIsLoading(true);
 				const response = await axiosHttpService.get(
-					API_GOV_FILE_GET_ALL + userPermissionId
+					API_GOV_FILE_GET_ALL
 				);
 				setIsLoading(false);
 				setFiles(getFileFromResponse(response));
@@ -554,7 +554,7 @@ const BasePage = ({
 
 	const handleSearch = async (ev) => {
 		try {
-			let request = API_GOV_FILE_SEARCH + userPermissionId;
+			let request = API_GOV_FILE_SEARCH;
 			Object.keys(search).forEach((key) => {
 				if (key === "state" && (search[key] === 0 || search[key] === "Tất cả"))
 					return;

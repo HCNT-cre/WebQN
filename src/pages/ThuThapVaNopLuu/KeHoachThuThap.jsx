@@ -225,9 +225,9 @@ const Update = ({
 	};
 
 	useEffect(() => {
+		if(!id) return;
 		const getPlan = async () => {
 			const { data } = await axiosHttpService.get(API_COLLECTION_PLAN + id);
-			console.log(data);
 			setRequest({
 				name: data.name,
 				date: data.date,
@@ -386,7 +386,6 @@ const KeHoachThuThap = () => {
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		console.log(API_COLLECTION_PLAN);
 		const res = await axiosHttpService.get(`${API_COLLECTION_PLAN}`);
 
 		const rawDatas = res.data.reverse().filter((data) => {

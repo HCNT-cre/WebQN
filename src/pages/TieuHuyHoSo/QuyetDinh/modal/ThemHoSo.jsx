@@ -134,7 +134,7 @@ const ThemHoSo = ({
             try {
                 setIsLoading(true);
                 const response = await axiosHttpService.get(
-                    API_GOV_FILE_GET_ALL + userPermissionId
+                    API_GOV_FILE_GET_ALL
                 );
                 setIsLoading(false);
                 const files = getFileFromResponse(response);
@@ -175,7 +175,7 @@ const ThemHoSo = ({
     };
 
     const resetSearch = async () => {
-        let request = API_GOV_FILE_SEARCH + userPermissionId;
+        let request = API_GOV_FILE_SEARCH;
         const response = await axiosHttpService.get(request);
         setFiles(getFileFromResponse(response));
         setSearch((prev) => ({

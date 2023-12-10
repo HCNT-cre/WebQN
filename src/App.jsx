@@ -209,11 +209,10 @@ const App = () => {
         const userInfo = await InitApp.initUserInfo();
         if (userInfo) {
             dispatch(LoginAction(userInfo.email, userInfo.full_name));
-            if (userInfo.is_superuser === true) {
-                dispatch(setUserPermission([]));
-            }
-        }else {
-            if(window.location.pathname === "/dang-nhap") return;
+            const permissions = userInfo.menu_permission.split("-");
+            dispatch(setUserPermission(permissions));
+        } else {
+            if (window.location.pathname === "/dang-nhap") return;
             dispatch({ type: "LOGOUT" });
         }
         setIsLoading(false);
