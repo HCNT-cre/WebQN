@@ -52,7 +52,6 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         getOrgan();
     }, [])
 
-    console.log(organ);
 
     const handleCancle = () => {
         setModalOpen(false)
