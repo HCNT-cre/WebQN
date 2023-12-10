@@ -6,7 +6,7 @@ import { Input, Modal, Button, Switch, Select, Popconfirm } from "antd";
 import { GetKey, notifyError, notifySuccess } from "../../../custom/Function";
 import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
-import axiosHttpService from "src/utils/httpService";
+import axiosHttpService, { axiosCorsService } from "src/utils/httpService";
 import { Link } from "react-router-dom";
 
 const Search = Input.Search
@@ -88,7 +88,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
 
     useEffect(() => {
         const fetchProvinces = async () => {
-            const res = await axiosHttpService.get(API_PROVINCES)
+            const res = await axiosCorsService.get(API_PROVINCES)
             const data = res.data
             data.forEach((item) => {
                 item.label = item.name
@@ -108,7 +108,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
 
             if (!request.province) return
             try {
-                const res = await axiosHttpService.get(API_DISTRICTS.replace("IDPROVINCE", request.province))
+                const res = await axiosCorsService.get(API_DISTRICTS.replace("IDPROVINCE", request.province))
                 const data = res.data.districts
                 data.forEach((item) => {
                     item.label = item.name
@@ -128,7 +128,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
             handleChangeRequest("ward", null)
             if (!request.district) return
             try {
-                const res = await axiosHttpService.get(API_WARD.replace("IDDISTRICT", request.district))
+                const res = await axiosCorsService.get(API_WARD.replace("IDDISTRICT", request.district))
                 const data = res.data.wards
                 data.forEach((item) => {
                     item.label = item.name

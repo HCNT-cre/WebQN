@@ -109,7 +109,7 @@ export const ORGAN_DECENTRALIZATION_INPUTS = [
     { type: "number", require: false, name: "fax", label: "Fax" },
     { type: "select", require: true, name: "province", label: "Tỉnh thành" },
     { type: "select", require: true, name: "district", label: "Quận huyện" },
-    { type: "select", require: true, name: "ward", label: "Phường xã" },
+    { type: "select", require: false, name: "ward", label: "Phường xã" },
     { type: "switch", require: false, false: "storage", label: "Trung tâm lưu trữ lịch sử" },
     { type: "textarea", require: false, false: "note", label: "Ghi chú" },
 ]
