@@ -16,7 +16,7 @@ export const STAFF = [
    // { title: "Vị trí", key: "position", width: "100%" },
     {title: "Chức vụ", key: "role", width: "100%"},
     // { title: "Trạng thái", key: "state", width: "100%" },
-    { title: "", key: "update", width: "100%" },
+    // { title: "", key: "update", width: "100%" },
 ]
 
 export const ORGAN = [

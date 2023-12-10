@@ -328,10 +328,10 @@ const NhanVien = () => {
                 "organ": organData.data.name,
                 "department": departmentData.data.name,
                 "role": roleStr,
-                "update": <span className="cursor-pointer" onClick={() => {
-                    setModalOpen(true)
-                    setId(data.id)
-                }}><i className="fa-regular fa-pen-to-square"></i></span>
+                // "update": <span className="cursor-pointer" onClick={() => {
+                //     setModalOpen(true)
+                //     setId(data.id)
+                // }}><i className="fa-regular fa-pen-to-square"></i></span>
             })
         }
 
