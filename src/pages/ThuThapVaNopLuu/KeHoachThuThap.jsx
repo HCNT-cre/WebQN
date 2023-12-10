@@ -8,10 +8,10 @@ import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
 const API_STORAGE_GET_ORGAN_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
-
+const API_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN;
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
-	{ title: "Ngày kế hoạch", key: "date", width: "100%" },
+	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
 	{ title: "Chức năng", key: "function", width: "120px" },
@@ -21,6 +21,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [request, setRequest] = useState({});
 	const [organ, setOrgan] = useState([]);
 	const [fileList, setFileList] = useState([]);
+	const [fileUploaded, setFileUploaded] = useState([]);
 	const props = {
 		onRemove: (file) => {
 			const index = fileList.indexOf(file);
@@ -40,7 +41,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 			const _ = data.map((item) => {
 				return {
 					label: item.name,
-					value: item.name,
+					value: item.id,
 				};
 			});
 			setOrgan(_);
@@ -50,16 +51,22 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	}, []);
 
 	const handleOk = async () => {
+		console.log(fileUploaded);
 		const formData = new FormData();
 		fileList.forEach((file) => {
-			formData.append('files[]', file);
+			console.log(file);
+			formData.append('files', file);
 		});
 		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
-		request["attachment"] = formData;
+		request["attachment"] = fileUploaded[0];
 		request["type"] = ENUM_TYPE_PLAN.THU_THAP_NOP_LUU;
 
-		console.log(request);
-		await axiosHttpService.post(`${API_COLLECTION_PLAN}`, request);
+		await axiosHttpService.post(`${API_COLLECTION_PLAN}`, request, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'multipart/form-data',
+			}
+		});
 		setTimeout(() => {
 			reFetchData();
 			setRequest({});
@@ -105,7 +112,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 				<div className="flex justify-between py-[12px]">
 					<span>Ngày kế hoạch</span>
 					<Input
-						name="date"
+						name="start_date"
 						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
 						type="date"
 						className="w-[70%]"
@@ -127,13 +134,28 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 
 				<div className="flex justify-between py-[12px]">
 					<span>Văn bản đính kèm</span>
-					<Upload
-						{...props}
-						className="w-[70%]"
-						name="file"
-					>
-						<Button>Tải tệp lên</Button>
-					</Upload>
+					<form encType="multipart/form-data">
+						<label
+							className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
+							htmlFor="file-upload"
+						>
+							<p className="ml-[8px]">Thêm văn bản</p>
+						</label>
+						<input
+							onClick={(ev) => {
+								ev.target.value = "";
+							}}
+							type="file"
+							id="file-upload"
+							name="file-upload"
+							className="hidden"
+							onChange={(ev) => {
+								setFileUploaded(Array.from(ev.target.files));
+							}}
+							accept="application/pdf"
+							multiple
+						></input>
+					</form>
 				</div>
 			</div>
 		</Modal>
@@ -149,7 +171,7 @@ const Delete = ({ id, reFetchData }) => {
 
 	const handleConfirm = async () => {
 		const deletePlan = async () => {
-			await axiosHttpService.delete(API_COLLECTION_PLAN + id);
+			await axiosHttpService.delete(API_COLLECTION_PLAN + '/' + id);
 		};
 
 		deletePlan();
@@ -225,9 +247,9 @@ const Update = ({
 	};
 
 	useEffect(() => {
-		if(!id) return;
+		if (!id) return;
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_COLLECTION_PLAN + id);
+			const { data } = await axiosHttpService.get(API_COLLECTION_PLAN + '/' + id);
 			setRequest({
 				name: data.name,
 				date: data.date,
@@ -262,7 +284,7 @@ const Update = ({
 	};
 
 	const handleOk = async () => {
-		await axiosHttpService.put(API_COLLECTION_PLAN + id, request);
+		await axiosHttpService.put(API_COLLECTION_PLAN + '/' + id, request);
 		setModalOpen(false);
 		reFetchData();
 	};
@@ -332,23 +354,19 @@ const KeHoachThuThap = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
-
 	const handleSendCollectPlan = async () => {
 		const planIds = stateCheckBox.map((item) => {
 			return Number(item.split("checkbox")[1]);
 		})
-		
-		console.log(planIds);
-		console.log(plan);
+
 		plan.forEach(async (pl) => {
 			if (planIds.findIndex((id) => id === pl.id) === -1) return;
 			console.log(pl.name.props.children);
-			await axiosHttpService.put(API_COLLECTION_PLAN + pl.id, {
+			await axiosHttpService.put(API_COLLECTION_PLAN + '/' + pl.id, {
 				name: pl.name.props.children[1],
-				date: pl.date,
-				organ: pl.organ,
+				start_date: pl.start_date,
+				organ: pl.organId,
 				state: ENUM_STATE_PLAN.CHO_DUYET,
-				attachment: pl.attachment
 			});
 		});
 
@@ -387,21 +405,21 @@ const KeHoachThuThap = () => {
 	const reFetchData = async () => {
 		setIsLoading(true);
 		const res = await axiosHttpService.get(`${API_COLLECTION_PLAN}`);
-
 		const rawDatas = res.data.reverse().filter((data) => {
 			return data.state === ENUM_STATE_PLAN.TAO_MOI;
 		});
 
 		const plan = [];
 		for (const rawData of rawDatas) {
+			const organ = await axiosHttpService.get(API_GET_ORGAN + '/' + rawData.organ);
 			const row = {
 				id: rawData.id,
 				name: <p
 					onClick={() => handleClickUpdate(rawData.id)}
 					className="cursor-pointer hover:underline"
 				> {rawData.name} </p>,
-				date: rawData.date,
-				organ: rawData.organ,
+				start_date: rawData.start_date,
+				organ: organ.data.name,
 				state: <button>{rawData.state}</button>,
 				function: (
 					<div className="flex ">
@@ -412,6 +430,7 @@ const KeHoachThuThap = () => {
 
 					</div>
 				),
+				organId: rawData.organ,
 			};
 			plan.push(row);
 		}

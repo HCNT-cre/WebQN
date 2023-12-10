@@ -836,7 +836,7 @@ export const ModalPlan = () => {
     const oldState = useSelector(state => state.modalPlanReducer.oldState);
     console.log(oldState);
     const handleOk = async () => {
-        await axiosHttpService.put(API_PLAN + id, {
+        await axiosHttpService.put( + '/' + id, {
             ...oldState,
             state: ENUM_STATE_PLAN.CHAP_NHAN,
             type: type
@@ -852,7 +852,7 @@ export const ModalPlan = () => {
     }
 
     const handleCancle = async () => {
-        await axiosHttpService.put(API_PLAN + id, {
+        await axiosHttpService.put(API_PLAN + '/' + id, {
             ...oldState,
             state: ENUM_STATE_PLAN.TU_CHOI,
             type: type,

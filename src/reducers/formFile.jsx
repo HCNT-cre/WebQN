@@ -23,7 +23,8 @@ const formFileReducer = (state = initialState, action) => {
         case "CREATE_FILE":
             return {
                 state: "CREATE_FILE",
-                id: null
+                id: null,
+                category_file: action.category_file
             }
 
         default:

@@ -121,7 +121,7 @@ const getLanguages = async () => {
     const languages = res.data.map((item) => {
         return {
             label: item.name,
-            value: item.name
+            value: item.id
         }
     })
     return languages;
@@ -132,11 +132,11 @@ const getMaintance = async () => {
     const maintance = res.data.map((item) => {
         if (item.duration === "Vĩnh viễn") return {
             label: item.duration,
-            value: item.duration
+            value: item.id
         }
         return {
             label: item.duration + " năm",
-            value: item.duration + " năm"
+            value: item.id
         }
     })
     return maintance;
@@ -147,7 +147,7 @@ const getFormat = async () => {
     const format = res.data.map((item) => {
         return {
             label: item.name,
-            value: item.name
+            value: item.id
         }
     })
     return format;
@@ -158,7 +158,7 @@ const getOrganId = async () => {
     const organId = res.data.map((item) => {
         return {
             label: item.fond_name,
-            value: item.fond_name
+            value: item.id
         }
     })
     return organId;

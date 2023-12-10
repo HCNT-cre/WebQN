@@ -9,13 +9,14 @@ import * as actionFile from "../../../actions/formFile";
 import { FORMAT, LANGUAGE, MAINTENANCE, ORGAN_ID, IDENTIFIER, RIGHTS, IDENTIFIER_CODE } from "../../../storage/FileStorage";
 import { Select, Input } from "antd";
 import { FirstLower, notifyError, notifySuccess } from "../../../custom/Function";
+import UserAPIService from "src/service/api/userAPIService";
 
 const API_GOV_FILE_CREATE = import.meta.env.VITE_API_GOV_FILE_CREATE
 const API_GOV_FILE_GET = import.meta.env.VITE_API_GOV_FILE_GET
 const API_GOV_FILE_UPDATE = import.meta.env.VITE_API_GOV_FILE_UPDATE
 const API_UPDATE_STATE_GOV_FILE =
-	import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE;
-
+    import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE;
+const API_GET_FOND_BY_ORGAN = import.meta.env.VITE_API_GET_FOND_BY_ORGAN;
 const File = ({
     reset,
 }) => {
@@ -24,11 +25,13 @@ const File = ({
     const userPermissionId = useSelector(state => state.user.permission_id)
     const stateForm = useSelector((state) => state.formFile.state)
     const fileID = useSelector((state) => state.formFile.id)
+    const categoryFile = useSelector((state) => state.formFile.category_file)
     const language = useSelector((state) => state.language.language)
     const format = useSelector((state) => state.format.format)
     const maintance = useSelector((state) => state.maintance.maintance)
-    const organId = useSelector((state) => state.organId.organId)
     const [idFileCreate, setIdFileCreate] = useState(null);
+    const [organ, setOrgan] = useState(null);
+    const [fond, setFond] = useState([]);
 
     const FIELDS_LEFT = [
         {
@@ -41,16 +44,16 @@ const File = ({
             key: "identifier",
             title: "Mã cơ quan lưu trữ",
             require: true,
-            type: "select",
-            options: IDENTIFIER,
-            default: true
+            type: "input",
+            options: organ ? organ.name : "",
+            disable: true
         },
         {
             key: "organ_id",
             title: "Mã phông/công trình/sưu tập lưu trữ",
             require: true,
             type: "select",
-            options: organId
+            options: fond
         },
         {
             key: "file_catalog",
@@ -64,7 +67,12 @@ const File = ({
             require: true,
             type: "text",
         },
-        { key: "title", title: "Tiêu đề hồ sơ", require: true, type: "text" },
+        {
+            key: "title",
+            title: "Tiêu đề hồ sơ",
+            require: true,
+            type: "text"
+        },
         {
             key: "maintenance",
             title: "Thời hạn bảo quản",
@@ -149,15 +157,15 @@ const File = ({
 
     const dispatch = useDispatch();
     const [request, setRequest] = useState({
-        rights: "Công Khai",
+        rights: null,
         gov_file_code: null,
-        identifier: "Trung tâm Lưu trữ lịch sử",
-        organ_id: "Phông trung tâm Lưu trữ lịch sử",
+        identifier: null,
+        organ_id: null,
         file_catalog: null,
         file_notation: null,
         title: null,
-        maintenance: "Vĩnh viễn",
-        language: "Tiếng Việt",
+        maintenance: null,
+        language: null,
         start_date: null,
         end_date: null,
         total_doc: null,
@@ -166,8 +174,9 @@ const File = ({
         keyword: null,
         sheet_number: null,
         page_number: null,
-        format: "Bình thường"
+        format: null
     })
+
 
     useEffect(() => {
         if (fileID === null || fileID === undefined) {
@@ -175,12 +184,7 @@ const File = ({
             Object.keys(request).forEach(key => {
                 updatedRequest[key] = null
             })
-            updatedRequest['identifier'] = "Trung tâm Lưu trữ lịch sử"
-            updatedRequest['rights'] = "Công Khai"
-            updatedRequest['organ_id'] = "Phông trung tâm Lưu trữ lịch sử"
-            updatedRequest['maintenance'] = "Vĩnh viễn"
-            updatedRequest['language'] = "Tiếng Việt"
-            updatedRequest['format'] = "Bình thường"
+    
             setRequest(prev => updatedRequest)
             return
         }
@@ -197,16 +201,42 @@ const File = ({
 
     }, [fileID])
 
+    useEffect(() => {
+        const getFond = async () => {
+            if (!organ) return;
+            const organId = organ.id;
+            const res = await axiosHttpService.get(API_GET_FOND_BY_ORGAN + '/' + organId);
+            const fond = res.data.map((item) => {
+                return {
+                    label: item.fond_name,
+                    value: item.id
+                }
+            })
+            setFond(fond);
+        }
+        getFond();
+    }, [organ])
+
+    useEffect(() => {
+        const getOrgan = async () => {
+            const organ = await UserAPIService.getUserOrgan();
+            setOrgan(organ);
+            handleChangeForm("identifier", organ.id);
+        }
+        getOrgan();
+    }, [])
+
     const handleChangeForm = (name, value) => {
         setRequest(prevState => ({
             ...prevState,
             [name]: value
         }))
     };
-
+    
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        console.log(request);
         for (const field of FIELDS_LEFT) {
             if (field.require && (request[field.key] === null || request[field.key] === "")) {
                 notifyError("Vui lòng nhập " + FirstLower(field.title))
@@ -221,7 +251,6 @@ const File = ({
             }
         }
         const handleChangeStateFile = async (id) => {
-            console.log("bmcl id file: ", id);
             const bmclFile = {
                 current_state: 1,
                 new_state: 11,
@@ -230,22 +259,19 @@ const File = ({
 
             }
             const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, [bmclFile]);
-            console.log(response);
-            
+
             window.location.reload();
         };
 
-        const gov_file_code = IDENTIFIER_CODE[request["identifier"]] + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
+        const gov_file_code = organ.code + "." + request["start_date"].split("-")[0] + "." + request["file_notation"]
 
         const API = title === "Tạo hồ sơ" ? API_GOV_FILE_CREATE : API_GOV_FILE_UPDATE
 
-        
+
         try {
+            request["category_file"] = categoryFile
             const response = await axiosHttpService.post(API, { ...request, gov_file_code: gov_file_code, perm_token: userPermissionId })
-            console.log(response)
             const error_code = response.data.error_code
-            console.log(error_code);
-            console.log(error_code === undefined);
             if (error_code === undefined) {
                 if (currentTab === "/bien-muc-chinh-ly/bien-muc-ho-so") {
                     handleChangeStateFile(response.data.id);
@@ -303,7 +329,6 @@ const File = ({
                                         <div className="flex justify-between">
                                             <div className="w-[50%] px-[10px]">
                                                 {FIELDS_LEFT.map((field, index) => {
-                                                    console.log(field.options)
                                                     const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
                                                     return (
                                                         <div
@@ -330,13 +355,13 @@ const File = ({
                                                                 />
                                                             ) : (
                                                                 <Input
-                                                                    disabled={stateForm === "WATCH_FILE"}
+                                                                    disabled={stateForm === "WATCH_FILE" || field.disable}
                                                                     onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
                                                                     name={field.key}
                                                                     placeholder={placeholder}
                                                                     type={field.type}
                                                                     min="0"
-                                                                    value={request[field.key] === null ? "" : request[field.key]}
+                                                                    value={field.disable ? organ.name : request[field.key] === null ? "" : request[field.key]}
                                                                     className="w-full py-[4px] px-[8px] border-solid border-[1px] rounded-[2px] mt-[12px] h-[30px]"
                                                                 />
                                                             )}

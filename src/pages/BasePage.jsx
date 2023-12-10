@@ -40,10 +40,13 @@ const PlanAndCategoryFile = ({
 	const dispatch = useDispatch();
 	const [categoryFile, setCategoryFile] = useState([]);
 	const [collectionPlan, setCollectionPlan] = useState([]);
+	const [category, setCategory] = useState(null);
 
+	console.log(category);
 	const handleOk = () => {
 		setOpen(false);
-		dispatch(CreateFile());
+	
+		dispatch(CreateFile(category));
 	};
 
 	const handleCancle = () => {
@@ -63,7 +66,7 @@ const PlanAndCategoryFile = ({
 				if (!isParent)
 					_.push({
 						label: data[i].name,
-						value: data[i].name,
+						value: data[i].id,
 					});
 			}
 			setCategoryFile(_);
@@ -114,6 +117,7 @@ const PlanAndCategoryFile = ({
 					name="categoryFile"
 					className="w-[70%]"
 					options={categoryFile}
+					onChange={(value) => setCategory(value)}
 				/>
 			</div>
 		</Modal>
@@ -595,7 +599,6 @@ const BasePage = ({
 			listState.push({
 				...newState,
 				id: id,
-				perm_token: userPermissionId,
 			});
 		}
 

@@ -166,7 +166,7 @@ const Update = ({
 	useEffect(() => {
 		if (id === null) return;
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_COLLECTION_PLAN + id);
+			const { data } = await axiosHttpService.get(API_COLLECTION_PLAN + '/' + id);
 			console.log(data);
 			setRequest({
 				name: data.name,
@@ -202,7 +202,7 @@ const Update = ({
 	};
 
 	const handleOk = async () => {
-		await axiosHttpService.put(API_COLLECTION_PLAN + id, request);
+		await axiosHttpService.put(API_COLLECTION_PLAN + '/' + id, request);
 		setModalOpen(false);
 		reFetchData();
 	};

@@ -41,8 +41,8 @@ export const ENUM_TYPE_PLAN = {
 
 export const ENUM_STATE_PLAN = {
 	TAO_MOI: "Mới lập",
-	CHO_DUYET: "Chờ duyệt",
-	TU_CHOI: "Từ chối",
+	CHO_DUYET: "Đợi duyệt",
+	TU_CHOI: "Trả về",
 	CHAP_NHAN: "Đã duyệt",
 }
 

@@ -111,7 +111,7 @@ const Delete = ({ id, reFetchData }) => {
 
 	const handleConfirm = async () => {
 		const deletePlan = async () => {
-			await axiosHttpService.delete(API_PLAN + id);
+			await axiosHttpService.delete(API_PLAN + '/' + id);
 		};
 
 		deletePlan();
@@ -177,7 +177,7 @@ const Update = ({ reFetchData, id }) => {
 
 	useEffect(() => {
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_PLAN + id);
+			const { data } = await axiosHttpService.get(API_PLAN + '/' + id);
 			setRequest({
 				
 				code: data.code,
@@ -218,7 +218,7 @@ const Update = ({ reFetchData, id }) => {
 	};
 
 	const handleOk = async () => {
-		await axiosHttpService.put(API_PLAN + id, request);
+		await axiosHttpService.put(API_PLAN + '/' + id, request);
 		setModalOpen(false);
 		reFetchData();
 	};

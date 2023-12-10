@@ -4,9 +4,11 @@ export const CloseFile = () => {
     }
 }
 
-export const CreateFile = () => {
+export const CreateFile = (category) => {
+    console.log("category", category);
     return {
-        type: "CREATE_FILE"
+        type: "CREATE_FILE",
+        category_file: category
     }
 }
 
