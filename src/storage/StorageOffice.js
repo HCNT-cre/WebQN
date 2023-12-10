@@ -96,9 +96,9 @@ export const STAFF_DECENTRALIZATION = [
     { type: "email", require: true, name: "email", label: "Email" },
     { type: "password", require: true, name: "password", label: "Mật khẩu" },
     { type: "text", require: true, name: "phone", label: "Số điện thoại" },
-    { type: "checkbox", require: true, name: "is_staff", label: "Quản trị viên" },
+    { type: "checkbox", require: false, name: "is_staff", label: "Quản trị viên" },
     { type: "select", require: true, name: "department", label: "Phòng ban" },
-    { type: "select", require: true, name: "role", label: "Chức vụ" },
+    { type: "select", require: false, name: "role", label: "Chức vụ" },
 ]
 
 export const ORGAN_DECENTRALIZATION_INPUTS = [

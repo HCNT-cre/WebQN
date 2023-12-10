@@ -38,6 +38,7 @@ const Form = ({
 
     useEffect(() => {
         const fetchDepartment = async () => {
+            if(!idOrgan) return;
             const res = await axiosHttpService.get(VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN + '/' + idOrgan)
             const datas = res.data
             const department = []
@@ -50,6 +51,7 @@ const Form = ({
             setDepartment(department)
         }
         const fetchRole = async () => {
+            if(!idOrgan) return;
             const res = await axiosHttpService.get(API_ROLE_BY_ORGAN + '/' + idOrgan)
             const datas = res.data
             const role = []
@@ -118,13 +120,14 @@ const Form = ({
     const onSubmit = async (e) => {
         e.preventDefault();
 
-        console.log(request);
-
         if (!request) {
             notifyError("Vui lòng nhập đầy đủ thông tin")
             return
         }
 
+        if(request["is_staff"] === undefined || request["is_staff"] === null) request["is_staff"] = true;
+
+        if(request["role"] === undefined) request["role"] = null;
         for (const input of STAFF_DECENTRALIZATION) {
             if (input.require && !request[input.name]) {
                 notifyError("Vui lòng nhập " + input.label)
@@ -151,7 +154,7 @@ const Form = ({
 
     return (
         <Modal
-            title="Cập nhật nhân viên"
+            title={state === "update" ? "Cập nhật nhân viên" : "Tạo nhân viên"}
             style={{
                 top: 20,
             }}
@@ -179,7 +182,7 @@ const Form = ({
                                             onChange={(ev) => handleChangeRequest(input.name, ev)} /> :
                                         input.type === "checkbox" ?
                                             <Checkbox
-                                                onChange={(ev) => handleChangeRequest(input.name, ev.target.checked)}
+                                                onChange={(ev) => handleChangeRequest(input.name, !ev.target.checked)}
                                             /> :
                                             <Input
                                                 disabled={state === "read"}
@@ -311,7 +314,11 @@ const NhanVien = () => {
         const organData = await axiosHttpService.get(API_SINGLE_ORGAN + '/' + params.organ_id)
         const departmentData = await axiosHttpService.get(API_ORGAN_GET_SINGLE_DEPARTMENT + '/' + params.department_id)
         for (const data of datas) {
-            const roleData = await axiosHttpService.get(API_ORGAN_ROLE + '/' + data.role)
+            let roleStr = "Chưa có vai trò"
+            if(data.role !== null) {
+                let roleData = await axiosHttpService.get(API_ORGAN_ROLE + '/' + data.role);
+                roleStr = roleData.data.name;
+            }
             // if (data.department_id !== params.department_id) continue
             newData.push({
                 "id": data.id,
@@ -320,7 +327,7 @@ const NhanVien = () => {
                 "phone": data.phone,
                 "organ": organData.data.name,
                 "department": departmentData.data.name,
-                "role": roleData.data.name,
+                "role": roleStr,
                 "update": <span className="cursor-pointer" onClick={() => {
                     setModalOpen(true)
                     setId(data.id)
