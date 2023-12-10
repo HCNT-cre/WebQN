@@ -39,7 +39,7 @@ const File = ({
         },
         {
             key: "identifier",
-            title: "Mã cơ quan lưu trữ lịch sử",
+            title: "Mã cơ quan lưu trữ",
             require: true,
             type: "select",
             options: IDENTIFIER,
