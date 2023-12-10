@@ -8,7 +8,7 @@ export const DEPARTMENT = [
 ]
 
 export const STAFF = [
-    { title: "Tên", key: "name", width: "100%" },
+    { title: "Họ và tên", key: "name", width: "100%" },
     { title: "Email", key: "email", width: "100%" },
     { title: "Số điện thoại", key: "phone", width: "100%" },
     { title: "Cơ quan", key: "organ", width: "100%" },
