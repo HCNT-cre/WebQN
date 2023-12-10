@@ -744,24 +744,23 @@ export const FOND = [
 	{ title: "Tên phông/công trình/sưu tập lưu trữ", key: "fond_name", width: "100%" },
 	{ title: "", key: "update", width: "100px" },
 ];
-
+ 
 
 export const FOND_INPUT = [
-	{ type: "text", require: true, name: "identifier", label: "Mã cơ quan lưu trữ" },
-	{ type: "select", require: true, name: "organ_id", label: "Mã phông/công trình/sưu tập lưu trữ" },
+	{ type: "select", require: true, name: "organ", label: "Mã cơ quan lưu trữ" },
+	{ type: "text", require: true, name: "identifier", label: "Mã phông/công trình/sưu tập lưu trữ" },
 	{ type: "text", require: true, name: "fond_name", label: "Tên phông/công trình/sưu tập lưu trữ" },
 	{ type: "text", require: true, name: "fond_history", label: "Lịch sử đơn vị hình thành phông" },
 	{ type: "text", require: true, name: "archives_time", label: "Thời gian tài liệu" },
-	{ type: "number", require: true, name: "paper_total", label: "Tổng số tài liệu giấy" },
-	{ type: "number", require: true, name: "paper_digital", label: "Số lượng tài liệu giấy đã số hóa" },
-	{ type: "text", require: true, name: "key_groups", label: "Các nhóm tài liệu chủ yếu" },
-	{ type: "text", require: true, name: "other_types", label: "Các loại hình tài liệu khác" },
-	{ type: "text", require: true, name: "language", label: "Ngôn ngữ" },
-	{ type: "text", require: true, name: "lookup_tools", label: "Công cụ tra cứu" },
-	{ type: "number", require: true, name: "copy_number", label: "Số lượng trang tài liệu đã lập bản sao bảo hiểm" },
-	{ type: "text", require: true, name: "description", label: "Ghi chú" },
+	// { type: "number", require: true, name: "paper_total", label: "Tổng số tài liệu giấy" },
+	// { type: "number", require: true, name: "paper_digital", label: "Số lượng tài liệu giấy đã số hóa" },
+	// { type: "text", require: true, name: "key_groups", label: "Các nhóm tài liệu chủ yếu" },
+	// { type: "text", require: true, name: "other_types", label: "Các loại hình tài liệu khác" },
+	// { type: "text", require: true, name: "language", label: "Ngôn ngữ" },
+	// { type: "text", require: true, name: "lookup_tools", label: "Công cụ tra cứu" },
+	// { type: "number", require: true, name: "copy_number", label: "Số lượng trang tài liệu đã lập bản sao bảo hiểm" },
+	// { type: "text", require: true, name: "description", label: "Ghi chú" },
 ];
-
 export const FIELDS_TABLE_SEARCH_FILE = [
     { title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
     { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },

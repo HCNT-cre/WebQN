@@ -8,7 +8,7 @@ export const DEPARTMENT = [
 ]
 
 export const STAFF = [
-    { title: "Tên", key: "name", width: "100%" },
+    { title: "Họ và tên", key: "name", width: "100%" },
     { title: "Email", key: "email", width: "100%" },
     { title: "Số điện thoại", key: "phone", width: "100%" },
     { title: "Cơ quan", key: "organ", width: "100%" },
@@ -16,7 +16,7 @@ export const STAFF = [
    // { title: "Vị trí", key: "position", width: "100%" },
     {title: "Chức vụ", key: "role", width: "100%"},
     // { title: "Trạng thái", key: "state", width: "100%" },
-    { title: "", key: "update", width: "100%" },
+    // { title: "", key: "update", width: "100%" },
 ]
 
 export const ORGAN = [
@@ -31,9 +31,9 @@ export const ORGAN = [
     { title: "", key: "update", width: "100%" }
 ]
 export const DEPARTMENT_DECENTRALIZATION_INPUTS = [
+    { type: "select", require: true, name: "organ", label: "Cơ quan", },
     { type: "input", require: true, name: "name", label: "Tên", },
     { type: "input", require: true, name: "code", label: "Mã", },
-    { type: "select", require: true, name: "organ", label: "Cơ quan", },
 ]
 
 export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
@@ -80,15 +80,25 @@ export const DEPARTMENT_DECENTRALIZATION_COLLASPE = [
     }
 ]
 
+// "email": "tqvinh@gmail.com",
+//     "username": "tqvinh",
+//     "password": "admintl97p1",
+//     "full_name": "Truong Quoc Vinh",
+//     "phone": "0987654321", 
+//     "is_staff": false,
+//     "menu_permission": "",
+//     "department": "2",
+//     "role": 1
+
 export const STAFF_DECENTRALIZATION = [
-    { type: "input", require: true, name: "name", label: "Tên" },
+    { type: "text", require: true, name: "full_name", label: "Tên" },
+    { type: "text", require: true, name: "username", label: "Tên người dùng" },
     { type: "email", require: true, name: "email", label: "Email" },
     { type: "password", require: true, name: "password", label: "Mật khẩu" },
-    { type: "number", require: true, name: "phone", label: "Số điện thoại" },
-    // { type: "input", require: true, name: "position", label: "Vị trí" },
-    
+    { type: "text", require: true, name: "phone", label: "Số điện thoại" },
+    { type: "checkbox", require: false, name: "is_staff", label: "Quản trị viên" },
     { type: "select", require: true, name: "department", label: "Phòng ban" },
-    { type: "select", require: true, name: "role", label: "Chức vụ" },
+    { type: "select", require: false, name: "role", label: "Chức vụ" },
 ]
 
 export const ORGAN_DECENTRALIZATION_INPUTS = [

@@ -39,8 +39,7 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
                 value: data.name
             })
 
-            handleChangeRequest("organ_id", idOrgan)
-            handleChangeRequest("organ", data.name)
+            handleChangeRequest("organ", idOrgan)
         }
         fetchOrgan()
     }, [idOrgan])
@@ -84,8 +83,7 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
             notifySuccess("Tạo phòng ban thành công")
         }
         setRequest({})
-        handleChangeRequest("organ_id", idOrgan)
-        handleChangeRequest("organ", organ.name)
+        handleChangeRequest("organ", idOrgan)
         setTimeout(() => {
             setModalOpen(false)
             fetchFieldData()
@@ -115,7 +113,7 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
                             <div className="w-[70%]">
                                 {input.type === "select" ?
                                     <Select
-                                        value={request["organ"]}
+                                        value={organ.name}
                                         disabled
                                         className="w-full" />
                                     : <Input

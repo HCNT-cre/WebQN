@@ -28,3 +28,4 @@ doc/
 
 dist
 dist/*
+dist/index.html

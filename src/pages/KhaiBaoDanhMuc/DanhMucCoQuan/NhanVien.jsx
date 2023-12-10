@@ -13,7 +13,7 @@ const Search = Input.Search
 const { Panel } = Collapse
 
 
-const API_SINGLE_ORGAN =import.meta.env.VITE_API_STORAGE_GET_ORGAN;
+const API_SINGLE_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN;
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 const API_ORGAN_POST_STAFF = import.meta.env.VITE_API_ORGAN_POST_STAFF
 const VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN
@@ -22,7 +22,8 @@ const API_GROUP_PERMISSION = import.meta.env.VITE_API_GROUP_PERMISSION
 const API_ROLE_BY_ORGAN = import.meta.env.VITE_API_ROLE_BY_ORGAN
 const API_ORGAN_ROLE = import.meta.env.VITE_API_ORGAN_ROLE
 
-const Form = ({ modalOpen,
+const Form = ({
+    modalOpen,
     setModalOpen,
     fetchFieldData,
     idOrgan,
@@ -31,27 +32,36 @@ const Form = ({ modalOpen,
 
     const [request, setRequest] = useState({})
     const [department, setDepartment] = useState([])
-    const [organ, setOrgan] = useState({})
     const [groupPermission, setGroupPermission] = useState([])
     const [permissionGroup, setPermissionGroup] = useState([])
+    const [role, setRole] = useState([])
 
     useEffect(() => {
         const fetchDepartment = async () => {
+            if(!idOrgan) return;
             const res = await axiosHttpService.get(VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN + '/' + idOrgan)
             const datas = res.data
-
             const department = []
             for (const data of datas) {
-                if (data.organ_id === idOrgan) {
-                    department.push({
-                        label: data.name,
-                        value: data.id
-                    })
-                }
+                department.push({
+                    label: data.name,
+                    value: data.id
+                })
             }
-
-            setOrgan(organ)
             setDepartment(department)
+        }
+        const fetchRole = async () => {
+            if(!idOrgan) return;
+            const res = await axiosHttpService.get(API_ROLE_BY_ORGAN + '/' + idOrgan)
+            const datas = res.data
+            const role = []
+            for (const data of datas) {
+                role.push({
+                    label: data.name,
+                    value: data.id
+                })
+            }
+            setRole(role)
         }
 
         const fetchGroupPermission = async () => {
@@ -66,15 +76,17 @@ const Form = ({ modalOpen,
             })
             setGroupPermission(groupPermission)
         }
+
+        fetchRole();
         fetchGroupPermission()
         fetchDepartment()
-    }, [])
+    }, [idOrgan])
 
     useEffect(() => {
         const fetchData = async () => {
             if (!id)
                 return
-            const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + '/'+ id)
+            const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + '/' + id)
             const data = res.data
 
             setRequest(data)
@@ -88,6 +100,7 @@ const Form = ({ modalOpen,
     }
 
     const handleChangeRequest = (name, value) => {
+        console.log("name:", name, "value:", value)
         setRequest(prev => ({
             ...prev,
             [name]: value
@@ -105,11 +118,16 @@ const Form = ({ modalOpen,
     }
 
     const onSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
+
         if (!request) {
             notifyError("Vui lòng nhập đầy đủ thông tin")
             return
         }
+
+        if(request["is_staff"] === undefined || request["is_staff"] === null) request["is_staff"] = true;
+
+        if(request["role"] === undefined) request["role"] = null;
         for (const input of STAFF_DECENTRALIZATION) {
             if (input.require && !request[input.name]) {
                 notifyError("Vui lòng nhập " + input.label)
@@ -117,9 +135,7 @@ const Form = ({ modalOpen,
             }
         }
 
-        request["organ"] = organ[request.department]
-        request["department_id"] = request["department"]
-        request["department"] = department.find((item) => item.value === request.department).label
+        request["menu_permission"] = "";
 
         if (id !== null) {
             await axiosHttpService.put(API_ORGAN_POST_STAFF + '/' + id, request)
@@ -138,7 +154,7 @@ const Form = ({ modalOpen,
 
     return (
         <Modal
-            title="Cập nhật nhân viên"
+            title={state === "update" ? "Cập nhật nhân viên" : "Tạo nhân viên"}
             style={{
                 top: 20,
             }}
@@ -151,7 +167,7 @@ const Form = ({ modalOpen,
                 <div>
                     {STAFF_DECENTRALIZATION.map((input, index) => {
                         return (
-                            <div className="flex mb-[30px]" >
+                            <div className="flex mb-[30px]" key={index}>
                                 <div className={`w-[30%]  ${input.require === true ? "after-form" : ""}`}>
                                     {input.label}
                                 </div>
@@ -162,16 +178,21 @@ const Form = ({ modalOpen,
                                             className="w-full"
                                             value={request[input.name]}
                                             name={input.name}
-                                            options={department}
+                                            options={input.name === "department" ? department : role}
                                             onChange={(ev) => handleChangeRequest(input.name, ev)} /> :
+                                        input.type === "checkbox" ?
+                                            <Checkbox
+                                                onChange={(ev) => handleChangeRequest(input.name, !ev.target.checked)}
+                                            /> :
+                                            <Input
+                                                disabled={state === "read"}
+                                                type={input.type}
+                                                name={input.name}
+                                                onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
+                                                value={request[input.name]}
+                                            />
 
-                                        <Input
-                                            disabled={state === "read"}
-                                            type={input.type}
-                                            name={input.name}
-                                            onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
-                                            value={request[input.name]}
-                                        />}
+                                    }
                                 </div>
                             </div>
                         )
@@ -222,11 +243,10 @@ const Form = ({ modalOpen,
                     </Collapse>
                 </div>
                 {
-                    state === "update" &&
                     <div className="flex justify-between mt-[30px]">
                         <Button onClick={handleCancle}>Hủy</Button>
                         <Button form="tao-nhan-vien" type="submit" className="bg-[#00f] text-white" onClick={onSubmit}>
-                            Cập nhật
+                            {state === "update" ? "Cập nhật" : "Tạo"}
                         </Button>
                     </div>
                 }
@@ -287,15 +307,19 @@ const NhanVien = () => {
 
     const fetchFieldData = async () => {
         setIsLoading(true)
-        const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + '/'+ params.department_id)
+        const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + '/' + params.department_id)
         const datas = res.data
-        console.log("params: ",params)
+        console.log("params: ", params)
         const newData = []
         const organData = await axiosHttpService.get(API_SINGLE_ORGAN + '/' + params.organ_id)
-        const departmentData = await axiosHttpService.get(API_ORGAN_GET_SINGLE_DEPARTMENT +'/'+ params.department_id)
+        const departmentData = await axiosHttpService.get(API_ORGAN_GET_SINGLE_DEPARTMENT + '/' + params.department_id)
         for (const data of datas) {
-            const roleData = await axiosHttpService.get(API_ORGAN_ROLE + '/'+ data.role)
-           // if (data.department_id !== params.department_id) continue
+            let roleStr = "Chưa có vai trò"
+            if(data.role !== null) {
+                let roleData = await axiosHttpService.get(API_ORGAN_ROLE + '/' + data.role);
+                roleStr = roleData.data.name;
+            }
+            // if (data.department_id !== params.department_id) continue
             newData.push({
                 "id": data.id,
                 "name": data.full_name,
@@ -303,11 +327,11 @@ const NhanVien = () => {
                 "phone": data.phone,
                 "organ": organData.data.name,
                 "department": departmentData.data.name,
-                "role": roleData.data.name,
-                "update": <span className="cursor-pointer" onClick={() => {
-                    setModalOpen(true)
-                    setId(data.id)
-                }}><i className="fa-regular fa-pen-to-square"></i></span>
+                "role": roleStr,
+                // "update": <span className="cursor-pointer" onClick={() => {
+                //     setModalOpen(true)
+                //     setId(data.id)
+                // }}><i className="fa-regular fa-pen-to-square"></i></span>
             })
         }
 
@@ -346,7 +370,7 @@ const NhanVien = () => {
                 title={
                     <span>
                         <span>{organ ? organ.name : "Danh mục cơ quan"}</span> /
-                        <span> {department ? department.name : "Phòng ban" } </span> /
+                        <span> {department ? department.name : "Phòng ban"} </span> /
                         <span className="text-black"> Nhân viên </span>
                     </span>
                 }
