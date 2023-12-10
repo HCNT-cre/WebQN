@@ -18,6 +18,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
     const [request, setRequest] = useState({});
     const [organ, setOrgan] = useState([]);
     const handleChangeRequest = (name, value) => {
+        console.log(name, value);
         setRequest(prev => ({
             ...prev,
             [name]: value
@@ -44,7 +45,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
             const _ = data.map((item) => {
                 return {
                     label: item.code,
-                    value: item.code,
+                    value: item.id,
                 };
             });
             setOrgan(_);
@@ -120,7 +121,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
                                         value={request[input.name]}
                                         className="w-full"
                                         options={organ}
-                                        onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
+                                        onChange={(ev) => handleChangeRequest(input.name, ev)}
                                     /> :
                                     <Input
                                         name={input.name}
