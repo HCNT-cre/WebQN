@@ -8,7 +8,8 @@ const APPLICANT = {
             update_state: {
                 current_state: 1,
                 new_state: 2
-            }
+            },
+            perm_id: 201
         },
         {
             permission_title: "Mở hồ sơ",
@@ -16,7 +17,8 @@ const APPLICANT = {
             update_state: {
                 current_state: 2,
                 new_state: 1
-            }
+            },
+            perm_id: 202
         },
         {
             permission_title: "Nộp lưu cơ quan",
@@ -24,7 +26,8 @@ const APPLICANT = {
             update_state: {
                 current_state: 2,
                 new_state: 3
-            }
+            },
+            perm_id: 203
         },
         {
             permission_title: "Nộp lưu lịch sử",
@@ -32,7 +35,8 @@ const APPLICANT = {
             update_state: {
                 current_state: 4,
                 new_state: 5
-            }
+            },
+            perm_id: 204
         }
     ]
 }
@@ -70,14 +74,22 @@ const APPLICATION_REVIEWER = {
 
 
 const userReducer = (state = APPLICANT, action) => {
-    switch (action.type) {
-        case "SET_ROLE_TO_APPLICANT":
-            return APPLICANT
-        case "SET_ROLE_TO_APPLICATION_REVIEWER":
-            return APPLICATION_REVIEWER
-        default:
-            return state
-    }
+    // switch (action.type) {
+    //     case "SET_ROLE_TO_APPLICANT":
+    //         return APPLICANT
+    //     case "SET_ROLE_TO_APPLICATION_REVIEWER":
+    //         return APPLICATION_REVIEWER
+    //     default:
+    //         return state
+    // }
+
+    // finalState = []
+    // for (const permission of state.permissions) {
+    //     if (permission.perm_id in permArrayOfUser) {
+    //         finalState.push(permission);
+    //     }
+    // }
+    return state; // TODO: return finaState
 }
 
 export default userReducer
