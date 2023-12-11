@@ -208,10 +208,12 @@ export const ModalConfirmLuuTruCoQuan = () => {
 
         const fetchOrganName = async () => {
             const response = await UserAPIService.getUserOrgan();
-            setOptionOrgan([{
+            let organObject = {
                 value: response.id,
                 label: response.name
-            }]);
+            }
+            setOptionOrgan([organObject]);
+            handleChangeRequest('organ', organObject.value)
         }
 
         const fetchWarehouse = async () => {
@@ -287,7 +289,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
     const handleClickApprove = async () => {
         for (const key in request) {
             if (request[key] === null) {
-                notifyError("Vui lòng chọn đủ thông tin")
+                notifyError("Vui lòng chọn đủ thông tin " + key)
                 return
             }
         }
@@ -296,7 +298,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
             { id: IDFile, current_state: 10, new_state: 4 } // CHO_XEP_KHO -> LUU_TRU_CO_QUAN
         ]);
         
-        await axiosHttpService.post(API_STORAGE_POST_FILE_ORGAN_STORAGE, { ...request, file_id: IDFile })
+        // await axiosHttpService.post(API_STORAGE_POST_FILE_ORGAN_STORAGE, { ...request, file_id: IDFile })
         dispatch({ type: "close_modal_confirm_luutrucoquan", id: null })
         notifySuccess("Duyệt thành công")
         reFetchFile()
