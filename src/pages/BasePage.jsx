@@ -134,7 +134,6 @@ const ButtonFunctionOfEachFile = ({
 	const handleClose = () => {
 		setOpen(false);
 	};
-
 	const handleConfirm = () => {
 		console.log("IDFile", IDFile);
 		const DeleteOrganFile = async () => {
@@ -172,7 +171,7 @@ const ButtonFunctionOfEachFile = ({
 
 	useEffect(() => {
 		const popupContainer = document.querySelectorAll(
-			".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1fviqcj.css-dev-only-do-not-override-1fviqcj.ant-popover-placement-top"
+			".ant-popover.ant-popconfirm.css-1vr7spz.css-1vr7spz.ant-popover-placement-top"
 		)[0];
 
 		if (popupContainer === undefined) return;
@@ -234,9 +233,28 @@ const ButtonFunctionOfEachFile = ({
 		{
 			popup: true,
 			element: (
-					<div className="absolute w-[200px] h-[200px] bg-black bottom-0">
-					
-					</div>
+				<Popconfirm
+					// ref={(el) => {
+					// 	console.log("ref in delete", el)
+					// 	contentRef.current[2] = el;
+					// }}
+					title="Xóa hồ sơ"
+					open={open}
+					description="Bạn có chắc chắn xóa?"
+					onConfirm={handleConfirm}
+					onCancel={handleClose}
+					key={GetKey()}
+				>
+					<Button
+						onClick={() => {
+							setOpen(true);
+						}}
+						className={`hover:bg-blue-300 cursor-pointer basis-1/4 max-w-[25%] text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`}
+						title="Xóa hồ sơ"
+					>
+						<i className="fa-solid fa-trash-can"></i>
+					</Button>
+				</Popconfirm>
 			),
 		},
 
