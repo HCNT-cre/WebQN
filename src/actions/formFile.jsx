@@ -4,11 +4,11 @@ export const CloseFile = () => {
     }
 }
 
-export const CreateFile = (category) => {
-    console.log("category", category);
+export const CreateFile = (category, plan) => {
     return {
         type: "CREATE_FILE",
-        category_file: category
+        category_file: category,
+        plan: plan
     }
 }
 
