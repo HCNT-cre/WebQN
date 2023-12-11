@@ -7,7 +7,6 @@ import AddFile from "src/pages/Files/AddFile";
 import { ToastContainer, Zoom } from 'react-toastify';
 import DigitizingFile from "src/pages/Files/DigitizingFile";
 import DueFile from "src/pages/Files/DueFile";
-import HoSoTaiLieuGiaoNopLS from "src/pages/LuuTruLichSu/HoSoTaiLieuGiaoNopLS";
 import KhoLuuTruLichSu from "src/pages/LuuTruLichSu/KhoLuuTruLichSu";
 import HoSoTaiLieuGiaoNop from "src/pages/LuuTruCoQuan/HoSoTaiLieuGiaoNop";
 import KhoLuuTruCoQuan from "src/pages/LuuTruCoQuan/KhoLuuTruCoQuan";
@@ -245,11 +244,14 @@ const App = () => {
             path: "/luu-tru-co-quan/ho-so-bi-tra-ve",
             element: <HoSoBiTraVeCoQuan />,
         },
+        // {
+        //     path: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop",
+        //     element: <HoSoTaiLieuGiaoNopLS />,
+        // },
         {
-            path: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop",
-            element: <HoSoTaiLieuGiaoNopLS />,
+            path: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
+            element: <PheDuyetKeHoachLuuTruLichSu />,
         },
-
         {
             path: "/luu-tru-lich-su/kho-luu-tru-lich-su",
             element: <KhoLuuTruLichSu />,
