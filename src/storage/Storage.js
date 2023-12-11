@@ -309,19 +309,14 @@ export const TABS_SIDEBAR = [
 				number: 31,
 			},
 			// {
-			// 	title: "Phê duyệt kế hoạch lưu trữ lịch sử",
-			// 	to: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
-			// 	key: "/luu-tru-lich-su/phe-duyet-ke-hoach-luu-tru-lich-su",
-			// },
-			// {
 			// 	title: "Kế hoạch lưu trữ lịch sử bị từ chối",
 			// 	to: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
 			// 	key: "/luu-tru-lich-su/ke-hoach-luu-tru-lich-su-bi-tu-choi",
 			// },
 			{
-				title: "Hồ sơ tài liệu giao nộp",
-				to: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop",
-				key: "/luu-tru-lich-su/ho-so-tai-lieu-giao-nop",
+				title: "Phê duyệt kế hoạch nộp lưu lịch sử",
+				to: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
+				key: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
 				number: 32,
 			},
 			{
