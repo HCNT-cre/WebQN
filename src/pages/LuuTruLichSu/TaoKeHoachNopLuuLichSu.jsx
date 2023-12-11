@@ -3,14 +3,19 @@ import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
+import { ENUM_TYPE_PLAN } from "src/storage/Storage";
 
 const API_STORE_HISTORY_PLAN = import.meta.env.VITE_API_STORE_HISTORY_PLAN;
+const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
+const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
+const API_GET_PLAN_BY_TYPE= import.meta.env.VITE_API_GET_PLAN_BY_TYPE
 const API_STORAGE_GET_ORGAN_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
+	
 
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
-	{ title: "Ngày kế hoạch", key: "date", width: "100%" },
+	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
 	{ title: "Chức năng", key: "function", width: "120px" },
@@ -26,7 +31,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 			const _ = data.map((item) => {
 				return {
 					label: item.name,
-					value: item.name,
+					value: item.id,
 				};
 			});
 			setOrgan(_);
@@ -37,7 +42,8 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 
 	const handleOk = async () => {
 		request["state"] = "Mới lập";
-		await axiosHttpService.post(`${API_STORE_HISTORY_PLAN}`, request);
+		request["type"] = ENUM_TYPE_PLAN.NOP_LUU_LICH_SU;
+		await axiosHttpService.post(`${API_GET_PLAN}`, request);
 		setTimeout(() => {
 			reFetchData();
 			setRequest({});
@@ -81,11 +87,11 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 				<div className="flex justify-between py-[12px]">
 					<span>Ngày kế hoạch</span>
 					<Input
-						name="date"
+						name="start_date"
 						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
 						type="date"
 						className="w-[70%]"
-						value={request["date"]}
+						value={request["start_date"]}
 					/>
 				</div>
 
@@ -113,7 +119,7 @@ const Delete = ({ id, reFetchData }) => {
 
 	const handleConfirm = async () => {
 		const deletePlan = async () => {
-			await axiosHttpService.delete(API_STORE_HISTORY_PLAN + id);
+			await axiosHttpService.delete(API_DELETE_PLAN +'/'+ id);
 		};
 
 		deletePlan();
@@ -172,7 +178,7 @@ const Update = ({ reFetchData, id }) => {
 
 	useEffect(() => {
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_STORE_HISTORY_PLAN + id);
+			const { data } = await axiosHttpService.get(API_GET_PLAN_BY_TYPE+ '/' + ENUM_TYPE_PLAN.NOP_LUU_LICH_SU);
 			setRequest({
 				name: data.name,
 				date: data.date,
@@ -230,7 +236,7 @@ const Update = ({ reFetchData, id }) => {
 						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
 						type="date"
 						className="w-[70%]"
-						value={request["date"]}
+						value={request["start_date"]}
 					/>
 				</div>
 				<div className="flex justify-between py-[12px]">
@@ -281,15 +287,15 @@ const TaoKeHoachLuuTruLichSu = () => {
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		const res = await axiosHttpService.get(`${API_STORE_HISTORY_PLAN}`);
+		const res = await axiosHttpService.get(`${API_GET_PLAN_BY_TYPE}/${ENUM_TYPE_PLAN.NOP_LUU_LICH_SU}`);
 		const rawDatas = res.data;
 		const plan = [];
 		for (const rawData of rawDatas) {
 			const row = {
 				id: rawData.id,
 				name: rawData.name,
-				date: rawData.date,
-				organ: rawData.organ,
+				start_date: rawData.start_date,
+				organ: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
 				function: (
 					<div className="flex ">
