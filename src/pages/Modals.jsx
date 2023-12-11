@@ -23,6 +23,7 @@ const API_DOCUMENT_MODIFICATION_REJECT = import.meta.env.VITE_API_DOCUMENT_MODIF
 const API_DOCUMENT_MODIFICATION_REJECT_ADDED = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT_ADDED
 
 const API_PLAN = import.meta.env.VITE_API_PLAN;
+import UserAPIService from "src/service/api/userAPIService";
 
 const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
@@ -205,21 +206,12 @@ export const ModalConfirmLuuTruCoQuan = () => {
 
         }
 
-        const fetchOrgan = async () => {
-
-
-            const response = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL)
-            const raws = []
-
-            for (const data of response.data) {
-                const raw = {}
-                raw["value"] = data["name"]
-                raw["label"] = data["name"]
-                raws.push(raw)
-            }
-
-            setOptionOrgan(raws)
-
+        const fetchOrganName = async () => {
+            const response = await UserAPIService.getUserOrgan();
+            setOptionOrgan([{
+                value: response.id,
+                label: response.name
+            }]);
         }
 
         const fetchWarehouse = async () => {
@@ -268,9 +260,10 @@ export const ModalConfirmLuuTruCoQuan = () => {
         fetchDrawers()
         fetchShelf()
         fetchWareHouseRoom()
-        fetchOrgan()
+        fetchOrganName()
         fetchWarehouse()
     }
+    console.log("option shelf: ",optionShelf)
 
     useEffect(() => {
         reFetchData()
@@ -309,10 +302,10 @@ export const ModalConfirmLuuTruCoQuan = () => {
         reFetchFile()
     }
 
-    const warehouseDisabled = !optionOrgan.find(item => item.value === request.organ);
-    const warehouseRoomDisabled = !request.warehouse || !optionWarehouse.find(item => item.value === request.warehouse);
-    const shelfDisabled = !request.warehouseroom || !optionWarehouseRoom.find(item => item.value === request.warehouseroom);
-    const drawerDisabled = !request.shelf || !optionShelf.find(item => item.value === request.shelf);
+ //   const warehouseDisabled = !optionOrgan.find(item => item.value === request.organ);
+    let warehouseRoomDisabled = !request.warehouse || !optionWarehouse.find(item => item.value === request.warehouse);
+    let shelfDisabled = !request.warehouseroom || !optionWarehouseRoom.find(item => item.value === request.warehouseroom);
+    let drawerDisabled = !request.shelf || !optionShelf.find(item => item.value === request.shelf);
 
     return (
         <div>
@@ -333,13 +326,14 @@ export const ModalConfirmLuuTruCoQuan = () => {
                         className="w-[70%] bg-white outline-none rounded-md"
                         showSearch
                         allowClear
-                        placeholder="Chọn cơ quan"
+                        defaultValue={optionOrgan[0]?.value}
                         optionFilterProp="children"
                         onChange={(value) => handleChangeRequest('organ', value)}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionOrgan}
+                        disabled={true}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -356,7 +350,6 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionWarehouse}
-                        disabled={warehouseDisabled}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -373,7 +366,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionWarehouseRoom}
-                        disabled={warehouseRoomDisabled}
+                         disabled={warehouseRoomDisabled}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -390,7 +383,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionShelf}
-                        disabled={shelfDisabled}
+                         disabled={shelfDisabled}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -407,7 +400,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionDrawers}
-                        disabled={drawerDisabled}
+                         disabled={drawerDisabled}
                     />
                 </div>
                 <div className="flex justify-center">
