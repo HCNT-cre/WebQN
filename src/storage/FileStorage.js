@@ -6,7 +6,7 @@ export const FIELDS_TABLE = [
     { title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
     { title: "Thời gian bắt đầu", key: "start_date", width: "100%" },
     { title: "Thời gian kết thúc", key: "end_date", width: "100%" },
-    { title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
+    { title: "Thời hạn bảo quản", key: "maintenance_name", width: "100%" },
     { title: "Chế độ sử dụng", key: "rights", width: "100%" },
     { title: "Trạng thái", key: "state", width: "130%" },
     { title: "Chức năng", key: "Function", width: "120px" },

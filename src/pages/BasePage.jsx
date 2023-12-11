@@ -478,7 +478,7 @@ const BasePage = ({
 				total_doc: rawData.total_doc || "",
 				start_date: rawData.start_date || "",
 				end_date: rawData.end_date || "",
-				maintenance: rawData.maintenance || "",
+				maintenance_name: rawData.maintenance_name || "",
 				rights: rawData.rights || "",
 				state: (
 					<button
