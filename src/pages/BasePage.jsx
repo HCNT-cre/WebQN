@@ -622,7 +622,7 @@ const BasePage = ({
 		if (filter === null) return;
 
 		setFiles((prev) => {
-			return filter(files);
+			return filter(prev);
 		});
 
 		setDoesFilter(false);
