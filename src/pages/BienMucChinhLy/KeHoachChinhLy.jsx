@@ -9,7 +9,7 @@ import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 
 const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
-const API_PLAN_BY_ID = import.meta.env.VITE_API_GET_PLAN_BY_ID;
+const API_PLAN_BY_ID = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
 
 
 
@@ -316,10 +316,9 @@ const KeHoachChinhLy = () => {
 		for (const rawData of rawDatas) {
 			const row = {
 				id: rawData.id,
-				code: rawData.code,
 				name: rawData.name,
-				date_start: rawData.start_date,
-				date_end: rawData.end_date,
+				start_date: rawData.start_date,
+				end_date: rawData.end_date,
 				organ: rawData.organ_name,
 				function: (
 					<div className="flex ">

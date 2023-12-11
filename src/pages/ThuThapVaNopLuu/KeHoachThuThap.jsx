@@ -5,7 +5,7 @@ import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
-const API_PLAN_BY_ID = import.meta.env.VITE_API_GET_PLAN_BY_ID;
+const API_PLAN_BY_ID = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
 const API_STORAGE_GET_ORGAN_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
@@ -420,7 +420,7 @@ const KeHoachThuThap = () => {
 					className="cursor-pointer hover:underline"
 				> {rawData.name} </p>,
 				start_date: rawData.start_date,
-				organ: organ.data.name,
+				organ: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
 				function: (
 					<div className="flex ">
