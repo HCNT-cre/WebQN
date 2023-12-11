@@ -290,7 +290,7 @@ const PheDuyetKeHoachThuThap = () => {
 					onClick={() => handleClickUpdate(rawData.id)}
 					className="cursor-pointer hover:underline"
 				> {rawData.name} </p>,
-				date: rawData.date,
+				date: rawData.start_date,
 				organ: rawData.organ,
 				state: <button>{rawData.state}</button>,
 				function: (

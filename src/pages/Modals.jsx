@@ -462,7 +462,7 @@ export const ModalModificationDocumentConfirmStore = () => {
     }
 
     const handleClickApprove = async () => {
-        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
+      //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
         await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
             id: IDFile, current_state: 12,
             new_state: getNextState(12) // HSCL_GIAO_NOP -> CHO_XEP_KHO

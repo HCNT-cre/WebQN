@@ -42,7 +42,7 @@ const KeHoachThuThapDuocPheDuyet = () => {
 			const row = {
 				id: rawData.id,
 				name: rawData.name,
-				date: rawData.date,
+				date: rawData.start_date,
 				organ: rawData.organ,
 				state: <button>{rawData.state}</button>,
 			};
