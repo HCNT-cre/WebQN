@@ -1,7 +1,13 @@
 import { ENUM_STATE_FILE } from "src/storage/Storage";
 import BasePage from "../BasePage";
+import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
+const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
 
-const API_DOCUMENT_MODIFICATION_PLAN = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_PLAN
+
+const filtePlanCondition = (file) => {
+    const state = (file.type === ENUM_TYPE_PLAN.BIEN_MUC_CHINH_LY && file.state === ENUM_STATE_PLAN.CHAP_NHAN);
+    return state;
+}
 
 const BienMucHoSo = () => {
     const parent = [
@@ -31,10 +37,11 @@ const BienMucHoSo = () => {
             current={current}
             addNewFile={true}
             filter={filter}
-            apiPlan={API_DOCUMENT_MODIFICATION_PLAN}
+            apiPlan={API_GET_PLAN_BY_TYPE + '/' + ENUM_TYPE_PLAN.BIEN_MUC_CHINH_LY}
             eOffice={false}
             haveActionButton={false}
             BMCL_GuiDuyetHoSo={true}
+            filtePlanCondition={filtePlanCondition}
         />
     );
 };

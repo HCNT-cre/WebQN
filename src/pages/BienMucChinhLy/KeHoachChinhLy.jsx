@@ -41,7 +41,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	}, []);
 
 	const handleOk = async () => {
-		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
+		request["state"] = ENUM_STATE_PLAN.CHAP_NHAN;
 		request["type"] = ENUM_TYPE_PLAN.BIEN_MUC_CHINH_LY;
 
 		await axiosHttpService.post(`${API_PLAN}`, request),
