@@ -25,7 +25,7 @@ const FileAPIService = {
         const response = await axiosHttpService.get(API_GOV_FILE_GET_ALL + 1);
         return response.data;
     },
-
-}
+    
+}   
 
 export default FileAPIService;
