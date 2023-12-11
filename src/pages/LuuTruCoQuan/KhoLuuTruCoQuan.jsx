@@ -8,10 +8,7 @@ export const FIELDS_TABLE = [
     { title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
     { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
     { title: "Phông", key: "organ_id", width: "100%" },
-    { title: "Kho", key: "warehouse", width: "100%" },
-    { title: "Phòng kho", key: "warehouseroom", width: "100%" },
-    { title: "Kệ", key: "shelf", width: "100%" },
-    { title: "Hộp", key: "drawers", width: "100%" },
+    { title: "Vị trí lưu trữ", key: "drawer_name", width: "100%" },
     { title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
     { title: "Chế độ sử dụng", key: "rights", width: "100%" },
     { title: "Trạng thái", key: "state", width: "130%" },
@@ -74,7 +71,7 @@ const KhoLuuTruCoQuan = () => {
     // }, [allOrganStorageFiles]);
 
 
-    return <BasePage parent={parent} current={current} filter={filter} fieldsTableCustom={FIELDS_TABLE} />
+    return <BasePage parent={parent} current={current} filter={filter} fieldsTableCustom={FIELDS_TABLE} luuTruCoQuan={true} />
 }
 
 export default KhoLuuTruCoQuan;

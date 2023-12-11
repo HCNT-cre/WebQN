@@ -289,7 +289,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
     const handleClickApprove = async () => {
         for (const key in request) {
             if (request[key] === null) {
-                notifyError("Vui lòng chọn đủ thông tin " + key)
+                notifyError("Vui lòng chọn đủ thông tin")
                 return
             }
         }
