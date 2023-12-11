@@ -106,7 +106,7 @@ const ThemHoSo = ({
                         {rawData.title || ""}
                     </p>
                 ),
-                organ_id: rawData.organ_id || "",
+                organ_id_name: rawData.organ_id_name || "",
                 sheet_number: rawData.sheet_number || "",
                 total_doc: rawData.total_doc || "",
                 start_date: rawData.start_date || "",
