@@ -278,11 +278,11 @@ const TaoKeHoachLuuTruLichSu = () => {
 			btn_class_name: "custom-btn-clear-filter",
 			icon: <i className="fa-solid fa-sync"></i>,
 		},
-		{
-			title: "Duyệt kế hoạch",
-			btn_class_name: "custom-btn-export-excel",
-			icon: <i className="fa-solid fa-file-excel"></i>,
-		},
+		// {
+		// 	title: "Duyệt kế hoạch",
+		// 	btn_class_name: "custom-btn-export-excel",
+		// 	icon: <i className="fa-solid fa-file-excel"></i>,
+		// },
 	];
 
 	const reFetchData = async () => {
