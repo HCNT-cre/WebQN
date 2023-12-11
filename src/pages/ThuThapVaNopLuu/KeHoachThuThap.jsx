@@ -5,6 +5,7 @@ import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
+const API_PLAN_BY_ID = import.meta.env.VITE_API_GET_PLAN_BY_ID;
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
 const API_STORAGE_GET_ORGAN_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
@@ -249,7 +250,7 @@ const Update = ({
 	useEffect(() => {
 		if (!id) return;
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_COLLECTION_PLAN + '/' + id);
+			const { data } = await axiosHttpService.get(API_PLAN_BY_ID + '/' + 1);
 			setRequest({
 				name: data.name,
 				date: data.date,
@@ -404,7 +405,7 @@ const KeHoachThuThap = () => {
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		const res = await axiosHttpService.get(`${API_COLLECTION_PLAN}`);
+		const res = await axiosHttpService.get(`${API_PLAN_BY_ID + '/' + 1}`);
 		const rawDatas = res.data.reverse().filter((data) => {
 			return data.state === ENUM_STATE_PLAN.TAO_MOI;
 		});

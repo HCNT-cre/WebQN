@@ -4,7 +4,6 @@ export const KE_HOACH_CHINH_LY_FIELD_TABLE = [
 	{ title: "Năm bắt đầu", key: "date_start", width: "50%" },
 	{ title: "Năm kết thúc", key: "date_end", width: "50%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
-	{ title: "Phông", key: "organId", width: "100%" },
 	{ title: "Chức năng", key: "function", width: "120px" },
 ];
 

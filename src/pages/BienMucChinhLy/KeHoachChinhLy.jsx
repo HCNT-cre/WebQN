@@ -5,8 +5,13 @@ import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 import { KE_HOACH_CHINH_LY_INPUT, KE_HOACH_CHINH_LY_FIELD_TABLE } from "src/storage/BienMucChinhLy";
 import { useSelector } from "react-redux";
+import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 const API_PLAN = import.meta.env.VITE_API_PLAN;
+
 const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
+const API_PLAN_BY_ID = import.meta.env.VITE_API_GET_PLAN_BY_ID;
+
+
 
 
 
@@ -26,7 +31,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 			const _ = data.map((item) => {
 				return {
 					label: item.name,
-					value: item.name,
+					value: item.id,
 				};
 			});
 			setOrgan(_);
@@ -36,8 +41,16 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	}, []);
 
 	const handleOk = async () => {
-		request["state"] = "Mới lập";
-		await axiosHttpService.post(`${API_PLAN}`, request);
+		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
+		request["type"] = ENUM_TYPE_PLAN.BIEN_MUC_CHINH_LY;
+
+		await axiosHttpService.post(`${API_PLAN}`, request),
+		{
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'multipart/form-data',
+			}
+		};
 		setTimeout(() => {
 			reFetchData();
 			setRequest({});
@@ -177,15 +190,13 @@ const Update = ({ reFetchData, id }) => {
 
 	useEffect(() => {
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_PLAN + '/' + id);
+			const { data } = await axiosHttpService.get(API_PLAN_BY_ID + '/' + 2);
 			setRequest({
-				
 				code: data.code,
 				name: data.name,
-				date_start: data.date_start,
-				date_end: data.date_end,
-				organ: data.organ,
-				organId: data.organId,
+				start_date: data.start_date,
+				end_date: data.end_date,
+				organ: data.organ_name,
 			});
 		};
 		getPlan();
@@ -299,7 +310,7 @@ const KeHoachChinhLy = () => {
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		const res = await axiosHttpService.get(`${API_PLAN}`);
+		const res = await axiosHttpService.get(`${API_PLAN_BY_ID+ '/' + 2}`);
 		const rawDatas = res.data.reverse();
 		const plan = [];
 		for (const rawData of rawDatas) {
@@ -307,10 +318,9 @@ const KeHoachChinhLy = () => {
 				id: rawData.id,
 				code: rawData.code,
 				name: rawData.name,
-				date_start: rawData.date_start,
-				date_end: rawData.date_end,
-				organ: rawData.organ,
-				organId: rawData.organId,
+				date_start: rawData.start_date,
+				date_end: rawData.end_date,
+				organ: rawData.organ_name,
 				function: (
 					<div className="flex ">
 						<Delete id={rawData.id} reFetchData={reFetchData} />
