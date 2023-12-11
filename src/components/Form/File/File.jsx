@@ -26,6 +26,7 @@ const File = ({
     const stateForm = useSelector((state) => state.formFile.state)
     const fileID = useSelector((state) => state.formFile.id)
     const categoryFile = useSelector((state) => state.formFile.category_file)
+    const plan = useSelector((state) => state.formFile.plan)
     const language = useSelector((state) => state.language.language)
     const format = useSelector((state) => state.format.format)
     const maintance = useSelector((state) => state.maintance.maintance)
@@ -236,7 +237,6 @@ const File = ({
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        console.log(request);
         for (const field of FIELDS_LEFT) {
             if (field.require && (request[field.key] === null || request[field.key] === "")) {
                 notifyError("Vui lòng nhập " + FirstLower(field.title))
@@ -269,7 +269,8 @@ const File = ({
 
 
         try {
-            request["category_file"] = categoryFile
+            request["category_file"] = categoryFile;
+            request["plan_ttnl"] = plan;
             const response = await axiosHttpService.post(API, { ...request, gov_file_code: gov_file_code, perm_token: userPermissionId })
             const error_code = response.data.error_code
             if (error_code === undefined) {

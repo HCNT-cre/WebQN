@@ -41,12 +41,11 @@ const PlanAndCategoryFile = ({
 	const [categoryFile, setCategoryFile] = useState([]);
 	const [collectionPlan, setCollectionPlan] = useState([]);
 	const [category, setCategory] = useState(null);
-
+	const [selectedPlan, setSelectedPlan] = useState(null);
 	console.log(category);
 	const handleOk = () => {
 		setOpen(false);
-	
-		dispatch(CreateFile(category));
+		dispatch(CreateFile(category, selectedPlan));
 	};
 
 	const handleCancle = () => {
@@ -80,7 +79,7 @@ const PlanAndCategoryFile = ({
 
 			const _ = filterdData.map((item) => {
 				return {
-					value: item.name,
+					value: item.id,
 					label: item.name,
 				};
 			});
@@ -109,6 +108,7 @@ const PlanAndCategoryFile = ({
 					name="collectionPlan"
 					className="w-[70%]"
 					options={collectionPlan}
+					onChange={(value) => setSelectedPlan(value)}
 				/>
 			</div>
 			<div className="flex justify-between py-[12px]">

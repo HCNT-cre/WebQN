@@ -6,7 +6,6 @@ import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axiosHttpService from 'src/utils/httpService';
 import { Spin, Select } from "antd"
-import { FORM_FIELDS } from '../../../storage/DocumentStorage';
 import { GetDateFromString, notifyError, notifySuccess } from '../../../custom/Function';
 import { Input, Button } from "antd"
 import { ValidateFormDoc } from '../../../custom/Function';
@@ -15,11 +14,21 @@ import { SetNull } from '../../../custom/Function';
 import { useButtonClickOutside } from 'src/custom/Hook';
 import sign from 'src/assets/img/sign.jpg'
 import sign2 from 'src/assets/img/sign2.png'
+import UserAPIService from 'src/service/api/userAPIService';
+import DocumentAPIService from 'src/service/api/DocumentAPIService';
+import { RIGHTS } from 'src/storage/FileStorage';
+
 const API_EXTRACT_OCR = import.meta.env.VITE_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = import.meta.env.VITE_API_DOCUMENT_UPLOAD
 
-
-const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFile, govFileID, fileData }) => {
+const AddDoc = ({
+    stateAddDoc,
+    setStateAddDoc,
+    fileUploaded,
+    fetchDocumentsOfFile,
+    govFileID,
+    fileData
+}) => {
     const [request, setRequest] = useState({
         gov_file_id: govFileID,
         file: null,
@@ -55,7 +64,39 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [isLoading, setIsLoading] = useState(false)
     const [openSign, setOpenSign] = useState(false)
+    const [organ, setOrgan] = useState(null);
+    const [language, setLanguage] = useState([]);
+    const [fond, setFond] = useState([]);
+    const [format, setFormat] = useState([]);
 
+    const FORM_FIELDS = [
+        { key: "doc_ordinal", title: "Số thứ tự", require: true, type: "number" },
+        { key: "autograph", title: "Bút tích", require: false, type: "text" },
+        { key: "issued_date", title: "Ngày, tháng, năm văn bản", require: true, type: "date" },
+        { key: "code_number", title: "Số của văn bản", require: false, type: "text" },
+        { key: "doc_code", title: "Mã định danh văn bản", require: false, type: "text" },
+        { key: "identifier", title: "Mã cơ quan lưu trữ", require: true, type: "text", disable: true }, // organ
+       
+    
+        { key: "mode", title: "Chế độ sử dụng", require: true, type: "select", options: RIGHTS },
+        { key: "language", title: "Ngôn ngữ", require: true, type: "select", options: language },
+        // { key: "confidence_level", title: "Mức độ tin cậy", require: true, type: "select", options: },
+        { key: "format", title: "Tình trạng vật lý", require: true, type: "select", options: format },
+        { key: "organ_id", title: "Mã phông/công trình/sưu tập lưu trữ", require: true, type: "select", options: fond, extract: true },
+    
+    
+    
+        { key: "file_catalog", title: "Mục lục số hoặc năm hình thành hồ sơ", require: false, type: "number", extract: true },
+        { key: "file_notation", title: "Số và ký hiệu hồ sơ", require: false, type: "text", extract: true },
+        { key: "type_name", title: "Tên loại văn bản", require: false, type: "text" },
+        { key: "code_notation", title: "Ký hiệu của văn bản", require: false, type: "text" },
+        { key: "organ_name", title: "Tên cơ quan, tổ chức ban hành văn bản", require: false, type: "text" },
+        { key: "subject", title: "Trích yếu nội dung", require: false, type: "text" },
+        { key: "page_amount", title: "Số lượng trang của văn bản", require: false, type: "number" },
+        { key: "description", title: "Ghi chú", require: false, type: "text" },
+        { key: "infor_sign", title: "Ký hiệu thông tin", require: false, type: "text" },
+        { key: "keyword", title: "Từ khóa", require: false, type: "text" },
+    ]
 
     const handleClose = () => {
         setOpenSign(false)
@@ -63,6 +104,47 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
     const [buttonRef, contentRef, toggleContent, showContent] =
         useButtonClickOutside(false, handleClose);
 
+    useEffect(() => {
+
+        const fetchData = async () => {
+            const _organ = await UserAPIService.getUserOrgan();
+            const _language = await DocumentAPIService.getLanguage();
+            const _format = await DocumentAPIService.getFormat();   
+            const _fond = await DocumentAPIService.getFondByOrgan(_organ.id);
+
+            const language = _language.map(item => ({
+                label: item.name,
+                value: item.id
+            }))
+
+            const format = _format.map(item => ({
+                label: item.name,
+                value: item.id
+            }))
+
+            const fond = _fond.map(item => ({
+                label: item.fond_name,
+                value: item.id
+            }))
+
+            
+
+            setRequest(prev => ({
+               ...prev,
+               identifier: _organ.name
+            }));
+
+            setOrgan(_organ);
+            setLanguage(language);
+            setFond(fond);
+            setFormat(format);
+        }
+
+        setIsLoading(true);
+        fetchData();
+        setIsLoading(false);
+
+    }, [])
 
     useEffect(() => {
         setRequest(prev => ({
@@ -97,7 +179,6 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
 
     useEffect(() => {
         handleChangePdfFile(0)
-
     }, [files])
 
     // tab operations
@@ -206,6 +287,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
         const formDataValidated = ValidateFormDoc(request)
         try {
             setIsLoading(true)
+            request['identifier'] = organ.id;
             await axiosHttpService.post(API_DOCUMENT_UPLOAD, formDataValidated, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -365,6 +447,7 @@ const AddDoc = ({ stateAddDoc, setStateAddDoc, fileUploaded, fetchDocumentsOfFil
                                                                                     )
                                                                                 ) : (
                                                                                     <Input
+                                                                                        disabled={field?.disable}
                                                                                         onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
                                                                                         name={field.key}
                                                                                         placeholder={field.title}

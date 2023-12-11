@@ -6,7 +6,7 @@ export const FORM_FIELDS = [
     { key: "issued_date", title: "Ngày, tháng, năm văn bản", require: true, type: "date" },
     { key: "code_number", title: "Số của văn bản", require: false, type: "text" },
     { key: "doc_code", title: "Mã định danh văn bản", require: false, type: "text" },
-    { key: "identifier", title: "Mã cơ quan lưu trữ", require: true, type: "select", options: IDENTIFIER, extract: true },
+    { key: "identifier", title: "Mã cơ quan lưu trữ", require: true, type: "select", options: IDENTIFIER, disabale:true }, // organ
    
 
     { key: "mode", title: "Chế độ sử dụng", require: true, type: "select", options: RIGHTS },
