@@ -8,6 +8,7 @@ import { ENUM_STATE_BMCL, ENUM_STATE_FILE, STATE } from "../storage/Storage";
 import { current } from "@reduxjs/toolkit";
 import { ENUM_TYPE_PLAN, ENUM_STATE_PLAN } from "../storage/Storage";
 const API_GOV_FILE_UPDATE_STATE = import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE
+const API_GOV_FILE_SET_DRAWER = import.meta.env.VITE_API_GOV_FILE_SET_DRAWER
 const API_STORAGE_GET_SHELF_ALL = import.meta.env.VITE_API_STORAGE_GET_SHELF_ALL
 const API_STORAGE_GET_WAREHOUSEROOM_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSEROOM_ALL
 const API_STORAGE_GET_WAREHOUSE_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSE_ALL
@@ -179,6 +180,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
         warehouse: null,
         warehouseroom: null,
         shelf: null,
+        drawer: null,
     })
 
     const IDFile = useSelector(state => state.modalStoreOrgan.id)
@@ -251,7 +253,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
             const raws = []
             for (const data of response.data) {
                 const raw = {}
-                raw["value"] = data["name"]
+                raw["value"] = data["id"]
                 raw["label"] = data["name"]
                 raws.push(raw)
             }
@@ -289,13 +291,16 @@ export const ModalConfirmLuuTruCoQuan = () => {
     const handleClickApprove = async () => {
         for (const key in request) {
             if (request[key] === null) {
-                notifyError("Vui lòng chọn đủ thông tin")
+                notifyError("Vui lòng chọn đủ thông tin " + key)
                 return
             }
         }
 
         await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [
             { id: IDFile, current_state: 10, new_state: 4 } // CHO_XEP_KHO -> LUU_TRU_CO_QUAN
+        ]);
+        await axiosHttpService.post(API_GOV_FILE_SET_DRAWER, [
+            { gov_file_id: IDFile, drawer_id: request.drawer } 
         ]);
         
         // await axiosHttpService.post(API_STORAGE_POST_FILE_ORGAN_STORAGE, { ...request, file_id: IDFile })
@@ -397,7 +402,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                         allowClear
                         placeholder="Chọn phòng kho"
                         optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('drawers', value)}
+                        onChange={(value) => handleChangeRequest('drawer', value)}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
@@ -480,7 +485,7 @@ export const ModalModificationDocumentConfirmStore = () => {
     }
 
     const handleClickReject = async () => {
-        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
+      //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
         await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
             id: IDFile, current_state: 12,
             new_state: 13 // HSCL_GIAO_NOP -> HSCL_BI_TRA_VE
@@ -553,11 +558,11 @@ export const ModalModificationDocumentAddDocument = () => {
     }
 
     const handleClickApprove = async () => {
-        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT_ADDED, { idFile: IDFile })
+      //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT_ADDED, { idFile: IDFile })
 
-        const rejected = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT)
+      //  const rejected = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT)
         const id = rejected.data.find(item => item.idFile === IDFile).id
-        await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT + "/" + id)
+      //  await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT + "/" + id)
 
         notifySuccess("Nộp thành công")
         dispatch({ type: "close_modal_confirm_bmcl_bosunghosotailieu", id: null })
@@ -633,15 +638,15 @@ export const ModalModificationDocumentAddedDocument = () => {
     }
 
     const handleClickApprove = async () => {
-        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
+    //    await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
         await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
             id: IDFile, current_state: 3,
             new_state: 3 + 1
         }])
 
-        const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+     //   const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
         const id = added.data.find(item => item.idFile === IDFile).id
-        await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
+     //   await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
 
         notifySuccess("Đã trình duyệt lưu kho hồ sơ bổ sung thành công")
         dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
@@ -652,12 +657,12 @@ export const ModalModificationDocumentAddedDocument = () => {
     }
 
     const handleClickReject = async () => {
-        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
+       // await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
         notifySuccess("Đã trả về hồ sơ")
 
-        const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+      //  const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
         const id = added.data.find(item => item.idFile === IDFile).id
-        await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
+     //   await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
 
         dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
         setTimeout(() => {
@@ -753,12 +758,12 @@ export const ModalModificationDocumentRequireAddDoc = () => {
 
     }
     const handleClickReject = async () => {
-        await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
+      //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
         notifySuccess("Đã trả về hồ sơ")
 
-        const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+     //   const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
         const id = added.data.find(item => item.idFile === IDFile).id
-        await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
+    //    await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
 
         dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
         setTimeout(() => {
