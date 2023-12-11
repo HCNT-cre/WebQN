@@ -1,6 +1,6 @@
 export const FIELDS_TABLE = [
     { title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
-    { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
+    { title: "Tiêu đề hồ sơ~", key: "title", width: "100%" },
     { title: "Phông", key: "organ_id_name", width: "100%" },
     { title: "Số lượng tờ", key: "sheet_number", width: "70px" },
     { title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
