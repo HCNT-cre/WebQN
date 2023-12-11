@@ -360,6 +360,7 @@ const BasePage = ({
 	currentTab = null,
 	haveActionButton = true,
 	XepVaoKho = false,
+	luuTruCoQuan = false,
 	BMCL_GuiDuyetHoSo = false,
 	filtePlanCondition = null
 }) => {
@@ -473,49 +474,95 @@ const BasePage = ({
 				// });
 			}
 
-			const row = {
-				id: rawData.id,
-				gov_file_code: (
-					<p
-						className="cursor-pointer hover:underline"
-						onClick={() => handleClickOnFile(rawData.id)}
-					>
-						{rawData.gov_file_code || ""}
-					</p>
-				),
-				title: (
-					<p
-						className="cursor-pointer hover:underline"
-						onClick={() => handleClickOnFile(rawData.id)}
-					>
-						{rawData.title || ""}
-					</p>
-				),
-				organ_id_name: rawData.organ_id_name || "",
-				sheet_number: rawData.sheet_number || "",
-				total_doc: rawData.total_doc || "",
-				start_date: rawData.start_date || "",
-				end_date: rawData.end_date || "",
-				maintenance_name: rawData.maintenance_name || "",
-				rights: rawData.rights || "",
-				state: (
-					<button
-						onClick={() => {
-							search["state"] = rawData.state;
-							handleSearch();
-						}}
-					>
-						{STATE[rawData.state]}
-					</button>
-				),
-				Function: newButton || (
-					<ButtonFunctionOfEachFile
-						state={parseInt(rawData.state)}
-						handleClickOnFile={handleClickOnFile}
-						IDFile={rawData.id}
-						reset={reset}
-					/>
-				),
+			let row = {};
+
+			if (luuTruCoQuan) {
+				row = {
+					id: rawData.id,
+					gov_file_code: (
+						<p
+							className="cursor-pointer hover:underline"
+							onClick={() => handleClickOnFile(rawData.id)}
+						>
+							{rawData.gov_file_code || ""}
+						</p>
+					),
+					title: (
+						<p
+							className="cursor-pointer hover:underline"
+							onClick={() => handleClickOnFile(rawData.id)}
+						>
+							{rawData.title || ""}
+						</p>
+					),
+					organ_id_name: rawData.organ_id_name || "",
+					drawer_name: rawData.drawer_name || "",
+					maintenance_name: rawData.maintenance_name || "",
+					rights: rawData.rights || "",
+					state: (
+						<button
+							onClick={() => {
+								search["state"] = rawData.state;
+								handleSearch();
+							}}
+						>
+							{STATE[rawData.state]}
+						</button>
+					),
+					Function: newButton || (
+						<ButtonFunctionOfEachFile
+							state={parseInt(rawData.state)}
+							handleClickOnFile={handleClickOnFile}
+							IDFile={rawData.id}
+							reset={reset}
+						/>
+					),
+				}
+			} else {
+				row = {
+					id: rawData.id,
+					gov_file_code: (
+						<p
+							className="cursor-pointer hover:underline"
+							onClick={() => handleClickOnFile(rawData.id)}
+						>
+							{rawData.gov_file_code || ""}
+						</p>
+					),
+					title: (
+						<p
+							className="cursor-pointer hover:underline"
+							onClick={() => handleClickOnFile(rawData.id)}
+						>
+							{rawData.title || ""}
+						</p>
+					),
+					organ_id_name: rawData.organ_id_name || "",
+					sheet_number: rawData.sheet_number || "",
+					total_doc: rawData.total_doc || "",
+					start_date: rawData.start_date || "",
+					end_date: rawData.end_date || "",
+					maintenance_name: rawData.maintenance_name || "",
+					rights: rawData.rights || "",
+					state: (
+						<button
+							onClick={() => {
+								search["state"] = rawData.state;
+								handleSearch();
+							}}
+						>
+							{STATE[rawData.state]}
+						</button>
+					),
+					Function: newButton || (
+						<ButtonFunctionOfEachFile
+							state={parseInt(rawData.state)}
+							handleClickOnFile={handleClickOnFile}
+							IDFile={rawData.id}
+							reset={reset}
+						/>
+					),
+				}
 			};
 			filesArray.push(row);
 		}
