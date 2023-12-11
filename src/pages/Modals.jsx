@@ -309,6 +309,11 @@ export const ModalConfirmLuuTruCoQuan = () => {
         reFetchFile()
     }
 
+    const warehouseDisabled = !optionOrgan.find(item => item.value === request.organ);
+    const warehouseRoomDisabled = !request.warehouse || !optionWarehouse.find(item => item.value === request.warehouse);
+    const shelfDisabled = !request.warehouseroom || !optionWarehouseRoom.find(item => item.value === request.warehouseroom);
+    const drawerDisabled = !request.shelf || !optionShelf.find(item => item.value === request.shelf);
+
     return (
         <div>
             <Modal
@@ -351,6 +356,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionWarehouse}
+                        disabled={warehouseDisabled}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -367,6 +373,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionWarehouseRoom}
+                        disabled={warehouseRoomDisabled}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -383,6 +390,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionShelf}
+                        disabled={shelfDisabled}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -399,6 +407,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionDrawers}
+                        disabled={drawerDisabled}
                     />
                 </div>
                 <div className="flex justify-center">
