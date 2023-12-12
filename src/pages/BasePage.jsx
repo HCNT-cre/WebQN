@@ -17,6 +17,8 @@ import { Link } from "react-router-dom";
 import { notifyError, notifySuccess } from "../custom/Function";
 import { ModalCensorship, ModalConfirmLuuTruCoQuan, ModalModificationDocumentAddDocument, ModalModificationDocumentAddedDocument, ModalModificationDocumentConfirmStore, ModalModificationDocumentRequireAddDoc } from "./Modals";
 
+
+import UserAPIService from "src/service/api/userAPIService";
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
 	import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE;
@@ -28,6 +30,7 @@ const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL;
 
 const CATEGORY_FILE_API = import.meta.env.VITE_CATEGORY_FILE_API;
+const API_GET_CATEGORY_FILE_BY_ORGAN = import.meta.env.VITE_API_GET_CATEGORY_FILE_BY_ORGAN;
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_COLLECTION_PLAN;
 const API_EXPORT_EXCEL = import.meta.env.VITE_API_EXPORT_EXCEL;
 
@@ -42,6 +45,7 @@ const PlanAndCategoryFile = ({
 	const [collectionPlan, setCollectionPlan] = useState([]);
 	const [category, setCategory] = useState(null);
 	const [selectedPlan, setSelectedPlan] = useState(null);
+	const [organ, setOrgan] = useState([])
 	console.log(category);
 	const handleOk = () => {
 		setOpen(false);
@@ -54,15 +58,14 @@ const PlanAndCategoryFile = ({
 
 	useEffect(() => {
 		const getCategoryFile = async () => {
-			const { data } = await axiosHttpService.get(CATEGORY_FILE_API);
+			const response = await UserAPIService.getUserOrgan();
+            let organObject = {
+                value: response.id,
+                label: response.name
+            }
+			const { data } = await axiosHttpService.get(API_GET_CATEGORY_FILE_BY_ORGAN +'/' + organObject.value);
 			const _ = [];
 			for (let i = 0; i < data.length; i++) {
-				let isParent = false;
-				for (let j = 0; j < data.length; j++) {
-					if (i === j) continue;
-					if (data[i].id === data[j].parent) isParent = true;
-				}
-				if (!isParent)
 					_.push({
 						label: data[i].name,
 						value: data[i].id,
