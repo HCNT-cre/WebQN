@@ -365,7 +365,8 @@ const BasePage = ({
 	XepVaoKho = false,
 	luuTruCoQuan = false,
 	BMCL_GuiDuyetHoSo = false,
-	filtePlanCondition = null
+	filtePlanCondition = null,
+	pheDuyetLuuTruLichSu = false,
 }) => {
 	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
@@ -874,6 +875,17 @@ const BasePage = ({
 										<i className="fa-solid fa-warehouse"></i>
 									</div>
 									Đẩy vào hàng đợi xếp kho
+								</Button>
+							</div>}
+							{pheDuyetLuuTruLichSu && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+								<Button
+									onClick={() => handleChangeStateFile({ "current_state": 5, "new_state": 6 })}
+									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
+								>
+									<div className="mr-[8px]">
+										<i className="fa-solid fa-check"></i>
+									</div>
+									Phê duyệt lưu trữ lịch sử
 								</Button>
 							</div>}
 							{haveActionButton &&

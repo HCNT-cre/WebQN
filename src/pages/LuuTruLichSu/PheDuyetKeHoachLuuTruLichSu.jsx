@@ -43,7 +43,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
     }
 
 
-    return <BasePage parent={parent} current={current} filter={filter} isCheckBox={false} buttonFuctions={<ButtonFuctions />} haveActionButton={false} />
+    return <BasePage parent={parent} current={current} filter={filter} isCheckBox={true} pheDuyetLuuTruLichSu={true} haveActionButton={false} />
 }
 
 export default PheDuyetKeHoachLuuTruLichSu;
