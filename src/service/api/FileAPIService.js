@@ -3,7 +3,8 @@ import axiosHttpService from "src/utils/httpService";
 
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
-
+const API_UPDATE_STATE_GOV_FILE =
+	import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE;
 const FileAPIService = {
     getFileByTitle: async (title) => {
         const response = await axiosHttpService.get(`${API_GOV_FILE_SEARCH}title=${title}`)
@@ -25,6 +26,19 @@ const FileAPIService = {
         const response = await axiosHttpService.get(API_GOV_FILE_GET_ALL + 1);
         return response.data;
     },
+
+    updateState: async (newState) => {
+        const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, newState);
+        return response.data;
+    },
+
+    getFileByPlanId: async (id) => {
+        const response = await axiosHttpService.get(API_GOV_FILE_GET_ALL);
+        const {data} = response;
+        if(id === null) return data;
+        const result = data.filter((file) => file.plan_bmcl === id || file.plan_nopluuls === id || file.plan_thuthap === id || file.plan_tieuhuy === id)
+        return result;
+    }
     
 }   
 
