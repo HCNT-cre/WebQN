@@ -11,8 +11,7 @@ const API_PLAN = import.meta.env.VITE_API_PLAN;
 const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const API_PLAN_BY_ID = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
 
-
-
+import UserAPIService from "src/service/api/userAPIService";
 
 
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
@@ -24,7 +23,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		organId: organId,
 		organ: organ,
 	}
-	
+
 	useEffect(() => {
 		const getOrgan = async () => {
 			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
@@ -190,13 +189,14 @@ const Update = ({ reFetchData, id }) => {
 
 	useEffect(() => {
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_PLAN_BY_ID + '/' + 2);
+			const { data } = await axiosHttpService.get(API_PLAN + '/' + id);
 			setRequest({
 				code: data.code,
 				name: data.name,
 				start_date: data.start_date,
 				end_date: data.end_date,
-				organ: data.organ_name,
+				organ: data.organ,
+				state: data.state,
 			});
 		};
 		getPlan();
@@ -204,14 +204,12 @@ const Update = ({ reFetchData, id }) => {
 
 	useEffect(() => {
 		const getOrgan = async () => {
-			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
-			const _ = data.map((item) => {
-				return {
-					label: item.name,
-					value: item.name,
-				};
-			});
-			setOrgan(_);
+			const response = await UserAPIService.getUserOrgan();
+			let organObject = {
+				value: response.id,
+				label: response.name
+			}
+			setOrgan([organObject]);
 		};
 
 		getOrgan();
@@ -257,13 +255,30 @@ const Update = ({ reFetchData, id }) => {
 									item.type === "select" ?
 										<div className="flex justify-between py-[12px]">
 											<span>{item.label}</span>
+											{
+											item.label === "Cơ quan / Đơn vị lập kế hoạch" ?
+											<Select
+												name="organ"
+												className="w-[70%]"
+												showSearch
+												allowClear
+												defaultValue={request.organ}
+												optionFilterProp="children"
+												onChange={(value) => handleChangeRequest('organ', value)}
+												filterOption={(input, option) =>
+													(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+												}
+												options={organ}
+												disabled={true}
+											/>
+											:
 											<Select
 												name={item.name}
 												onChange={(value) => handleChangeRequest(item.name, value)}
 												className="w-[70%]"
 												value={request[item.name]}
 												options={kehoachchinhlyOption[item.name]}
-											/>
+											/>}
 										</div>
 										:
 										<div className="flex justify-between py-[12px]">
@@ -305,12 +320,12 @@ const KeHoachChinhLy = () => {
 				setModalOpen(true);
 			},
 		},
-	
+
 	];
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		const res = await axiosHttpService.get(`${API_PLAN_BY_ID+ '/' + 2}`);
+		const res = await axiosHttpService.get(`${API_PLAN_BY_ID + '/' + 2}`);
 		const rawDatas = res.data.reverse();
 		const plan = [];
 		for (const rawData of rawDatas) {

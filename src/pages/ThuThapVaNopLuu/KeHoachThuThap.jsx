@@ -5,7 +5,10 @@ import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
-const API_PLAN_BY_ID = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
+import UserAPIService from "src/service/api/userAPIService";
+const API_PLAN = import.meta.env.VITE_API_PLAN;
+
+const API_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
 const API_STORAGE_GET_ORGAN_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
@@ -62,7 +65,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		request["attachment"] = fileUploaded[0];
 		request["type"] = ENUM_TYPE_PLAN.THU_THAP_NOP_LUU;
 
-		await axiosHttpService.post(`${API_COLLECTION_PLAN}`, request, {
+		await axiosHttpService.post(`${API_PLAN}`, request, {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'multipart/form-data',
@@ -172,7 +175,7 @@ const Delete = ({ id, reFetchData }) => {
 
 	const handleConfirm = async () => {
 		const deletePlan = async () => {
-			await axiosHttpService.delete(API_COLLECTION_PLAN + '/' + id);
+			await axiosHttpService.delete(API_PLAN + '/' + id);
 		};
 
 		deletePlan();
@@ -250,10 +253,10 @@ const Update = ({
 	useEffect(() => {
 		if (!id) return;
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_PLAN_BY_ID + '/' + 1);
+			const { data } = await axiosHttpService.get(API_PLAN + '/' + id);
 			setRequest({
 				name: data.name,
-				date: data.date,
+				date: data.start_date,
 				organ: data.organ,
 				state: data.state,
 			});
@@ -264,14 +267,12 @@ const Update = ({
 
 	useEffect(() => {
 		const getOrgan = async () => {
-			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
-			const _ = data.map((item) => {
-				return {
-					label: item.name,
-					value: item.name,
-				};
-			});
-			setOrgan(_);
+			const response = await UserAPIService.getUserOrgan();
+			let organObject = {
+				value: response.id,
+				label: response.name
+			}
+			setOrgan([organObject]);
 		};
 
 		getOrgan();
@@ -285,7 +286,7 @@ const Update = ({
 	};
 
 	const handleOk = async () => {
-		await axiosHttpService.put(API_COLLECTION_PLAN + '/' + id, request);
+		await axiosHttpService.put(API_PLAN + '/' + id, request);
 		setModalOpen(false);
 		reFetchData();
 	};
@@ -326,9 +327,15 @@ const Update = ({
 					<span>Cơ quan / Đơn vị </span>
 					<Select
 						name="organ"
-						onChange={(value) => handleChangeRequest("organ", value)}
 						className="w-[70%]"
-						value={request["organ"]}
+						showSearch
+						allowClear
+						defaultValue={request.organ}
+						optionFilterProp="children"
+						onChange={(value) => handleChangeRequest('organ', value)}
+						filterOption={(input, option) =>
+							(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+						}
 						options={organ}
 					/>
 				</div>
@@ -405,7 +412,7 @@ const KeHoachThuThap = () => {
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		const res = await axiosHttpService.get(`${API_PLAN_BY_ID + '/' + 1}`);
+		const res = await axiosHttpService.get(`${API_PLAN_BY_TYPE + '/' + 1}`);
 		const rawDatas = res.data.reverse().filter((data) => {
 			return data.state === ENUM_STATE_PLAN.TAO_MOI;
 		});
