@@ -5,12 +5,14 @@ import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 import { ENUM_TYPE_PLAN } from "src/storage/Storage";
 
+import ThemHoSo from "src/pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSoLuuTru";
+
 const API_STORE_HISTORY_PLAN = import.meta.env.VITE_API_STORE_HISTORY_PLAN;
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_PLAN_BY_TYPE= import.meta.env.VITE_API_GET_PLAN_BY_TYPE
 const API_STORAGE_GET_ORGAN_ALL =
-	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
+import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 	
 
 const FIELDS_TABLE = [
@@ -22,6 +24,8 @@ const FIELDS_TABLE = [
 ];
 
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
+	const [openModalAddFile, setOpenModalAddFile] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState([]);
 	const [request, setRequest] = useState({});
 	const [organ, setOrgan] = useState([]);
 
@@ -105,7 +109,23 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 						options={organ}
 					/>
 				</div>
+				<div className="flex justify-between py-[12px]">
+                        <span>Hồ sơ</span>
+                        <div
+                            className="w-[70%]"
+                        >
+                            <Button onClick={() => {
+                                setOpenModalAddFile(true)
+                            }}> Chọn hồ sơ </Button>
+                        </div>
+                    </div>
 			</div>
+			<ThemHoSo
+                    open={openModalAddFile}
+                    setOpen={setOpenModalAddFile}
+                    selectedFiles={selectedFiles}
+                    setSelectedFiles={setSelectedFiles}
+                />
 		</Modal>
 	);
 };

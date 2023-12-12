@@ -12,6 +12,17 @@ export const FIELDS_TABLE = [
     { title: "Chức năng", key: "Function", width: "120px" },
 ]
 
+export const FIELDS_TABLE_STORE_ORGAN = [
+    { title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
+    { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
+    { title: "Phông", key: "organ_id", width: "100%" },
+    { title: "Vị trí lưu trữ", key: "drawer_name", width: "100%" },
+    { title: "Thời hạn bảo quản", key: "maintenance_name", width: "100%" },
+    { title: "Chế độ sử dụng", key: "rights", width: "100%" },
+    { title: "Trạng thái", key: "state", width: "130%" },
+    { title: "Chức năng", key: "Function", width: "120px" },
+]
+
 export const IDENTIFIER_CODE = {
     "Trung tâm Lưu trữ lịch sử": "001.03.34.H48",
     "Sở Giáo dục và Đào tạo": "001.03.34.J09",
