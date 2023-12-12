@@ -2,7 +2,7 @@
 import { useState, useEffect, cloneElement } from "react";
 import DocCategory from "../components/Form/Document/DocCategory";
 import MultimediaCategory from "../components/Form/Multimedia/MultimediaCategory";
-import axiosHttpService from "src/utils/httpService";
+import axiosHttpService, { axiosCorsService } from "src/utils/httpService";
 import { Table } from "../custom/Components";
 import { useSelector, useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,6 +19,7 @@ import { ModalCensorship, ModalConfirmLuuTruCoQuan, ModalModificationDocumentAdd
 
 
 import UserAPIService from "src/service/api/userAPIService";
+import ExcelAPIService from "src/service/api/execAPIService";
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
 	import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE;
@@ -59,17 +60,17 @@ const PlanAndCategoryFile = ({
 	useEffect(() => {
 		const getCategoryFile = async () => {
 			const response = await UserAPIService.getUserOrgan();
-            let organObject = {
-                value: response.id,
-                label: response.name
-            }
-			const { data } = await axiosHttpService.get(API_GET_CATEGORY_FILE_BY_ORGAN +'/' + organObject.value);
+			let organObject = {
+				value: response.id,
+				label: response.name
+			}
+			const { data } = await axiosHttpService.get(API_GET_CATEGORY_FILE_BY_ORGAN + '/' + organObject.value);
 			const _ = [];
 			for (let i = 0; i < data.length; i++) {
-					_.push({
-						label: data[i].name,
-						value: data[i].id,
-					});
+				_.push({
+					label: data[i].name,
+					value: data[i].id,
+				});
 			}
 			setCategoryFile(_);
 		};
@@ -707,7 +708,13 @@ const BasePage = ({
 	}, [fieldsTableCustom]);
 	const handleExportDocToExcel = () => {
 		const getExcel = async () => {
-			const response = await axiosHttpService.post(API_EXPORT_EXCEL, {
+			fileSheet.forEach((file) => {
+				file.maintenance = file.maintenance_name;
+				if(file.maintenance_name !== "Vĩnh viễn"){
+					file.maintenance = file.maintenance_name + " năm"; 
+				}
+			})
+			const response = await axiosCorsService.post(API_EXPORT_EXCEL, {
 				luong: 200,
 				data: fileSheet,
 				cmd: "danhmuc"
