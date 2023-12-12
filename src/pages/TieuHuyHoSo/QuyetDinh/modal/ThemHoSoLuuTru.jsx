@@ -8,7 +8,8 @@ import { FIELDS_TABLE_STORE_ORGAN } from "src/storage/FileStorage";
 
 import axiosHttpService from "src/utils/httpService";
 import { Button, Input, Select } from "antd";
-import { notifySuccess } from "src/custom/Function";
+import { notifyError, notifySuccess } from "src/custom/Function";
+import FileAPIService from "src/service/api/FileAPIService";
 
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
@@ -203,17 +204,9 @@ const ThemHoSo = ({
             title: "Tìm kiếm",
             btn_class_name: "custom-btn-search",
             icon: <i className="fa-solid fa-magnifying-glass"></i>,
-          //  onClick: handleSearch,
+            //  onClick: handleSearch,
         },
     ];
-    
-    const handleChangeStateFile = () => {
-        notifySuccess("Thêm hồ sơ thành công")
-    }
-    
-    const setPlanForFile = () => {
-    }
-
 
     useEffect(() => {
         reset()
@@ -228,8 +221,6 @@ const ThemHoSo = ({
             onCancel={() => setOpen(false)}
             onOk={() => {
                 setOpen(false);
-                handleChangeStateFile();
-                setPlanForFile();
             }}
             open={open}
             className="w-10/12">
@@ -322,7 +313,6 @@ const ThemHoSo = ({
                         isLoading={isLoading}
                         fieldNames={fieldsTable}
                         setStateCheckBox={setSelectedFiles}
-                        selectedFiles={selectedFiles}
                     />
                 </div>
             </div>

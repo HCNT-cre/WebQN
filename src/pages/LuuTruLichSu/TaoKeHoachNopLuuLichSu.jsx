@@ -3,18 +3,20 @@ import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
-import { ENUM_TYPE_PLAN } from "src/storage/Storage";
-
+import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
+import FileAPIService from "src/service/api/FileAPIService";
 import ThemHoSo from "src/pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSoLuuTru";
-
+import { notifySuccess, notifyError } from "src/custom/Function";
+import PlanAPIService from "src/service/api/PlanAPIService";
 const API_STORE_HISTORY_PLAN = import.meta.env.VITE_API_STORE_HISTORY_PLAN;
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
-const API_GET_PLAN_BY_TYPE= import.meta.env.VITE_API_GET_PLAN_BY_TYPE
+const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
 const API_STORAGE_GET_ORGAN_ALL =
-import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
-	
+	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
+const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 
+const API_PLAN = import.meta.env.VITE_API_PLAN;
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
 	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },
@@ -25,9 +27,41 @@ const FIELDS_TABLE = [
 
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [openModalAddFile, setOpenModalAddFile] = useState(false);
-    const [selectedFiles, setSelectedFiles] = useState([]);
+	const [selectedFiles, setSelectedFiles] = useState([]);
 	const [request, setRequest] = useState({});
 	const [organ, setOrgan] = useState([]);
+
+	const handleChangeStateFile = async () => {
+		const newState = selectedFiles.map((file) => {
+			return ({
+				current_state: 4, // Lưu trữ cơ quan
+				new_state: 5, // nộp lưu lịch sử
+				id: parseInt(file.substring(file.indexOf("checkbox") + "checkbox".length)),
+			})
+		});
+		await FileAPIService.updateState(newState);
+	};
+
+	const handleCreate = async () => {
+		request["state"] = "Mới lập";
+		request["type"] = ENUM_TYPE_PLAN.NOP_LUU_LICH_SU;
+		const response = await axiosHttpService.post(`${API_GET_PLAN}`, request);
+		const idPlan = response.data.id;
+
+		selectedFiles.forEach(async (file) => {
+			const payload = {
+				plan_id: idPlan,
+				gov_file_id: parseInt(file.substring(file.indexOf("checkbox") + "checkbox".length)),
+			};
+			await axiosHttpService.post(API_SET_PLAN_FOR_FILE, payload);
+		});
+
+		setTimeout(() => {
+			reFetchData();
+			setRequest({});
+			setModelOpen(false);
+		}, 500);
+	};
 
 	useEffect(() => {
 		const getOrgan = async () => {
@@ -45,14 +79,16 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	}, []);
 
 	const handleOk = async () => {
-		request["state"] = "Mới lập";
-		request["type"] = ENUM_TYPE_PLAN.NOP_LUU_LICH_SU;
-		await axiosHttpService.post(`${API_GET_PLAN}`, request);
-		setTimeout(() => {
-			reFetchData();
-			setRequest({});
-			setModelOpen(false);
-		}, 500);
+		try {
+			await Promise.all[
+				handleChangeStateFile(),
+				handleCreate()
+			]
+			notifySuccess("Tạo kế hoạch thành công");
+		} catch (err) {
+			console.log("err in create file nop luu lich su", err)
+			notifyError("Tạo kế hoạch thất bại");
+		}
 	};
 
 	const handleCancle = () => {
@@ -110,22 +146,22 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 					/>
 				</div>
 				<div className="flex justify-between py-[12px]">
-                        <span>Hồ sơ</span>
-                        <div
-                            className="w-[70%]"
-                        >
-                            <Button onClick={() => {
-                                setOpenModalAddFile(true)
-                            }}> Chọn hồ sơ </Button>
-                        </div>
-                    </div>
+					<span>Hồ sơ</span>
+					<div
+						className="w-[70%]"
+					>
+						<Button onClick={() => {
+							setOpenModalAddFile(true)
+						}}> Chọn hồ sơ </Button>
+					</div>
+				</div>
 			</div>
 			<ThemHoSo
-                    open={openModalAddFile}
-                    setOpen={setOpenModalAddFile}
-                    selectedFiles={selectedFiles}
-                    setSelectedFiles={setSelectedFiles}
-                />
+				open={openModalAddFile}
+				setOpen={setOpenModalAddFile}
+				selectedFiles={selectedFiles}
+				setSelectedFiles={setSelectedFiles}
+			/>
 		</Modal>
 	);
 };
@@ -139,7 +175,7 @@ const Delete = ({ id, reFetchData }) => {
 
 	const handleConfirm = async () => {
 		const deletePlan = async () => {
-			await axiosHttpService.delete(API_DELETE_PLAN +'/'+ id);
+			await axiosHttpService.delete(API_DELETE_PLAN + '/' + id);
 		};
 
 		deletePlan();
@@ -198,7 +234,7 @@ const Update = ({ reFetchData, id }) => {
 
 	useEffect(() => {
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_GET_PLAN_BY_TYPE+ '/' + ENUM_TYPE_PLAN.NOP_LUU_LICH_SU);
+			const { data } = await axiosHttpService.get(API_GET_PLAN_BY_TYPE + '/' + ENUM_TYPE_PLAN.NOP_LUU_LICH_SU);
 			setRequest({
 				name: data.name,
 				date: data.date,
@@ -279,6 +315,26 @@ const TaoKeHoachLuuTruLichSu = () => {
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
 
+	const handleSendPlan = async () => {
+		setIsLoading(true);
+		try {
+			stateCheckBox.forEach(async (item) => {
+				const id = parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))
+				await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.CHO_DUYET);
+			})
+
+			setTimeout(() => {
+				reFetchData();
+				setIsLoading(false);
+			}, 500);
+
+		}catch(err){
+			console.log("err in send plan nop luu lich su", err)
+			notifyError("Gửi kế hoạch thất bại");
+		}
+
+	};
+
 	const BUTTON_ACTIONS = [
 		{
 			title: "Tìm kiếm",
@@ -296,6 +352,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 		{
 			title: "Gửi kế hoạch",
 			btn_class_name: "custom-btn-clear-filter",
+			onClick: handleSendPlan,
 			icon: <i className="fa-solid fa-sync"></i>,
 		},
 		// {
@@ -311,8 +368,12 @@ const TaoKeHoachLuuTruLichSu = () => {
 		const rawDatas = res.data;
 		const plan = [];
 		for (const rawData of rawDatas) {
+			// let color = "bg-indigo-700";
+			// if (rawData.state === ENUM_STATE_PLAN.CHO_DUYET) color = "bg-green-500";
+			// else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";
+			// else if (rawData.state === ENUM_STATE_PLAN.CHAP_NHAN) color = "bg-blue-600";
 			const row = {
-				id: rawData.id,
+			id: rawData.id,
 				name: rawData.name,
 				start_date: rawData.start_date,
 				organ: rawData.organ_name,

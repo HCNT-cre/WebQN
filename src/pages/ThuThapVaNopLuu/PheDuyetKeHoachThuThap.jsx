@@ -274,7 +274,6 @@ const PheDuyetKeHoachThuThap = () => {
 	const ref = useRef();
 	const reFetchData = async () => {
 		setIsLoading(true);
-		console.log(API_COLLECTION_PLAN);
 		const res = await axiosHttpService.get(`${API_COLLECTION_PLAN}`);
 
 		const rawDatas = res.data.reverse().filter((data) => {
@@ -282,7 +281,6 @@ const PheDuyetKeHoachThuThap = () => {
 		});
 
 		const plan = [];
-		console.log(rawDatas);
 		for (const rawData of rawDatas) {
 			const row = {
 				id: rawData.id,
@@ -312,13 +310,6 @@ const PheDuyetKeHoachThuThap = () => {
 
 	const handleClickActionPlan = async (id) => {
 		const oldState = ref.current.find((item) => Number(item.id) === id);
-		console.log({
-			oldState,
-			type: "open_modal_collect_plan",
-			id,
-			reFetchData: reFetchData
-		});
-
 		dispatch({
 			oldState,
 			type: "open_modal_collect_plan",

@@ -10,7 +10,7 @@ import { Button, Input, Select, Popconfirm, Modal } from "antd";
 import { OpenFile, EditFile, CreateFile } from "../actions/formFile";
 import File from "../components/Form/File/File";
 import { FIELDS_TABLE } from "../storage/FileStorage";
-import { ENUM_STATE_BMCL, ENUM_STATE_FILE, STATE } from "../storage/Storage";
+import { ENUM_STATE_BMCL, ENUM_STATE_FILE, ENUM_STATE_PLAN, STATE } from "../storage/Storage";
 import { DeleteData, GetKey } from "../custom/Function";
 import { useButtonClickOutside } from "../custom/Hook";
 import { Link } from "react-router-dom";
@@ -19,6 +19,8 @@ import { ModalCensorship, ModalConfirmLuuTruCoQuan, ModalModificationDocumentAdd
 
 
 import UserAPIService from "src/service/api/userAPIService";
+import FileAPIService from "src/service/api/FileAPIService";
+import PlanAPIService from "src/service/api/PlanAPIService";
 // import ExcelAPIService from "src/service/api/execAPIService";
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
@@ -47,7 +49,6 @@ const PlanAndCategoryFile = ({
 	const [category, setCategory] = useState(null);
 	const [selectedPlan, setSelectedPlan] = useState(null);
 	const [organ, setOrgan] = useState([])
-	console.log(category);
 	const handleOk = () => {
 		setOpen(false);
 		dispatch(CreateFile(category, selectedPlan));
@@ -139,7 +140,6 @@ const ButtonFunctionOfEachFile = ({
 		setOpen(false);
 	};
 	const handleConfirm = () => {
-		console.log("IDFile", IDFile);
 		const DeleteOrganFile = async () => {
 			const files = axiosHttpService.get(API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL);
 			for (const file of files) {
@@ -381,6 +381,7 @@ const BasePage = ({
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const userPermissionId = useSelector((state) => state.user.permission_id);
 	const userPermissions = useSelector((state) => state.user.permissions);
+	const [filterByPlan, setFilterByPlan] = useState(null);
 	const [buttonRef, contentRef, toggleContent, showContent] =
 		useButtonClickOutside(false);
 
@@ -391,7 +392,7 @@ const BasePage = ({
 		state: 0,
 		type: null,
 	});
-
+	
 	const handleClickOnFile = (IDFile) => {
 		dispatch({ type: "open", id: IDFile });
 	};
@@ -568,7 +569,7 @@ const BasePage = ({
 						/>
 					),
 				}
-			};
+			}
 			filesArray.push(row);
 		}
 		return filesArray;
@@ -617,10 +618,14 @@ const BasePage = ({
 
 			const _ = filterdData.map((item) => {
 				return {
-					value: item.name,
+					value: item.id,
 					label: item.name,
 				};
 			});
+			_.unshift({
+				value: null,
+				label: "Tất cả",
+			})
 			setPlan(_);
 		}
 		getPlan();
@@ -656,6 +661,40 @@ const BasePage = ({
 			[name]: value,
 		}));
 	};
+
+	const handleChangeHistoryFile = async (newState) => {
+        if(filterByPlan === null){
+            notifyError("Vui lòng chọn kế hoạch")
+            return ;
+        }
+
+        const listState = [];
+        
+        for (const file of files) {
+            listState.push({
+                ...newState,
+                id: file.id
+            });
+        }
+
+		console.log("listState", listState);
+
+
+        try {
+			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.CHAP_NHAN);
+            const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, listState);
+            const error_code = response.data.error_code;
+            if (error_code === undefined) {
+                notifySuccess("Thay đổi trạng thái thành công");
+                reset();
+            } else {
+                const description = response.data.description;
+                notifyError(description);
+            }
+        } catch (error) {
+            notifyError("Thay đổi trạng thái thất bại");
+        }
+    };
 
 	const handleChangeStateFile = async (newState) => {
 		const listState = [];
@@ -771,6 +810,16 @@ const BasePage = ({
 		}
 	}
 
+	const handleFilterFileByPlan = async (value) => {
+		setIsLoading(true);
+		let res = await FileAPIService.getFileByPlanId(value);
+		res = getFileFromResponse({data: res})
+		if(filter !== null) res = filter(res);
+		setFiles(res);
+		setIsLoading(false);
+		setFilterByPlan(value);
+	}
+
 	return (
 		<>
 			<div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
@@ -837,11 +886,12 @@ const BasePage = ({
 									className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"
 								></Input>
 							</div>
-							<div className="w-[11.11111%] px-[5px]">
+							<div className="w-[15%] px-[5px]">
 								<Select
 									options={plan}
 									placeholder="Kế hoạch"
 									className="border-[0.1rem] text-[12px] w-full truncate h-[32px]"
+									onChange={handleFilterFileByPlan}
 								></Select>
 							</div>
 
@@ -886,7 +936,7 @@ const BasePage = ({
 							</div>}
 							{pheDuyetLuuTruLichSu && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
-									onClick={() => handleChangeStateFile({ "current_state": 5, "new_state": 6 })}
+									onClick={() => handleChangeHistoryFile({ "current_state": 5, "new_state": 6 })}
 									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
 								>
 									<div className="mr-[8px]">
