@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
 import ThemHoSo from "src/pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSoLuuTru";
+import SuaHoSo from "../TieuHuyHoSo/QuyetDinh/modal/SuaHoSoLuuTruLS";
 import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
 const API_STORE_HISTORY_PLAN = import.meta.env.VITE_API_STORE_HISTORY_PLAN;
@@ -81,7 +82,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const handleOk = async () => {
 		try {
 			await Promise.all[
-				handleChangeStateFile(),
+			//	handleChangeStateFile(),
 				handleCreate()
 			]
 			notifySuccess("Tạo kế hoạch thành công");
@@ -156,7 +157,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 					</div>
 				</div>
 			</div>
-			<ThemHoSo
+			<SuaHoSo
 				open={openModalAddFile}
 				setOpen={setOpenModalAddFile}
 				selectedFiles={selectedFiles}
@@ -231,19 +232,24 @@ const Delete = ({ id, reFetchData }) => {
 const Update = ({ reFetchData, id }) => {
 	const [request, setRequest] = useState({});
 	const [modalOpen, setModalOpen] = useState(false);
+	const [openModalAddFile, setOpenModalAddFile] = useState(false);
+	const [selectedFiles, setSelectedFiles] = useState([]);
 
 	useEffect(() => {
 		const getPlan = async () => {
-			const { data } = await axiosHttpService.get(API_GET_PLAN_BY_TYPE + '/' + ENUM_TYPE_PLAN.NOP_LUU_LICH_SU);
+			const { data } = await axiosHttpService.get(API_GET_PLAN + '/' + id);
 			setRequest({
 				name: data.name,
-				date: data.date,
+				start_date: data.start_date,
+				organ_name: data.organ_name,
 				organ: data.organ,
+				state: data.state,
 			});
 		};
 		getPlan();
 	}, [id]);
 
+	
 	const handleChangeRequest = (name, value) => {
 		return setRequest({
 			...request,
@@ -256,7 +262,16 @@ const Update = ({ reFetchData, id }) => {
 	};
 
 	const handleOk = async () => {
-		await axiosHttpService.put(API_STORE_HISTORY_PLAN + id, request);
+		await axiosHttpService.put(API_GET_PLAN + '/' +id, request);
+		
+		selectedFiles.forEach(async (file) => {
+			const payload = {
+				plan_id: id,
+				gov_file_id: parseInt(file.substring(file.indexOf("checkbox") + "checkbox".length)),
+			};
+			await axiosHttpService.post(API_SET_PLAN_FOR_FILE, payload);
+		});
+		
 		setModalOpen(false);
 		reFetchData();
 	};
@@ -302,9 +317,26 @@ const Update = ({ reFetchData, id }) => {
 						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
 						type="text"
 						className="w-[70%]"
-						value={request["organ"]}
+						value={request["organ_name"]}
 					/>
 				</div>
+				<div className="flex justify-between py-[12px]">
+					<span>Hồ sơ</span>
+					<div
+						className="w-[70%]"
+					>
+						<Button onClick={() => {
+							setOpenModalAddFile(true)
+						}}> Chọn hồ sơ </Button>
+					</div>
+				</div>
+				<ThemHoSo
+				open={openModalAddFile}
+				setOpen={setOpenModalAddFile}
+				selectedFiles={selectedFiles}
+				setSelectedFiles={setSelectedFiles}
+			/>
+
 			</Modal>
 		</div>
 	);
@@ -376,7 +408,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 			id: rawData.id,
 				name: rawData.name,
 				start_date: rawData.start_date,
-				organ: rawData.organ_name,
+				organ_name: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
 				function: (
 					<div className="flex ">

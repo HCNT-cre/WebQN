@@ -57,7 +57,7 @@ const filterFileEachTab = (files, text) => {
 }
 
 
-const ThemHoSo = ({
+const SuaHoSo = ({
     open,
     setOpen,
     selectedFiles,
@@ -332,4 +332,4 @@ const ThemHoSo = ({
     )
 }
 
-export default ThemHoSo
+export default SuaHoSo
