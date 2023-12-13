@@ -677,9 +677,6 @@ const BasePage = ({
             });
         }
 
-		console.log("listState", listState);
-
-
         try {
 			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.CHAP_NHAN);
             const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, listState);

@@ -3,7 +3,7 @@ import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
-import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
+import { ENUM_STATE_FILE, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
 import ThemHoSo from "src/pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSoLuuTru";
 import SuaHoSo from "../TieuHuyHoSo/QuyetDinh/modal/SuaHoSoLuuTruLS";
@@ -373,6 +373,7 @@ const Update = ({ reFetchData, id }) => {
 		</div>
 	);
 };
+
 const TaoKeHoachLuuTruLichSu = () => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -385,6 +386,10 @@ const TaoKeHoachLuuTruLichSu = () => {
 			stateCheckBox.forEach(async (item) => {
 				const id = parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))
 				await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.CHO_DUYET);
+				await FileAPIService.updateStateByIdPlan(id, {
+					current_state: 4, // luu tru co quan
+					new_state: 5, // nop luu lich su
+				});
 			})
 
 			setTimeout(() => {

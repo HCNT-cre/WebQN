@@ -38,6 +38,8 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
         }
 
         for (const file of files) {
+            console.log(file.id);
+            console.log(file.state.props.children);
             if (file.state.props.children !== ENUM_STATE_FILE.NOP_LUU_LICH_SU) continue;
             // if (file.maintenance_name !== "Vĩnh viễn") continue;
             // if (file.end_date === null || file.end_date === undefined || (file.state.props.children !== 'Nộp lưu lịch sử' || file.maintenance !== "Vĩnh viễn"))
