@@ -9,6 +9,7 @@ import ThemHoSo from "src/pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSoLuuTru";
 import SuaHoSo from "../TieuHuyHoSo/QuyetDinh/modal/SuaHoSoLuuTruLS";
 import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
+import XoaHoSo from "../TieuHuyHoSo/QuyetDinh/modal/XoaHoSoLuuTruLS";
 const API_STORE_HISTORY_PLAN = import.meta.env.VITE_API_STORE_HISTORY_PLAN;
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
@@ -233,6 +234,7 @@ const Update = ({ reFetchData, id }) => {
 	const [request, setRequest] = useState({});
 	const [modalOpen, setModalOpen] = useState(false);
 	const [openModalAddFile, setOpenModalAddFile] = useState(false);
+	const [openModalDeleteFile, setOpenModalDeleteFile] = useState(false);
 	const [selectedFiles, setSelectedFiles] = useState([]);
 
 	useEffect(() => {
@@ -327,9 +329,25 @@ const Update = ({ reFetchData, id }) => {
 					>
 						<Button onClick={() => {
 							setOpenModalAddFile(true)
-						}}> Chọn hồ sơ </Button>
+						}}> Thêm hồ sơ mới vào kế hoạch</Button>
 					</div>
 				</div>
+				<div className="flex justify-between py-[12px]">
+					<span>Hồ sơ</span>
+					<div
+						className="w-[70%]"
+					>
+						<Button onClick={() => {
+							setOpenModalDeleteFile(true)
+						}}> Xoá hồ sơ trong kế hoạch</Button>
+					</div>
+				</div>
+				<XoaHoSo
+				open={openModalDeleteFile}
+				setOpen={setOpenModalDeleteFile}
+				selectedFiles={selectedFiles}
+				setSelectedFiles={setSelectedFiles}
+			/>
 				<ThemHoSo
 				open={openModalAddFile}
 				setOpen={setOpenModalAddFile}
