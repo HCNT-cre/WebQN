@@ -223,6 +223,13 @@ const ThemHoSo = ({
         reset()
     }, [])
 
+    const handleOk = () =>{
+        setTimeout(() =>{
+            setOpen(false);
+            reset();
+        }, [300])
+    }
+
     return (
         <Modal
             style={{
@@ -230,9 +237,7 @@ const ThemHoSo = ({
             }}
             title="Thêm hồ sơ"
             onCancel={() => setOpen(false)}
-            onOk={() => {
-                setOpen(false);
-            }}
+            onOk={handleOk}
             open={open}
             className="w-10/12">
 

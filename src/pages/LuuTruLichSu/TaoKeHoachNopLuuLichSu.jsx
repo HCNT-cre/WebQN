@@ -32,17 +32,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [selectedFiles, setSelectedFiles] = useState([]);
 	const [request, setRequest] = useState({});
 	const [organ, setOrgan] = useState([]);
-
-	const handleChangeStateFile = async () => {
-		const newState = selectedFiles.map((file) => {
-			return ({
-				current_state: 4, // Lưu trữ cơ quan
-				new_state: 5, // nộp lưu lịch sử
-				id: parseInt(file.substring(file.indexOf("checkbox") + "checkbox".length)),
-			})
-		});
-		await FileAPIService.updateState(newState);
-	};
+	const [reset, setReset] = useState(false);
 
 	const handleCreate = async () => {
 		request["state"] = "Mới lập";
@@ -82,11 +72,12 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 
 	const handleOk = async () => {
 		try {
-			await Promise.all[
-			//	handleChangeStateFile(),
-				handleCreate()
-			]
-			notifySuccess("Tạo kế hoạch thành công");
+			await handleCreate();
+			setTimeout(() => {
+				reFetchData();
+				setReset(true);
+				notifySuccess("Tạo kế hoạch thành công");
+			}, [])
 		} catch (err) {
 			console.log("err in create file nop luu lich su", err)
 			notifyError("Tạo kế hoạch thất bại");
@@ -163,6 +154,8 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 				setOpen={setOpenModalAddFile}
 				selectedFiles={selectedFiles}
 				setSelectedFiles={setSelectedFiles}
+				doesReset={reset}
+				setDoesReset={setReset}
 			/>
 		</Modal>
 	);
@@ -251,7 +244,7 @@ const Update = ({ reFetchData, id }) => {
 		getPlan();
 	}, [id]);
 
-	
+
 	const handleChangeRequest = (name, value) => {
 		return setRequest({
 			...request,
@@ -264,8 +257,8 @@ const Update = ({ reFetchData, id }) => {
 	};
 
 	const handleOk = async () => {
-		await axiosHttpService.put(API_GET_PLAN + '/' +id, request);
-		
+		await axiosHttpService.put(API_GET_PLAN + '/' + id, request);
+
 		selectedFiles.forEach(async (file) => {
 			const payload = {
 				plan_id: id,
@@ -273,7 +266,7 @@ const Update = ({ reFetchData, id }) => {
 			};
 			await axiosHttpService.post(API_SET_PLAN_FOR_FILE, payload);
 		});
-		
+
 		setModalOpen(false);
 		reFetchData();
 	};
@@ -343,18 +336,18 @@ const Update = ({ reFetchData, id }) => {
 					</div>
 				</div>
 				<XoaHoSo
-				open={openModalDeleteFile}
-				idPlan={id}
-				setOpen={setOpenModalDeleteFile}
-				selectedFiles={selectedFiles}
-				setSelectedFiles={setSelectedFiles}
-			/>
+					open={openModalDeleteFile}
+					idPlan={id}
+					setOpen={setOpenModalDeleteFile}
+					selectedFiles={selectedFiles}
+					setSelectedFiles={setSelectedFiles}
+				/>
 				<ThemHoSo
-				open={openModalAddFile}
-				setOpen={setOpenModalAddFile}
-				selectedFiles={selectedFiles}
-				setSelectedFiles={setSelectedFiles}
-			/>
+					open={openModalAddFile}
+					setOpen={setOpenModalAddFile}
+					selectedFiles={selectedFiles}
+					setSelectedFiles={setSelectedFiles}
+				/>
 
 			</Modal>
 		</div>
@@ -379,7 +372,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 				setIsLoading(false);
 			}, 500);
 
-		}catch(err){
+		} catch (err) {
 			console.log("err in send plan nop luu lich su", err)
 			notifyError("Gửi kế hoạch thất bại");
 		}
@@ -424,7 +417,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 			// else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";
 			// else if (rawData.state === ENUM_STATE_PLAN.CHAP_NHAN) color = "bg-blue-600";
 			const row = {
-			id: rawData.id,
+				id: rawData.id,
 				name: rawData.name,
 				start_date: rawData.start_date,
 				organ_name: rawData.organ_name,

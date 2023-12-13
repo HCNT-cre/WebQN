@@ -10,9 +10,10 @@ import axiosHttpService from "src/utils/httpService";
 import { Button, Input, Select } from "antd";
 import { notifyError, notifySuccess } from "src/custom/Function";
 import FileAPIService from "src/service/api/FileAPIService";
+import PlanAPIService from "src/service/api/PlanAPIService";
 
 const REMOVE_FILE_FROM_PLAN = import.meta.env.VITE_REMOVE_FILE_FROM_PLAN;
-const GET_FILE_BY_PLAN_ID = import.meta.env.VITE_GET_FILE_BY_PLAN_ID;
+const API_GET_FILE_BY_PLAN_NNLS_ID = import.meta.env.VITE_API_GET_FILE_BY_PLAN_NNLS_ID;
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
@@ -124,11 +125,7 @@ const XoaHoSo = ({
                         {STATE[rawData.state]}
                     </button>
                 ),
-                type: rawData.type || "",
-                plan_thuthap: rawData.plan_thuthap || "",
-                plan_bmcl: rawData.plan_bmcl || "",
-                plan_nopluuls: rawData.plan_nopluuls || "",
-                plan_tieuhuy: rawData.plan_tieuhuy || "",
+                type: rawData.type || ""
             };
             filesArray.push(row);
         }
@@ -139,17 +136,15 @@ const XoaHoSo = ({
         const fetchFileData = async () => {
             try {
                 setIsLoading(true);
-                const response = await axiosHttpService.get(
-                    GET_FILE_BY_PLAN_ID + idPlan
-                );
+                const response = await PlanAPIService.getFileByPlanNLLSId(idPlan);
                 setIsLoading(false);
                 const files = getFileFromResponse(response);
                 const newFiles = [];
                 for (const file of files) {
                     if (
-                                file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN 
-                        )
-                        newFiles.push(file)
+                        file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN
+                    )
+                    newFiles.push(file)
                 }
                 setFiles(newFiles);
                 setOrgFiles(files)
@@ -184,6 +179,17 @@ const XoaHoSo = ({
     };
 
     const handleRemoveFile = async () => {
+        // checkbox{id}
+        setIsLoading(true);
+        for(const idFile of selectedFiles){
+            const id = idFile.split('checkbox')[1]
+            await PlanAPIService.removeFileFromPlan(id);    
+        }
+        setIsLoading(false);
+        setTimeout(() => {
+            reset();
+            notifySuccess("Xóa hồ sơ thành công");
+        }, 300)
     };
 
     const handleClickOnFile = (IDFile) => {

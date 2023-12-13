@@ -61,7 +61,9 @@ const SuaHoSo = ({
     open,
     setOpen,
     selectedFiles,
-    setSelectedFiles
+    setSelectedFiles,
+    doesReset = null,
+    setDoesReset = null,
 }) => {
     const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
@@ -144,12 +146,12 @@ const SuaHoSo = ({
                 const newFiles = [];
                 for (const file of files) {
                     if (
-                                file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN 
-                            && file.plan_thuthap === ""
-                            && file.plan_bmcl === ""
-                            && file.plan_nopluuls=== "" 
-                            && file.plan_tieuhuy === ""
-                        )
+                        file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN
+                        && file.plan_thuthap === ""
+                        && file.plan_bmcl === ""
+                        && file.plan_nopluuls === ""
+                        && file.plan_tieuhuy === ""
+                    )
                         newFiles.push(file)
                 }
                 setFiles(newFiles);
@@ -222,6 +224,13 @@ const SuaHoSo = ({
     useEffect(() => {
         reset()
     }, [])
+
+    useEffect(() =>{
+        if(doesReset){
+            reset()
+            setDoesReset(false);
+        }
+    }, [doesReset])
 
     return (
         <Modal
