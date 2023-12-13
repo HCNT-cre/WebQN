@@ -11,6 +11,8 @@ import { Button, Input, Select } from "antd";
 import { notifyError, notifySuccess } from "src/custom/Function";
 import FileAPIService from "src/service/api/FileAPIService";
 
+const REMOVE_FILE_FROM_PLAN = import.meta.env.VITE_REMOVE_FILE_FROM_PLAN;
+const GET_FILE_BY_PLAN_ID = import.meta.env.VITE_GET_FILE_BY_PLAN_ID;
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
@@ -61,7 +63,8 @@ const XoaHoSo = ({
     open,
     setOpen,
     selectedFiles,
-    setSelectedFiles
+    setSelectedFiles,
+    idPlan
 }) => {
     const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
@@ -137,7 +140,7 @@ const XoaHoSo = ({
             try {
                 setIsLoading(true);
                 const response = await axiosHttpService.get(
-                    API_GOV_FILE_GET_ALL
+                    GET_FILE_BY_PLAN_ID + idPlan
                 );
                 setIsLoading(false);
                 const files = getFileFromResponse(response);
@@ -145,10 +148,6 @@ const XoaHoSo = ({
                 for (const file of files) {
                     if (
                                 file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN 
-                            && file.plan_thuthap === ""
-                            && file.plan_bmcl === ""
-                            // && file.plan_nopluuls=== ""
-                            && file.plan_tieuhuy === ""
                         )
                         newFiles.push(file)
                 }
@@ -182,6 +181,9 @@ const XoaHoSo = ({
         } catch (error) {
             console.error(error);
         }
+    };
+
+    const handleRemoveFile = async () => {
     };
 
     const handleClickOnFile = (IDFile) => {
@@ -232,6 +234,7 @@ const XoaHoSo = ({
             onCancel={() => setOpen(false)}
             onOk={() => {
                 setOpen(false);
+                handleRemoveFile();
             }}
             open={open}
             className="w-10/12">

@@ -323,7 +323,7 @@ const Update = ({ reFetchData, id }) => {
 					/>
 				</div>
 				<div className="flex justify-between py-[12px]">
-					<span>Hồ sơ</span>
+					<span>Thêm hồ sơ</span>
 					<div
 						className="w-[70%]"
 					>
@@ -333,7 +333,7 @@ const Update = ({ reFetchData, id }) => {
 					</div>
 				</div>
 				<div className="flex justify-between py-[12px]">
-					<span>Hồ sơ</span>
+					<span>Xoá hồ sơ</span>
 					<div
 						className="w-[70%]"
 					>
@@ -344,6 +344,7 @@ const Update = ({ reFetchData, id }) => {
 				</div>
 				<XoaHoSo
 				open={openModalDeleteFile}
+				idPlan={id}
 				setOpen={setOpenModalDeleteFile}
 				selectedFiles={selectedFiles}
 				setSelectedFiles={setSelectedFiles}
