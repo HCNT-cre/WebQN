@@ -71,7 +71,7 @@ const KhoLuuTruCoQuan = () => {
     // }, [allOrganStorageFiles]);
 
 
-    return <BasePage parent={parent} current={current} filter={filter} fieldsTableCustom={FIELDS_TABLE} luuTruCoQuan={true} />
+    return <BasePage parent={parent} haveActionButton={false} current={current} filter={filter} fieldsTableCustom={FIELDS_TABLE} luuTruCoQuan={true} />
 }
 
 export default KhoLuuTruCoQuan;
