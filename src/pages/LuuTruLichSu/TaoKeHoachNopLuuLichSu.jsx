@@ -228,8 +228,10 @@ const Update = ({ reFetchData, id }) => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [openModalAddFile, setOpenModalAddFile] = useState(false);
 	const [openModalDeleteFile, setOpenModalDeleteFile] = useState(false);
-	const [selectedFiles, setSelectedFiles] = useState([]);
-
+	const [addFile, setAddFile] = useState([]);
+	const [removeFile, setRemoveFile] = useState([]);
+	const [resetRemove, setResetRemove] = useState(false);
+	const [resetAdd, setResetAdd] = useState(false);
 	useEffect(() => {
 		const getPlan = async () => {
 			const { data } = await axiosHttpService.get(API_GET_PLAN + '/' + id);
@@ -256,19 +258,33 @@ const Update = ({ reFetchData, id }) => {
 		setModalOpen(true);
 	};
 
-	const handleOk = async () => {
-		await axiosHttpService.put(API_GET_PLAN + '/' + id, request);
+	const handleRemoveFile = async () => {
+        for(const checkbox of removeFile){
+            const idFile = checkbox.split('checkbox')[1]
+            await PlanAPIService.removeFileFromPlan(idFile);    
+        }
+    };
 
-		selectedFiles.forEach(async (file) => {
+	const handleAddFile = async () => {
+		for(const checkbox of addFile){
+			const idFile = checkbox.split('checkbox')[1]
 			const payload = {
 				plan_id: id,
-				gov_file_id: parseInt(file.substring(file.indexOf("checkbox") + "checkbox".length)),
-			};
-			await axiosHttpService.post(API_SET_PLAN_FOR_FILE, payload);
-		});
+				gov_file_id: idFile,
+			}
+			await PlanAPIService.setPlanForFile(payload);
+		}
+	}
 
-		setModalOpen(false);
+	const handleOk = async () => {
+		await axiosHttpService.put(API_GET_PLAN + '/' + id, request);
+		await handleRemoveFile();
+		await handleAddFile();
+		setResetAdd(true);
+		setResetRemove(true);
 		reFetchData();
+		setModalOpen(false);
+		notifySuccess("Cập nhật thành công");
 	};
 
 	const handleCancle = () => {
@@ -339,14 +355,18 @@ const Update = ({ reFetchData, id }) => {
 					open={openModalDeleteFile}
 					idPlan={id}
 					setOpen={setOpenModalDeleteFile}
-					selectedFiles={selectedFiles}
-					setSelectedFiles={setSelectedFiles}
+					selectedFiles={removeFile}
+					setSelectedFiles={setRemoveFile}
+					doesReset={resetRemove}
+					setDoesReset={setResetRemove}
 				/>
 				<ThemHoSo
 					open={openModalAddFile}
 					setOpen={setOpenModalAddFile}
-					selectedFiles={selectedFiles}
-					setSelectedFiles={setSelectedFiles}
+					selectedFiles={addFile}
+					setSelectedFiles={setAddFile}
+					doesReset={resetAdd}
+					setDoesReset={setResetAdd}
 				/>
 
 			</Modal>

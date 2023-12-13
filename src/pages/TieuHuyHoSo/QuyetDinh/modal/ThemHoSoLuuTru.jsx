@@ -13,7 +13,6 @@ import FileAPIService from "src/service/api/FileAPIService";
 
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
-const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 
 const fieldsTable = [...FIELDS_TABLE_STORE_ORGAN];
 fieldsTable.pop()
@@ -61,7 +60,9 @@ const ThemHoSo = ({
     open,
     setOpen,
     selectedFiles,
-    setSelectedFiles
+    setSelectedFiles,
+    doesReset,
+    setDoesReset
 }) => {
     const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
@@ -188,20 +189,6 @@ const ThemHoSo = ({
         dispatch({ type: "open", id: IDFile });
     };
 
-    const resetSearch = async () => {
-        let request = API_GOV_FILE_SEARCH;
-        const response = await axiosHttpService.get(request);
-        setFiles(getFileFromResponse(response));
-        setSearch((prev) => ({
-            title: "",
-            organ_id: "",
-            offce: "",
-            state: 0,
-            type: "",
-            end_date: "",
-            start_date: "",
-        }));
-    };
 
     const handleChangeSearch = (name, value) => {
         setSearch((prev) => ({
@@ -224,12 +211,15 @@ const ThemHoSo = ({
     }, [])
 
     const handleOk = () =>{
-        setTimeout(() =>{
-            setOpen(false);
-            reset();
-        }, [300])
+        setOpen(false);
     }
 
+    useEffect(() => {
+        if(doesReset) {
+            reset();
+            setDoesReset(false);
+        }
+    }, [doesReset])
     return (
         <Modal
             style={{

@@ -16,7 +16,6 @@ const REMOVE_FILE_FROM_PLAN = import.meta.env.VITE_REMOVE_FILE_FROM_PLAN;
 const API_GET_FILE_BY_PLAN_NNLS_ID = import.meta.env.VITE_API_GET_FILE_BY_PLAN_NNLS_ID;
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
-const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 
 const fieldsTable = [...FIELDS_TABLE_STORE_ORGAN];
 fieldsTable.pop()
@@ -65,7 +64,9 @@ const XoaHoSo = ({
     setOpen,
     selectedFiles,
     setSelectedFiles,
-    idPlan
+    idPlan,
+    doesReset,
+    setDoesReset,
 }) => {
     const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
@@ -178,38 +179,12 @@ const XoaHoSo = ({
         }
     };
 
-    const handleRemoveFile = async () => {
-        // checkbox{id}
-        setIsLoading(true);
-        for(const idFile of selectedFiles){
-            const id = idFile.split('checkbox')[1]
-            await PlanAPIService.removeFileFromPlan(id);    
-        }
-        setIsLoading(false);
-        setTimeout(() => {
-            reset();
-            notifySuccess("Xóa hồ sơ thành công");
-        }, 300)
-    };
+    
 
     const handleClickOnFile = (IDFile) => {
         dispatch({ type: "open", id: IDFile });
     };
 
-    const resetSearch = async () => {
-        let request = API_GOV_FILE_SEARCH;
-        const response = await axiosHttpService.get(request);
-        setFiles(getFileFromResponse(response));
-        setSearch((prev) => ({
-            title: "",
-            organ_id: "",
-            offce: "",
-            state: 0,
-            type: "",
-            end_date: "",
-            start_date: "",
-        }));
-    };
 
     const handleChangeSearch = (name, value) => {
         setSearch((prev) => ({
@@ -231,6 +206,12 @@ const XoaHoSo = ({
         reset()
     }, [])
 
+    useEffect(() => {
+        if(doesReset) {
+            reset();
+            setDoesReset(false);
+        }
+    }, [doesReset])
     return (
         <Modal
             style={{
@@ -240,7 +221,6 @@ const XoaHoSo = ({
             onCancel={() => setOpen(false)}
             onOk={() => {
                 setOpen(false);
-                handleRemoveFile();
             }}
             open={open}
             className="w-10/12">
