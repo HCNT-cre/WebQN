@@ -23,8 +23,10 @@ const API_DOCUMENT_MODIFICATION_REJECT = import.meta.env.VITE_API_DOCUMENT_MODIF
 
 const API_DOCUMENT_MODIFICATION_REJECT_ADDED = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT_ADDED
 
+const API_GET_WAREHOUSE_BY_ORGAN = import.meta.env.VITE_API_GET_WAREHOUSE_BY_ORGAN;
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 import UserAPIService from "src/service/api/userAPIService";
+import LuutrucoquanAPIService from "src/service/api/LuutrucoquanAPIService";
 
 const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
@@ -190,87 +192,83 @@ export const ModalConfirmLuuTruCoQuan = () => {
     const [optionWarehouseRoom, setOptionWarehouseRoom] = useState([])
     const [optionDrawers, setOptionDrawers] = useState([])
 
-    const reFetchData = () => {
-
-        const fetchShelf = async () => {
-
-            const response = await axiosHttpService.get(API_STORAGE_GET_SHELF_ALL)
-            const raws = []
-
-            for (const data of response.data) {
-                const raw = {}
-                raw["value"] = data["name"]
-                raw["label"] = data["name"]
-                raws.push(raw)
-            }
-
-            setOptionShelf(raws)
-
+    const fetchOrganName = async () => {
+        const response = await UserAPIService.getUserOrgan();
+        let organObject = {
+            value: response.id,
+            label: response.name
         }
-
-        const fetchOrganName = async () => {
-            const response = await UserAPIService.getUserOrgan();
-            let organObject = {
-                value: response.id,
-                label: response.name
-            }
-            setOptionOrgan([organObject]);
-            handleChangeRequest('organ', organObject.value)
-        }
-
-        const fetchWarehouse = async () => {
-
-            const response = await axiosHttpService.get(API_STORAGE_GET_WAREHOUSE_ALL)
-            const raws = []
-            for (const data of response.data) {
-                const raw = {}
-                raw["value"] = data["name"]
-                raw["label"] = data["name"]
-                raws.push(raw)
-            }
-
-            setOptionWarehouse(raws)
-
-        }
-
-        const fetchWareHouseRoom = async () => {
-
-            const response = await axiosHttpService.get(API_STORAGE_GET_WAREHOUSEROOM_ALL)
-            const raws = []
-            for (const data of response.data) {
-                const raw = {}
-                raw["value"] = data["name"]
-                raw["label"] = data["name"]
-                raws.push(raw)
-            }
-
-            setOptionWarehouseRoom(raws)
-
-        }
-        const fetchDrawers = async () => {
-
-            const response = await axiosHttpService.get(API_STORAGE_GET_DRAWERS_ALL)
-            const raws = []
-            for (const data of response.data) {
-                const raw = {}
-                raw["value"] = data["id"]
-                raw["label"] = data["name"]
-                raws.push(raw)
-            }
-
-            setOptionDrawers(raws)
-        }
-
-        fetchDrawers()
-        fetchShelf()
-        fetchWareHouseRoom()
-        fetchOrganName()
-        fetchWarehouse()
+        setOptionOrgan([organObject]);
+        handleChangeRequest('organ', organObject.value)
     }
-    console.log("option shelf: ",optionShelf)
 
     useEffect(() => {
-        reFetchData()
+        const fetchWarehouse = async (id) => {
+            if(!id) return;
+            const warehouse = await LuutrucoquanAPIService.getWarehouseByOrganId(id);
+            const raws = []
+            for (const data of warehouse) {
+                raws.push({
+                    value: data.id,
+                    label: data.name
+                })
+            }
+            setOptionWarehouse(raws)
+        }
+        fetchWarehouse(request['organ'])
+    }, [request['organ']])
+
+
+    useEffect(() => {
+        const fetchWarehouseRoom = async (id) => {
+            if(!id) return;
+            const warehouseRoom = await LuutrucoquanAPIService.getWarehouseRoomByWarehouseId(id);
+            const raws = []
+            for (const data of warehouseRoom) {
+                raws.push({
+                    value: data.id,
+                    label: data.name
+                })
+            }
+            setOptionWarehouseRoom(raws)
+        }
+        fetchWarehouseRoom(request['warehouse'])
+    }, [request['warehouse']])
+
+    useEffect(() => {
+        const fetchShelf = async (id) => {
+            if(!id) return;
+            const shelf = await LuutrucoquanAPIService.getShelfByWarehouseRoomId(id);
+            const raws = []
+            for (const data of shelf) {
+                raws.push({
+                    value: data.id,
+                    label: data.name
+                })
+            }
+            setOptionShelf(raws)
+        }
+        fetchShelf(request['warehouseroom'])
+    }, [request['warehouseroom']])
+
+    useEffect(() => {
+        const fetchDrawer = async (id) => {
+            if(!id) return;
+            const drawer = await LuutrucoquanAPIService.getDrawerByShelfId(id);
+            const raws = []
+            for (const data of drawer) {
+                raws.push({
+                    value: data.id,
+                    label: data.name
+                })
+            }
+            setOptionDrawers(raws)
+        }
+        fetchDrawer(request['shelf'])
+    }, [request['shelf']])
+
+    useEffect(() => {
+        fetchOrganName()
     }, [])
 
     const handleChangeRequest = (name, value) => {
@@ -300,16 +298,16 @@ export const ModalConfirmLuuTruCoQuan = () => {
             { id: IDFile, current_state: 10, new_state: 4 } // CHO_XEP_KHO -> LUU_TRU_CO_QUAN
         ]);
         await axiosHttpService.post(API_GOV_FILE_SET_DRAWER, [
-            { gov_file_id: IDFile, drawer_id: request.drawer } 
+            { gov_file_id: IDFile, drawer_id: request.drawer }
         ]);
-        
+
         // await axiosHttpService.post(API_STORAGE_POST_FILE_ORGAN_STORAGE, { ...request, file_id: IDFile })
         dispatch({ type: "close_modal_confirm_luutrucoquan", id: null })
         notifySuccess("Duyệt thành công")
         reFetchFile()
     }
 
- //   const warehouseDisabled = !optionOrgan.find(item => item.value === request.organ);
+    //   const warehouseDisabled = !optionOrgan.find(item => item.value === request.organ);
     let warehouseRoomDisabled = !request.warehouse || !optionWarehouse.find(item => item.value === request.warehouse);
     let shelfDisabled = !request.warehouseroom || !optionWarehouseRoom.find(item => item.value === request.warehouseroom);
     let drawerDisabled = !request.shelf || !optionShelf.find(item => item.value === request.shelf);
@@ -373,7 +371,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionWarehouseRoom}
-                         disabled={warehouseRoomDisabled}
+                        disabled={warehouseRoomDisabled}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -390,7 +388,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionShelf}
-                         disabled={shelfDisabled}
+                        disabled={shelfDisabled}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -407,7 +405,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionDrawers}
-                         disabled={drawerDisabled}
+                        disabled={drawerDisabled}
                     />
                 </div>
                 <div className="flex justify-center">
@@ -471,7 +469,7 @@ export const ModalModificationDocumentConfirmStore = () => {
     }
 
     const handleClickApprove = async () => {
-      //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
+        //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
         await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
             id: IDFile, current_state: 12,
             new_state: getNextState(12) // HSCL_GIAO_NOP -> CHO_XEP_KHO
@@ -485,7 +483,7 @@ export const ModalModificationDocumentConfirmStore = () => {
     }
 
     const handleClickReject = async () => {
-      //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
+        //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
         await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
             id: IDFile, current_state: 12,
             new_state: 13 // HSCL_GIAO_NOP -> HSCL_BI_TRA_VE
@@ -558,11 +556,11 @@ export const ModalModificationDocumentAddDocument = () => {
     }
 
     const handleClickApprove = async () => {
-      //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT_ADDED, { idFile: IDFile })
+        //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT_ADDED, { idFile: IDFile })
 
-      //  const rejected = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT)
+        //  const rejected = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT)
         const id = rejected.data.find(item => item.idFile === IDFile).id
-      //  await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT + "/" + id)
+        //  await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT + "/" + id)
 
         notifySuccess("Nộp thành công")
         dispatch({ type: "close_modal_confirm_bmcl_bosunghosotailieu", id: null })
@@ -638,15 +636,15 @@ export const ModalModificationDocumentAddedDocument = () => {
     }
 
     const handleClickApprove = async () => {
-    //    await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
+        //    await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
         await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
             id: IDFile, current_state: 3,
             new_state: 3 + 1
         }])
 
-     //   const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+        //   const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
         const id = added.data.find(item => item.idFile === IDFile).id
-     //   await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
+        //   await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
 
         notifySuccess("Đã trình duyệt lưu kho hồ sơ bổ sung thành công")
         dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
@@ -657,12 +655,12 @@ export const ModalModificationDocumentAddedDocument = () => {
     }
 
     const handleClickReject = async () => {
-       // await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
+        // await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
         notifySuccess("Đã trả về hồ sơ")
 
-      //  const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+        //  const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
         const id = added.data.find(item => item.idFile === IDFile).id
-     //   await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
+        //   await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
 
         dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
         setTimeout(() => {
@@ -758,12 +756,12 @@ export const ModalModificationDocumentRequireAddDoc = () => {
 
     }
     const handleClickReject = async () => {
-      //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
+        //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
         notifySuccess("Đã trả về hồ sơ")
 
-     //   const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
+        //   const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
         const id = added.data.find(item => item.idFile === IDFile).id
-    //    await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
+        //    await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
 
         dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
         setTimeout(() => {
@@ -846,7 +844,7 @@ export const ModalPlan = () => {
     const oldState = useSelector(state => state.modalPlanReducer.oldState);
     console.log(oldState);
     const handleOk = async () => {
-        await axiosHttpService.put( API_PLAN + '/' + oldState.id, {
+        await axiosHttpService.put(API_PLAN + '/' + oldState.id, {
             ...oldState,
             state: ENUM_STATE_PLAN.CHAP_NHAN,
             type: type
@@ -866,7 +864,7 @@ export const ModalPlan = () => {
             ...oldState,
             state: ENUM_STATE_PLAN.TU_CHOI,
             type: type,
-        
+
         });
 
         notifySuccess("Đã từ chối kế hoạch");
