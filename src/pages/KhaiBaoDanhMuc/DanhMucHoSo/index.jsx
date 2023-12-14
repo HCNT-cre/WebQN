@@ -3,7 +3,7 @@ import { Button, Select, Spin } from "antd"
 import { useEffect, useState } from "react"
 import { Input, Table, Modal, Popconfirm } from "antd"
 import axiosHttpService from "src/utils/httpService";
-
+import UserAPIService from 'src/service/api/userAPIService';
 const CATEGORY_FILE_API = import.meta.env.VITE_CATEGORY_FILE_API
 
 // API: 
@@ -70,8 +70,11 @@ const Create = ({
     }, [order])
 
     const handleOk = async () => {
+
+        const _organ = await UserAPIService.getUserOrgan();
         request["order"] = order
         request["parent"] = parent
+        request["organ"] = _organ.id
         await axiosHttpService.post(`${CATEGORY_FILE_API}`, request)
 
         setTimeout(() => {

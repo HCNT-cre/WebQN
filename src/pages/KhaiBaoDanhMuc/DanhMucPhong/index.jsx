@@ -184,7 +184,8 @@ const KhaiBaiDanhMucPhong = () => {
         const newData = []
 
         for (const data of datas) {
-            const organData = await axiosHttpService.get(API_SINGLE_ORGAN + '/' + data.organ)
+            const organData = await axiosHttpService.get(API_ORGAN + '/' + data.organ)
+            console.log("organData: ",organData)
             newData.push({
                 "id": data.id,
                 "organ_id": organData.data.name,
