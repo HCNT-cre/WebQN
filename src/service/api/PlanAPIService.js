@@ -4,6 +4,7 @@ const API_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_FILE_BY_PLAN_NNLS_ID = import.meta.env.VITE_API_GET_FILE_BY_PLAN_NNLS_ID;
 const API_REMOVE_FILE_FROM_PLAN = import.meta.env.VITE_API_REMOVE_FILE_FROM_PLAN;
 const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
+const API_SET_PLAN_TIEU_HUY_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_TIEU_HUY_FOR_FILE;
 
 const PlanAPIService = {
     getPlanById: async (id) => {
@@ -32,6 +33,11 @@ const PlanAPIService = {
 
     setPlanForFile: async (payload) => {
         const response = await axiosHttpService.post(API_SET_PLAN_FOR_FILE , payload);
+        return response;
+    },
+
+    setPlanTieuHuyForFile: async (payload) => {
+        const response = await axiosHttpService.post(API_SET_PLAN_TIEU_HUY_FOR_FILE , payload);
         return response;
     },
 

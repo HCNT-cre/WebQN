@@ -6,10 +6,26 @@ import { Button, Input, Modal, Popconfirm, Select } from "antd";
 import ThemHoSo from "src/pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSo";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import UserAPIService from "src/service/api/userAPIService";
-import { ENUM_TYPE_PLAN } from "src/storage/Storage";
+
+import { Link } from "react-router-dom";
+import { Table } from "src/custom/Components/Table";
+import { notifySuccess, notifyError } from "src/custom/Function";
+
+import FileAPIService from "src/service/api/FileAPIService";
+import { ENUM_STATE_FILE, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
 const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
-const API_DELETE_PLAN = import.meta.env.VITE_API_DELETE_PLAN
+const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN
+const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
+const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
+
+const FIELDS_TABLE = [
+    { title: "Tên kế hoạch", key: "name", width: "150%" },
+    { title: "Ngày kế hoạch", key: "start_date", width: "100%" },
+    { title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
+    { title: "Trạng thái", key: "state", width: "70%" },
+    { title: "Chức năng", key: "function", width: "120px" },
+];
 
 const parent =
 {
@@ -46,23 +62,23 @@ const Create = ({
 
     const handleOk = async () => {
         request["state"] = "Mới lập";
-		request["type"] = ENUM_TYPE_PLAN.QUYET_DINH_TIEU_HUY;
-		const response = await PlanAPIService.createPlan(request);
-		const idPlan = response.id;
+        request["type"] = ENUM_TYPE_PLAN.QUYET_DINH_TIEU_HUY;
+        const response = await PlanAPIService.createPlan(request);
+        const idPlan = response.id;
 
-		selectedFiles.forEach(async (file) => {
-			const payload = {
-				plan_id: idPlan,
-				gov_file_id: parseInt(file.substring(file.indexOf("checkbox") + "checkbox".length)),
-			};
-			await PlanAPIService.setPlanForFile(payload);
-		});
+        selectedFiles.forEach(async (file) => {
+            const payload = {
+                plan_id: idPlan,
+                gov_file_id: parseInt(file.substring(file.indexOf("checkbox") + "checkbox".length)),
+            };
+            await PlanAPIService.setPlanTieuHuyForFile(payload);
+        });
 
-		setTimeout(() => {
-			reFetchData();
-			setRequest({});
-			setModelOpen(false);
-		}, 500);
+        setTimeout(() => {
+            reFetchData();
+            setRequest({});
+            setModelOpen(false);
+        }, 500);
 
     };
 
@@ -108,11 +124,11 @@ const Create = ({
                     <div className="flex justify-between py-[12px]">
                         <span>Ngày quyết định</span>
                         <Input
-                            name="date"
+                            name="start_date"
                             onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
                             type="date"
                             className="w-[70%]"
-                            value={request["date"]}
+                            value={request["start_date"]}
                         />
                     </div>
 
@@ -160,7 +176,7 @@ const Delete = ({ id, reFetchData }) => {
 
     const handleConfirm = async () => {
         const deletePlan = async () => {
-            await axiosHttpService.delete(API_DELETE_PLAN + id);
+            await axiosHttpService.delete(API_DELETE_PLAN + '/' + id);
         };
 
         deletePlan();
@@ -220,12 +236,14 @@ const Update = ({ reFetchData, id }) => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [organName, setOrganName] = useState("");
     const getPlan = async () => {
-        if(!id) return ;
+        if (!id) return;
         const data = await PlanAPIService.getPlanById(id);
         setRequest({
             name: data.name,
-            date: data.start_date,
+            start_date: data.start_date,
+            organ_name: data.organ_name,
             organ: data.organ,
+            state: data.state,
         });
         setOrganName(data.organ_name);
         setSelectedFiles(data.files)
@@ -247,7 +265,7 @@ const Update = ({ reFetchData, id }) => {
     };
 
     const handleOk = async () => {
-        await axiosHttpService.put(API_DELETE_PLAN + id, request);
+        await axiosHttpService.put(API_GET_PLAN + '/' + id, request);
         setModalOpen(false);
         reFetchData();
     };
@@ -283,11 +301,11 @@ const Update = ({ reFetchData, id }) => {
                 <div className="flex justify-between py-[12px]">
                     <span>Ngày quyết định</span>
                     <Input
-                        name="date"
+                        name="start_date"
                         onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
                         type="date"
                         className="w-[70%]"
-                        value={request["date"]}
+                        value={request["start_date"]}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -326,12 +344,37 @@ const Update = ({ reFetchData, id }) => {
 
 const TaoQuyetDinh = () => {
     const [modalOpen, setModalOpen] = useState(false);
-    const [plan, setPlan] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedPlan, setSelectedPlan] = useState([]);
+    const [stateCheckBox, setStateCheckBox] = useState([]);
+    const [plan, setPlan] = useState([]);
+
+    const handleSendPlan = async () => {
+        setIsLoading(true);
+        try {
+            stateCheckBox.forEach(async (item) => {
+                const id = parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))
+                await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.CHO_DUYET);
+            })
+
+            setTimeout(() => {
+                reFetchData();
+                setIsLoading(false);
+            }, 500);
+
+        } catch (err) {
+            console.log("err in send plan nop luu lich su", err)
+            notifyError("Gửi kế hoạch thất bại");
+        }
+
+    };
 
 
     const BUTTON_ACTIONS = [
+        {
+            title: "Tìm kiếm",
+            btn_class_name: "custom-btn-search",
+            icon: <i className="fa-solid fa-magnifying-glass"></i>,
+        },
         {
             title: "Tạo quyết định",
             btn_class_name: "custom-btn-add-file",
@@ -343,73 +386,121 @@ const TaoQuyetDinh = () => {
         {
             title: "Gửi quyết định",
             btn_class_name: "custom-btn-clear-filter",
+            onClick: handleSendPlan,
             icon: <i className="fa-solid fa-sync"></i>,
-            onClick: async () => {
-                const sentPlan = async () => {
-                    for (const item of selectedPlan) {
-                        const id = item.split("checkbox")[1]
-                        const { data } = await axiosHttpService.get(API_DELETE_PLAN + id);
-                        data.state = "Chờ Duyệt"
-                        delete data["id"]
-                        await axiosHttpService.put(API_DELETE_PLAN + id, data);
-                    }
-                }
-                await sentPlan()
-                setTimeout(() => {
-                    reFetchData()
-                }, 500)
-            }
         }
     ]
 
-    const reFetchData = useCallback(async () => {
+    const reFetchData = async () => {
         setIsLoading(true);
-        const rawDatas = await PlanAPIService.getDeletePlan();
-        const plans = [];
+        const res = await axiosHttpService.get(`${API_GET_PLAN_BY_TYPE}/${ENUM_TYPE_PLAN.QUYET_DINH_TIEU_HUY}`);
+        const rawDatas = res.data;
+        const plan = [];
         for (const rawData of rawDatas) {
+            // let color = "bg-indigo-700";
+            // if (rawData.state === ENUM_STATE_PLAN.CHO_DUYET) color = "bg-green-500";
+            // else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";
+            // else if (rawData.state === ENUM_STATE_PLAN.CHAP_NHAN) color = "bg-blue-600";
             const row = {
                 id: rawData.id,
                 name: rawData.name,
-                date: rawData.date,
-                organ: rawData.organ,
-                state: (
-                    <button>{rawData.state}
-                    </button>
-                ),
+                start_date: rawData.start_date,
+                organ_name: rawData.organ_name,
+                state: <button>{rawData.state}</button>,
                 function: (
-                    <div className="flex">
+                    <div className="flex ">
                         <Delete id={rawData.id} reFetchData={reFetchData} />
                         <Update id={rawData.id} reFetchData={reFetchData} />
                     </div>
                 ),
             };
-            plans.push(row);
+            plan.push(row);
         }
-        setPlan(plans);
+        setPlan(plan);
         setIsLoading(false);
-    }, []);
+    };
 
     useEffect(() => {
-        reFetchData()
-    }, [])
+        reFetchData();
+    }, []);
 
     return (
-        <div>
-            <BasePage
-                parent={parent}
-                current={current}
-                plan={plan}
-                btnActions={BUTTON_ACTIONS}
+        <div className="w-full">
+            <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
+                <p className="text-[14px] font-300 cursor-pointer ">
+                    <span className="text-[rgba(0,0,0,.45)]">
+                        Tiêu huỷ hồ sơ /{" "}
+                    </span>
+                    <span>
+                        <Link to="/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh">
+                            Tạo quyết định
+                        </Link>
+                    </span>
+                </p>
+            </div>
+
+            <div className="w-full px-[24px] pb-[16px] bg-white flex justify-between">
+                <p className="text-[20px] font-bold ">Tạo quyết định tiêu huỷ hồ sơ</p>
+            </div>
+
+            <div className="mt-[16px] mx-[24px] flex ">
+                <div className="w-[11.11111%] px-[5px]">
+                    <Input
+                        allowClear
+                        name="title"
+                        placeholder="Tìm kiếm tên quyết định"
+                        className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px] flex items-center"
+                    ></Input>
+                </div>
+                <div className="w-[11.11111%] px-[5px]">
+                    <Input
+                        name="start_date"
+                        placeholder="Năm"
+                        type="text"
+                        onBlur={(e) => (e.target.type = "text")}
+                        className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"
+                    ></Input>
+                </div>
+                <div className="w-[11.11111%] px-[5px]">
+                    <Input
+                        name="end_date"
+                        placeholder="Cơ quan đơn vị"
+                        type="text"
+                        onBlur={(e) => (e.target.type = "text")}
+                        className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"
+                    ></Input>
+                </div>
+                {BUTTON_ACTIONS.map((item, index) => {
+                    return (
+                        <div
+                            key={index}
+                            className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex"
+                        >
+                            <Button
+                                onClick={item.onClick}
+                                className={`rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center ${item.btn_class_name}`}
+                            >
+                                <div className="mr-[8px]">{item.icon}</div>
+                                {item.title}
+                            </Button>
+                        </div>
+                    );
+                })}
+            </div>
+
+            <Table
+                setStateCheckBox={setStateCheckBox}
+                fieldNames={FIELDS_TABLE}
+                fieldDatas={plan}
                 isLoading={isLoading}
-                setSelectedPlan={setSelectedPlan}
+                isCheckBox={true}
             />
 
             <Create
-                setModelOpen={setModalOpen}
                 modalOpen={modalOpen}
+                setModelOpen={setModalOpen}
                 reFetchData={reFetchData}
             />
-
         </div>
     )
 }
