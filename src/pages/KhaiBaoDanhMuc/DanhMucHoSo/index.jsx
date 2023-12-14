@@ -138,14 +138,46 @@ const Create = ({
 const Update = ({ reFetchData, id }) => {
     const [request, setRequest] = useState({
         name: null,
+        description: null,
+        parent: null,
     })
+    
+
+	const [categoryFile, setCategoryFile] = useState([]);
     const [modalOpen, setModalOpen] = useState(false)
 
+    useEffect(() => {
+        const getCategoryFile = async () => {
+			
+			const { data } = await axiosHttpService.get(CATEGORY_FILE_API);
+			const _ = [];
+			for (let i = 0; i < data.length; i++) {
+				_.push({
+					label: data[i].name,
+					value: data[i].id,
+				});
+			}
+			setCategoryFile(_);
+		};
+       
+        const fetchData = async () => {
+          try {
+            const res = await axiosHttpService.get(`${CATEGORY_FILE_API}/${id}`);
+            setRequest(res.data);
+          } catch (error) {
+            console.error('Error fetching data:', error);
+          }
+        };
+        
+		getCategoryFile();
+        fetchData();
+      }, [id]);
+
     const handleChangeRequest = (name, value) => {
-        return setRequest({
-            ...request,
-            [name]: value
-        })
+        setRequest((prevRequest) => ({
+            ...prevRequest,
+            [name]: value,
+          }));
     }
 
     const handleClick = () => {
@@ -154,9 +186,11 @@ const Update = ({ reFetchData, id }) => {
 
     const handleOk = async () => {
         if (request.name !== null)
-            await axiosHttpService.put(CATEGORY_FILE_API + id, request)
+        {
+            await axiosHttpService.put(CATEGORY_FILE_API + '/' + id, request)
+            await reFetchData()
+        }
         setModalOpen(false)
-        reFetchData()
     }
 
     const handleCancle = () => {
@@ -174,12 +208,23 @@ const Update = ({ reFetchData, id }) => {
                 onCancel={handleCancle}>
                 <div className='flex justify-between items-center' >
                     <span>Tên</span>
-                    <Input name="name" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} className='w-[70%]' />
+                    <Input name="name" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} className='w-[70%]' value={request.name} />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Đề mục / Nhóm lớn</span>
+                    <Select
+                        options={categoryFile}
+                        defaultValue={request.parent}
+                        name="parent"
+                        onChange={(e) => handleChangeRequest("parent", e)}
+                        className="w-[70%]"
+                    />
                 </div>
                 <div className="flex justify-between py-[12px]">
                     <span>Mô tả</span>
                     <Input name="description" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="text" className="w-[70%]" value={request["description"]} />
                 </div>
+                
             </Modal>
         </div>
     )
