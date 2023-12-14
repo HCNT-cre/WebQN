@@ -4,6 +4,9 @@ import { useEffect, useState, useCallback } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Button, Input, Modal, Popconfirm, Select } from "antd";
 import ThemHoSo from "src/pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSo";
+import PlanAPIService from "src/service/api/PlanAPIService";
+import UserAPIService from "src/service/api/userAPIService";
+import { ENUM_TYPE_PLAN } from "src/storage/Storage";
 
 const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const API_DELETE_PLAN = import.meta.env.VITE_API_DELETE_PLAN
@@ -27,37 +30,43 @@ const Create = ({
     const [request, setRequest] = useState({
         state: "Tạo mới"
     });
-    const [organ, setOrgan] = useState([]);
     const [openModalAddFile, setOpenModalAddFile] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [organName, setOrganName] = useState("");
 
     useEffect(() => {
         const getOrgan = async () => {
-            const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
-            const _ = data.map((item) => {
-                return {
-                    label: item.name,
-                    value: item.name,
-                };
-            });
-            setOrgan(_);
+            const organ = await UserAPIService.getUserOrgan();
+            handleChangeRequest("organ", organ.id);
+            setOrganName(organ.name);
         };
 
         getOrgan();
     }, []);
 
     const handleOk = async () => {
-        await axiosHttpService.post(`${API_DELETE_PLAN}`, request);
-        setTimeout(() => {
-            reFetchData();
-            setRequest({
-                state: "Tạo mới"
-            });
-            setModelOpen(false);
-        }, 500);
+        request["state"] = "Mới lập";
+		request["type"] = ENUM_TYPE_PLAN.QUYET_DINH_TIEU_HUY;
+		const response = await PlanAPIService.createPlan(request);
+		const idPlan = response.id;
+
+		selectedFiles.forEach(async (file) => {
+			const payload = {
+				plan_id: idPlan,
+				gov_file_id: parseInt(file.substring(file.indexOf("checkbox") + "checkbox".length)),
+			};
+			await PlanAPIService.setPlanForFile(payload);
+		});
+
+		setTimeout(() => {
+			reFetchData();
+			setRequest({});
+			setModelOpen(false);
+		}, 500);
+
     };
 
-    const handleCancle = () => {
+    const handleCancel = () => {
         setModelOpen(false);
     };
 
@@ -82,7 +91,7 @@ const Create = ({
                 }}
                 open={modalOpen}
                 onOk={handleOk}
-                onCancel={handleCancle}
+                onCancel={handleCancel}
             >
                 <div>
                     <div className="flex justify-between py-[12px]">
@@ -109,12 +118,11 @@ const Create = ({
 
                     <div className="flex justify-between py-[12px]">
                         <span>Cơ quan / Đơn vị  </span>
-                        <Select
+                        <Input
+                            disabled={true}
                             name="organ"
-                            onChange={(value) => handleChangeRequest("organ", value)}
                             className="w-[70%]"
-                            value={request["organ"]}
-                            options={organ}
+                            value={organName}
                         />
                     </div>
 
@@ -210,20 +218,21 @@ const Update = ({ reFetchData, id }) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [openModalAddFile, setOpenModalAddFile] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
-
+    const [organName, setOrganName] = useState("");
     const getPlan = async () => {
-        const { data } = await axiosHttpService.get(API_DELETE_PLAN + id);
+        if(!id) return ;
+        const data = await PlanAPIService.getPlanById(id);
         setRequest({
             name: data.name,
-            date: data.date,
+            date: data.start_date,
             organ: data.organ,
         });
+        setOrganName(data.organ_name);
         setSelectedFiles(data.files)
     };
 
     useEffect(() => {
         getPlan();
-        console.log("id", id)
     }, [id]);
 
     const handleChangeRequest = (name, value) => {
@@ -288,7 +297,8 @@ const Update = ({ reFetchData, id }) => {
                         onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
                         type="text"
                         className="w-[70%]"
-                        value={request["organ"]}
+                        value={organName}
+                        disabled={true}
                     />
 
                 </div>
@@ -354,8 +364,7 @@ const TaoQuyetDinh = () => {
 
     const reFetchData = useCallback(async () => {
         setIsLoading(true);
-        const res = await axiosHttpService.get(`${API_DELETE_PLAN}`);
-        const rawDatas = res.data;
+        const rawDatas = await PlanAPIService.getDeletePlan();
         const plans = [];
         for (const rawData of rawDatas) {
             const row = {

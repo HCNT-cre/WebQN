@@ -15,9 +15,6 @@ const SideBar = ({ sideBarWidth }) => {
     const locaiton = useLocation()
     const [sidebarTabs, setSidebarTabs] = useState(TABS_SIDEBAR)
     const transitions = ["height"];
-   
-
-    console.log("permissions", permissions);
 
     const toggleExpand = (key) => {
         const cur = sidebarTabs.map((tab) => {

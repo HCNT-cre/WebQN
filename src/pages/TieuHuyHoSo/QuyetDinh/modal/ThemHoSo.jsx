@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Modal } from "antd"
 import { Table } from "src/custom/Components"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -7,7 +6,8 @@ import { STATE } from "src/storage/Storage";
 import { FIELDS_TABLE } from "src/storage/FileStorage";
 
 import axiosHttpService from "src/utils/httpService";
-import { Button, Input, Select } from "antd";
+import { Button, Input, Select, Modal } from "antd";
+import { DateDiff } from "src/custom/Function";
 
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
@@ -15,56 +15,13 @@ const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const fieldsTable = [...FIELDS_TABLE];
 fieldsTable.pop()
 
-const TAB = [
-    { text: 'Tất cả', className: 'mb-[12px] text-[12px]' },
-    { text: 'Hết thời hạn bảo quản', className: 'mb-[12px] text-[12px]' },
-    { text: 'Thời gian kết thúc', className: 'mb-[12px] text-[12px]' }
-];
-
-const filterFileEachTab = (files, text) => {
-    if (text === "Tất cả") return files
-    const newFiles = []
-
-    let today = new Date()
-    const y = today.getFullYear();
-    const m = today.getMonth() + 1; // Months start at 0!
-    const d = today.getDate();
-
-    today = new Date(`${y}-${m}-${d}`)
-
-    const dateDiff = (start_date, end_date = today) => {
-        start_date = new Date(start_date)
-        const diffTime = end_date - start_date
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        return diffDays / 365
-    }
-
-    for (const file of files) {
-        const yearMaintenance = parseInt(file.maintenance.split(' ')[0])
-        if (text === "Hết thời hạn bảo quản") {
-            if (file.maintenance === "Vĩnh viễn") continue;
-            if (dateDiff(file.start_date) >= yearMaintenance)
-                newFiles.push(file)
-        } else {
-            if (dateDiff(file.end_date) >= 0)
-                newFiles.push(file)
-        }
-    }
-
-    return newFiles
-}
-
-
 const ThemHoSo = ({
     open,
     setOpen,
     selectedFiles,
     setSelectedFiles
 }) => {
-    const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
-    const [orgFiles, setOrgFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const userPermissionId = useSelector((state) => state.user.permission_id);
@@ -79,15 +36,23 @@ const ThemHoSo = ({
 
     const dispatch = useDispatch();
 
-    const handleChangeTab = (text) => {
-        setActiveTab(text)
-        setFiles(filterFileEachTab(orgFiles, text))
-    }
-
     const getFileFromResponse = (response) => {
         const rawDatas = response.data;
         let filesArray = [];
         for (const rawData of rawDatas) {
+            if (rawData.maintenance_name === "Vĩnh viễn" || rawData.state != 4) continue;
+
+            let today = new Date()
+            const y = today.getFullYear();
+            const m = today.getMonth() + 1; // Months start at 0!
+            const d = today.getDate();
+            today = new Date(`${y}-${m}-${d}`);
+
+            const endDate = new Date(rawData.end_date);
+            endDate.setFullYear(endDate.getFullYear() + Number(rawData.maintenance_name));
+            
+            if (DateDiff(endDate, today) <= 0 ) continue;
+
             const row = {
                 id: rawData.id,
                 gov_file_code: (
@@ -139,7 +104,6 @@ const ThemHoSo = ({
                 setIsLoading(false);
                 const files = getFileFromResponse(response);
                 setFiles(files);
-                setOrgFiles(files)
             } catch (err) {
                 console.log(err);
             }
@@ -222,25 +186,11 @@ const ThemHoSo = ({
             }}
             title="Thêm hồ sơ"
             onCancel={() => setOpen(false)}
-            onOk={() => {setOpen(false)}}
+            onOk={() => { setOpen(false) }}
             open={open}
             className="w-10/12">
 
             <div className="flex justify-between">
-                <div className="flex flex-col mt-[72px]">
-                    {TAB.map((button, index) => (
-                        <Button
-                            onClick={() => handleChangeTab(button.text)}
-                            key={index}
-                            className={`${activeTab === button.text
-                                ? 'text-white bg-sky-700'
-                                : ''
-                                } ${button.className}`}
-                        >
-                            {button.text}
-                        </Button>
-                    ))}
-                </div>
                 <div className="w-11/12">
                     <div className="mt-[16px] mx-[24px] flex ">
                         <div className="w-[11.11111%] px-[5px]">

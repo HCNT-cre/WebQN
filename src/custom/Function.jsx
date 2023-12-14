@@ -104,3 +104,11 @@ export const GetDataFromIDFile = async (IDFile, userPermissionId) => {
     }
     return null
 }
+
+export const DateDiff = (startDate, endDate) => {
+    startDate = new Date(startDate);
+    const diffTime = endDate - startDate;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays / 365;
+}

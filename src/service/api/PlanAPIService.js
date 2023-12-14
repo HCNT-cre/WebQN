@@ -1,3 +1,4 @@
+import { ENUM_TYPE_PLAN } from "src/storage/Storage";
 import axiosHttpService from "src/utils/httpService";
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_FILE_BY_PLAN_NNLS_ID = import.meta.env.VITE_API_GET_FILE_BY_PLAN_NNLS_ID;
@@ -32,6 +33,16 @@ const PlanAPIService = {
     setPlanForFile: async (payload) => {
         const response = await axiosHttpService.post(API_SET_PLAN_FOR_FILE , payload);
         return response;
+    },
+
+    getDeletePlan: async () => {
+        const response = await axiosHttpService.get(API_PLAN);
+        return response.data.filter((plan) => plan.type === ENUM_TYPE_PLAN.QUYET_DINH_TIEU_HUY);
+    },
+
+    createPlan: async (payload) => {
+        const response = await axiosHttpService.post(API_PLAN, payload);
+        return response.data;
     }
 }
 

@@ -1,12 +1,8 @@
+import { DateDiff } from "src/custom/Function";
 import BasePage from "src/pages/BasePage";
+import { ENUM_STATE_FILE } from "src/storage/Storage";
 
-const dateDiff = (startDate, endDate) => {
-    startDate = new Date(startDate);
-    const diffTime = endDate - startDate;
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    return diffDays / 365;
-}
 
 const DanhSachHoSoChoTieuHuy = () => {
     const parent = []
@@ -20,7 +16,7 @@ const DanhSachHoSoChoTieuHuy = () => {
         const newFiles = []
 
         for (const file of files) {
-            if(file.maintenance_name === "Vĩnh viễn" || file.state !== 4) continue;
+            if(file.maintenance_name === "Vĩnh viễn" || file.state.props.children !== ENUM_STATE_FILE.LUU_TRU_CO_QUAN) continue;
 
             let today = new Date()
             const y = today.getFullYear();
@@ -31,7 +27,7 @@ const DanhSachHoSoChoTieuHuy = () => {
             const endDate = new Date(file.end_date);
             endDate.setFullYear(endDate.getFullYear() + Number(file.maintenance_name));
 
-            if (dateDiff(endDate, today) >= 0 )
+            if (DateDiff(endDate, today) >= 0 )
                 newFiles.push(file)
         }
 
