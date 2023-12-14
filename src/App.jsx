@@ -33,7 +33,7 @@ import DuyetHoSoNopLuu from "src/pages/ThuThapVaNopLuu/DuyetHoSoNopLuu";
 import NopLuuCoQuan from "src/pages/ThuThapVaNopLuu/NopLuuCoQuan";
 import HoSoDaNhanNopLuu from "src/pages/ThuThapVaNopLuu/HoSoDaNhanNopLuu";
 import HetThoiHanBaoQuan from "src/pages/TieuHuyHoSo/DSHoSoChoTieuHuy/HetThoiHanBaoQuan";
-import ThoiGianKetThuc from "src/pages/TieuHuyHoSo/DSHoSoChoTieuHuy/ThoiGianKetThuc";
+import DanhSachHoSoChoTieuHuy from "src/pages/TieuHuyHoSo/DSHoSoChoTieuHuy/ThoiGianKetThuc";
 import TaoQuyetDinh from "src/pages/TieuHuyHoSo/QuyetDinh/TaoQuyetDinh"
 import TraVe from "src/pages/TieuHuyHoSo/QuyetDinh/Trave"
 import DuyetQuyetDinh from "src/pages/TieuHuyHoSo/QuyetDinh/DuyetQuyetDinh"
@@ -333,8 +333,8 @@ const App = () => {
             element: <DuyetHoSoNopLuu />
         },
         {
-            path: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/thoi-gian-ket-thuc",
-            element: <ThoiGianKetThuc />
+            path: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy",
+            element: <DanhSachHoSoChoTieuHuy />
         },
         {
             path: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/het-thoi-han-bao-quan",

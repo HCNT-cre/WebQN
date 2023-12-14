@@ -95,9 +95,9 @@ export const TABS_SIDEBAR = [
 				number: 4,
 			},
 			{
-				title:"Kế hoạch thu thập được phê duyệt",
-				to:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
-				key:"/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
+				title: "Kế hoạch thu thập được phê duyệt",
+				to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
+				key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
 				number: 5,
 			},
 			{
@@ -245,7 +245,7 @@ export const TABS_SIDEBAR = [
 			}
 		],
 	},
-	
+
 	// {
 	// 	isExpand: false,
 	// 	icon: '<i class="fa-solid fa-check"></i>',
@@ -255,7 +255,7 @@ export const TABS_SIDEBAR = [
 	// 	key: "/duyet-chinh-ly",
 	// 	display: true,
 	// },
-	
+
 	{
 		key: "/luu-tru-co-quan/",
 		isExpand: false,
@@ -356,9 +356,9 @@ export const TABS_SIDEBAR = [
 				number: 37,
 			},
 			{
-				title:"Hồ sơ thực hiện thủ tục hành chính bị từ chối",
-				to:"/kho-luu-tru-to-chuc-ca-nhan/ho-so-thuc-hien-thu-tuc-hanh-chinh-bi-tu-choi",
-				key:"/kho-luu-tru-to-chuc-ca-nhan/ho-so-thuc-hien-thu-tuc-hanh-chinh-bi-tu-choi",
+				title: "Hồ sơ thực hiện thủ tục hành chính bị từ chối",
+				to: "/kho-luu-tru-to-chuc-ca-nhan/ho-so-thuc-hien-thu-tuc-hanh-chinh-bi-tu-choi",
+				key: "/kho-luu-tru-to-chuc-ca-nhan/ho-so-thuc-hien-thu-tuc-hanh-chinh-bi-tu-choi",
 				number: 38,
 			},
 			{
@@ -381,29 +381,12 @@ export const TABS_SIDEBAR = [
 		childTabs: [
 			{
 				icon: '<i class="fa-regular fa-newspaper"></i>',
-				title: "Hồ sơ chờ tiêu hủy",
+				title: "Danh sách hồ sơ chờ tiêu huỷ",
+				to: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy",
 				key: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy",
 				display: false,
 				type: ["hoso"],
-				isExpand: false,
-				numChildTabs: 2,
 				number: 41,
-				childTabs: [
-					{
-						title: "Hết thời hạn bảo quản",
-						to: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/het-thoi-han-bao-quan",
-						key: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/het-thoi-han-bao-quan",
-						number: 42,
-						numChildTabs: 0,
-					},
-					{
-						title: "Thời gian kết thúc",
-						to: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/thoi-gian-ket-thuc",
-						key: "/tieu-huy-ho-so/danh-sach-ho-so-cho-tieu-huy/thoi-gian-ket-thuc",
-						number: 43,
-						numChildTabs: 0,
-					}
-				],
 			},
 			{
 				icon: '<i class="fa-regular fa-newspaper"></i>',
@@ -632,7 +615,7 @@ export const TABS_SIDEBAR = [
 			},
 		],
 	},
-	
+
 	{
 		isExpand: false,
 		icon: '<i class="fa-regular fa-file"></i>',
@@ -739,7 +722,7 @@ export const FOND = [
 	{ title: "Tên phông/công trình/sưu tập lưu trữ", key: "fond_name", width: "100%" },
 	{ title: "", key: "update", width: "100px" },
 ];
- 
+
 
 export const FOND_INPUT = [
 	{ type: "select", require: true, name: "organ", label: "Mã cơ quan lưu trữ" },
@@ -757,30 +740,30 @@ export const FOND_INPUT = [
 	// { type: "text", require: true, name: "description", label: "Ghi chú" },
 ];
 export const FIELDS_TABLE_SEARCH_FILE = [
-    { title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
-    { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
-    { title: "Phông", key: "organ_id", width: "100%" },
-    { title: "Số lượng tờ", key: "sheet_number", width: "70px" },
-    { title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
-    { title: "Thời gian bắt đầu", key: "start_date", width: "100%" },
-    { title: "Thời gian kết thúc", key: "end_date", width: "100%" },
-    { title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
-    { title: "Chế độ sử dụng", key: "rights", width: "100%" },
-    { title: "", key: "borrow", width: "100px" },
+	{ title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
+	{ title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
+	{ title: "Phông", key: "organ_id", width: "100%" },
+	{ title: "Số lượng tờ", key: "sheet_number", width: "70px" },
+	{ title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
+	{ title: "Thời gian bắt đầu", key: "start_date", width: "100%" },
+	{ title: "Thời gian kết thúc", key: "end_date", width: "100%" },
+	{ title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
+	{ title: "Chế độ sử dụng", key: "rights", width: "100%" },
+	{ title: "", key: "borrow", width: "100px" },
 ]
 
 export const PERMISSION_GROUP = [
-	{label: "Admin cơ quan", value :"1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33-34-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76"},
-	{label: "Lãnh đạo cơ quan", value :"1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76"},
-	{label: "Chuyên viên cơ quan", value :"1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-27-28-29-30-31-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76"},
-	{label: "Lãnh đạo đơn vị", value :"1-2-3-4-5-6-7-8-9-10-11-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76"},
-	{label: "Chuyên viên cơ quan lưu trữ lịch sử", value :"30-31-32-33-34-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76"},
-	{label: "Chuyên viên đơn vị", value :"1-5-6-8-9-10-11-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76"},
+	{ label: "Admin cơ quan", value: "1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-32-33-34-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76" },
+	{ label: "Lãnh đạo cơ quan", value: "1-2-3-4-5-6-7-8-9-10-11-12-13-14-16-17-18-19-20-21-22-23-24-25-26-27-28-29-30-31-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76" },
+	{ label: "Chuyên viên cơ quan", value: "1-2-3-4-5-6-7-8-9-10-11-12-13-14-15-16-17-18-19-20-21-22-23-24-25-27-28-29-30-31-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76" },
+	{ label: "Lãnh đạo đơn vị", value: "1-2-3-4-5-6-7-8-9-10-11-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76" },
+	{ label: "Chuyên viên cơ quan lưu trữ lịch sử", value: "30-31-32-33-34-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76" },
+	{ label: "Chuyên viên đơn vị", value: "1-5-6-8-9-10-11-35-36-37-38-39-40-41-42-43-44-45-46-47-48-49-50-51-52-53-54-55-56-57-58-59-60-61-62-63-64-65-66-67-68-69-70-71-72-73-74-75-76" },
 ]
 
 export const ACTION_GROUP = [
-	{label: "Tất cả", value :"201-202-203-204"},
-	{label: "Gửi duyệt nộp lưu lịch sử", value:"204"},
-	{label: "Thu thập và gửi duyệt nộp lưu cơ quan", value:"201-202-203"},
-	{label: "Không", value:""},
+	{ label: "Tất cả", value: "201-202-203-204" },
+	{ label: "Gửi duyệt nộp lưu lịch sử", value: "204" },
+	{ label: "Thu thập và gửi duyệt nộp lưu cơ quan", value: "201-202-203" },
+	{ label: "Không", value: "" },
 ]

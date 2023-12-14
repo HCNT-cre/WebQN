@@ -47,9 +47,6 @@ const SideBar = ({ sideBarWidth }) => {
                     <img className="w-[70px]" alt="Quoc Huy" src={QuocHuy} />
                 </Link>
                 {sidebarTabs.map((tab) => {
-                    console.log(permissions);
-                    console.log(permissions.findIndex((permission) => permission==tab.number) );
-                    console.log(tab.number);
                     return (
                         tab.number == 0 || permissions.findIndex((permission) => permission==tab.number) >= 0 &&
                         // eslint-disable-next-line react/jsx-key
@@ -80,7 +77,6 @@ const SideBar = ({ sideBarWidth }) => {
                                                 <div className="flex ml-[30px] flex-col">
                                                     {tab.childTabs.map((child) => {
                                                         if (child.numChildTabs === undefined){
-                                                            console.log(child);
                                                             return (
                                                                 permissions.findIndex((permission) => permission==child.number) >= 0 &&
                                                                 <Link key={child.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 hover:text-white rounded-[8px] block mt-[8px] text-wrap-normal" to={child.to} >
