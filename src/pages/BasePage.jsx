@@ -503,6 +503,7 @@ const BasePage = ({
 					),
 					organ_id_name: rawData.organ_id_name || "",
 					drawer_name: rawData.drawer_name || "",
+					endDate: rawData.end_date,
 					maintenance_name: rawData.maintenance_name || "",
 					rights: rawData.rights || "",
 					state: (

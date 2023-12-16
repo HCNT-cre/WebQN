@@ -9,11 +9,11 @@ const API_RESTORE_PLAN = import.meta.env.VITE_API_RESTORE_PLAN
 
 const parent =
     { title: "Tiêu hủy hồ sơ", 
-     //link: "/tieu-huy-ho-so/khoi-phuc/duyet-quyet-dinh" 
+     //link: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-duoc-khoi-phuc" 
 }
 
 const current = {
-    link: "/tieu-huy-ho-so/khoi-phuc/duyet-quyet-dinh",
+    link: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-duoc-khoi-phuc",
     title: "Duyệt quyết định"
 }
 

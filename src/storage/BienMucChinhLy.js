@@ -10,6 +10,6 @@ export const KE_HOACH_CHINH_LY_INPUT= [
 	{ type:"text", require:true, label: "Tên kế hoạch", name: "name"},
 	{ type:"date", require:true, label: "Năm bắt đầu", name: "start_date"},
 	{ type:"date", require:true, label: "Năm kết thúc", name: "end_date"},
-	{ type:"select", require:true, label: "Cơ quan / Đơn vị lập kế hoạch", name: "organ"},
+	{ type:"text", require:true, label: "Cơ quan / Đơn vị lập kế hoạch", name: "organ", disabled: true},
 ];
 

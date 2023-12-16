@@ -1,14 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Link, useLocation } from "react-router-dom"
 import QuocHuy from '../../../assets/img/QuocHuy.png'
 import Expand from "react-expand-animated"
 import { TABS_SIDEBAR } from "../../../storage/Storage"
 import { useSelector } from "react-redux"
-import axiosHttpService from "src/utils/httpService"
 import { Spin } from "antd"
 
-const API_GROUP_PERMISSION = import.meta.env.VITE_API_GROUP_PERMISSION
 
 const SideBar = ({ sideBarWidth }) => {
     const permissions = useSelector(state => state.userPermission)
@@ -32,9 +30,9 @@ const SideBar = ({ sideBarWidth }) => {
         setSidebarTabs(cur)
     }
 
+    const [currentTab, setCurrentTab] = useState(locaiton.pathname.toLocaleLowerCase());
 
-    const [currentTab, setCurrentTab] = useState(locaiton.pathname.toLocaleLowerCase())
-
+    console.log("permissions", permissions);
     return (
         permissions === null ? <Spin /> :
         <>
@@ -45,7 +43,7 @@ const SideBar = ({ sideBarWidth }) => {
                 </Link>
                 {sidebarTabs.map((tab) => {
                     return (
-                        tab.number == 0 || permissions.findIndex((permission) => permission==tab.number) >= 0 &&
+                        (tab.number == 0 || permissions.findIndex((permission) => permission==tab.number) >= 0 || permissions.length === 1) &&
                         // eslint-disable-next-line react/jsx-key
                         <div>
                             {
@@ -75,14 +73,14 @@ const SideBar = ({ sideBarWidth }) => {
                                                     {tab.childTabs.map((child) => {
                                                         if (child.numChildTabs === undefined){
                                                             return (
-                                                                permissions.findIndex((permission) => permission==child.number) >= 0 &&
+                                                                (permissions.findIndex((permission) => permission==child.number) >= 0 || permissions.length === 1) &&
                                                                 <Link key={child.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent hover:border-cyan-400 hover:text-white rounded-[8px] block mt-[8px] text-wrap-normal" to={child.to} >
                                                                     {sideBarWidth === 250 && <span>{child.title}</span>}
                                                                 </Link>
                                                             )}
                                                         else {
                                                             return (
-                                                                permissions.findIndex((permission) => permission==child.number) >= 0 &&
+                                                                (permissions.findIndex((permission) => permission==child.number) >= 0 || permissions.length === 1) &&
                                                                 <Link to={child.to} onClick={() => { setCurrentTab(child.key) }} key={child.key} className={`block ${sideBarWidth === 250 ? 'sidebar-items--large' : 'sidebar-items--small'} m-0
                         `}>
                                                                     <div className={`${sideBarWidth !== 250 ? "justify-center" : ""} hover:bg-[#aaaaaa25]  px-[8px] border-[1.5px] border-transparent items-center justify-between hover:text-white hover:border-cyan-400 rounded-[8px] flex relative ${child.key === currentTab ? "sidebar-items--active" : ""}`} onClick={() => toggleExpand(child.key)}>
@@ -97,7 +95,7 @@ const SideBar = ({ sideBarWidth }) => {
                                                                         <div className="flex flex-col ml-[12px]">
                                                                             {child.childTabs.map((childd) => {
                                                                                 return (
-                                                                                    permissions.findIndex((permission) => permission==childd.number) >= 0 &&
+                                                                                    (permissions.findIndex((permission) => permission==childd.number) >= 0 || permissions.length === 1) &&
                                                                                     <Link key={childd.key} className="text-[14px] px-[8px] hover:bg-[#aaaaaa25] border-[1.5px] border-transparent  hover:text-white hover:border-cyan-400 rounded-[8px] block mt-[8px] text-wrap-normal" to={childd.to} >
                                                                                         {sideBarWidth === 250 && <span>{childd.title}</span>}
                                                                                     </Link>

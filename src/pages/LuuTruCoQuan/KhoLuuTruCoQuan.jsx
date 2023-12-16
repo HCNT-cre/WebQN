@@ -1,14 +1,13 @@
-import axiosHttpService from "src/utils/httpService";
 import BasePage from "../BasePage";
-import { useState, useEffect, useCallback } from "react";
 import { ENUM_STATE_FILE } from "src/storage/Storage";
+import { DateDiff } from "src/custom/Function";
 
-const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL = import.meta.env.VITE_API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL
 export const FIELDS_TABLE = [
     { title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
     { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
     { title: "Phông", key: "organ_id", width: "100%" },
     { title: "Vị trí lưu trữ", key: "drawer_name", width: "100%" },
+    { title: "Thời gian kết thúc", key: "endDate", width: "100%" },
     { title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
     { title: "Chế độ sử dụng", key: "rights", width: "100%" },
     { title: "Trạng thái", key: "state", width: "130%" },
@@ -17,11 +16,10 @@ export const FIELDS_TABLE = [
 
 
 const KhoLuuTruCoQuan = () => {
- //   const [allOrganStorageFiles, setAllOrganStorageFiles] = useState([])
     const parent = [
-        { title: "Lưu trữ cơ quan", 
-        // link: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop"
-     },
+        {
+            title: "Lưu trữ cơ quan",
+        },
     ]
 
     const current = {
@@ -29,46 +27,25 @@ const KhoLuuTruCoQuan = () => {
         title: "Kho lưu trữ cơ quan"
     }
 
-    // const fetchAllOrganStorageFiles = async () => {
-    //     const res = await axiosHttpService.get(API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL)
-    //     setAllOrganStorageFiles(res.data)
-    // }
+    const filter = (files) => {
+        const newFiles = []
+        for (const file of files) {
+            if (file.state.props.children !== ENUM_STATE_FILE.LUU_TRU_CO_QUAN) continue;
 
-    // useEffect(() => {
-    //     fetchAllOrganStorageFiles()
-    // }, [])
+            let today = new Date()
+            const y = today.getFullYear();
+            const m = today.getMonth() + 1; // Months start at 0!
+            const d = today.getDate();
+            today = new Date(`${y}-${m}-${d}`);
 
-    // const mergeTwoFile = (file, fileS) => {
-    //     const newFile = {
-    //         'id': file.id,
-    //         'gov_file_code': file.gov_file_code,
-    //         'title': file.title,
-    //         'organ_id': file.organ_id,
-    //         'warehouse': fileS.warehouse,
-    //         'warehouseroom': fileS.warehouseroom,
-    //         'shelf': fileS.shelf,
-    //         'drawers': fileS.drawers,
-    //         'maintenance': file.maintenance,
-    //         'rights': file.rights,
-    //         'state': file.state,
-    //         'Function': file.Function
-    //     }
+            const endDate = new Date(file.endDate);
+            endDate.setFullYear(endDate.getFullYear() + Number(file.maintenance_name));
 
-    //     return newFile
-    // }
-
-
-    // const filter = useCallback((files) => {
-        const filter = (files) => {
-            const newFiles = []
-            console.log(files)
-            for (const file of files) {
-                if (file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN)
-                    newFiles.push(file)
-            }
-            return newFiles
+            if (DateDiff(endDate, today) < 0)
+                newFiles.push(file)
         }
-    // }, [allOrganStorageFiles]);
+        return newFiles
+    }
 
 
     return <BasePage parent={parent} haveActionButton={false} current={current} filter={filter} fieldsTableCustom={FIELDS_TABLE} luuTruCoQuan={true} />

@@ -1,20 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import BasePage from "src/pages/TieuHuyHoSo/QuyetDinh/Base";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
-import { Button, Input, Modal, Popconfirm, Select } from "antd";
+import { Button, Input, Modal, Popconfirm } from "antd";
 import ThemHoSo from "src/pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSo";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import UserAPIService from "src/service/api/userAPIService";
 
 import { Link } from "react-router-dom";
 import { Table } from "src/custom/Components/Table";
-import { notifySuccess, notifyError } from "src/custom/Function";
+import { notifyError } from "src/custom/Function";
 
-import FileAPIService from "src/service/api/FileAPIService";
-import { ENUM_STATE_FILE, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
+import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
-const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
@@ -49,6 +46,7 @@ const Create = ({
     const [openModalAddFile, setOpenModalAddFile] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [organName, setOrganName] = useState("");
+    const [reset, setReset] = useState(false);
 
     useEffect(() => {
         const getOrgan = async () => {
@@ -74,10 +72,12 @@ const Create = ({
             await PlanAPIService.setPlanTieuHuyForFile(payload);
         });
 
+
         setTimeout(() => {
             reFetchData();
             setRequest({});
             setModelOpen(false);
+            setReset(true);
         }, 500);
 
     };
@@ -156,6 +156,8 @@ const Create = ({
                 </div>
 
                 <ThemHoSo
+                    doesReset={reset}
+                    setDoesReset={setReset}
                     open={openModalAddFile}
                     setOpen={setOpenModalAddFile}
                     selectedFiles={selectedFiles}

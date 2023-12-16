@@ -87,7 +87,6 @@ import HoSoDenHanNopLuu from "./pages/ThuThapVaNopLuu/HoSoDenHanNopLuu";
 import InitApp from "./init";
 import { LoginAction } from "./service/actions/authenAction";
 import { Fragment } from "react";
-import { Spin } from "antd";
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
 function LoggedIn() {
@@ -357,11 +356,11 @@ const App = () => {
             element: <TraVeQuyetDinhKhoiPhuc />
         },
         {
-            path: "/tieu-huy-ho-so/khoi-phuc/duyet-quyet-dinh",
+            path: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-duoc-khoi-phuc",
             element: <DuyetQuyetDinhKhoiPhuc />
         },
         {
-            path: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh",
+            path: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-bi-tieu-huy",
             element: <TaoQuyetDinhKhoiPhuc />
         },
 

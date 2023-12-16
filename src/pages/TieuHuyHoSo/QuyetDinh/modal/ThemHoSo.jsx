@@ -19,7 +19,9 @@ const ThemHoSo = ({
     open,
     setOpen,
     selectedFiles,
-    setSelectedFiles
+    setSelectedFiles,
+    doesReset,
+    setDoesReset,
 }) => {
     const [files, setFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -41,7 +43,8 @@ const ThemHoSo = ({
         let filesArray = [];
         for (const rawData of rawDatas) {
             if (rawData.maintenance_name === "Vĩnh viễn" || rawData.state != 4) continue;
-
+            if (rawData.plan_nopluuls !== null || rawData.plan_tieuhuy !== null) continue;
+            
             let today = new Date()
             const y = today.getFullYear();
             const m = today.getMonth() + 1; // Months start at 0!
@@ -98,9 +101,7 @@ const ThemHoSo = ({
         const fetchFileData = async () => {
             try {
                 setIsLoading(true);
-                const response = await axiosHttpService.get(
-                    API_GOV_FILE_GET_ALL
-                );
+                const response = await axiosHttpService.get(API_GOV_FILE_GET_ALL);
                 setIsLoading(false);
                 const files = getFileFromResponse(response);
                 setFiles(files);
@@ -177,7 +178,15 @@ const ThemHoSo = ({
 
     useEffect(() => {
         reset()
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        if(doesReset) {
+            console.log("re fetch");
+            reset();
+            setDoesReset(false);    
+        }
+    }, [doesReset])
 
     return (
         <Modal

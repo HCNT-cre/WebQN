@@ -289,7 +289,7 @@ const PheDuyetKeHoachThuThap = () => {
 					className="cursor-pointer hover:underline"
 				> {rawData.name} </p>,
 				date: rawData.start_date,
-				organ: rawData.organ,
+				organ: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
 				function: (
 					<Button className="border-none shadow-none text-green-500"

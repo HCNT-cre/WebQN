@@ -431,25 +431,18 @@ export const TABS_SIDEBAR = [
 				number: 48,
 				childTabs: [
 					{
-						title: "Tạo quyết định",
-						to: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh",
-						key: "/tieu-huy-ho-so/khoi-phuc/tao-quyet-dinh",
+						title: "Danh sách hồ sơ bị tiêu huỷ",
+						to: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-bi-tieu-huy",
+						key: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-bi-tieu-huy",
 						number: 49,
 						numChildTabs: 0,
 					},
 					{
-						title: "Duyệt quyết định",
-						to: "/tieu-huy-ho-so/khoi-phuc/duyet-quyet-dinh",
-						key: "/tieu-huy-ho-so/khoi-phuc/duyet-quyet-dinh",
+						title: "Danh sách hồ sơ được khôi phục",
+						to: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-duoc-khoi-phuc",
+						key: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-duoc-khoi-phuc",
 						number: 50,
 						numChildTabs: 0,
-					},
-					{
-						title: "Trả về",
-						to: "/tieu-huy-ho-so/khoi-phuc/tra-ve",
-						key: "/tieu-huy-ho-so/khoi-phuc/tra-ve",
-						numChildTabs: 0,
-						number: 51,
 					}
 				],
 			},

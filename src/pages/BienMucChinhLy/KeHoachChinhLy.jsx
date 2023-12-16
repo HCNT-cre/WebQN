@@ -16,26 +16,16 @@ import UserAPIService from "src/service/api/userAPIService";
 
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [request, setRequest] = useState({});
-	const [organ, setOrgan] = useState([]);
-	const organId = useSelector((state) => state.organId.organId)
+	const [organName, setOrganName] = useState(null);
 
-	const kehoachchinhlyOption = {
-		organId: organId,
-		organ: organ,
-	}
 
 	useEffect(() => {
 		const getOrgan = async () => {
-			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
-			const _ = data.map((item) => {
-				return {
-					label: item.name,
-					value: item.id,
-				};
-			});
-			setOrgan(_);
-		};
+			const organ = await UserAPIService.getUserOrgan();
+			setOrganName(organ.name);
+			handleChangeRequest('organ', organ.id);
 
+		};
 		getOrgan();
 	}, []);
 
@@ -57,7 +47,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		}, 500);
 	};
 
-	const handleCancle = () => {
+	const handleCancel = () => {
 		setModelOpen(false);
 	};
 
@@ -76,35 +66,24 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 			}}
 			open={modalOpen}
 			onOk={handleOk}
-			onCancel={handleCancle}
+			onCancel={handleCancel}
 		>
 			<div>
 				{KE_HOACH_CHINH_LY_INPUT.map((item, index) => {
 					return (
 						<div key={index}>
 							{
-								item.type === "select" ?
-									<div className="flex justify-between py-[12px]">
-										<span>{item.label}</span>
-										<Select
-											name={item.name}
-											onChange={(value) => handleChangeRequest(item.name, value)}
-											className="w-[70%]"
-											value={request[item.name]}
-											options={kehoachchinhlyOption[item.name]}
-										/>
-									</div>
-									:
-									<div className="flex justify-between py-[12px]">
-										<span>{item.label}</span>
-										<Input
-											name={item.name}
-											onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
-											type={item.type}
-											className="w-[70%]"
-											value={request[item.name]}
-										/>
-									</div>
+								<div className="flex justify-between py-[12px]">
+									<span>{item.label}</span>
+									<Input
+										name={item.name}
+										onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
+										type={item.type}
+										className="w-[70%]"
+										value={item.name === 'organ' ? organName : request[item.name]}
+										disabled={item.disabled}
+									/>
+								</div>
 							}
 						</div>
 					);
@@ -256,29 +235,29 @@ const Update = ({ reFetchData, id }) => {
 										<div className="flex justify-between py-[12px]">
 											<span>{item.label}</span>
 											{
-											item.label === "Cơ quan / Đơn vị lập kế hoạch" ?
-											<Select
-												name="organ"
-												className="w-[70%]"
-												showSearch
-												allowClear
-												defaultValue={request.organ}
-												optionFilterProp="children"
-												onChange={(value) => handleChangeRequest('organ', value)}
-												filterOption={(input, option) =>
-													(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-												}
-												options={organ}
-												disabled={true}
-											/>
-											:
-											<Select
-												name={item.name}
-												onChange={(value) => handleChangeRequest(item.name, value)}
-												className="w-[70%]"
-												value={request[item.name]}
-												options={kehoachchinhlyOption[item.name]}
-											/>}
+												item.label === "Cơ quan / Đơn vị lập kế hoạch" ?
+													<Select
+														name="organ"
+														className="w-[70%]"
+														showSearch
+														allowClear
+														defaultValue={request.organ}
+														optionFilterProp="children"
+														onChange={(value) => handleChangeRequest('organ', value)}
+														filterOption={(input, option) =>
+															(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+														}
+														options={organ}
+														disabled={true}
+													/>
+													:
+													<Select
+														name={item.name}
+														onChange={(value) => handleChangeRequest(item.name, value)}
+														className="w-[70%]"
+														value={request[item.name]}
+														options={kehoachchinhlyOption[item.name]}
+													/>}
 										</div>
 										:
 										<div className="flex justify-between py-[12px]">
