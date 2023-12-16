@@ -30,6 +30,11 @@ export const ENUM_STATE_FILE = {
 	HSCL_TAO_MOI: "HSCL tạo mới",
 	HSCL_GIAO_NOP: "HSCL giao nộp",
 	HSCL_BI_TRA_VE: "HSCL bị trả về",
+	THHS_CHO_TIEU_HUY: "Chờ tiêu huỷ",
+	THHS_CHO_DUYET_TIEU_HUY: "Chờ duyệt tiêu huỷ",
+	THHS_DA_TIEU_HUY: "Đã tiêu huỷ",
+	THHS_KHOI_PHUC: "Đã khôi phục",
+	NOP_LUU_LICH_SU_CHO_SO_NOI_VU_DUYET: "Chờ Sở Nội vụ duyệt",
 };
 
 export const ENUM_TYPE_PLAN = {
