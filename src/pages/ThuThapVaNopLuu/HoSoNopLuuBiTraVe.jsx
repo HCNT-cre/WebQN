@@ -30,7 +30,7 @@ const HoSoNopLuuBiTraVe = () => {
 
         return newFiles
     }
-    return <BasePage parent={parent} current={current} filter={filter}/>
+    return <BasePage parent={parent} current={current} filter={filter} />
 }
 
 export default HoSoNopLuuBiTraVe;

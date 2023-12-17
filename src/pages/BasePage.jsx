@@ -284,7 +284,7 @@ const ButtonFunctionOfEachFile = ({
 	return (
 		<div>
 			<div className="flex flex-wrap">
-				{ (state !== 1 && state !== 17) ? (
+				{ (state !== 1 && state !== 17 && state !== 7) ? (
 					<div className="flex justify-center w-full">
 						{BUTTON_READ_ONLY.map((item) => {
 							return (
