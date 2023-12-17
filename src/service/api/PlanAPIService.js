@@ -49,7 +49,8 @@ const PlanAPIService = {
     createPlan: async (payload) => {
         const response = await axiosHttpService.post(API_PLAN, payload);
         return response.data;
-    }
+    },
+
 }
 
 export default PlanAPIService;

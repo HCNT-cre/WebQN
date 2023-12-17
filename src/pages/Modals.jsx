@@ -27,6 +27,7 @@ const API_GET_WAREHOUSE_BY_ORGAN = import.meta.env.VITE_API_GET_WAREHOUSE_BY_ORG
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 import UserAPIService from "src/service/api/userAPIService";
 import LuutrucoquanAPIService from "src/service/api/LuutrucoquanAPIService";
+import FileAPIService from "src/service/api/FileAPIService";
 
 const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
@@ -204,7 +205,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
 
     useEffect(() => {
         const fetchWarehouse = async (id) => {
-            if(!id) return;
+            if (!id) return;
             const warehouse = await LuutrucoquanAPIService.getWarehouseByOrganId(id);
             const raws = []
             for (const data of warehouse) {
@@ -221,7 +222,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
 
     useEffect(() => {
         const fetchWarehouseRoom = async (id) => {
-            if(!id) return;
+            if (!id) return;
             const warehouseRoom = await LuutrucoquanAPIService.getWarehouseRoomByWarehouseId(id);
             const raws = []
             for (const data of warehouseRoom) {
@@ -237,7 +238,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
 
     useEffect(() => {
         const fetchShelf = async (id) => {
-            if(!id) return;
+            if (!id) return;
             const shelf = await LuutrucoquanAPIService.getShelfByWarehouseRoomId(id);
             const raws = []
             for (const data of shelf) {
@@ -253,7 +254,7 @@ export const ModalConfirmLuuTruCoQuan = () => {
 
     useEffect(() => {
         const fetchDrawer = async (id) => {
-            if(!id) return;
+            if (!id) return;
             const drawer = await LuutrucoquanAPIService.getDrawerByShelfId(id);
             const raws = []
             for (const data of drawer) {
@@ -835,6 +836,59 @@ export const ModalModificationDocumentRequireAddDoc = () => {
     )
 }
 
+export const ModalRecoverFile = () => {
+    const dispatch = useDispatch();
+    const open = useSelector(state => state.modalRecoverFile.open);
+    const ids = useSelector(state => state.modalRecoverFile.ids);
+    const reFetchData = useSelector(state => state.modalRecoverFile.reFetchData);
+
+    const handleOk = async () => {
+
+        const payload = ids.map((id) => {
+            return {
+                id,
+                current_state: 16,
+                new_state: 17
+            }
+        })
+
+        await FileAPIService.updateState(payload);
+
+        notifySuccess("Đã khôi phục hồ sơ");
+        dispatch({
+            type: "close_modal_recover_file"
+        });
+        setTimeout(() => {
+            reFetchData();
+        }, 500);
+    }
+
+    const handleCancle = async () => {
+        dispatch({
+            type: "close_modal_recover_file"
+        })
+    }
+
+    return (
+        <Modal
+            footer={null}
+            title="Đồng ý khôi phục hồ sơ"
+            style={{
+                top: 200,
+            }}
+            open={open}
+            onOk={handleOk}
+            onCancel={handleCancle}
+        >
+            <div className="flex justify-center">
+                <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleOk}>Khôi phục</Button>
+                <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleCancle}>Huỷ</Button>
+            </div>
+        </Modal >
+    )
+}
+
+
 export const ModalPlan = () => {
     const dispatch = useDispatch();
     const open = useSelector(state => state.modalPlanReducer.state);
@@ -842,7 +896,6 @@ export const ModalPlan = () => {
     const id = useSelector(state => state.modalPlanReducer.id);
     const reFetchData = useSelector(state => state.modalPlanReducer.reFetchData);
     const oldState = useSelector(state => state.modalPlanReducer.oldState);
-    console.log(oldState);
     const handleOk = async () => {
         await axiosHttpService.put(API_PLAN + '/' + oldState.id, {
             ...oldState,

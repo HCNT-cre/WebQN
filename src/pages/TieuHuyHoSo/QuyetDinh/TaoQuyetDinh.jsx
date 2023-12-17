@@ -10,7 +10,8 @@ import { Link } from "react-router-dom";
 import { Table } from "src/custom/Components/Table";
 import { notifyError } from "src/custom/Function";
 
-import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
+import { ENUM_STATE_FILE, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
+import FileAPIService from "src/service/api/FileAPIService";
 
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
@@ -356,6 +357,11 @@ const TaoQuyetDinh = () => {
             stateCheckBox.forEach(async (item) => {
                 const id = parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))
                 await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.CHO_DUYET);
+                await FileAPIService.updateStateByIdPlan(id, {
+                    current_state: 14, // chờ tiêu huỷ
+                    new_state: 15 // đợi phê duyệt tiêu huỷ
+                })
+                
             })
 
             setTimeout(() => {

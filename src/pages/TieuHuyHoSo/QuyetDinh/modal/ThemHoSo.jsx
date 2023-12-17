@@ -31,7 +31,6 @@ const ThemHoSo = ({
     const [search, setSearch] = useState({
         title: null,
         organ_id: null,
-        offce: null,
         state: 0,
         type: null,
     });
@@ -146,7 +145,6 @@ const ThemHoSo = ({
         setSearch((prev) => ({
             title: "",
             organ_id: "",
-            offce: "",
             state: 0,
             type: "",
             end_date: "",
@@ -182,7 +180,6 @@ const ThemHoSo = ({
 
     useEffect(() => {
         if(doesReset) {
-            console.log("re fetch");
             reset();
             setDoesReset(false);    
         }

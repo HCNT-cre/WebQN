@@ -15,7 +15,7 @@ import { DeleteData, GetKey } from "../custom/Function";
 import { useButtonClickOutside } from "../custom/Hook";
 import { Link } from "react-router-dom";
 import { notifyError, notifySuccess } from "../custom/Function";
-import { ModalCensorship, ModalConfirmLuuTruCoQuan, ModalModificationDocumentAddDocument, ModalModificationDocumentAddedDocument, ModalModificationDocumentConfirmStore, ModalModificationDocumentRequireAddDoc } from "./Modals";
+import { ModalCensorship, ModalConfirmLuuTruCoQuan, ModalModificationDocumentAddDocument, ModalModificationDocumentAddedDocument, ModalModificationDocumentConfirmStore, ModalModificationDocumentRequireAddDoc, ModalRecoverFile } from "./Modals";
 
 
 import UserAPIService from "src/service/api/userAPIService";
@@ -32,7 +32,6 @@ const API_STORAGE_DELETE_FILE_ORGAN_STORAGE =
 const API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_FILE_ORGAN_STORAGE_ALL;
 
-const CATEGORY_FILE_API = import.meta.env.VITE_CATEGORY_FILE_API;
 const API_GET_CATEGORY_FILE_BY_ORGAN = import.meta.env.VITE_API_GET_CATEGORY_FILE_BY_ORGAN;
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_COLLECTION_PLAN;
 const API_EXPORT_EXCEL = import.meta.env.VITE_API_EXPORT_EXCEL;
@@ -48,13 +47,12 @@ const PlanAndCategoryFile = ({
 	const [collectionPlan, setCollectionPlan] = useState([]);
 	const [category, setCategory] = useState(null);
 	const [selectedPlan, setSelectedPlan] = useState(null);
-	const [organ, setOrgan] = useState([])
 	const handleOk = () => {
 		setOpen(false);
 		dispatch(CreateFile(category, selectedPlan));
 	};
 
-	const handleCancle = () => {
+	const handleCancel = () => {
 		setOpen(false);
 	};
 
@@ -104,7 +102,7 @@ const PlanAndCategoryFile = ({
 			okButtonProps={{ style: { backgroundColor: 'blue-300' } }}
 			className="w-[600px]"
 			open={open}
-			onCancel={handleCancle}
+			onCancel={handleCancel}
 			onOk={handleOk}
 		>
 			<div className="flex justify-between py-[12px]">
@@ -233,15 +231,22 @@ const ButtonFunctionOfEachFile = ({
 		},
 	];
 
+	const BUTTON_RECOVER = [
+		{
+			icon: <i className="fa-regular fa-folder-open"></i>,
+			title: "Sửa hồ sơ",
+			color: "text-[#FF8400]",
+			onclick: () => {
+				dispatch(EditFile(IDFile));
+			},
+		},
+	];
+
 	const BUTTON_MORE = [
 		{
 			popup: true,
 			element: (
 				<Popconfirm
-					// ref={(el) => {
-					// 	console.log("ref in delete", el)
-					// 	contentRef.current[2] = el;
-					// }}
 					title="Xóa hồ sơ"
 					open={open}
 					description="Bạn có chắc chắn xóa?"
@@ -279,7 +284,7 @@ const ButtonFunctionOfEachFile = ({
 	return (
 		<div>
 			<div className="flex flex-wrap">
-				{state !== 1 ? (
+				{ (state !== 1 && state !== 17) ? (
 					<div className="flex justify-center w-full">
 						{BUTTON_READ_ONLY.map((item) => {
 							return (
@@ -294,7 +299,22 @@ const ButtonFunctionOfEachFile = ({
 							);
 						})}
 					</div>
-				) : (
+				) : state === 17 ? (
+					<div className="flex justify-center w-full">
+						{BUTTON_RECOVER.map((item) => {
+							return (
+								<Button
+									key={GetKey()}
+									className={` hover:bg-blue-300 cursor-pointer basis-1/4 max-w-[25%] ${item.color} px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button`}
+									onClick={item.onclick}
+									title={item.title}
+								>
+									{item.icon}
+								</Button>
+							);
+						})}
+					</div>
+				) :  (
 					<div className="flex justify-center">
 						{BUTTON_DEFAULT.map((item) => {
 							return (
@@ -368,6 +388,11 @@ const BasePage = ({
 	BMCL_GuiDuyetHoSo = false,
 	filtePlanCondition = null,
 	pheDuyetLuuTruLichSu = false,
+	pheDuyetTieuHuy = false,
+	khoiPhuc = false,
+	duyetKhoiPhuc = false,
+	excel = true,
+	havePlan = true,
 }) => {
 	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
@@ -392,7 +417,7 @@ const BasePage = ({
 		state: 0,
 		type: null,
 	});
-	
+
 	const handleClickOnFile = (IDFile) => {
 		dispatch({ type: "open", id: IDFile });
 	};
@@ -663,36 +688,36 @@ const BasePage = ({
 		}));
 	};
 
-	const handleChangeHistoryFile = async (newState) => {
-        if(filterByPlan === null){
-            notifyError("Vui lòng chọn kế hoạch")
-            return ;
-        }
+	const handleChangeStateFileOfPlan = async (newState) => {
+		if (filterByPlan === null) {
+			notifyError("Vui lòng chọn kế hoạch")
+			return;
+		}
 
-        const listState = [];
-        
-        for (const file of files) {
-            listState.push({
-                ...newState,
-                id: file.id
-            });
-        }
+		const listState = [];
 
-        try {
+		for (const file of files) {
+			listState.push({
+				...newState,
+				id: file.id
+			});
+		}
+
+		try {
 			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.CHAP_NHAN);
-            const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, listState);
-            const error_code = response.data.error_code;
-            if (error_code === undefined) {
-                notifySuccess("Thay đổi trạng thái thành công");
-                reset();
-            } else {
-                const description = response.data.description;
-                notifyError(description);
-            }
-        } catch (error) {
-            notifyError("Thay đổi trạng thái thất bại");
-        }
-    };
+			const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, listState);
+			const error_code = response.data.error_code;
+			if (error_code === undefined) {
+				notifySuccess("Thay đổi trạng thái thành công");
+				reset();
+			} else {
+				const description = response.data.description;
+				notifyError(description);
+			}
+		} catch (error) {
+			notifyError("Thay đổi trạng thái thất bại");
+		}
+	};
 
 	const handleChangeStateFile = async (newState) => {
 		const listState = [];
@@ -725,6 +750,14 @@ const BasePage = ({
 		}
 	};
 
+	const handleRecoverFile = () => {
+		dispatch({
+			type: "open_modal_recover_file",
+			ids: stateCheckBox.map((id) => id.split("checkbox")[1]),
+			reFetchData: reset
+		})
+	}
+
 	useEffect(() => {
 		if (filter === null) return;
 
@@ -743,12 +776,13 @@ const BasePage = ({
 		if (fieldsTableCustom === null) setFieldsTable(FIELDS_TABLE);
 		else setFieldsTable(fieldsTableCustom);
 	}, [fieldsTableCustom]);
+
 	const handleExportDocToExcel = () => {
 		const getExcel = async () => {
 			fileSheet.forEach((file) => {
 				file.maintenance = file.maintenance_name;
-				if(file.maintenance_name !== "Vĩnh viễn"){
-					file.maintenance = file.maintenance_name + " năm"; 
+				if (file.maintenance_name !== "Vĩnh viễn") {
+					file.maintenance = file.maintenance_name + " năm";
 				}
 			})
 			const response = await axiosCorsService.post(API_EXPORT_EXCEL, {
@@ -802,6 +836,10 @@ const BasePage = ({
 		BUTTON_ACTIONS.pop();
 	}
 
+	if (!excel) {
+		BUTTON_ACTIONS.pop();
+	}
+
 	if (newButtons !== null) {
 		for (const button of newButtons) {
 			BUTTON_ACTIONS.push(button);
@@ -810,9 +848,10 @@ const BasePage = ({
 
 	const handleFilterFileByPlan = async (value) => {
 		setIsLoading(true);
+		console.log("id:", value);
 		let res = await FileAPIService.getFileByPlanId(value);
-		res = getFileFromResponse({data: res})
-		if(filter !== null) res = filter(res);
+		res = getFileFromResponse({ data: res })
+		if (filter !== null) res = filter(res);
 		setFiles(res);
 		setIsLoading(false);
 		setFilterByPlan(value);
@@ -884,16 +923,16 @@ const BasePage = ({
 									className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"
 								></Input>
 							</div>
-							<div className="w-[15%] px-[5px]">
-								<Select
-									options={plan}
-									placeholder="Kế hoạch"
-									className="border-[0.1rem] text-[12px] w-full truncate h-[32px]"
-									onChange={handleFilterFileByPlan}
-								></Select>
-							</div>
-
-
+							{
+								havePlan && <div className="w-[15%] px-[5px]">
+									<Select
+										options={plan}
+										placeholder="Kế hoạch"
+										className="border-[0.1rem] text-[12px] w-full truncate h-[32px]"
+										onChange={handleFilterFileByPlan}
+									></Select>
+								</div>
+							}
 							{BUTTON_ACTIONS.map((item, index) => {
 								return (
 									<div
@@ -934,13 +973,46 @@ const BasePage = ({
 							</div>}
 							{pheDuyetLuuTruLichSu && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
-									onClick={() => handleChangeHistoryFile({ "current_state": 5, "new_state": 6 })}
+									onClick={() => handleChangeStateFileOfPlan({ "current_state": 5, "new_state": 6 })}
 									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
 								>
 									<div className="mr-[8px]">
 										<i className="fa-solid fa-check"></i>
 									</div>
 									Phê duyệt lưu trữ lịch sử
+								</Button>
+							</div>}
+							{pheDuyetTieuHuy && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+								<Button
+									onClick={() => handleChangeStateFileOfPlan({ "current_state": 15, "new_state": 16 })}
+									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
+								>
+									<div className="mr-[8px]">
+										<i className="fa-solid fa-check"></i>
+									</div>
+									Phê duyệt tiêu huỷ
+								</Button>
+							</div>}
+							{khoiPhuc && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+								<Button
+									onClick={handleRecoverFile}
+									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
+								>
+									<div className="mr-[8px]">
+										<i className="fa-solid fa-check"></i>
+									</div>
+									Khôi phục
+								</Button>
+							</div>}
+							{duyetKhoiPhuc && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+								<Button
+									onClick={() => handleChangeStateFile({ "current_state": 17, "new_state": 10 })}
+									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
+								>
+									<div className="mr-[8px]">
+										<i className="fa-solid fa-check"></i>
+									</div>
+									Đẩy vào hàng đợi xếp kho
 								</Button>
 							</div>}
 							{haveActionButton &&
@@ -1006,6 +1078,7 @@ const BasePage = ({
 					<ModalModificationDocumentAddDocument />
 					<ModalModificationDocumentAddedDocument />
 					<ModalModificationDocumentRequireAddDoc />
+					<ModalRecoverFile/>
 					<PlanAndCategoryFile
 						open={modalOpen}
 						setOpen={setModalOpen}

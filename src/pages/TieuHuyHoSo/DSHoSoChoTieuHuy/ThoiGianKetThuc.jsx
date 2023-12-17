@@ -16,7 +16,9 @@ const DanhSachHoSoChoTieuHuy = () => {
         const newFiles = []
 
         for (const file of files) {
-            if(file.maintenance_name === "Vĩnh viễn" || file.state.props.children !== ENUM_STATE_FILE.LUU_TRU_CO_QUAN) continue;
+            if ((file.maintenance_name === "Vĩnh viễn" || file.state.props.children !== ENUM_STATE_FILE.LUU_TRU_CO_QUAN)
+                && file.state.props.children !== ENUM_STATE_FILE.THHS_CHO_TIEU_HUY
+            ) continue;
 
             let today = new Date()
             const y = today.getFullYear();
@@ -27,8 +29,10 @@ const DanhSachHoSoChoTieuHuy = () => {
             const endDate = new Date(file.end_date);
             endDate.setFullYear(endDate.getFullYear() + Number(file.maintenance_name));
 
-            if (DateDiff(endDate, today) >= 0 )
+            if (DateDiff(endDate, today) >= 0) {
+                file.state.props.children = ENUM_STATE_FILE.THHS_CHO_TIEU_HUY;
                 newFiles.push(file)
+            }
         }
 
         return newFiles

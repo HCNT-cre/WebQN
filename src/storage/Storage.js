@@ -13,6 +13,11 @@ export const STATE = [
 	"HSCL tạo mới",
 	"HSCL giao nộp",
 	"HSCL bị trả về",
+	"Chờ tiêu huỷ",
+	"Chờ phê duyệt tiêu huỷ",
+	"Đã tiêu huỷ",
+	"Đã khôi phục",
+	"Chờ Sở Nội vụ duyệt",
 ];
 
 export const ENUM_STATE_FILE = {
@@ -415,13 +420,6 @@ export const TABS_SIDEBAR = [
 						to: "/tieu-huy-ho-so/quyet-dinh/duyet-quyet-dinh",
 						key: "/tieu-huy-ho-so/quyet-dinh/duyet-quyet-dinh",
 						number: 46,
-						numChildTabs: 0,
-					},
-					{
-						title: "Trả về",
-						to: "/tieu-huy-ho-so/quyet-dinh/tra-ve",
-						key: "/tieu-huy-ho-so/quyet-dinh/tra-ve",
-						number: 47,
 						numChildTabs: 0,
 					}
 				],
