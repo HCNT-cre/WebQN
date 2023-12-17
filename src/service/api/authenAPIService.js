@@ -3,11 +3,12 @@ import axiosHttpService from "src/utils/httpService";
 const API_LOGIN = import.meta.env.VITE_API_LOGIN;
 const API_LOGOUT = import.meta.env.VITE_API_LOGOUT;
 const AuthenAPIService = {
-    login: async (email, password) => {
+    login: async (email, password, sso) => {
         try {
             const response = await axiosHttpService.post(API_LOGIN, {
-                email: email,
-                password: password
+                email,
+                password,
+                sso
             });
             return response.data;
         } catch (err) {

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -11,7 +10,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import AuthenAPIService from "src/service/api/authenAPIService";
-import { useDispatch } from "react-redux";
 
 
 const LoginContainer = styled(Box)`
@@ -66,8 +64,6 @@ const LoginButton = styled(Button)`
 `;
 
 const Login = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -76,8 +72,8 @@ const Login = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  const handleLogin = async () => {
-    const res = await AuthenAPIService.login(username, password);
+  const handleLogin = async (sso) => {
+    const res = await AuthenAPIService.login(username, password, sso);
     if (res) {
       localStorage.setItem("isLogin", 1);
       window.location.reload();
@@ -85,6 +81,7 @@ const Login = () => {
       setErr("Tài khoản hoặc mật khẩu không đúng");
     }
   };
+
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -144,13 +141,11 @@ const Login = () => {
           {err}
         </Typography>
         <ButtonContainer>
-          <LoginButton onClick={handleLogin}>
+          <LoginButton onClick={() => handleLogin(false)}>
             Đăng nhập
           </LoginButton>
           <SsoButton
-            onClick={() => {
-              navigate("/dang-nhap-sso");
-            }}
+            onClick={() => handleLogin(true)}
           >
             Đăng nhập SSO
           </SsoButton>
