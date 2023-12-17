@@ -369,7 +369,6 @@ const KeHoachThuThap = () => {
 
 		plan.forEach(async (pl) => {
 			if (planIds.findIndex((id) => id === pl.id) === -1) return;
-			console.log(pl.name.props.children);
 			await axiosHttpService.put(API_COLLECTION_PLAN + '/' + pl.id, {
 				name: pl.name.props.children[1],
 				start_date: pl.start_date,

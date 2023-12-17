@@ -10,7 +10,7 @@ const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
 	{ title: "Ngày kế hoạch", key: "date", width: "100%" },
-	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
+	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ_name", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
 	{ title: "Chức năng", key: "function", width: "120px" },
 ];
@@ -191,13 +191,39 @@ const KeHoachThuThapBiTuChoi = () => {
 	const [plan, setPlan] = useState([]);
 	const [id, setId] = useState(null);
 	const [updateOpen, setUpdateOpen] = useState(false);
+	const [stateCheckBox, setStateCheckBox] = useState([]);
+	const handleSendCollectPlan = async () => {
+		const planIds = stateCheckBox.map((item) => {
+			return Number(item.split("checkbox")[1]);
+		})
+
+		plan.forEach(async (pl) => {
+			if (planIds.findIndex((id) => id === pl.id) === -1) return;
+			await axiosHttpService.put(API_COLLECTION_PLAN + '/' + pl.id, {
+				name: pl.name.props.children[1],
+				start_date: pl.start_date,
+				organ: pl.organId,
+				state: ENUM_STATE_PLAN.CHO_DUYET,
+			});
+		});
+
+		setTimeout(() => {
+			reFetchData();
+		}, 600);
+	}
 
 	const BUTTON_ACTIONS = [
 		{
 			title: "Tìm kiếm",
 			btn_class_name: "custom-btn-search",
 			icon: <i className="fa-solid fa-magnifying-glass"></i>,
-		}
+		},
+		{
+			title: "Gửi kế hoạch",
+			btn_class_name: "custom-btn-clear-filter",
+			onClick: handleSendCollectPlan,
+			icon: <i className="fa-solid fa-sync"></i>,
+		},
 	];
 	const handleClickUpdate = (id) => {
 		setUpdateOpen(true);
@@ -218,7 +244,7 @@ const KeHoachThuThapBiTuChoi = () => {
 				id: rawData.id,
 				name: rawData.name,
 				date: rawData.start_date,
-				organ: rawData.organ,
+				organ: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
 				function: (
 					<div className="flex ">
@@ -308,8 +334,10 @@ const KeHoachThuThapBiTuChoi = () => {
 
 			<Table
 				fieldNames={FIELDS_TABLE}
+				setStateCheckBox={setStateCheckBox}
 				fieldDatas={plan}
 				isLoading={isLoading}
+				isCheckBox={true}
 			/>
 
 			<Update

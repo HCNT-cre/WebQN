@@ -39,7 +39,7 @@ const DanhSachHoSoChoTieuHuy = () => {
     }
 
 
-    return <BasePage parent={parent} current={current} filter={filter} />
+    return <BasePage isCheckBox={false} parent={parent} current={current} filter={filter} haveActionButton={false}/>
 }
 
 export default DanhSachHoSoChoTieuHuy;

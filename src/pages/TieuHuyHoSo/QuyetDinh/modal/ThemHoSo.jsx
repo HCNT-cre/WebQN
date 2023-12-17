@@ -239,56 +239,6 @@ const ThemHoSo = ({
                                 className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"
                             ></Input>
                         </div>
-                        <div className="w-[11.11111%] px-[5px]">
-                            <Input
-                                placeholder="Kế hoạch"
-                                type="text"
-                                className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"
-                            ></Input>
-                        </div>
-                        <div className="w-[11.11111%] px-[5px] rounded-none">
-                            <Select
-                                name="state"
-                                className="w-full bg-white outline-none rounded-md"
-                                showSearch
-                                defaultValue="Tất cả"
-                                value={search["state"]}
-                                optionFilterProp="children"
-                                onChange={(value) => handleChangeSearch("state", value)}
-                                filterOption={(input, option) =>
-                                    (option?.label ?? "")
-                                        .toLowerCase()
-                                        .includes(input.toLowerCase())
-                                }
-                                options={[
-                                    { value: 0, label: "Tất cả" },
-                                    {
-                                        value: 1,
-                                        label: "Mở",
-                                    },
-                                    {
-                                        value: 2,
-                                        label: "Đóng",
-                                    },
-                                    {
-                                        value: 3,
-                                        label: "Nộp lưu cơ quan",
-                                    },
-                                    {
-                                        value: 4,
-                                        label: "Lưu trữ cơ quan",
-                                    },
-                                    {
-                                        value: 5,
-                                        label: "Nộp lưu lịch sử",
-                                    },
-                                    {
-                                        value: 6,
-                                        label: "Lưu trữ lịch sử",
-                                    },
-                                ]}
-                            />
-                        </div>
 
                         {BUTTON_ACTIONS.map((item, index) => {
                             return (
