@@ -39,7 +39,7 @@ import TraVe from "src/pages/TieuHuyHoSo/QuyetDinh/Trave"
 import DuyetQuyetDinh from "src/pages/TieuHuyHoSo/QuyetDinh/DuyetQuyetDinh"
 
 import DanhMucChucVu from "src/pages/KhaiBaoDanhMuc/DanhMucChucVu";
-import TaoQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/TaoQuyetDinhKhoiPhuc";
+import KhoiPhucHoSo from "src/pages/TieuHuyHoSo/KhoiPhuc/TaoQuyetDinhKhoiPhuc";
 import DuyetQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/DuyetQuyetDinhKhoiPhuc";
 import TraVeQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/TraVeQuyetDinhKhoiPhuc";
 import BienMucHoSo from "src/pages/BienMucChinhLy/BienMucHoSo";
@@ -361,7 +361,7 @@ const App = () => {
         },
         {
             path: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-bi-tieu-huy",
-            element: <TaoQuyetDinhKhoiPhuc />
+            element: <KhoiPhucHoSo />
         },
 
         {
