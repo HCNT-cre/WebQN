@@ -21,6 +21,7 @@ import { ModalCensorship, ModalConfirmLuuTruCoQuan, ModalModificationDocumentAdd
 import UserAPIService from "src/service/api/userAPIService";
 import FileAPIService from "src/service/api/FileAPIService";
 import PlanAPIService from "src/service/api/PlanAPIService";
+import SoNoiVuPheDuyet from "./LuuTruLichSu/SoNoiVuPheDuyet";
 // import ExcelAPIService from "src/service/api/execAPIService";
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
@@ -284,7 +285,7 @@ const ButtonFunctionOfEachFile = ({
 	return (
 		<div>
 			<div className="flex flex-wrap">
-				{ (state !== 1 && state !== 17 && state !== 7 && state !== 13) ? (
+				{(state !== 1 && state !== 17 && state !== 7 && state !== 13) ? (
 					<div className="flex justify-center w-full">
 						{BUTTON_READ_ONLY.map((item) => {
 							return (
@@ -314,7 +315,7 @@ const ButtonFunctionOfEachFile = ({
 							);
 						})}
 					</div>
-				) :  (
+				) : (
 					<div className="flex justify-center">
 						{BUTTON_DEFAULT.map((item) => {
 							return (
@@ -393,6 +394,7 @@ const BasePage = ({
 	duyetKhoiPhuc = false,
 	excel = true,
 	havePlan = true,
+	soNoiVuDuyet = false,
 }) => {
 	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
@@ -704,6 +706,37 @@ const BasePage = ({
 		}
 
 		try {
+			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.DOI_SO_NOI_VU_DUYET);
+			const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, listState);
+			const error_code = response.data.error_code;
+			if (error_code === undefined) {
+				notifySuccess("Thay đổi trạng thái thành công");
+				reset();
+			} else {
+				const description = response.data.description;
+				notifyError(description);
+			}
+		} catch (error) {
+			notifyError("Thay đổi trạng thái thất bại");
+		}
+	};
+
+	const handleChangeStateFileOfPlanSoNoiVu = async (newState) => {
+		if (filterByPlan === null) {
+			notifyError("Vui lòng chọn kế hoạch")
+			return;
+		}
+
+		const listState = [];
+
+		for (const file of files) {
+			listState.push({
+				...newState,
+				id: file.id
+			});
+		}
+
+		try {
 			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.CHAP_NHAN);
 			const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, listState);
 			const error_code = response.data.error_code;
@@ -718,6 +751,7 @@ const BasePage = ({
 			notifyError("Thay đổi trạng thái thất bại");
 		}
 	};
+
 
 	const handleChangeStateFile = async (newState) => {
 		const listState = [];
@@ -973,7 +1007,18 @@ const BasePage = ({
 							</div>}
 							{pheDuyetLuuTruLichSu && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
-									onClick={() => handleChangeStateFileOfPlan({ "current_state": 5, "new_state": 6 })}
+									onClick={() => handleChangeStateFileOfPlan({ "current_state": 5, "new_state": 18 })}
+									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
+								>
+									<div className="mr-[8px]">
+										<i className="fa-solid fa-check"></i>
+									</div>
+									Gửi Sở Nội vụ phê duyệt
+								</Button>
+							</div>}
+							{soNoiVuDuyet && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+								<Button
+									onClick={() => handleChangeStateFileOfPlanSoNoiVu({ "current_state": 18, "new_state": 6 })}
 									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
 								>
 									<div className="mr-[8px]">
@@ -981,7 +1026,9 @@ const BasePage = ({
 									</div>
 									Phê duyệt lưu trữ lịch sử
 								</Button>
-							</div>}
+							</div>
+
+							}
 							{pheDuyetTieuHuy && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
 									onClick={() => handleChangeStateFileOfPlan({ "current_state": 15, "new_state": 16 })}
@@ -1078,7 +1125,7 @@ const BasePage = ({
 					<ModalModificationDocumentAddDocument />
 					<ModalModificationDocumentAddedDocument />
 					<ModalModificationDocumentRequireAddDoc />
-					<ModalRecoverFile/>
+					<ModalRecoverFile />
 					<PlanAndCategoryFile
 						open={modalOpen}
 						setOpen={setModalOpen}
