@@ -5,12 +5,11 @@ import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 import { ENUM_STATE_FILE, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
-import ThemHoSo from "src/pages/TieuHuyHoSo/QuyetDinh/modal/ThemHoSoLuuTru";
-import SuaHoSo from "../TieuHuyHoSo/QuyetDinh/modal/SuaHoSoLuuTruLS";
+import ThemHoSo from "src/pages/LuuTruLichSu/modals/ThemHoSoLuuTruLS";
+import SuaHoSo from "./modals/SuaHoSoLuuTruLS";
 import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
-import XoaHoSo from "../TieuHuyHoSo/QuyetDinh/modal/XoaHoSoLuuTruLS";
-const API_STORE_HISTORY_PLAN = import.meta.env.VITE_API_STORE_HISTORY_PLAN;
+import XoaHoSo from "./modals/XoaHoSoLuuTruLS";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
@@ -18,7 +17,6 @@ const API_STORAGE_GET_ORGAN_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 
-const API_PLAN = import.meta.env.VITE_API_PLAN;
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
 	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },

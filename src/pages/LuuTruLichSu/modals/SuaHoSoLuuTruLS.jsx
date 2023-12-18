@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Modal } from "antd"
 import { Table } from "src/custom/Components"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -7,9 +6,7 @@ import { ENUM_STATE_FILE, STATE } from "src/storage/Storage";
 import { FIELDS_TABLE_STORE_ORGAN } from "src/storage/FileStorage";
 
 import axiosHttpService from "src/utils/httpService";
-import { Button, Input, Select } from "antd";
-import { notifyError, notifySuccess } from "src/custom/Function";
-import FileAPIService from "src/service/api/FileAPIService";
+import { Button, Input, Modal } from "antd";
 
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
@@ -56,13 +53,13 @@ const filterFileEachTab = (files, text) => {
 }
 
 
-const ThemHoSo = ({
+const SuaHoSo = ({
     open,
     setOpen,
     selectedFiles,
     setSelectedFiles,
-    doesReset,
-    setDoesReset
+    doesReset = null,
+    setDoesReset = null,
 }) => {
     const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
@@ -145,12 +142,13 @@ const ThemHoSo = ({
                 const newFiles = [];
                 for (const file of files) {
                     if (
-                                file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN 
-                            && file.plan_thuthap === ""
-                            && file.plan_bmcl === ""
-                            && file.plan_nopluuls=== "" 
-                            && file.plan_tieuhuy === ""
-                        )
+                        file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN
+                        && file.plan_thuthap === ""
+                        && file.plan_bmcl === ""
+                        && file.plan_nopluuls === ""
+                        && file.plan_tieuhuy === "" 
+                        && file.maintenance_name === "Vĩnh viễn"
+                    )
                         newFiles.push(file)
                 }
                 setFiles(newFiles);
@@ -189,6 +187,20 @@ const ThemHoSo = ({
         dispatch({ type: "open", id: IDFile });
     };
 
+    const resetSearch = async () => {
+        let request = API_GOV_FILE_SEARCH;
+        const response = await axiosHttpService.get(request);
+        setFiles(getFileFromResponse(response));
+        setSearch((prev) => ({
+            title: "",
+            organ_id: "",
+            offce: "",
+            state: 0,
+            type: "",
+            end_date: "",
+            start_date: "",
+        }));
+    };
 
     const handleChangeSearch = (name, value) => {
         setSearch((prev) => ({
@@ -210,16 +222,13 @@ const ThemHoSo = ({
         reset()
     }, [])
 
-    const handleOk = () =>{
-        setOpen(false);
-    }
-
-    useEffect(() => {
-        if(doesReset) {
-            reset();
+    useEffect(() =>{
+        if(doesReset){
+            reset()
             setDoesReset(false);
         }
     }, [doesReset])
+
     return (
         <Modal
             style={{
@@ -227,7 +236,9 @@ const ThemHoSo = ({
             }}
             title="Thêm hồ sơ"
             onCancel={() => setOpen(false)}
-            onOk={handleOk}
+            onOk={() => {
+                setOpen(false);
+            }}
             open={open}
             className="w-10/12">
 
@@ -327,4 +338,4 @@ const ThemHoSo = ({
     )
 }
 
-export default ThemHoSo
+export default SuaHoSo

@@ -8,10 +8,11 @@ import UserAPIService from "src/service/api/userAPIService";
 
 import { Link } from "react-router-dom";
 import { Table } from "src/custom/Components/Table";
-import { notifyError } from "src/custom/Function";
+import { notifyError, notifySuccess } from "src/custom/Function";
 
 import { ENUM_STATE_FILE, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
+import XoaHoSo from "./modal/XoaHoSo";
 
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
@@ -238,6 +239,12 @@ const Update = ({ reFetchData, id }) => {
     const [openModalAddFile, setOpenModalAddFile] = useState(false);
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [organName, setOrganName] = useState("");
+    const [openModalDeleteFile, setOpenModalDeleteFile] = useState(false);
+    const [removeFile, setRemoveFile] = useState([]);
+	const [resetRemove, setResetRemove] = useState(false);
+	const [resetAdd, setResetAdd] = useState(false);
+	const [addFile, setAddFile] = useState([]);
+
     const getPlan = async () => {
         if (!id) return;
         const data = await PlanAPIService.getPlanById(id);
@@ -267,13 +274,36 @@ const Update = ({ reFetchData, id }) => {
         setModalOpen(true);
     };
 
-    const handleOk = async () => {
-        await axiosHttpService.put(API_GET_PLAN + '/' + id, request);
-        setModalOpen(false);
-        reFetchData();
+    const handleRemoveFile = async () => {
+        for(const checkbox of removeFile){
+            const idFile = checkbox.split('checkbox')[1]
+            await PlanAPIService.removeFileFromPlan(idFile);    
+        }
     };
 
-    const handleCancle = () => {
+	const handleAddFile = async () => {
+		for(const checkbox of addFile){
+			const idFile = checkbox.split('checkbox')[1]
+			const payload = {
+				plan_id: id,
+				gov_file_id: idFile,
+			}
+			await PlanAPIService.setPlanForFile(payload);
+		}
+	}
+
+    const handleOk = async () => {
+        await axiosHttpService.put(API_GET_PLAN + '/' + id, request);
+		await handleRemoveFile();
+		await handleAddFile();
+		setResetAdd(true);
+		setResetRemove(true);
+		reFetchData();
+		setModalOpen(false);
+		notifySuccess("Cập nhật thành công");
+    };
+
+    const handleCancel = () => {
         setModalOpen(false);
     };
 
@@ -290,7 +320,7 @@ const Update = ({ reFetchData, id }) => {
                 open={modalOpen}
                 title="Sửa"
                 onOk={handleOk}
-                onCancel={handleCancle}
+                onCancel={handleCancel}
             >
                 <div className="flex justify-between items-center">
                     <span>Tên quyết định</span>
@@ -324,21 +354,43 @@ const Update = ({ reFetchData, id }) => {
 
                 </div>
                 <div className="flex justify-between py-[12px]">
-                    <span>Hồ sơ</span>
-                    <div
-                        className="w-[70%]"
-                    >
-                        <Button onClick={() => {
-                            setOpenModalAddFile(true)
-                        }}> Xem hồ sơ </Button>
-                    </div>
-                </div>
+					<span>Thêm hồ sơ</span>
+					<div
+						className="w-[70%]"
+					>
+						<Button onClick={() => {
+							setOpenModalAddFile(true)
+						}}> Thêm hồ sơ mới vào kế hoạch</Button>
+					</div>
+				</div>
+				<div className="flex justify-between py-[12px]">
+					<span>Xoá hồ sơ</span>
+					<div
+						className="w-[70%]"
+					>
+						<Button onClick={() => {
+							setOpenModalDeleteFile(true)
+						}}> Xoá hồ sơ trong kế hoạch</Button>
+					</div>
+				</div>
                 <ThemHoSo
-                    open={openModalAddFile}
-                    setOpen={setOpenModalAddFile}
-                    selectedFiles={selectedFiles}
-                    setSelectedFiles={setSelectedFiles}
-                />
+					open={openModalAddFile}
+					setOpen={setOpenModalAddFile}
+					selectedFiles={addFile}
+					setSelectedFiles={setAddFile}
+					doesReset={resetAdd}
+					setDoesReset={setResetAdd}
+				/>
+
+                <XoaHoSo
+					open={openModalDeleteFile}
+					idPlan={id}
+					setOpen={setOpenModalDeleteFile}
+					selectedFiles={removeFile}
+					setSelectedFiles={setRemoveFile}
+					doesReset={resetRemove}
+					setDoesReset={setResetRemove}
+				/>
             </Modal>
         </div>
     );

@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Modal } from "antd"
 import { Table } from "src/custom/Components"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -7,11 +6,9 @@ import { ENUM_STATE_FILE, STATE } from "src/storage/Storage";
 import { FIELDS_TABLE_STORE_ORGAN } from "src/storage/FileStorage";
 
 import axiosHttpService from "src/utils/httpService";
-import { Button, Input, Select } from "antd";
-import { notifyError, notifySuccess } from "src/custom/Function";
-import FileAPIService from "src/service/api/FileAPIService";
+import { Button, Input, Modal } from "antd";
+import PlanAPIService from "src/service/api/PlanAPIService";
 
-const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 
 const fieldsTable = [...FIELDS_TABLE_STORE_ORGAN];
@@ -56,13 +53,14 @@ const filterFileEachTab = (files, text) => {
 }
 
 
-const SuaHoSo = ({
+const XoaHoSo = ({
     open,
     setOpen,
     selectedFiles,
     setSelectedFiles,
-    doesReset = null,
-    setDoesReset = null,
+    idPlan,
+    doesReset,
+    setDoesReset,
 }) => {
     const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
@@ -122,11 +120,7 @@ const SuaHoSo = ({
                         {STATE[rawData.state]}
                     </button>
                 ),
-                type: rawData.type || "",
-                plan_thuthap: rawData.plan_thuthap || "",
-                plan_bmcl: rawData.plan_bmcl || "",
-                plan_nopluuls: rawData.plan_nopluuls || "",
-                plan_tieuhuy: rawData.plan_tieuhuy || "",
+                type: rawData.type || ""
             };
             filesArray.push(row);
         }
@@ -137,21 +131,15 @@ const SuaHoSo = ({
         const fetchFileData = async () => {
             try {
                 setIsLoading(true);
-                const response = await axiosHttpService.get(
-                    API_GOV_FILE_GET_ALL
-                );
+                const response = await PlanAPIService.getFileByPlanNLLSId(idPlan);
                 setIsLoading(false);
                 const files = getFileFromResponse(response);
                 const newFiles = [];
                 for (const file of files) {
                     if (
                         file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN
-                        && file.plan_thuthap === ""
-                        && file.plan_bmcl === ""
-                        && file.plan_nopluuls === ""
-                        && file.plan_tieuhuy === ""
                     )
-                        newFiles.push(file)
+                    newFiles.push(file)
                 }
                 setFiles(newFiles);
                 setOrgFiles(files)
@@ -185,24 +173,12 @@ const SuaHoSo = ({
         }
     };
 
+    
+
     const handleClickOnFile = (IDFile) => {
         dispatch({ type: "open", id: IDFile });
     };
 
-    const resetSearch = async () => {
-        let request = API_GOV_FILE_SEARCH;
-        const response = await axiosHttpService.get(request);
-        setFiles(getFileFromResponse(response));
-        setSearch((prev) => ({
-            title: "",
-            organ_id: "",
-            offce: "",
-            state: 0,
-            type: "",
-            end_date: "",
-            start_date: "",
-        }));
-    };
 
     const handleChangeSearch = (name, value) => {
         setSearch((prev) => ({
@@ -224,19 +200,18 @@ const SuaHoSo = ({
         reset()
     }, [])
 
-    useEffect(() =>{
-        if(doesReset){
-            reset()
+    useEffect(() => {
+        if(doesReset) {
+            reset();
             setDoesReset(false);
         }
     }, [doesReset])
-
     return (
         <Modal
             style={{
                 top: 20,
             }}
-            title="Thêm hồ sơ"
+            title="Xoá hồ sơ"
             onCancel={() => setOpen(false)}
             onOk={() => {
                 setOpen(false);
@@ -340,4 +315,4 @@ const SuaHoSo = ({
     )
 }
 
-export default SuaHoSo
+export default XoaHoSo 

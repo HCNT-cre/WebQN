@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Modal } from "antd"
 import { Table } from "src/custom/Components"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -7,13 +6,8 @@ import { ENUM_STATE_FILE, STATE } from "src/storage/Storage";
 import { FIELDS_TABLE_STORE_ORGAN } from "src/storage/FileStorage";
 
 import axiosHttpService from "src/utils/httpService";
-import { Button, Input, Select } from "antd";
-import { notifyError, notifySuccess } from "src/custom/Function";
-import FileAPIService from "src/service/api/FileAPIService";
-import PlanAPIService from "src/service/api/PlanAPIService";
+import { Button, Input, Modal } from "antd";
 
-const REMOVE_FILE_FROM_PLAN = import.meta.env.VITE_REMOVE_FILE_FROM_PLAN;
-const API_GET_FILE_BY_PLAN_NNLS_ID = import.meta.env.VITE_API_GET_FILE_BY_PLAN_NNLS_ID;
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 
@@ -59,14 +53,13 @@ const filterFileEachTab = (files, text) => {
 }
 
 
-const XoaHoSo = ({
+const ThemHoSo = ({
     open,
     setOpen,
     selectedFiles,
     setSelectedFiles,
-    idPlan,
     doesReset,
-    setDoesReset,
+    setDoesReset
 }) => {
     const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
@@ -126,7 +119,11 @@ const XoaHoSo = ({
                         {STATE[rawData.state]}
                     </button>
                 ),
-                type: rawData.type || ""
+                type: rawData.type || "",
+                plan_thuthap: rawData.plan_thuthap || "",
+                plan_bmcl: rawData.plan_bmcl || "",
+                plan_nopluuls: rawData.plan_nopluuls || "",
+                plan_tieuhuy: rawData.plan_tieuhuy || "",
             };
             filesArray.push(row);
         }
@@ -137,15 +134,21 @@ const XoaHoSo = ({
         const fetchFileData = async () => {
             try {
                 setIsLoading(true);
-                const response = await PlanAPIService.getFileByPlanNLLSId(idPlan);
+                const response = await axiosHttpService.get(
+                    API_GOV_FILE_GET_ALL
+                );
                 setIsLoading(false);
                 const files = getFileFromResponse(response);
                 const newFiles = [];
                 for (const file of files) {
                     if (
-                        file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN
-                    )
-                    newFiles.push(file)
+                                file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN 
+                            && file.plan_thuthap === ""
+                            && file.plan_bmcl === ""
+                            && file.plan_nopluuls=== "" 
+                            && file.plan_tieuhuy === ""
+                        )
+                        newFiles.push(file)
                 }
                 setFiles(newFiles);
                 setOrgFiles(files)
@@ -179,8 +182,6 @@ const XoaHoSo = ({
         }
     };
 
-    
-
     const handleClickOnFile = (IDFile) => {
         dispatch({ type: "open", id: IDFile });
     };
@@ -206,6 +207,10 @@ const XoaHoSo = ({
         reset()
     }, [])
 
+    const handleOk = () =>{
+        setOpen(false);
+    }
+
     useEffect(() => {
         if(doesReset) {
             reset();
@@ -217,11 +222,9 @@ const XoaHoSo = ({
             style={{
                 top: 20,
             }}
-            title="Xoá hồ sơ"
+            title="Thêm hồ sơ"
             onCancel={() => setOpen(false)}
-            onOk={() => {
-                setOpen(false);
-            }}
+            onOk={handleOk}
             open={open}
             className="w-10/12">
 
@@ -321,4 +324,4 @@ const XoaHoSo = ({
     )
 }
 
-export default XoaHoSo 
+export default ThemHoSo

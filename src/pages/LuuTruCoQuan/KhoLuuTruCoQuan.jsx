@@ -31,7 +31,10 @@ const KhoLuuTruCoQuan = () => {
         const newFiles = []
         for (const file of files) {
             if (file.state.props.children !== ENUM_STATE_FILE.LUU_TRU_CO_QUAN) continue;
-
+            if (file.maintenance_name === 'Vĩnh viễn') {
+                newFiles.push(file);
+                continue;
+            }
             let today = new Date()
             const y = today.getFullYear();
             const m = today.getMonth() + 1; // Months start at 0!

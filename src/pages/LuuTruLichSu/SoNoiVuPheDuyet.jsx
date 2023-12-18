@@ -1,9 +1,8 @@
 import BasePage from "../BasePage";
-import ButtonFuctions from "../LuuTruCoQuan/Button";
 import { ENUM_STATE_FILE, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
 const filterPlan = (file) => {
-    return (file.type === ENUM_TYPE_PLAN.NOP_LUU_LICH_SU && file.state === ENUM_STATE_PLAN.CHO_DUYET)
+    return (file.type === ENUM_TYPE_PLAN.NOP_LUU_LICH_SU && file.state === ENUM_STATE_PLAN.DOI_SO_NOI_VU_DUYET)
 }
 
 
@@ -31,7 +30,7 @@ const SoNoiVuPheDuyet = () => {
         today = new Date(`${y}-${m}-${d}`)
 
         for (const file of files) {
-            if (file.state.props.children !== ENUM_STATE_FILE.NOP_LUU_LICH_SU) continue;
+            if (file.state.props.children !== ENUM_STATE_FILE.NOP_LUU_LICH_SU_CHO_SO_NOI_VU_DUYET) continue;
             // if (file.maintenance_name !== "Vĩnh viễn") continue;
             // if (file.end_date === null || file.end_date === undefined || (file.state.props.children !== 'Nộp lưu lịch sử' || file.maintenance !== "Vĩnh viễn"))
             //     continue
@@ -50,7 +49,9 @@ const SoNoiVuPheDuyet = () => {
         filter={filter}
         isCheckBox={false}
         soNoiVuDuyet={true}
-        haveActionButton={false} />
+        haveActionButton={false}
+        havePlan={true}
+    />
 }
 
 export default SoNoiVuPheDuyet;

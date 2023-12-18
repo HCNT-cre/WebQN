@@ -882,7 +882,6 @@ const BasePage = ({
 
 	const handleFilterFileByPlan = async (value) => {
 		setIsLoading(true);
-		console.log("id:", value);
 		let res = await FileAPIService.getFileByPlanId(value);
 		res = getFileFromResponse({ data: res })
 		if (filter !== null) res = filter(res);

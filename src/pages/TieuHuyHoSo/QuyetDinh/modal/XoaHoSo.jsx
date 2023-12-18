@@ -2,28 +2,69 @@
 import { Table } from "src/custom/Components"
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import {  STATE } from "src/storage/Storage";
-import { FIELDS_TABLE } from "src/storage/FileStorage";
+import { ENUM_STATE_FILE, STATE } from "src/storage/Storage";
+import { FIELDS_TABLE_STORE_ORGAN } from "src/storage/FileStorage";
 
 import axiosHttpService from "src/utils/httpService";
 import { Button, Input, Modal } from "antd";
-import { DateDiff } from "src/custom/Function";
+import PlanAPIService from "src/service/api/PlanAPIService";
 
-const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 
-const fieldsTable = [...FIELDS_TABLE];
+const fieldsTable = [...FIELDS_TABLE_STORE_ORGAN];
 fieldsTable.pop()
 
-const ThemHoSo = ({
+const TAB = [
+    { text: 'Danh sách hồ sơ', className: 'mb-[12px] text-[12px]' }
+];
+
+const filterFileEachTab = (files, text) => {
+    if (text === "Tất cả") return files
+    const newFiles = []
+
+    let today = new Date()
+    const y = today.getFullYear();
+    const m = today.getMonth() + 1; // Months start at 0!
+    const d = today.getDate();
+
+    today = new Date(`${y}-${m}-${d}`)
+
+    const dateDiff = (start_date, end_date = today) => {
+        start_date = new Date(start_date)
+        const diffTime = end_date - start_date
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        return diffDays / 365
+    }
+
+    for (const file of files) {
+        const yearMaintenance = parseInt(file.maintenance.split(' ')[0])
+        if (text === "Hết thời hạn bảo quản") {
+            if (file.maintenance === "Vĩnh viễn") continue;
+            if (dateDiff(file.start_date) >= yearMaintenance)
+                newFiles.push(file)
+        } else {
+            if (dateDiff(file.end_date) >= 0)
+                newFiles.push(file)
+        }
+    }
+
+    return newFiles
+}
+
+
+const XoaHoSo = ({
     open,
     setOpen,
     selectedFiles,
     setSelectedFiles,
+    idPlan,
     doesReset,
     setDoesReset,
 }) => {
+    const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
+    const [orgFiles, setOrgFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const userPermissionId = useSelector((state) => state.user.permission_id);
@@ -31,30 +72,23 @@ const ThemHoSo = ({
     const [search, setSearch] = useState({
         title: null,
         organ_id: null,
+        offce: null,
         state: 0,
         type: null,
     });
 
     const dispatch = useDispatch();
 
+    const handleChangeTab = (text) => {
+        setActiveTab(text)
+        setFiles(filterFileEachTab(orgFiles, text))
+    }
+
     const getFileFromResponse = (response) => {
         const rawDatas = response.data;
         let filesArray = [];
         for (const rawData of rawDatas) {
-            if (rawData.maintenance_name === "Vĩnh viễn" || rawData.state != 4) continue;
-            if (rawData.plan_nopluuls !== null || rawData.plan_tieuhuy !== null) continue;
             rawData.state = 14;
-            let today = new Date()
-            const y = today.getFullYear();
-            const m = today.getMonth() + 1; // Months start at 0!
-            const d = today.getDate();
-            today = new Date(`${y}-${m}-${d}`);
-
-            const endDate = new Date(rawData.end_date);
-            endDate.setFullYear(endDate.getFullYear() + Number(rawData.maintenance_name));
-            
-            if (DateDiff(endDate, today) <= 0 ) continue;
-
             const row = {
                 id: rawData.id,
                 gov_file_code: (
@@ -74,11 +108,8 @@ const ThemHoSo = ({
                     </p>
                 ),
                 organ_id_name: rawData.organ_id_name || "",
-                sheet_number: rawData.sheet_number || "",
-                total_doc: rawData.total_doc || "",
-                start_date: rawData.start_date || "",
-                end_date: rawData.end_date || "",
-                maintenance: rawData.maintenance || "",
+                drawer_name: rawData.drawer_name || "",
+                maintenance_name: rawData.maintenance_name || "",
                 rights: rawData.rights || "",
                 state: (
                     <button
@@ -90,6 +121,7 @@ const ThemHoSo = ({
                         {STATE[rawData.state]}
                     </button>
                 ),
+                type: rawData.type || ""
             };
             filesArray.push(row);
         }
@@ -100,10 +132,11 @@ const ThemHoSo = ({
         const fetchFileData = async () => {
             try {
                 setIsLoading(true);
-                const response = await axiosHttpService.get(API_GOV_FILE_GET_ALL);
+                const response = await PlanAPIService.getFileByPlanNLLSId(idPlan);
                 setIsLoading(false);
                 const files = getFileFromResponse(response);
                 setFiles(files);
+                setOrgFiles(files)
             } catch (err) {
                 console.log(err);
             }
@@ -134,23 +167,12 @@ const ThemHoSo = ({
         }
     };
 
+    
+
     const handleClickOnFile = (IDFile) => {
         dispatch({ type: "open", id: IDFile });
     };
 
-    const resetSearch = async () => {
-        let request = API_GOV_FILE_SEARCH;
-        const response = await axiosHttpService.get(request);
-        setFiles(getFileFromResponse(response));
-        setSearch((prev) => ({
-            title: "",
-            organ_id: "",
-            state: 0,
-            type: "",
-            end_date: "",
-            start_date: "",
-        }));
-    };
 
     const handleChangeSearch = (name, value) => {
         setSearch((prev) => ({
@@ -164,39 +186,48 @@ const ThemHoSo = ({
             title: "Tìm kiếm",
             btn_class_name: "custom-btn-search",
             icon: <i className="fa-solid fa-magnifying-glass"></i>,
-            onClick: handleSearch,
+            //  onClick: handleSearch,
         },
-        {
-            title: "Xóa bộ lọc",
-            btn_class_name: "custom-btn-clear-filter",
-            icon: <i className="fa-solid fa-sync"></i>,
-            onClick: resetSearch,
-        }
     ];
 
     useEffect(() => {
         reset()
-    }, []);
+    }, [])
 
     useEffect(() => {
         if(doesReset) {
             reset();
-            setDoesReset(false);    
+            setDoesReset(false);
         }
     }, [doesReset])
-
     return (
         <Modal
             style={{
                 top: 20,
             }}
-            title="Thêm hồ sơ"
+            title="Xoá hồ sơ"
             onCancel={() => setOpen(false)}
-            onOk={() => { setOpen(false) }}
+            onOk={() => {
+                setOpen(false);
+            }}
             open={open}
             className="w-10/12">
 
             <div className="flex justify-between">
+                <div className="flex flex-col mt-[72px]">
+                    {TAB.map((button, index) => (
+                        <Button
+                            onClick={() => handleChangeTab(button.text)}
+                            key={index}
+                            className={`${activeTab === button.text
+                                ? 'text-white bg-sky-700'
+                                : ''
+                                } ${button.className}`}
+                        >
+                            {button.text}
+                        </Button>
+                    ))}
+                </div>
                 <div className="w-11/12">
                     <div className="mt-[16px] mx-[24px] flex ">
                         <div className="w-[11.11111%] px-[5px]">
@@ -239,7 +270,13 @@ const ThemHoSo = ({
                                 className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"
                             ></Input>
                         </div>
-
+                        <div className="w-[11.11111%] px-[5px]">
+                            <Input
+                                placeholder="Vị trí lưu trữ"
+                                type="text"
+                                className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"
+                            ></Input>
+                        </div>
                         {BUTTON_ACTIONS.map((item, index) => {
                             return (
                                 <div
@@ -264,7 +301,6 @@ const ThemHoSo = ({
                         isLoading={isLoading}
                         fieldNames={fieldsTable}
                         setStateCheckBox={setSelectedFiles}
-                        selectedFiles={selectedFiles}
                     />
                 </div>
             </div>
@@ -273,4 +309,4 @@ const ThemHoSo = ({
     )
 }
 
-export default ThemHoSo
+export default XoaHoSo 
