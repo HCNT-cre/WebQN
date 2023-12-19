@@ -313,7 +313,7 @@ const File = ({
     return (
         <>
             {
-                (stateForm !== "CLOSE_FILE") && <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[1001] bg-[rgba(0,0,0,.45)]">
+                (stateForm !== "CLOSE_FILE") && <div className="overflow-y-scroll fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[500] bg-[rgba(0,0,0,.45)]">
                     <div className="relative top-[50px] pb-[30px] ">
                         <div className="w-[1000px] max-w-[calc(100vw-80px)] rounded-[2px] my-0 mx-auto bg-white">
                             <div className="relative rounded-[2px] bg-white border-[2px] border-blue-800">

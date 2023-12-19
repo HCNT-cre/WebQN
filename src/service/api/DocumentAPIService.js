@@ -5,6 +5,8 @@ const API_DOCUMENT_GET = import.meta.env.VITE_API_DOCUMENT_GET;
 const API_GET_FOND_BY_ORGAN = import.meta.env.VITE_API_GET_FOND_BY_ORGAN;
 const API_LANGUAGE = import.meta.env.VITE_API_LANGUAGE;
 const API_PHYSICAL_STATE = import.meta.env.VITE_API_PHYSICAL_STATE;
+const API_EOFFICE_DOCUMENT_LIST = import.meta.env.VITE_API_EOFFICE_DOCUMENT_LIST;
+const API_EOFFICE_ATTACHMENT_LIST = import.meta.env.VITE_API_EOFFICE_ATTACHMENT_LIST;
 const DocumentAPIService = {
     getDocumentByTitle: async (title) => {
         const response = await axiosHttpService.post(`${API_SEARCH}`,
@@ -38,6 +40,48 @@ const DocumentAPIService = {
     getLanguage: async () => {
         const res = await axiosHttpService.get(API_LANGUAGE);
         return res.data;
+    },
+
+    getEofficeDoc: async () => {
+        const token = localStorage.getItem('eoffice_token');
+        if (!token)
+            return null;
+        const payload = {
+            "pageNo": "1",
+            "pageRec": "20",
+            "param": "",
+            "kho": ""
+        }
+        try {
+            const res = await axiosHttpService.post(API_EOFFICE_DOCUMENT_LIST, payload, {
+                headers: {
+                    'X-AUTHENTICATION-TOKEN': token,
+                }
+            });
+            return res.data.data;
+        } catch (e) {
+            console.log('err in get eoffice doc', e);
+            return null;
+
+        }
+    },
+
+    getEofficeAttachmentByDocId: async (id) => {
+        const token = localStorage.getItem('eoffice_token');
+        if (!token)
+            return null;
+        try {
+            const res = await axiosHttpService.get(API_EOFFICE_ATTACHMENT_LIST + '/' + id, {
+                headers: {
+                    'X-AUTHENTICATION-TOKEN': token,
+                }
+            });
+            return res.data.data;
+        } catch (e) {
+            console.log('err in get eoffice attachment', e);
+            return null;
+        }
+
     }
 }
 

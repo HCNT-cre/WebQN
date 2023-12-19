@@ -11,6 +11,7 @@ import * as XLSX from "xlsx/xlsx.mjs";
 
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useDispatch, useSelector } from "react-redux";
+import LoginEoffice from "./LoginEoffice";
 
 const API_DOCUMENT_GET = import.meta.env.VITE_API_DOCUMENT_GET;
 const API_DOCUMENT_DELETE = import.meta.env.VITE_API_DOCUMENT_DELETE;
@@ -119,9 +120,11 @@ const DocCategory = ({ eOffice = true }) => {
   const [fileData, setFileData] = useState(null);
   const [stateEoffice, setStateEoffice] = useState(false);
   const [fileSheet, setFileSheet] = useState([]);
+  const [openLoginEoffice, setOpenLoginEoffice] = useState(false);
   const userPermissionId = useSelector((state) => state.user.permission_id);
   const stateDocCategory = useSelector((state) => state.docCategory.state);
   const govFileID = useSelector((state) => state.docCategory.id);
+
   const dispatch = useDispatch();
 
   const handleClickOnDocument = async (URL_PDF_FILE, pdfData, pdfID) => {
@@ -217,10 +220,20 @@ const DocCategory = ({ eOffice = true }) => {
     // XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
     // XLSX.writeFile(wb, "sheetVB.xlsx")
   };
+
+  const handleAddDocFromEoffice = () => {
+    const token = localStorage.getItem("eoffice_token");
+    if(!token) {
+      setOpenLoginEoffice(true);
+    }else {
+      setStateEoffice(true);
+    }
+  }
+
   return (
     <>
       {stateDocCategory && (
-        <div className="overflow-y-hidden fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[1001] bg-[rgba(0,0,0,.45)]">
+        <div className="overflow-y-hidden fixed top-0 right-0 bottom-0 left-0 h-full w-full z-[500] bg-[rgba(0,0,0,.45)]">
           <div className="relative  h-[calc(100vh)] top-[20px] pb-[30px] ">
             <div className="h-full relative overflow-y-scroll w-[calc(100vw-80px)] my-0 mx-auto bg-[#f0f2f5]">
               <div className="relative">
@@ -307,28 +320,28 @@ const DocCategory = ({ eOffice = true }) => {
                   </div>
 
                   <div className="w-[12.5%] text-white text-center px-[5px] flex">
-                    
-                      <button
-                        className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]"
-                        onClick={() => setStateEoffice(true)}
-                      >
-                        <div className="mr-[8px]">
-                        </div>
-                        Thêm VB từ EOFFICE
-                      </button>
-                    </div>
-                    <div className="w-[12.5%] text-white text-center px-[5px] flex">
-                    
-                      <button
-                        className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]"
-                        onClick={handleExportExcel}
-                      >
-                        <div className="mr-[8px]">
-                          <i className="fa-solid fa-file-csv"></i>
-                        </div>
-                        Xuất Excel
-                      </button>
-                    
+
+                    <button
+                      className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]"
+                      onClick={handleAddDocFromEoffice}
+                    >
+                      <div className="mr-[8px]">
+                      </div>
+                      Thêm VB từ EOFFICE
+                    </button>
+                  </div>
+                  <div className="w-[12.5%] text-white text-center px-[5px] flex">
+
+                    <button
+                      className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]"
+                      onClick={handleExportExcel}
+                    >
+                      <div className="mr-[8px]">
+                        <i className="fa-solid fa-file-csv"></i>
+                      </div>
+                      Xuất Excel
+                    </button>
+
                   </div>
                 </div>
                 <Table
@@ -366,6 +379,11 @@ const DocCategory = ({ eOffice = true }) => {
         setStateEoffice={setStateEoffice}
         fetchDocumentsOfFile={fetchDocumentsOfFile}
         govFileID={govFileID}
+      />
+      <LoginEoffice
+        open={openLoginEoffice}
+        setOpen={setOpenLoginEoffice}
+        setStateEoffice={setStateEoffice}
       />
     </>
   );
