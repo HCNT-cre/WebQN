@@ -649,29 +649,29 @@ export const TABS_SIDEBAR = [
 		number: 73,
 		display: true,
 	},
-	{
-		key: "/quan-ly-he-thong/",
-		isExpand: false,
-		icon: '<i class="fa-solid fa-people-roof"></i>',
-		display: false,
-		title: "Quản lý hệ thống",
-		numChildTabs: 2,
-		number: 74,
-		childTabs: [
-			{
-				title: "Người dùng",
-				to: "/quan-ly-he-thong/nguoi-dung",
-				key: "/quan-ly-he-thong/nguoi-dung",
-				number: 75,
-			},
-			{
-				title: "Phân quyền hệ thống",
-				to: "/quan-ly-he-thong/phan-quyen-he-thong",
-				key: "/quan-ly-he-thong/phan-quyen-he-thong",
-				number: 76,
-			},
-		],
-	},
+	// {
+	// 	key: "/quan-ly-he-thong/",
+	// 	isExpand: false,
+	// 	icon: '<i class="fa-solid fa-people-roof"></i>',
+	// 	display: false,
+	// 	title: "Quản lý hệ thống",
+	// 	numChildTabs: 2,
+	// 	number: 74,
+	// 	childTabs: [
+	// 		{
+	// 			title: "Người dùng",
+	// 			to: "/quan-ly-he-thong/nguoi-dung",
+	// 			key: "/quan-ly-he-thong/nguoi-dung",
+	// 			number: 75,
+	// 		},
+	// 		{
+	// 			title: "Phân quyền hệ thống",
+	// 			to: "/quan-ly-he-thong/phan-quyen-he-thong",
+	// 			key: "/quan-ly-he-thong/phan-quyen-he-thong",
+	// 			number: 76,
+	// 		},
+	// 	],
+	// },
 ];
 
 export const LIST_PERMISSION = [
