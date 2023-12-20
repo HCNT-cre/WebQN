@@ -112,3 +112,14 @@ export const DateDiff = (startDate, endDate) => {
 
     return diffDays / 365;
 }
+
+export const GetBinaryFromFile = (file) => {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.addEventListener("load", () => resolve(reader.result));
+        reader.addEventListener("error", err => reject(err));
+
+        reader.readAsBinaryString(file);
+    });
+}

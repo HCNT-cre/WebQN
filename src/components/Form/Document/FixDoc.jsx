@@ -91,7 +91,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
                                 <div className="bg-blue-300 text-black py-[8px] px-[24px] relative font-bold">
                                     <p className='text-bold'>Xem và chỉnh sửa</p>
                                     <button onClick={handleClose} className="text-[20px] absolute right-0 w-[2%] h-full flex items-center justify-center bg-blue-300 top-0 text-black ">
-                                        <i class="fa-solid fa-xmark"></i>
+                                        <i className="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
                                 <div className='w-full'>

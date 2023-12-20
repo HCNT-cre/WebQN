@@ -1,14 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useState } from "react";
-import {
-  INCOMING_DOC,
-  OUTCOMING_DOC,
-  MARKED_DOC,
-} from "../../../storage/Eoffice";
-import { useSelector } from "react-redux";
-import { GetDataFromIDFile } from "../../../custom/Function";
-import axiosHttpService from "src/utils/httpService";
 import { Table } from "../../../custom/Components";
 import { FaSearch } from "react-icons/fa";
 import "./EOFFICEstyle.css";
@@ -22,20 +14,21 @@ const TABLE_FIELDS = [
   { title: "Trích yếu", width: "200%", key: 'trichYeu' },
 ];
 
-
 const EOFFICE = ({
+  govFileID,
   setStateEoffice,
   stateEoffice,
+  fetchDocumentsOfFile
 }) => {
-  const [stateCheckBox, setStateCheckBox] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dataTable, setDataTable] = useState([]);
   const [idAttachment, setIdAttachment] = useState(null);
   const [stateAttachment, setStateAttachment] = useState(false);
+  const [date, setDate] = useState(null);
 
-
-  const handleClickDocument = (id) => {
+  const handleClickDocument = (id, date) => {
     setIdAttachment(id);
+    setDate(date);
     setStateAttachment(true);
   }
   useEffect(() => {
@@ -46,7 +39,7 @@ const EOFFICE = ({
       setDataTable(docs.map((doc) => {
         return {
           id: doc.id,
-          coQuanBanHanh: <p className="cursor-pointer" onClick={() => handleClickDocument(doc.id)}>{doc.coQuanBanHanh}</p>,
+          coQuanBanHanh: <p className="cursor-pointer" onClick={() => handleClickDocument(doc.id, doc.ngayVanBan)}>{doc.coQuanBanHanh}</p>,
           soKihieu: doc.soKihieu,
           trichYeu: doc.trichYeu,
         }
@@ -65,7 +58,7 @@ const EOFFICE = ({
               <div className="relative">
                 <button
                   onClick={() => setStateEoffice(false)}
-                  className="text-[20px] absolute right-0 w-[40px] h-full bg-gray-500 top-0 text-white font-medium "
+                  className="text-[20px] absolute right-0 w-[40px] h-full bg-gray-500 top-[10px] text-black font-medium "
                 >
                   <i className="fa-solid fa-xmark"></i>
                 </button>
@@ -80,6 +73,7 @@ const EOFFICE = ({
                         <div className="input-wrapper">
                           <FaSearch id="search-icon" />
                           <input
+                            className="text-[14px]"
                             placeholder="Tìm kiếm ..."
                           />
                         </div>
@@ -92,10 +86,8 @@ const EOFFICE = ({
                       </h2>
                       <Table
                         isLoading={isLoading}
-                        setStateCheckBox={setStateCheckBox}
                         fieldNames={TABLE_FIELDS}
                         fieldDatas={dataTable}
-                        isCheckBox={true}
                         headerBgColor="#ccc"
                       />
                     </div>
@@ -108,6 +100,9 @@ const EOFFICE = ({
       )}
 
       <Attachment
+        fetchDocumentsOfFile={fetchDocumentsOfFile}
+        date={date}
+        govFileID={govFileID}
         id={idAttachment}
         state={stateAttachment}
         setState={setStateAttachment}

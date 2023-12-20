@@ -37,12 +37,6 @@ const LoginEoffice = ({
 
     };
 
-    const handleKeyPress = (e) => {
-        if (e.key === "Enter") {
-            handleLogin();
-        }
-    };
-
     const handleUsernameChange = (e) => {
         setUsername(e.target.value);
     };

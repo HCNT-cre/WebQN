@@ -12,6 +12,7 @@ import * as XLSX from "xlsx/xlsx.mjs";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useDispatch, useSelector } from "react-redux";
 import LoginEoffice from "./LoginEoffice";
+import DocumentAPIService from "src/service/api/DocumentAPIService";
 
 const API_DOCUMENT_GET = import.meta.env.VITE_API_DOCUMENT_GET;
 const API_DOCUMENT_DELETE = import.meta.env.VITE_API_DOCUMENT_DELETE;
@@ -221,11 +222,18 @@ const DocCategory = ({ eOffice = true }) => {
     // XLSX.writeFile(wb, "sheetVB.xlsx")
   };
 
-  const handleAddDocFromEoffice = () => {
+  const handleAddDocFromEoffice = async () => {
     const token = localStorage.getItem("eoffice_token");
-    if(!token) {
+    if (!token) {
       setOpenLoginEoffice(true);
-    }else {
+    } else {
+      const data = await DocumentAPIService.getEofficeDoc();
+      console.log('data', data);
+      console.log('is data array', Array.isArray(data));
+      if (!Array.isArray(data)) {
+        setOpenLoginEoffice(true);
+        return;
+      }
       setStateEoffice(true);
     }
   }
