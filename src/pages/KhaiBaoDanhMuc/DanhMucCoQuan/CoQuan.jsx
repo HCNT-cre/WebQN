@@ -25,7 +25,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
     const [provinces, setProvinces] = useState([])
     const [districts, setDistricts] = useState([])
     const [wards, setWards] = useState([])
-
+    const [organ, setOrgan] = useState(null);
     const handleChangeRequest = (name, value) => {
         const getNameProvince = (code) => {
             if (!code) return null
@@ -77,12 +77,8 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
             if (!id) return
             try {
                 const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN + '/' + id)
-                const data = res.data;
-                data.province = data.provinceName;
-                data.district = data.districtName;
-                data.ward = data.wardName;
-                console.log('data', data);
-                setRequest(data);
+                setOrgan(res.data);
+                setRequest(res.data);
                 
             } catch (err) {
                 console.log(err);
@@ -91,7 +87,6 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         fetchData()
     }, [id])
 
-    console.log('request', request);
     useEffect(() => {
         const fetchProvinces = async () => {
             const res = await axiosCorsService.get(API_PROVINCES)
@@ -107,11 +102,16 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
 
     useEffect(() => {
         const fetchDistricts = async () => {
-            if (!request.province || isNaN(request.province)) return;
+            if (!request.province) return;
+            
+            if(request.province !== organ.province) {
+                handleChangeRequest("district", null);
+                handleChangeRequest("ward", null);
+            }
+
             setDistricts([])
             setWards([])
-            handleChangeRequest("district", null)
-            handleChangeRequest("ward", null);
+
             try {
                 const res = await axiosCorsService.get(API_DISTRICTS.replace("IDPROVINCE", request.province))
                 const data = res.data.districts
@@ -129,9 +129,11 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
 
     useEffect(() => {
         const fetchWards = async () => {
-            if (!request.district || isNaN(request.district)) return;
-            setWards([])
-            handleChangeRequest("ward", null)
+            if (!request.district) return;
+            if(request.district !== organ.district) {
+                handleChangeRequest("ward", null)
+            }
+            setWards([]);
             try {
                 const res = await axiosCorsService.get(API_WARD.replace("IDDISTRICT", request.district))
                 const data = res.data.wards
@@ -217,7 +219,11 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
                                             onChange={(ev) => handleChangeRequest(input.name, ev)}
                                             className="w-full"
                                             value={ 
-                                                request[input.name]} 
+                                                input.name === 'province'? request.provinceName :
+                                                input.name === 'district'? request.districtName :
+                                                input.name === 'ward'? request.wardName :
+                                                request[input.name]
+                                            } 
                                             />
                                         : <Input
                                             type={input.type} name={input.name}
