@@ -104,7 +104,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         const fetchDistricts = async () => {
             if (!request.province) return;
             
-            if(request.province !== organ.province) {
+            if(organ && request.province !== organ.province) {
                 handleChangeRequest("district", null);
                 handleChangeRequest("ward", null);
             }
@@ -130,7 +130,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
     useEffect(() => {
         const fetchWards = async () => {
             if (!request.district) return;
-            if(request.district !== organ.district) {
+            if(organ && request.district !== organ.district) {
                 handleChangeRequest("ward", null)
             }
             setWards([]);
