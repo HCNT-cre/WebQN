@@ -57,7 +57,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         }
 
         if (id !== null) {
-            await axiosHttpService.put(API_PHYSICAL_STATE + id, request)
+            await axiosHttpService.put(API_PHYSICAL_STATE + '/' + id, request)
             notifySuccess("Cập nhật tình trạng vật lý thành công")
         } else {
             await axiosHttpService.post(API_PHYSICAL_STATE, request)
