@@ -160,7 +160,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
             }
         }
         if (id !== null) {
-            await axiosHttpService.put(API_STORAGE_POST_ORGAN + id, request)
+            await axiosHttpService.put(API_STORAGE_POST_ORGAN + '/' + id, request)
             notifySuccess("Cập nhật cơ quan thành công")
         } else {
             await axiosHttpService.post(API_STORAGE_POST_ORGAN, request)
