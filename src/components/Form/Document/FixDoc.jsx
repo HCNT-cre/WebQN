@@ -7,9 +7,10 @@ import axiosHttpService from 'src/utils/httpService';
 import { useState, useEffect } from 'react';
 import { notifyError, notifySuccess } from '../../../custom/Function';
 import { Button, Spin, Input, Select } from 'antd';
-import { FORM_FIELDS } from '../../../storage/DocumentStorage';
 import { ValidateFormDoc } from '../../../custom/Function';
-
+import { RIGHTS } from 'src/storage/FileStorage';
+import UserAPIService from 'src/service/api/userAPIService';
+import DocumentAPIService from 'src/service/api/DocumentAPIService';
 
 const API_DOCUMENT_UPDATE = import.meta.env.VITE_API_DOCUMENT_UPDATE
 const API_EXTRACT_OCR = import.meta.env.VITE_API_EXTRACT_OCR
@@ -19,9 +20,102 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
     const defaultLayoutPluginInstance = defaultLayoutPlugin();
     const [request, setRequest] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
+    const [language, setLanguage] = useState([]);
+    const [fond, setFond] = useState([]);
+    const [format, setFormat] = useState([]);
+    const [organ, setOrgan] = useState(null);
+    const [currentLanguage, setCurrentLanguage] = useState(null);
+    const [currentFormat, setCurrentFormat] = useState(null);
+    const [currentFond, setCurrentFond] = useState(null);
+
+    const fetchData = async () => {
+        const _organ = await UserAPIService.getUserOrgan();
+        const _language = await DocumentAPIService.getLanguage();
+        const _format = await DocumentAPIService.getFormat();
+        const _fond = await DocumentAPIService.getFondByOrgan(_organ.id);
+
+        const language = _language.map(item => ({
+            label: item.name,
+            value: item.id
+        }))
+
+        const format = _format.map(item => ({
+            label: item.name,
+            value: item.id
+        }))
+
+        const fond = _fond.map(item => ({
+            label: item.fond_name,
+            value: item.id
+        }))
+
+
+
+        setRequest(prev => ({
+            ...prev,
+            identifier: _organ.name
+        }));
+
+        setOrgan(_organ);
+        setLanguage(language);
+        setFond(fond);
+        setFormat(format);
+    }
+
+    console.log('request', request);
+
+    const fetchCurrentData = async () => {
+        if(!pdfData) return;
+
+        const _language = language.find(item => item.value == pdfData.language);
+        const _format = format.find(item => item.value == pdfData.format);
+        const _fond = fond.find(item => item.value == pdfData.organ_id);
+
+        setCurrentLanguage(_language);
+        setCurrentFormat(_format);
+        setCurrentFond(_fond);
+    }
+
+    const FORM_FIELDS = [
+        { key: "doc_ordinal", title: "Số thứ tự", require: true, type: "number" },
+        { key: "autograph", title: "Bút tích", require: false, type: "text" },
+        { key: "issued_date", title: "Ngày, tháng, năm văn bản", require: true, type: "date" },
+        { key: "code_number", title: "Số của văn bản", require: false, type: "text" },
+        { key: "doc_code", title: "Mã định danh văn bản", require: false, type: "text" },
+        { key: "identifier", title: "Mã cơ quan lưu trữ", require: true, type: "text", disable: true }, // organ
+
+
+        { key: "mode", title: "Chế độ sử dụng", require: true, type: "select", options: RIGHTS },
+        { key: "language", title: "Ngôn ngữ", require: true, type: "select", options: language, defaultValue: currentLanguage },
+        // { key: "confidence_level", title: "Mức độ tin cậy", require: true, type: "select", options: },
+        { key: "format", title: "Tình trạng vật lý", require: true, type: "select", options: format, defaultValue: currentFormat },
+        { key: "organ_id", title: "Mã phông/công trình/sưu tập lưu trữ", require: true, type: "select", options: fond, extract: true, defaultValue: currentFond },
+
+
+
+        { key: "file_catalog", title: "Mục lục số hoặc năm hình thành hồ sơ", require: false, type: "number", extract: true },
+        { key: "file_notation", title: "Số và ký hiệu hồ sơ", require: false, type: "text", extract: true },
+        { key: "type_name", title: "Tên loại văn bản", require: false, type: "text" },
+        { key: "code_notation", title: "Ký hiệu của văn bản", require: false, type: "text" },
+        { key: "organ_name", title: "Tên cơ quan, tổ chức ban hành văn bản", require: false, type: "text" },
+        { key: "subject", title: "Trích yếu nội dung", require: false, type: "text" },
+        { key: "page_amount", title: "Số lượng trang của văn bản", require: false, type: "number" },
+        { key: "description", title: "Ghi chú", require: false, type: "text" },
+        { key: "infor_sign", title: "Ký hiệu thông tin", require: false, type: "text" },
+        { key: "keyword", title: "Từ khóa", require: false, type: "text" },
+    ]
+
+    console.log('current language', currentLanguage);
+    console.log('current format', currentFormat);
+    console.log('current fond', currentFond);
+    console.log('FORM_FIELDS', FORM_FIELDS);
 
     useEffect(() => {
-        setRequest(pdfData)
+        setIsLoading(true);
+        fetchCurrentData();
+        setRequest(pdfData);
+        fetchData();
+        setIsLoading(false);
     }, [pdfData])
 
     const extractDataOCR = async () => {
@@ -56,7 +150,8 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
         ev.preventDefault()
         const formDataValidated = ValidateFormDoc(request)
         try {
-            setIsLoading(true)
+            setIsLoading(true);
+            request['identifier'] = organ.id;
             await axiosHttpService.post(API_DOCUMENT_UPDATE, { ...formDataValidated, id: pdfID })
             setIsLoading(false)
             notifySuccess('Cập nhật thành công')
@@ -81,6 +176,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
     const handleExtract = (name) => {
         handleChangeForm(name, fileData[name])
     }
+
     return (
         <>
             {stateFixDoc &&
@@ -151,8 +247,7 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
                                                                                                 onChange={(value) => handleChangeForm(field.key, value)}
                                                                                                 options={field.options}
                                                                                                 className="w-full mt-[12px]"
-                                                                                                defaultValue={field.options[0]}
-                                                                                                value={request[field.key]}
+                                                                                                defaultValue={field.defaultValue ? field.defaultValue : field.options[0]}
                                                                                             >
                                                                                             </Select>
                                                                                         ) : (
@@ -160,12 +255,13 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
                                                                                                 onChange={(value) => handleChangeForm(field.key, value)}
                                                                                                 options={field.options}
                                                                                                 className="w-full mt-[12px]"
-                                                                                                value={request[field.key]}
+                                                                                                defaultValue={field.defaultValue ? field.defaultValue : field.options[0]}
                                                                                             >
                                                                                             </Select>
                                                                                         )
                                                                                     ) : (
                                                                                         <Input
+                                                                                            disabled={field?.disable}
                                                                                             onChange={(ev) => handleChangeForm(field.key, ev.target.value)}
                                                                                             name={field.key}
                                                                                             placeholder={field.title}

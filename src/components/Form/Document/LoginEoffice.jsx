@@ -18,7 +18,7 @@ import { Modal, Input } from "antd";
 const LoginEoffice = ({
     open,
     setOpen,
-    setStateEoffice
+    setStateEoffice = null
 }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -30,7 +30,7 @@ const LoginEoffice = ({
             localStorage.setItem("eoffice_token", response.token);
             notifySuccess("Đăng nhập thành công");
             setOpen(false);
-            setStateEoffice(true);
+            setStateEoffice && setStateEoffice(true);
         } else {
             setErr("Tài khoản hoặc mật khẩu không đúng");
         }
@@ -74,7 +74,9 @@ const LoginEoffice = ({
                 />
             </div>
 
-            {open && <div className="text-red-500">{err}</div>}
+            {open && (
+                <div className="flex justify-center items-center text-red-500">{err}</div>
+            )}
 
         </Modal>
     );

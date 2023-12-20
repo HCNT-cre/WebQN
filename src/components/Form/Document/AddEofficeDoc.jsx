@@ -200,7 +200,7 @@ const AddEofficeDoc = ({
                 'x-authentication-token': localStorage.getItem('eoffice_token')
             }
         }).then(res => {
-            request["file"] = new Blob([res.data], { type: 'application/pdf' });
+            request["file"] = new Blob([res.data], { type: 'application/pdf'});
         })
 
         const formDataValidated = ValidateFormDoc(request);

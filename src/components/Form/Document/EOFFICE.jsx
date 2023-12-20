@@ -7,6 +7,8 @@ import "./EOFFICEstyle.css";
 import { useEffect } from "react";
 import DocumentAPIService from "src/service/api/DocumentAPIService";
 import Attachment from "./Attachment";
+import { Button } from "antd";
+import LoginEoffice from "./LoginEoffice";
 
 const TABLE_FIELDS = [
   { title: "Cơ quan ban hành", width: "100%", key: 'coQuanBanHanh' },
@@ -26,6 +28,7 @@ const EOFFICE = ({
   const [stateAttachment, setStateAttachment] = useState(false);
   const [date, setDate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [openLoginEoffice, setOpenLoginEoffice] = useState(false);
 
   const handleClickDocument = (id, date) => {
     setIdAttachment(id);
@@ -61,6 +64,10 @@ const EOFFICE = ({
     await getDoc(currentPage - 1);
   }
 
+  const handleChangeAccount = () => {
+    setOpenLoginEoffice(true);
+  }
+
   return (
     <>
       {stateEoffice && (
@@ -94,25 +101,30 @@ const EOFFICE = ({
 
                     </div>
                     <div className="mt-[16px]">
-                      <div className="flex justify-between">
+                      <div className="flex justify-between items-center">
                         <h2 className="text-[20px] pl-[24px] font-medium">
                           Văn bản, Tài liệu
                         </h2>
-                        <div className="flex justify-center mt-4 items-center pb-4 pr-[24px]">
-                          <button
+                        <div className="flex justify-center mt-4 items-center pr-[24px]">
+                          <Button
                             onClick={handlePreviousPage}
+                            className="mr-[8px]"
                             disabled={currentPage === 1}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-lg w-[80px] text-[14px] mr-2"
                           >
                             Previous
-                          </button>
+                          </Button>
                           <p className="text-gray-800 font-bold">{currentPage}</p>
-                          <button
+                          <Button
                             onClick={handleNextPage}
-                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-lg w-[80px] text-[14px] ml-2"
+                            className="ml-[8px]"
                           >
                             Next
-                          </button>
+                          </Button>
+                        </div>
+                        <div className="pr-[24px]">
+                          <Button onClick={handleChangeAccount}>
+                            Chuyển tài khoản
+                          </Button>
                         </div>
                       </div>
 
@@ -140,6 +152,11 @@ const EOFFICE = ({
         id={idAttachment}
         state={stateAttachment}
         setState={setStateAttachment}
+      />
+
+      <LoginEoffice
+      open={openLoginEoffice}
+      setOpen={setOpenLoginEoffice} 
       />
     </>
   );
