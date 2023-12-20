@@ -8,6 +8,7 @@ import TextArea from "antd/es/input/TextArea";
 import { useEffect, useState } from "react";
 import axiosHttpService, { axiosCorsService } from "src/utils/httpService";
 import { Link } from "react-router-dom";
+import KhaiBaoDanhMucAPIService from "src/service/api/KhaiBaoDanhMucAPIService";
 
 const Search = Input.Search
 const API_STORAGE_POST_ORGAN = import.meta.env.VITE_API_STORAGE_POST_ORGAN
@@ -325,7 +326,7 @@ const CoQuan = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axiosHttpService.delete(API_STORAGE_POST_ORGAN + id)
+            await KhaiBaoDanhMucAPIService.deleteOrgan(id);
             notifySuccess("Xóa cơ quan thành công")
             fetchFieldData()
         } catch (err) {

@@ -4,6 +4,8 @@ const API_STORAGE_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN
 const API_ORGAN_GET_DEPARTMENT = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT;
 const API_ORGAN_GET_DEPARTMENT_BY_ORGAN = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN
 const API_ORGAN_POST_DEPARTMENT = import.meta.env.VITE_API_ORGAN_POST_DEPARTMENT;
+const API_STORAGE_POST_ORGAN = import.meta.env.VITE_API_STORAGE_POST_ORGAN
+
 const KhaiBaoDanhMucAPIService = {
     getOrganById: async (id) => {
         const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN + '/' + id);
@@ -28,7 +30,13 @@ const KhaiBaoDanhMucAPIService = {
     createDepartment: async (data) => {
         const res = await axiosHttpService.post(API_ORGAN_POST_DEPARTMENT, data);
         return res.data;
+    },
+
+    deleteOrgan: async (id) => {
+        const res = await axiosHttpService.delete(API_STORAGE_POST_ORGAN + '/' + id);
+        return res.data;
     }
+
 };
 
 export default KhaiBaoDanhMucAPIService;
