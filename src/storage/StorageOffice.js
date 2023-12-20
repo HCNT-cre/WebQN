@@ -31,7 +31,7 @@ export const ORGAN = [
     { title: "", key: "update", width: "100%" }
 ]
 export const DEPARTMENT_DECENTRALIZATION_INPUTS = [
-    { type: "select", require: true, name: "organ", label: "Cơ quan", },
+    { type: "input", require: true, name: "organ", label: "Cơ quan", },
     { type: "input", require: true, name: "name", label: "Tên", },
     { type: "input", require: true, name: "code", label: "Mã", },
 ]

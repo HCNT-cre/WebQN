@@ -1,24 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import DanhMucCoQuan from "."
 import { DEPARTMENT, DEPARTMENT_DECENTRALIZATION_INPUTS } from "../../../storage/StorageOffice"
-import { Input, Select, Modal, Button, Popconfirm, Spin } from "antd";
+import { Input, Modal, Button, Popconfirm, Spin } from "antd";
 import { GetKey } from "../../../custom/Function";
 import { notifyError, notifySuccess } from "../../../custom/Function";
 import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link, useParams } from "react-router-dom";
 import { getOrganbyId } from "./helper";
+import KhaiBaoDanhMucAPIService from "src/service/api/KhaiBaoDanhMucAPIService";
 
 const Search = Input.Search
 
 const API_ORGAN_GET_DEPARTMENT_BY_ORGAN = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN
 const API_STORAGE_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN
-const API_ORGAN_POST_DEPARTMENT = import.meta.env.VITE_API_ORGAN_POST_DEPARTMENT
-const API_ORGAN_GET_DEPARTMENT = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT
-
+const API_ORGAN_GET_DEPARTMENT = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT;
 const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = null }) => {
     const [request, setRequest] = useState({})
-    const [organ, setOrgan] = useState({})
+    const [organName, setOrganName] = useState({})
 
     const handleChangeRequest = (name, value) => {
         setRequest(prev => ({
@@ -30,16 +29,13 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
     useEffect(() => {
         const fetchOrgan = async () => {
             if (!idOrgan) return
-            const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN + '/' + idOrgan)
-            const data = res.data
-
-            setOrgan({
-                id: idOrgan,
-                name: data.name,
-                value: data.name
-            })
-
-            handleChangeRequest("organ", idOrgan)
+            try {
+                const res = await KhaiBaoDanhMucAPIService.getOrganById(idOrgan);
+                setOrganName(res.name);
+                handleChangeRequest("organ", idOrgan);
+            } catch (err) {
+                console.log(err);
+            }
         }
         fetchOrgan()
     }, [idOrgan])
@@ -48,9 +44,10 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
         const fetchData = async () => {
             if (!id) return
             try {
-                const res = await axiosHttpService.get(API_ORGAN_GET_DEPARTMENT_BY_ORGAN + '/' + id)
-                const data = res.data
-                setRequest(data)
+                const res = await KhaiBaoDanhMucAPIService.getDepartmentById(id);
+                setRequest(res);
+                const organ = await KhaiBaoDanhMucAPIService.getOrganById(res.organ);
+                setOrganName(organ.name);
             } catch (err) {
                 console.log(err);
             }
@@ -76,13 +73,12 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
         }
 
         if (id !== null) {
-            await axiosHttpService.put(API_ORGAN_GET_DEPARTMENT_BY_ORGAN + '/' + id, request)
+            await KhaiBaoDanhMucAPIService.updateDepartment(id, request);
             notifySuccess("Cập nhật phòng ban thành công")
         } else {
-            await axiosHttpService.post(API_ORGAN_POST_DEPARTMENT, request)
+            await KhaiBaoDanhMucAPIService.createDepartment(request);
             notifySuccess("Tạo phòng ban thành công")
         }
-        setRequest({})
         handleChangeRequest("organ", idOrgan)
         setTimeout(() => {
             setModalOpen(false)
@@ -92,7 +88,7 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
 
     return (
         <Modal
-            title="Tạo phòng ban"
+            title="Cập nhật phòng ban"
             style={{
                 top: 20,
             }}
@@ -105,24 +101,19 @@ const Form = ({ modalOpen, setModalOpen, fetchFieldData, id = null, idOrgan = nu
             <div>
                 {DEPARTMENT_DECENTRALIZATION_INPUTS.map((input, index) => {
                     return (
-                        <div className="flex mb-[30px]">
+                        <div className="flex mb-[30px]" key={index}>
                             <div
                                 className={`w-[30%]  ${input.require === true ? "after-form" : ""}`}>
                                 {input.label}
                             </div>
                             <div className="w-[70%]">
-                                {input.type === "select" ?
-                                    <Select
-                                        value={organ.name}
-                                        disabled
-                                        className="w-full" />
-                                    : <Input
-                                        type={input.type}
-                                        name={input.name}
-                                        onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
-                                        value={request[input.name]}
-                                    />
-                                }
+                                <Input
+                                    type={input.type}
+                                    name={input.name}
+                                    onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
+                                    value={input.name === 'organ' ? organName : request[input.name]}
+                                    disabled={input.name === 'organ'}
+                                />
                             </div>
                         </div>
                     )
@@ -184,7 +175,7 @@ const PhongBan = () => {
                 "name": <Link to={`./${data.id}`} className="cursor-pointer">{data.name}</Link>,
                 "code": data.code,
                 "organ": organData.data.name,
-               // "total_staff": data.total_staff,
+                // "total_staff": data.total_staff,
                 "update":
                     <span className="flex items-center justify-center">
                         <span className="text-teal-500 px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button cursor-pointer "
@@ -205,7 +196,6 @@ const PhongBan = () => {
                             <span
                                 className="text-[#20262E] px-[2px] font-bold italic block text-center border-none text-[16px] hover:underline icon-button cursor-pointer"
                                 title="Xóa phòng ban"
-                                onClick={(e) => console.log(e)}
                             >
                                 <i className="fa-solid fa-trash-can"></i>
                             </span>
@@ -231,7 +221,6 @@ const PhongBan = () => {
     const fetchOrgan = async () => {
         const organ = await getOrganbyId(params.id);
         setOrgan(organ);
-      //  console.log(organ);
     }
 
     useEffect(() => {

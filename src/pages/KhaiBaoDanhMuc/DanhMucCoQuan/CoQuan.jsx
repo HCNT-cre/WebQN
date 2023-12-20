@@ -26,8 +26,6 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
     const [wards, setWards] = useState([])
 
     const handleChangeRequest = (name, value) => {
-        console.log(name, value)
-
         const getNameProvince = (code) => {
             if (!code) return null
             const province = provinces.find((item) => item.code === code)
@@ -72,13 +70,19 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         }))
     }
 
+
     useEffect(() => {
         const fetchData = async () => {
             if (!id) return
             try {
                 const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN + '/' + id)
-                const data = res.data
-                setRequest(data)
+                const data = res.data;
+                data.province = data.provinceName;
+                data.district = data.districtName;
+                data.ward = data.wardName;
+                console.log('data', data);
+                setRequest(data);
+                
             } catch (err) {
                 console.log(err);
             }
@@ -86,6 +90,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         fetchData()
     }, [id])
 
+    console.log('request', request);
     useEffect(() => {
         const fetchProvinces = async () => {
             const res = await axiosCorsService.get(API_PROVINCES)
@@ -101,12 +106,11 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
 
     useEffect(() => {
         const fetchDistricts = async () => {
+            if (!request.province || isNaN(request.province)) return;
             setDistricts([])
             setWards([])
             handleChangeRequest("district", null)
-            handleChangeRequest("ward", null)
-
-            if (!request.province) return
+            handleChangeRequest("ward", null);
             try {
                 const res = await axiosCorsService.get(API_DISTRICTS.replace("IDPROVINCE", request.province))
                 const data = res.data.districts
@@ -124,9 +128,9 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
 
     useEffect(() => {
         const fetchWards = async () => {
+            if (!request.district || isNaN(request.district)) return;
             setWards([])
             handleChangeRequest("ward", null)
-            if (!request.district) return
             try {
                 const res = await axiosCorsService.get(API_WARD.replace("IDDISTRICT", request.district))
                 const data = res.data.wards
@@ -142,7 +146,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         fetchWards()
     }, [request.district])
 
-    const handleCancle = () => {
+    const handleCancel = () => {
         setModalOpen(false)
     }
 
@@ -166,9 +170,6 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
             await axiosHttpService.post(API_STORAGE_POST_ORGAN, request)
             notifySuccess("Tạo cơ quan thành công")
         }
-        setRequest({
-            storage: false
-        })
 
         setTimeout(() => {
             setModalOpen(false)
@@ -184,11 +185,11 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
             }}
             className="w-[600px]"
             open={modalOpen}
-            onCancel={handleCancle}
+            onCancel={handleCancel}
             footer={null}
         >
 
-            {ORGAN_DECENTRALIZATION_INPUTS.map((input) => {
+            {ORGAN_DECENTRALIZATION_INPUTS.map((input, index) => {
                 return (
                     <div className="flex mb-[30px]">
                         <div className={`w-[30%]  ${input.require === true ? "after-form" : ""}`}>
@@ -213,7 +214,10 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
                                             options={input.name === "province" ? provinces :
                                                 input.name === "district" ? districts : wards}
                                             onChange={(ev) => handleChangeRequest(input.name, ev)}
-                                            className="w-full" value={request[input.name]} />
+                                            className="w-full"
+                                            value={ 
+                                                request[input.name]} 
+                                            />
                                         : <Input
                                             type={input.type} name={input.name}
                                             defaultValue={request[input.name]}
@@ -230,7 +234,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
 
             <div className="flex justify-end">
                 <Button className="mr-[10px]"
-                    onClick={handleCancle}>Hủy</Button>
+                    onClick={handleCancel}>Hủy</Button>
                 <Button
                     type="submit"
                     className="bg-[#00f] text-white"
@@ -266,10 +270,11 @@ const Update = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
 }
 
 const CoQuan = () => {
-    const [fieldData, setFieldData] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [id, setId] = useState(null)
-    const [modalOpen, setModalOpen] = useState(false)
+    const [fieldData, setFieldData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [id, setId] = useState(null);
+    const [modalOpen, setModalOpen] = useState(false);
+
     const fetchFieldData = async () => {
         setIsLoading(true)
         const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN)
