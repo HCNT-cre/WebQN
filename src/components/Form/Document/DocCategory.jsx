@@ -227,7 +227,7 @@ const DocCategory = ({ eOffice = true }) => {
     if (!token) {
       setOpenLoginEoffice(true);
     } else {
-      const data = await DocumentAPIService.getEofficeDoc();
+      const data = await DocumentAPIService.getEofficeDoc(1);
       console.log('data', data);
       console.log('is data array', Array.isArray(data));
       if (!Array.isArray(data)) {

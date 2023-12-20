@@ -25,29 +25,41 @@ const EOFFICE = ({
   const [idAttachment, setIdAttachment] = useState(null);
   const [stateAttachment, setStateAttachment] = useState(false);
   const [date, setDate] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const handleClickDocument = (id, date) => {
     setIdAttachment(id);
     setDate(date);
     setStateAttachment(true);
   }
+  const getDoc = async (page) => {
+    if (!stateEoffice) return;
+    setIsLoading(true);
+    const docs = await DocumentAPIService.getEofficeDoc(page);
+    setDataTable(docs.map((doc) => {
+      return {
+        id: doc.id,
+        coQuanBanHanh: <p className="cursor-pointer" onClick={() => handleClickDocument(doc.id, doc.ngayVanBan)}>{doc.coQuanBanHanh}</p>,
+        soKihieu: doc.soKihieu,
+        trichYeu: doc.trichYeu,
+      }
+    }));
+    setIsLoading(false);
+  }
+
   useEffect(() => {
-    const getDoc = async () => {
-      if (!stateEoffice) return;
-      setIsLoading(true);
-      const docs = await DocumentAPIService.getEofficeDoc();
-      setDataTable(docs.map((doc) => {
-        return {
-          id: doc.id,
-          coQuanBanHanh: <p className="cursor-pointer" onClick={() => handleClickDocument(doc.id, doc.ngayVanBan)}>{doc.coQuanBanHanh}</p>,
-          soKihieu: doc.soKihieu,
-          trichYeu: doc.trichYeu,
-        }
-      }));
-      setIsLoading(false);
-    }
-    getDoc();
+    getDoc(1);
   }, [stateEoffice])
+
+  const handleNextPage = async () => {
+    setCurrentPage(currentPage + 1);
+    await getDoc(currentPage + 1);
+  }
+
+  const handlePreviousPage = async () => {
+    setCurrentPage(currentPage - 1);
+    await getDoc(currentPage - 1);
+  }
 
   return (
     <>
@@ -75,21 +87,43 @@ const EOFFICE = ({
                           <input
                             className="text-[14px]"
                             placeholder="Tìm kiếm ..."
+                            value=""
                           />
                         </div>
                       </div>
 
                     </div>
                     <div className="mt-[16px]">
-                      <h2 className="text-[20px] pl-[24px] font-medium">
-                        Văn bản, Tài liệu
-                      </h2>
+                      <div className="flex justify-between">
+                        <h2 className="text-[20px] pl-[24px] font-medium">
+                          Văn bản, Tài liệu
+                        </h2>
+                        <div className="flex justify-center mt-4 items-center pb-4 pr-[24px]">
+                          <button
+                            onClick={handlePreviousPage}
+                            disabled={currentPage === 1}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-lg w-[80px] text-[14px] mr-2"
+                          >
+                            Previous
+                          </button>
+                          <p className="text-gray-800 font-bold">{currentPage}</p>
+                          <button
+                            onClick={handleNextPage}
+                            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-lg w-[80px] text-[14px] ml-2"
+                          >
+                            Next
+                          </button>
+                        </div>
+                      </div>
+
                       <Table
                         isLoading={isLoading}
                         fieldNames={TABLE_FIELDS}
                         fieldDatas={dataTable}
                         headerBgColor="#ccc"
                       />
+
+
                     </div>
                   </div>
                 </div>

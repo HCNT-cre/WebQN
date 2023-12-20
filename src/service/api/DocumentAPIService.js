@@ -42,12 +42,12 @@ const DocumentAPIService = {
         return res.data;
     },
 
-    getEofficeDoc: async () => {
+    getEofficeDoc: async (page) => {
         const token = localStorage.getItem('eoffice_token');
         if (!token)
             return null;
         const payload = {
-            "pageNo": "1",
+            "pageNo": page,
             "pageRec": "20",
             "param": "",
             "kho": ""
