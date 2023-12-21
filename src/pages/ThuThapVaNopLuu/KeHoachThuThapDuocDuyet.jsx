@@ -1,10 +1,9 @@
-import { Button, Input, Modal, Popconfirm, Select, Upload } from "antd";
+import { Button, Input, Modal, Popconfirm, Upload } from "antd";
 import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 import { ENUM_STATE_PLAN } from "src/storage/Storage";
-import UserAPIService from "src/service/api/userAPIService";
 
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
 
@@ -211,7 +210,7 @@ const KeHoachThuThapDuocPheDuyet = () => {
 		const res = await axiosHttpService.get(`${API_COLLECTION_PLAN}`);
 
 		const rawDatas = res.data.reverse().filter((data) => {
-			return data.state === ENUM_STATE_PLAN.CHAP_NHAN;
+			return data.state === ENUM_STATE_PLAN.CHAP_NHAN && data.type == 1;
 		});
 
 		const plan = [];

@@ -28,7 +28,7 @@ const EOFFICE = ({
   const [stateAttachment, setStateAttachment] = useState(false);
   const [date, setDate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [param, setParam] = useState(null); 
+  const [param, setParam] = useState(null);
   const [openLoginEoffice, setOpenLoginEoffice] = useState(false);
 
   const handleClickDocument = (id, date) => {
@@ -36,10 +36,15 @@ const EOFFICE = ({
     setDate(date);
     setStateAttachment(true);
   }
-  const getDoc = async (page,param) => {
+  const getDoc = async (page, param) => {
     if (!stateEoffice) return;
     setIsLoading(true);
-    const docs = await DocumentAPIService.getEofficeDoc(page,param);
+    const docs = await DocumentAPIService.getEofficeDoc(page, param);
+    setIsLoading(false);
+
+    if (!docs) {
+      return setDataTable([]);
+    }
     setDataTable(docs.map((doc) => {
       return {
         id: doc.id,
@@ -48,7 +53,6 @@ const EOFFICE = ({
         trichYeu: doc.trichYeu,
       }
     }));
-    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -127,6 +131,7 @@ const EOFFICE = ({
                           <Button
                             onClick={handleNextPage}
                             className="ml-[8px]"
+                            disabled={dataTable.length < 20}
                           >
                             Next
                           </Button>
@@ -165,8 +170,8 @@ const EOFFICE = ({
       />
 
       <LoginEoffice
-      open={openLoginEoffice}
-      setOpen={setOpenLoginEoffice} 
+        open={openLoginEoffice}
+        setOpen={setOpenLoginEoffice}
       />
     </>
   );
