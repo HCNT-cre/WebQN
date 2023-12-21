@@ -62,8 +62,6 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
         setFormat(format);
     }
 
-    console.log('request', request);
-
     const fetchCurrentData = async () => {
         if(!pdfData) return;
 
@@ -104,11 +102,6 @@ const FixDoc = ({ pdfData, pdfFile, setStateFixDoc, stateFixDoc, API_PDF, pdfID,
         { key: "infor_sign", title: "Ký hiệu thông tin", require: false, type: "text" },
         { key: "keyword", title: "Từ khóa", require: false, type: "text" },
     ]
-
-    console.log('current language', currentLanguage);
-    console.log('current format', currentFormat);
-    console.log('current fond', currentFond);
-    console.log('FORM_FIELDS', FORM_FIELDS);
 
     useEffect(() => {
         setIsLoading(true);

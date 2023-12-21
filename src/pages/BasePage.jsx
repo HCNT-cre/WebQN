@@ -77,8 +77,11 @@ const PlanAndCategoryFile = ({
 
 		const getCollectionPlan = async () => {
 			const { data } = await axiosHttpService.get(API_PLAN);
+			const organ = await UserAPIService.getUserOrgan();
 			const filterdData = data.filter((item) => {
 				return filtePlanCondition(item);
+			}).filter((plan) => {
+				return plan.organ == organ.id;
 			});
 
 			const _ = filterdData.map((item) => {
