@@ -436,8 +436,7 @@ const KeHoachThuThap = () => {
 						</Button>
 
 					</div>
-				),
-				organId: rawData.organ,
+				)
 			};
 			plan.push(row);
 		}
