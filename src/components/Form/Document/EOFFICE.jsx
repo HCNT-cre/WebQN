@@ -28,6 +28,7 @@ const EOFFICE = ({
   const [stateAttachment, setStateAttachment] = useState(false);
   const [date, setDate] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [param, setParam] = useState(null); 
   const [openLoginEoffice, setOpenLoginEoffice] = useState(false);
 
   const handleClickDocument = (id, date) => {
@@ -35,10 +36,10 @@ const EOFFICE = ({
     setDate(date);
     setStateAttachment(true);
   }
-  const getDoc = async (page) => {
+  const getDoc = async (page,param) => {
     if (!stateEoffice) return;
     setIsLoading(true);
-    const docs = await DocumentAPIService.getEofficeDoc(page);
+    const docs = await DocumentAPIService.getEofficeDoc(page,param);
     setDataTable(docs.map((doc) => {
       return {
         id: doc.id,
@@ -56,16 +57,25 @@ const EOFFICE = ({
 
   const handleNextPage = async () => {
     setCurrentPage(currentPage + 1);
-    await getDoc(currentPage + 1);
+    await getDoc(currentPage + 1, param);
   }
 
   const handlePreviousPage = async () => {
     setCurrentPage(currentPage - 1);
-    await getDoc(currentPage - 1);
+    await getDoc(currentPage - 1, param);
   }
 
   const handleChangeAccount = () => {
     setOpenLoginEoffice(true);
+  }
+
+  const handleSearch = async (e) => {
+    const value = e.target.value.trim();
+    setParam(value);
+    if (e.key === 'Enter') {
+      setCurrentPage(1);
+      await getDoc(currentPage, value);
+    }
   }
 
   return (
@@ -88,13 +98,13 @@ const EOFFICE = ({
 
                   <div className="ml-[24px] h-full w-[100%]">
                     <div className="pt-[12px] mx-[24px] flex justify-between">
-                      <div className="flex">
+                      <div className="flex w-[600px]">
                         <div className="input-wrapper">
                           <FaSearch id="search-icon" />
                           <input
                             className="text-[14px]"
                             placeholder="Tìm kiếm ..."
-                            value=""
+                            onKeyDown={handleSearch}
                           />
                         </div>
                       </div>
