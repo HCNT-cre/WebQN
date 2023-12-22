@@ -57,6 +57,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
         }
         getWarehouseByOrgan();
         setOptionWarehouse([])
+        setWarehouse(null)
     }, [request['organ']])
 
 
