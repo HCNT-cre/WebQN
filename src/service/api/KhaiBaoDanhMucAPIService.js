@@ -63,6 +63,11 @@ const KhaiBaoDanhMucAPIService = {
         return response.data;
     },
 
+    deleteWarehouseRoomById: async (id) => {
+        const response = await axiosHttpService.delete(API_STORAGE_GET_WAREHOUSEROOM + '/' + id);
+        return response.data;
+    },
+
     updateWarehouseById: async (id, data) => {
         const response = await axiosHttpService.put(API_STORAGE_GET_WAREHOUSE + '/' + id, data);
         return response.data;

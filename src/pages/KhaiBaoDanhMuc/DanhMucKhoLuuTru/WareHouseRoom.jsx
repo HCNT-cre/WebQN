@@ -248,7 +248,7 @@ const Delete = ({ id, reFetchData }) => {
 
     const handleConfirm = () => {
         const deleteWarehouse = async () => {
-            const res = await axiosHttpService.delete(API_STORAGE_DELETE_WAREHOUSEROOM + id)
+            const res = await KhaiBaoDanhMucAPIService.deleteWarehouseRoomById(id)
             console.log(res)
         }
 
@@ -324,8 +324,6 @@ const WareHouseRoom = () => {
         }
 
         const fetchOrgan = async () => {
-            setIsLoading(true)
-
             const response = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL)
             const raws = []
 
@@ -337,11 +335,9 @@ const WareHouseRoom = () => {
             }
 
             setOptionOrgan(raws)
-            setIsLoading(false)
         }
 
         const fetchWarehouse = async () => {
-            setIsLoading(true)
             const response = await axiosHttpService.get(API_STORAGE_GET_WAREHOUSE_ALL)
             const raws = []
             for (const data of response.data) {
@@ -353,7 +349,6 @@ const WareHouseRoom = () => {
             }
 
             setOptionWarehouse(raws)
-            setIsLoading(false)
         }
 
         fetchWareHouseRoom()
