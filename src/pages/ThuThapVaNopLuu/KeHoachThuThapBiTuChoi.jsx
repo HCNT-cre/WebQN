@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
 import { ENUM_STATE_PLAN } from "src/storage/Storage";
+import { notifySuccess } from "src/custom/Function";
 
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
 
@@ -192,23 +193,27 @@ const KeHoachThuThapBiTuChoi = () => {
 	const [id, setId] = useState(null);
 	const [updateOpen, setUpdateOpen] = useState(false);
 	const [stateCheckBox, setStateCheckBox] = useState([]);
+	const [mapOrgan, setMapOrgan] = useState({});
 	const handleSendCollectPlan = async () => {
 		const planIds = stateCheckBox.map((item) => {
 			return Number(item.split("checkbox")[1]);
 		})
 
+		setIsLoading(true);
 		plan.forEach(async (pl) => {
-			if (planIds.findIndex((id) => id === pl.id) === -1) return;
+			if (planIds.findIndex((id) => id == pl.id) === -1) return;
 			await axiosHttpService.put(API_COLLECTION_PLAN + '/' + pl.id, {
-				name: pl.name.props.children[1],
-				start_date: pl.start_date,
-				organ: pl.organId,
+				name: pl.name,
+				start_date: pl.date,
+				organ: mapOrgan[pl.id],
 				state: ENUM_STATE_PLAN.CHO_DUYET,
 			});
 		});
 
 		setTimeout(() => {
 			reFetchData();
+			setIsLoading(false);
+			notifySuccess("Gửi kế hoạch thành công");
 		}, 600);
 	}
 
@@ -239,6 +244,7 @@ const KeHoachThuThapBiTuChoi = () => {
 		});
 
 		const plan = [];
+		const mapOrgan = {};
 		for (const rawData of rawDatas) {
 			const row = {
 				id: rawData.id,
@@ -257,7 +263,9 @@ const KeHoachThuThapBiTuChoi = () => {
 				),
 			};
 			plan.push(row);
+			mapOrgan[rawData.id] = rawData.organ;
 		}
+		setMapOrgan(mapOrgan);
 		setPlan(plan);
 		setIsLoading(false);
 	};

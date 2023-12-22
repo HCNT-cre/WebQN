@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
 import UserAPIService from "src/service/api/userAPIService";
+import { notifySuccess } from "src/custom/Function";
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 
 const API_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
@@ -380,6 +381,7 @@ const KeHoachThuThap = () => {
 
 		setTimeout(() => {
 			reFetchData();
+			notifySuccess("Gửi kế hoạch thành công");
 		}, 600);
 	}
 
