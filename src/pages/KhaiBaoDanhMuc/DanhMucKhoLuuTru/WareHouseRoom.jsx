@@ -19,6 +19,7 @@ const Search = Input.Search
 
 const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehouse }) => {
     const [optionWarehouse, setOptionWarehouse] = useState([])
+    const [warehouse, setWarehouse] = useState(null)
     const [request, setRequest] = useState({
         name: null,
         organ: null,
@@ -105,13 +106,15 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
                         allowClear
                         placeholder="Chọn kho"
                         optionFilterProp="children"
-                        onChange={(value) => {
+                        onChange={(value, ev) => {
                             handleChangeRequest('warehouse', value)
+                            setWarehouse(ev.label)
                         }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionWarehouse}
+                        value={warehouse}
                     />
                 </div>
             </div>

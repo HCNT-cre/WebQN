@@ -420,12 +420,12 @@ const TaoQuyetDinh = () => {
             setTimeout(() => {
                 reFetchData();
                 setIsLoading(false);
-                notifySuccess("Gửi kế hoạch thành công");
+                notifySuccess("Gửi quyết định thành công");
             }, 500);
 
         } catch (err) {
             console.log("err in send plan nop luu lich su", err)
-            notifyError("Gửi kế hoạch thất bại");
+            notifyError("Gửi quyết định thất bại");
         }
 
     };

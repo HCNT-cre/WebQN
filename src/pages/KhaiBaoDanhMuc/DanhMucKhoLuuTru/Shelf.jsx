@@ -67,6 +67,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
         getWarehouse()
         setOptionWarehouseroom([])
         setWareHouse(null)
+        handleChangeRequest('warehouse', null)
     }, [request['organ']])
 
     useEffect(() => {
@@ -83,7 +84,9 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
             setOptionWarehouseroom(raws)
         }
         getWarehouseRoom()
-        setWareHouseRoom(null)
+        setWareHouseRoom([])
+        setOptionWarehouseroom([])
+        handleChangeRequest('warehouse_room', null)
     }, [request['warehouse']])
 
     return (

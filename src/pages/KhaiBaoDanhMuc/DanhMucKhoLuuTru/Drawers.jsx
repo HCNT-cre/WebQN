@@ -6,7 +6,6 @@ import { DRAWERS } from "../../../storage/StorageStorage";
 import { Input, Select, Modal, Button, Popconfirm } from "antd";
 import KhaiBaoDanhMucAPIService from "src/service/api/KhaiBaoDanhMucAPIService";
 
-const API_STORAGE_DELETE_DRAWERS = import.meta.env.VITE_API_STORAGE_DELETE_DRAWERS
 const API_STORAGE_GET_DRAWERS_ALL = import.meta.env.VITE_API_STORAGE_GET_DRAWERS_ALL
 const API_STORAGE_POST_DRAWERS = import.meta.env.VITE_API_STORAGE_POST_DRAWERS
 
@@ -71,6 +70,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
         setOptionWarehouseroom([])
         setOptionShelf([])
         setWareHouse(null)
+        handleChangeRequest('warehouse', null)
     }, [request['organ']])
 
     useEffect(() => {
@@ -89,6 +89,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
         getWarehouseRoom()
         setOptionShelf([])
         setWareHouseRoom(null)
+        handleChangeRequest('warehouse_room', null)
     }, [request['warehouse']])
 
     useEffect(() => {
@@ -106,6 +107,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
         }
         getShelf()
         setShelf(null)
+        handleChangeRequest('shelf', null)
     }, [request['warehouse_room']])
 
     return (
