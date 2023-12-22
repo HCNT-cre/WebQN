@@ -12,7 +12,6 @@ const FIELDS_TABLE = [
     { title: "Chức năng", key: "function", width: "120px" },
 ];
 
-
 const BasePage = ({
     parent,
     current,

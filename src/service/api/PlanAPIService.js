@@ -6,6 +6,7 @@ const API_REMOVE_FILE_FROM_PLAN = import.meta.env.VITE_API_REMOVE_FILE_FROM_PLAN
 const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 const API_SET_PLAN_TIEU_HUY_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_TIEU_HUY_FOR_FILE;
 const API_GET_FILE_BY_PLAN_TIEUHUY_ID = import.meta.env.VITE_API_GET_FILE_BY_PLAN_TIEUHUY_ID;
+const API_REMOVE_FILE_FROM_PLAN_TIEUHUY = import.meta.env.VITE_API_REMOVE_FILE_FROM_PLAN_TIEUHUY;
 const PlanAPIService = {
     getPlanById: async (id) => {
         const response = await axiosHttpService.get(API_PLAN + '/' + id);
@@ -31,6 +32,13 @@ const PlanAPIService = {
 
     removeFileFromPlan: async (idFile) => {
         const response = await axiosHttpService.post(API_REMOVE_FILE_FROM_PLAN, {
+            gov_file_id: idFile
+        });
+        return response;
+    },
+
+    removeFileFromPlanTieuHuy: async (idFile) => {
+        const response = await axiosHttpService.post(API_REMOVE_FILE_FROM_PLAN_TIEUHUY, {
             gov_file_id: idFile
         });
         return response;

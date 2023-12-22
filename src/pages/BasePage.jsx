@@ -724,6 +724,37 @@ const BasePage = ({
 		}
 	};
 
+	const handleChangeStateFileOfPlanTieuHuy = async (newState) => {
+		if (filterByPlan === null) {
+			notifyError("Vui lòng chọn kế hoạch")
+			return;
+		}
+
+		const listState = [];
+
+		for (const file of files) {
+			listState.push({
+				...newState,
+				id: file.id
+			});
+		}
+
+		try {
+			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.CHAP_NHAN);
+			const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, listState);
+			const error_code = response.data.error_code;
+			if (error_code === undefined) {
+				notifySuccess("Thay đổi trạng thái thành công");
+				reset();
+			} else {
+				const description = response.data.description;
+				notifyError(description);
+			}
+		} catch (error) {
+			notifyError("Thay đổi trạng thái thất bại");
+		}
+	};
+
 	const handleChangeStateFileOfPlanSoNoiVu = async (newState) => {
 		if (filterByPlan === null) {
 			notifyError("Vui lòng chọn kế hoạch")
@@ -1033,7 +1064,7 @@ const BasePage = ({
 							}
 							{pheDuyetTieuHuy && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
-									onClick={() => handleChangeStateFileOfPlan({ "current_state": 15, "new_state": 16 })}
+									onClick={() => handleChangeStateFileOfPlanTieuHuy({ "current_state": 15, "new_state": 16 })}
 									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
 								>
 									<div className="mr-[8px]">

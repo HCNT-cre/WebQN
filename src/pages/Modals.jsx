@@ -28,6 +28,7 @@ const API_PLAN = import.meta.env.VITE_API_PLAN;
 import UserAPIService from "src/service/api/userAPIService";
 import LuutrucoquanAPIService from "src/service/api/LuutrucoquanAPIService";
 import FileAPIService from "src/service/api/FileAPIService";
+import PlanAPIService from "src/service/api/PlanAPIService";
 
 const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
@@ -177,7 +178,6 @@ export const ModalConfirmLuuTruCoQuan = () => {
     const dispatch = useDispatch()
     const state = useSelector(state => state.modalStoreOrgan.state)
     const reFetchFile = useSelector(state => state.reFetchFile.fetchFileFunction)
-
     const [request, setRequest] = useState({
         organ: null,
         warehouse: null,
@@ -192,6 +192,11 @@ export const ModalConfirmLuuTruCoQuan = () => {
     const [optionWarehouse, setOptionWarehouse] = useState([])
     const [optionWarehouseRoom, setOptionWarehouseRoom] = useState([])
     const [optionDrawers, setOptionDrawers] = useState([])
+
+    const [shelf, setShelf] = useState(null)
+    const [warehouse, setWarehouse] = useState(null)
+    const [warehouseRoom, setWarehouseRoom] = useState(null)
+    const [drawer, setDrawer] = useState(null)
 
     const fetchOrganName = async () => {
         const response = await UserAPIService.getUserOrgan();
@@ -217,6 +222,8 @@ export const ModalConfirmLuuTruCoQuan = () => {
             setOptionWarehouse(raws)
         }
         fetchWarehouse(request['organ'])
+        setWarehouse(null)
+        handleChangeRequest('warehouse', null)
     }, [request['organ']])
 
 
@@ -234,6 +241,8 @@ export const ModalConfirmLuuTruCoQuan = () => {
             setOptionWarehouseRoom(raws)
         }
         fetchWarehouseRoom(request['warehouse'])
+        setWarehouseRoom(null)
+        handleChangeRequest('warehouseroom', null)
     }, [request['warehouse']])
 
     useEffect(() => {
@@ -250,6 +259,8 @@ export const ModalConfirmLuuTruCoQuan = () => {
             setOptionShelf(raws)
         }
         fetchShelf(request['warehouseroom'])
+        setShelf(null)
+        handleChangeRequest('shelf', null)
     }, [request['warehouseroom']])
 
     useEffect(() => {
@@ -266,6 +277,8 @@ export const ModalConfirmLuuTruCoQuan = () => {
             setOptionDrawers(raws)
         }
         fetchDrawer(request['shelf'])
+        setDrawer(null)
+        handleChangeRequest('drawer', null)
     }, [request['shelf']])
 
     useEffect(() => {
@@ -351,11 +364,15 @@ export const ModalConfirmLuuTruCoQuan = () => {
                         allowClear
                         placeholder="Chọn kho"
                         optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('warehouse', value)}
+                        onChange={(value, ev) => {
+                            handleChangeRequest('warehouse', value)
+                            setWarehouse(ev.label)
+                        }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionWarehouse}
+                        value={warehouse}
                     />
                 </div>
                 <div className="flex justify-between py-[12px]">
@@ -367,11 +384,15 @@ export const ModalConfirmLuuTruCoQuan = () => {
                         allowClear
                         placeholder="Chọn phòng kho"
                         optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('warehouseroom', value)}
+                        onChange={(value, ev) => {
+                            handleChangeRequest('warehouseroom', value)
+                            setWarehouseRoom(ev.label)
+                        }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionWarehouseRoom}
+                        value={warehouseRoom}
                         disabled={warehouseRoomDisabled}
                     />
                 </div>
@@ -382,13 +403,17 @@ export const ModalConfirmLuuTruCoQuan = () => {
                         className="w-[70%] bg-white outline-none rounded-md"
                         showSearch
                         allowClear
-                        placeholder="Chọn phòng kho"
+                        placeholder="Chọn kệ"
                         optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('shelf', value)}
+                        onChange={(value, ev) => {
+                            handleChangeRequest('shelf', value)
+                            setShelf(ev.label)
+                        }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
                         options={optionShelf}
+                        value={shelf}
                         disabled={shelfDisabled}
                     />
                 </div>
@@ -399,12 +424,16 @@ export const ModalConfirmLuuTruCoQuan = () => {
                         className="w-[70%] bg-white outline-none rounded-md"
                         showSearch
                         allowClear
-                        placeholder="Chọn phòng kho"
+                        placeholder="Chọn hộp"
                         optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('drawer', value)}
+                        onChange={(value, ev) => {
+                            handleChangeRequest('drawer', value)
+                            setDrawer(ev.label)
+                        }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                         }
+                        value={drawer}
                         options={optionDrawers}
                         disabled={drawerDisabled}
                     />
@@ -844,6 +873,10 @@ export const ModalRecoverFile = () => {
 
     const handleOk = async () => {
 
+        ids.forEach(async (id) => {
+            await PlanAPIService.removeFileFromPlanTieuHuy(id);
+        });
+        
         const payload = ids.map((id) => {
             return {
                 id,

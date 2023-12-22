@@ -74,12 +74,12 @@ const Create = ({
             await PlanAPIService.setPlanTieuHuyForFile(payload);
         });
 
-
         setTimeout(() => {
             reFetchData();
             setRequest({});
             setModelOpen(false);
             setReset(true);
+            notifySuccess("Tạo quyết định thành công");
         }, 500);
 
     };
@@ -187,6 +187,7 @@ const Delete = ({ id, reFetchData }) => {
         setTimeout(() => {
             reFetchData();
             setOpen(false);
+            notifySuccess("Xóa thành công");
         }, 500);
     };
 
@@ -277,7 +278,7 @@ const Update = ({ reFetchData, id }) => {
     const handleRemoveFile = async () => {
         for(const checkbox of removeFile){
             const idFile = checkbox.split('checkbox')[1]
-            await PlanAPIService.removeFileFromPlan(idFile);    
+            await PlanAPIService.removeFileFromPlanTieuHuy(idFile);    
         }
     };
 
@@ -288,7 +289,7 @@ const Update = ({ reFetchData, id }) => {
 				plan_id: id,
 				gov_file_id: idFile,
 			}
-			await PlanAPIService.setPlanForFile(payload);
+			await PlanAPIService.setPlanTieuHuyForFile(payload);
 		}
 	}
 
@@ -419,6 +420,7 @@ const TaoQuyetDinh = () => {
             setTimeout(() => {
                 reFetchData();
                 setIsLoading(false);
+                notifySuccess("Gửi kế hoạch thành công");
             }, 500);
 
         } catch (err) {

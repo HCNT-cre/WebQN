@@ -132,7 +132,7 @@ const XoaHoSo = ({
         const fetchFileData = async () => {
             try {
                 setIsLoading(true);
-                const response = await PlanAPIService.getFileByPlanNLLSId(idPlan);
+                const response = await PlanAPIService.getFileByPlanTieuHuyId(idPlan);
                 setIsLoading(false);
                 const files = getFileFromResponse(response);
                 setFiles(files);

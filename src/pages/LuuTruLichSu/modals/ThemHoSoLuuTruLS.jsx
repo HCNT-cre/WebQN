@@ -142,12 +142,13 @@ const ThemHoSo = ({
                 const newFiles = [];
                 for (const file of files) {
                     if (
-                                file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN 
-                            && file.plan_thuthap === ""
-                            && file.plan_bmcl === ""
-                            && file.plan_nopluuls=== "" 
-                            && file.plan_tieuhuy === ""
-                        )
+                        file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN
+                        && file.plan_thuthap === ""
+                        && file.plan_bmcl === ""
+                        && file.plan_nopluuls === ""
+                        && file.plan_tieuhuy === ""
+                        && file.maintenance_name === "Vĩnh viễn"
+                    )
                         newFiles.push(file)
                 }
                 setFiles(newFiles);
@@ -207,12 +208,12 @@ const ThemHoSo = ({
         reset()
     }, [])
 
-    const handleOk = () =>{
+    const handleOk = () => {
         setOpen(false);
     }
 
     useEffect(() => {
-        if(doesReset) {
+        if (doesReset) {
             reset();
             setDoesReset(false);
         }

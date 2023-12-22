@@ -393,6 +393,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 			setTimeout(() => {
 				reFetchData();
 				setIsLoading(false);
+				notifySuccess("Gửi kế hoạch thành công");
 			}, 500);
 
 		} catch (err) {
