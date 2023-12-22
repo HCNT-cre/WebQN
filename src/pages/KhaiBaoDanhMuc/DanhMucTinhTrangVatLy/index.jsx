@@ -27,7 +27,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         const fetchData = async () => {
             if (!id) return
             try {
-                const res = await axiosHttpService.get(API_PHYSICAL_STATE + id)
+                const res = await axiosHttpService.get(API_PHYSICAL_STATE + '/' + id)
                 const data = res.data
                 setRequest(data)
             } catch (err) {
@@ -197,7 +197,7 @@ const KhaiBaoDanhMucTinhTrangVatLy = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axiosHttpService.delete(API_PHYSICAL_STATE + id)
+            await axiosHttpService.delete(API_PHYSICAL_STATE + '/' + id)
             notifySuccess("Xóa tình trạng vật lý thành công")
             fetchFieldData()
         } catch (err) {
