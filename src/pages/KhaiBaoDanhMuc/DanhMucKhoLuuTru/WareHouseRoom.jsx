@@ -4,6 +4,7 @@ import DanhMucKhoLuuTru from ".";
 import axiosHttpService from "src/utils/httpService";
 import { WARE_HOUSE_ROOM } from "../../../storage/StorageStorage";
 import { Input, Select, Modal, Button, Popconfirm } from "antd";
+import KhaiBaoDanhMucAPIService from "src/service/api/KhaiBaoDanhMucAPIService";
 
 
 const API_STORAGE_GET_WAREHOUSEROOM_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSEROOM_ALL
@@ -17,27 +18,12 @@ const Search = Input.Search
 
 const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehouse }) => {
     const [optionWarehouse, setOptionWarehouse] = useState([])
-
     const [request, setRequest] = useState({
         name: null,
         organ: null,
-        warehouseId: null,
         warehouse: null,
         state: true
     })
-
-    const handleChangeOptionOrgan = (value) => {
-
-        const optionWarehouse = []
-        for (const warehouse of allWarehouse) {
-            if (warehouse.par === value)
-                optionWarehouse.push({
-                    value: warehouse.value,
-                    label: warehouse.label
-                })
-        }
-        setOptionWarehouse(optionWarehouse)
-    }
 
     const handleChangeRequest = (name, value) => {
         return setRequest((prev) => ({
@@ -53,7 +39,25 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
 
     }
 
-    const handleCancle = () => {
+    useEffect(() => {
+        const getWarehouseByOrgan = async () => {
+            if (!request['organ'])
+                return setOptionWarehouse([])
+            const warehouse = await KhaiBaoDanhMucAPIService.getWarehouseByOrganId(request.organ);
+            const raws = []
+            for (const data of warehouse) {
+                const raw = {}
+                raw["value"] = data["id"]
+                raw["label"] = data["name"]
+                raws.push(raw)
+            }
+            setOptionWarehouse(raws)
+        }
+        getWarehouseByOrgan();
+    }, [request['organ']])
+
+
+    const handleCancel = () => {
         setModalOpen(false)
     }
 
@@ -65,7 +69,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
             }}
             open={modalOpen}
             onOk={handleOk}
-            onCancel={handleCancle}
+            onCancel={handleCancel}
         >
             <div>
                 <div className="flex justify-between py-[12px]">
@@ -81,9 +85,8 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
                         allowClear
                         placeholder="Chọn cơ quan"
                         optionFilterProp="children"
-                        onChange={(value, ev) => {
-                            handleChangeOptionOrgan(value)
-                            handleChangeRequest('organ', ev.label)
+                        onChange={(value) => {
+                            handleChangeRequest('organ', value)
                         }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -100,9 +103,8 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
                         allowClear
                         placeholder="Chọn kho"
                         optionFilterProp="children"
-                        onChange={(value, ev) => {
-                            handleChangeRequest('warehouseId', value)
-                            handleChangeRequest('warehouse', ev.label)
+                        onChange={(value) => {
+                            handleChangeRequest('warehouse', value)
                         }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -291,12 +293,13 @@ const WareHouseRoom = () => {
             const rawDatas = response.data
             let filesArray = []
             for (const rawData of rawDatas) {
+                const warehouse = await KhaiBaoDanhMucAPIService.getWarehouseById(rawData.warehouse);
+                const organ = await KhaiBaoDanhMucAPIService.getOrganById(warehouse.organ);
                 const row = {
                     'id': rawData.id,
                     'name': rawData.name,
-                    'organ': rawData.organ,
-                    'warehouse': rawData.warehouse,
-                    'warehouseId': rawData.warehouseId,
+                    'organ': organ.name,
+                    'warehouse': warehouse.name,
                     'state': <button>{
                         rawData['state'] === true ? "Mở" : "Đóng"
                     }</button>,
@@ -329,7 +332,6 @@ const WareHouseRoom = () => {
         const fetchWarehouse = async () => {
             setIsLoading(true)
             const response = await axiosHttpService.get(API_STORAGE_GET_WAREHOUSE_ALL)
-            console.log("response", response)
             const raws = []
             for (const data of response.data) {
                 const raw = {}

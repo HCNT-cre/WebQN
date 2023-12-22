@@ -4,6 +4,7 @@ import DanhMucKhoLuuTru from ".";
 import axiosHttpService from "src/utils/httpService";
 import { WARE_HOUSE } from "../../../storage/StorageStorage";
 import { Input, Select, Modal, Button, Popconfirm } from "antd";
+import { notifySuccess } from "src/custom/Function";
 
 
 const API_STORAGE_GET_WAREHOUSE_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSE_ALL
@@ -13,30 +14,26 @@ const API_STORAGE_PUT_WAREHOUSE = import.meta.env.VITE_API_STORAGE_PUT_WAREHOUSE
 
 const Search = Input.Search
 
-
 const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
     const [request, setRequest] = useState({
         name: null,
         organ: null,
-        organId: null,
         state: true
     })
 
 
     const handleChangeRequest = (name, value) => {
-        console.log(name, value)
         return setRequest((prev) => ({
             ...prev,
             [name]: value
         }))
     }
 
-
-    console.log(request)
     const handleOk = async () => {
         await axiosHttpService.post(API_STORAGE_GET_WAREHOUSE_ALL, request)
         setModalOpen(false)
         reFetchData()
+        notifySuccess("Tạo kho thành công")
     }
 
     const handleCancle = () => {
@@ -68,8 +65,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData }) => {
                         placeholder="Chọn cơ quan"
                         optionFilterProp="children"
                         onChange={(value, ev) => {
-                            handleChangeRequest('organ', ev.label)
-                            handleChangeRequest('organId', value)
+                            handleChangeRequest('organ', value)
                         }}
                         filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -168,7 +164,6 @@ const Delete = ({ id, reFetchData }) => {
     const handleConfirm = () => {
         const deleteWarehouse = async () => {
             const res = await axiosHttpService.delete(API_STORAGE_DELETE_WAREHOUSE + id)
-            console.log(res)
         }
 
         deleteWarehouse()
@@ -225,7 +220,7 @@ const WareHouse = () => {
                 const row = {
                     'id': rawData.id,
                     'name': rawData.name,
-                    'organ': rawData.organ,
+                    'organ': rawData.organ_name,
                     'state': <button>{
                         rawData['state'] === true ? "Mở" : "Đóng"
                     }</button>,
@@ -253,7 +248,6 @@ const WareHouse = () => {
 
             setOptionOrgan(raws)
             setIsLoading(false)
-
         }
         fetchWarehouse()
         fetchOrgan()
