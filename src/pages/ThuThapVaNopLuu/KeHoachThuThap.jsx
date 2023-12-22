@@ -362,6 +362,7 @@ const KeHoachThuThap = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
+	const [mapOrgan, setMapOrgan] = useState({});
 	const handleSendCollectPlan = async () => {
 		const planIds = stateCheckBox.map((item) => {
 			return Number(item.split("checkbox")[1]);
@@ -372,7 +373,7 @@ const KeHoachThuThap = () => {
 			await axiosHttpService.put(API_COLLECTION_PLAN + '/' + pl.id, {
 				name: pl.name.props.children[1],
 				start_date: pl.start_date,
-				organ: pl.organId,
+				organ: mapOrgan[pl.id],
 				state: ENUM_STATE_PLAN.CHO_DUYET,
 			});
 		});
@@ -417,8 +418,9 @@ const KeHoachThuThap = () => {
 		});
 
 		const plan = [];
+		const mapOrgan = {};
 		for (const rawData of rawDatas) {
-			const organ = await axiosHttpService.get(API_GET_ORGAN + '/' + rawData.organ);
+			mapOrgan[rawData.id] = rawData.organ;
 			const row = {
 				id: rawData.id,
 				name: <p
@@ -440,6 +442,7 @@ const KeHoachThuThap = () => {
 			};
 			plan.push(row);
 		}
+		setMapOrgan(mapOrgan);
 		setPlan(plan);
 		setIsLoading(false);
 	};
