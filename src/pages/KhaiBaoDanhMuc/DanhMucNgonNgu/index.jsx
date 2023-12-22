@@ -27,7 +27,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         const fetchData = async () => {
             if (!id) return
             try {
-                const res = await axiosHttpService.get(API_LANGUAGE + id)
+                const res = await axiosHttpService.get(API_LANGUAGE + '/' + id)
                 const data = res.data
                 setRequest(data)
             } catch (err) {
@@ -57,7 +57,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         }
 
         if (id !== null) {
-            await axiosHttpService.put(API_LANGUAGE + id, request)
+            await axiosHttpService.put(API_LANGUAGE + '/' + id, request)
             notifySuccess("Cập nhật ngôn ngữ thành công")
         } else {
             await axiosHttpService.post(API_LANGUAGE, request)
@@ -186,7 +186,7 @@ const KhaiBaoDanhMucNgonNgu = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axiosHttpService.delete(API_LANGUAGE + id)
+            await axiosHttpService.delete(API_LANGUAGE + '/' + id)
             notifySuccess("Xóa ngôn ngữ thành công")
             fetchFieldData()
         } catch (err) {
