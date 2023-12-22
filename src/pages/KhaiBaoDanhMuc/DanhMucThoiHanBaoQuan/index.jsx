@@ -27,7 +27,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         const fetchData = async () => {
             if (!id) return
             try {
-                const res = await axiosHttpService.get(API_STORAGE_DURATION + id)
+                const res = await axiosHttpService.get(API_STORAGE_DURATION + '/' + id)
                 const data = res.data
                 setRequest(data)
             } catch (err) {
@@ -57,7 +57,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
         }
 
         if (id !== null) {
-            await axiosHttpService.put(API_STORAGE_DURATION + id, request)
+            await axiosHttpService.put(API_STORAGE_DURATION + '/' + id, request)
             notifySuccess("Cập nhật thời hạn bảo quản thành công")
         } else {
             await axiosHttpService.post(API_STORAGE_DURATION, request)
@@ -198,7 +198,7 @@ const KhaiBaoDanhMucThoiHanBaoQuan = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axiosHttpService.delete(API_STORAGE_DURATION + id)
+            await axiosHttpService.delete(API_STORAGE_DURATION + '/' + id)
             notifySuccess("Xóa thời hạn bảo quản thành công")
             fetchFieldData()
         } catch (err) {

@@ -242,7 +242,7 @@ const Delete = ({
 
     const handleConfirm = () => {
         const deleteWarehouse = async () => {
-            const res = await axiosHttpService.delete(CATEGORY_FILE_API + id)
+            const res = await axiosHttpService.delete(CATEGORY_FILE_API + '/' + id)
             console.log(res)
         }
 
