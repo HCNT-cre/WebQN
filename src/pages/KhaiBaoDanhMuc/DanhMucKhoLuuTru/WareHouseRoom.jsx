@@ -5,6 +5,7 @@ import axiosHttpService from "src/utils/httpService";
 import { WARE_HOUSE_ROOM } from "../../../storage/StorageStorage";
 import { Input, Select, Modal, Button, Popconfirm } from "antd";
 import KhaiBaoDanhMucAPIService from "src/service/api/KhaiBaoDanhMucAPIService";
+import { notifySuccess } from "src/custom/Function";
 
 
 const API_STORAGE_GET_WAREHOUSEROOM_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSEROOM_ALL
@@ -54,6 +55,7 @@ const Create = ({ modalOpen, setModalOpen, optionOrgan, reFetchData, allWarehous
             setOptionWarehouse(raws)
         }
         getWarehouseByOrgan();
+        setOptionWarehouse([])
     }, [request['organ']])
 
 
@@ -200,15 +202,24 @@ const Update = ({ reFetchData, id }) => {
         setModalOpen(true)
     }
     const handleOk = async () => {
-        if (request.name !== null)
-            await axiosHttpService.put(API_STORAGE_PUT_WAREHOUSEROOM + id, request)
+        await KhaiBaoDanhMucAPIService.updateWarehouseRoomById(id, request)
         setModalOpen(false)
+        notifySuccess("Sửa phòng kho thành công")
         reFetchData()
     }
 
-    const handleCancle = () => {
+    const handleCancel = () => {
         setModalOpen(false)
     }
+
+    useEffect(() => {
+        const getWarehouseRoom = async () => {
+            if (!id) return;
+            const res = await KhaiBaoDanhMucAPIService.getWarehouseRoomById(id)
+            setRequest(res)
+        }
+        getWarehouseRoom()
+    }, [id])
 
     return (
         <div>
@@ -218,7 +229,7 @@ const Update = ({ reFetchData, id }) => {
             <Modal open={modalOpen}
                 title="Sửa tên phòng kho"
                 onOk={handleOk}
-                onCancel={handleCancle}>
+                onCancel={handleCancel}>
                 <div className='flex justify-between items-center' >
                     <span>Tên</span>
                     <Input onChange={(e) => handleChangeRequest('name', e.target.value)} className='w-[70%]' />

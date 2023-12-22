@@ -5,6 +5,7 @@ import axiosHttpService from "src/utils/httpService";
 import { WARE_HOUSE } from "../../../storage/StorageStorage";
 import { Input, Select, Modal, Button, Popconfirm } from "antd";
 import { notifySuccess } from "src/custom/Function";
+import KhaiBaoDanhMucAPIService from "src/service/api/KhaiBaoDanhMucAPIService";
 
 
 const API_STORAGE_GET_WAREHOUSE_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSE_ALL
@@ -126,15 +127,24 @@ const Update = ({ reFetchData, id }) => {
         setModalOpen(true)
     }
     const handleOk = async () => {
-        if (request.name !== null)
-            await axiosHttpService.put(API_STORAGE_PUT_WAREHOUSE + id, request)
+        await KhaiBaoDanhMucAPIService.updateWarehouseById(id, request)
         setModalOpen(false)
         reFetchData()
+        notifySuccess("Sửa kho thành công")
     }
 
-    const handleCancle = () => {
+    const handleCancel = () => {
         setModalOpen(false)
     }
+
+    useEffect(() => {
+        const getWarehouse = async () => {
+            if (!id) return;
+            const res = await KhaiBaoDanhMucAPIService.getWarehouseById(id)
+            setRequest(res)
+        }
+        getWarehouse()
+    }, [id])
 
     return (
         <div>
@@ -144,7 +154,7 @@ const Update = ({ reFetchData, id }) => {
             <Modal open={modalOpen}
                 title="Sửa tên kho"
                 onOk={handleOk}
-                onCancel={handleCancle}>
+                onCancel={handleCancel}>
                 <div className='flex justify-between items-center' >
                     <span>Tên</span>
                     <Input onChange={(e) => handleChangeRequest('name', e.target.value)} className='w-[70%]' />
@@ -163,15 +173,15 @@ const Delete = ({ id, reFetchData }) => {
 
     const handleConfirm = () => {
         const deleteWarehouse = async () => {
-            const res = await axiosHttpService.delete(API_STORAGE_DELETE_WAREHOUSE + id)
+            await KhaiBaoDanhMucAPIService.deleteWareHouseById(id)
         }
-
         deleteWarehouse()
         setTimeout(async () => {
             await reFetchData()
         }, 500)
 
         setOpen(false)
+        notifySuccess("Xóa kho thành công")
     }
 
     useEffect(() => {
