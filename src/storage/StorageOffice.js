@@ -16,7 +16,7 @@ export const STAFF = [
    // { title: "Vị trí", key: "position", width: "100%" },
     {title: "Chức vụ", key: "role", width: "100%"},
     // { title: "Trạng thái", key: "state", width: "100%" },
-    // { title: "", key: "update", width: "100%" },
+    { title: "", key: "update", width: "70px" },
 ]
 
 export const ORGAN = [
@@ -99,7 +99,7 @@ export const STAFF_DECENTRALIZATION = [
     { type: "checkbox", require: false, name: "is_staff", label: "Quản trị viên" },
     { type: "select", require: true, name: "department", label: "Phòng ban" },
     { type: "select", require: false, name: "role", label: "Chức vụ" },
-    { type: "select", require: true, name: "permission", label: "Nhóm quyền" },
+    { type: "list_checkbox", require: true, name: "menu_permission", label: "Nhóm quyền" },
     { type: "select", require: true, name: "action", label: "Nhóm hành động" },
 ]
 

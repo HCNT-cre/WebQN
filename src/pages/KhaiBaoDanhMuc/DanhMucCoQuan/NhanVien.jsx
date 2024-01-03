@@ -7,18 +7,16 @@ import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../../../custom/Function";
 import { Link, useParams } from "react-router-dom";
-import { getDepartmentbyId, getOrganbyId } from "./helper";
-import { ACTION_GROUP, PERMISSION_GROUP } from "src/storage/Storage";
+import { getAllPermissionsRelate, getDepartmentbyId, getOrganbyId } from "./helper";
+import { ACTION_GROUP, PERMISSION_GROUP, TABS_SIDEBAR } from "src/storage/Storage";
+import UserAPIService from "src/service/api/userAPIService";
 const Search = Input.Search
-const { Panel } = Collapse
 
 
 const API_SINGLE_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN;
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
-const API_ORGAN_POST_STAFF = import.meta.env.VITE_API_ORGAN_POST_STAFF
 const VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN = import.meta.env.VITE_API_ORGAN_GET_DEPARTMENT_BY_ORGAN
 const API_ORGAN_GET_SINGLE_DEPARTMENT = import.meta.env.VITE_API_ORGAN_GET_SINGLE_DEPARTMENT
-const API_GROUP_PERMISSION = import.meta.env.VITE_API_GROUP_PERMISSION
 const API_ROLE_BY_ORGAN = import.meta.env.VITE_API_ROLE_BY_ORGAN
 const API_ORGAN_ROLE = import.meta.env.VITE_API_ORGAN_ROLE
 
@@ -32,10 +30,9 @@ const Form = ({
 
     const [request, setRequest] = useState({})
     const [department, setDepartment] = useState([])
-    const [groupPermission, setGroupPermission] = useState([])
-    const [permissionGroup, setPermissionGroup] = useState([])
     const [role, setRole] = useState([])
-
+    const [listPermission, setListPermission] = useState([]);
+    const [listAction, setListAction] = useState([]);
     useEffect(() => {
         const fetchDepartment = async () => {
             if (!idOrgan) return;
@@ -64,21 +61,8 @@ const Form = ({
             setRole(role)
         }
 
-        const fetchGroupPermission = async () => {
-            const res = await axiosHttpService.get(API_GROUP_PERMISSION)
-            const data = res.data
-
-            const groupPermission = data.map((item) => {
-                return {
-                    label: item.name,
-                    value: item.name
-                }
-            })
-            setGroupPermission(groupPermission)
-        }
 
         fetchRole();
-        fetchGroupPermission()
         fetchDepartment()
     }, [idOrgan])
 
@@ -86,16 +70,35 @@ const Form = ({
         const fetchData = async () => {
             if (!id)
                 return
-            const res = await axiosHttpService.get(API_ORGAN_GET_STAFF + '/' + id)
-            const data = res.data
-
-            setRequest(data)
-            setPermissionGroup(data.permission_group)
+            const res = await UserAPIService.getUserById(id);
+            const menuPermission = res.menu_permission;
+            const listPermission = menuPermission.split('-');
+            setListPermission(listPermission.map((item) => parseInt(item)).filter((item) => item < 200));
+            setListAction(listPermission.map((item) => parseInt(item)).filter((item) => item >= 200));
+            res['action'] = listPermission.map((item) => parseInt(item)).filter((item) => item >= 200).join('-');
+            setRequest(res);
         }
         fetchData()
     }, [id, modalOpen])
 
-    const handleCancle = () => {
+    const handleClickPermission = (group) => {
+        const listPermissionOfGroup = getAllPermissionsRelate(group);
+        if (listPermission.includes(group)) {
+            setListPermission(prev => prev.filter((item) => !listPermissionOfGroup.includes(item)))
+        }else {
+            setListPermission(prev => [...prev, ...listPermissionOfGroup])
+        }
+    }
+
+    const checkChecked = (group) => {
+        const listPermissionOfGroup = getAllPermissionsRelate(group);
+        if(listPermissionOfGroup.length >= 2) {
+            listPermissionOfGroup.shift();
+        }
+        return listPermissionOfGroup.every((item) => listPermission.includes(item));
+    }
+
+    const handleCancel = () => {
         setModalOpen(false)
     }
 
@@ -107,16 +110,6 @@ const Form = ({
         }))
     }
 
-    const handleChangePermission = (value) => {
-        if (permissionGroup.includes(value)) {
-            handleChangeRequest("permission_group", permissionGroup.filter((item) => item !== value))
-            setPermissionGroup(prev => prev.filter((item) => item !== value))
-        } else {
-            handleChangeRequest("permission_group", [...permissionGroup, value])
-            setPermissionGroup(prev => [...prev, value])
-        }
-    }
-
     const onSubmit = async (e) => {
         e.preventDefault();
 
@@ -125,6 +118,8 @@ const Form = ({
             return
         }
 
+        request["menu_permission"] = listPermission.join('-') + '-' + request["action"];
+        
         if (request["is_staff"] === undefined || request["is_staff"] === null) request["is_staff"] = true;
         if (request["role"] === undefined) request["role"] = null;
         for (const input of STAFF_DECENTRALIZATION) {
@@ -134,16 +129,14 @@ const Form = ({
             }
         }
 
-
-        request["menu_permission"] = request["permission"] + "-" + request["action"];
         delete request["permission"];
         delete request["action"];
 
         if (id !== null) {
-            await axiosHttpService.put(API_ORGAN_POST_STAFF + '/' + id, request)
+            await UserAPIService.updateUserById(id, request);
             notifySuccess("Cập nhật nhân viên thành công")
         } else {
-            await axiosHttpService.post(API_ORGAN_POST_STAFF, request)
+            await UserAPIService.createUser(request);
             notifySuccess("Tạo nhân viên thành công")
         }
 
@@ -162,7 +155,7 @@ const Form = ({
             }}
             className="w-[600px]"
             open={modalOpen}
-            onCancel={handleCancle}
+            onCancel={handleCancel}
             footer={null}
         >
             <form id="tao-nhan-vien">
@@ -194,24 +187,78 @@ const Form = ({
                                             <Checkbox
                                                 onChange={(ev) => handleChangeRequest(input.name, !ev.target.checked)}
                                             /> :
-                                            <Input
-                                                disabled={state === "read"}
-                                                type={input.type}
-                                                name={input.name}
-                                                onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
-                                                value={request[input.name]}
-                                            />
+                                            input.type === "list_checkbox" ?
+                                                <div>
+                                                    {
+                                                        TABS_SIDEBAR.map((item, index) => {
+                                                            if (item.title === "Trang chủ") return;
+                                                            return (
+                                                                <div key={index}>
+                                                                    <div>
+                                                                        <Checkbox onChange={
+                                                                            () => {
+                                                                                handleClickPermission(item.number)
+                                                                            }
+                                                                        }
+                                                                            checked={checkChecked(item.number)}
+                                                                        ><p className="font-bold  text-[20px]">{item.title}</p></Checkbox>
+                                                                    </div>
+                                                                    <div className="ml-[12px]">
+                                                                        {item.childTabs && item.childTabs.map((child, index) => {
+                                                                            return (
+                                                                                <div key={index}>
+                                                                                    <Checkbox onChange={() => {
+                                                                                        handleClickPermission(child.number)
+                                                                                    }}
+                                                                                        checked={checkChecked(child.number)}
+                                                                                        key={index} className={`${child.isParent === true ? "font-bold" : ""}`} >{child.title}</Checkbox>
+                                                                                    {child.isParent === true &&
+                                                                                        <div className="ml-[12px] text-[16px]">
+                                                                                            {child.childTabs.map((child2, index) => {
+                                                                                                return (
+                                                                                                    <div key={index}>
+                                                                                                        <Checkbox
+                                                                                                            checked={checkChecked(child2.number)}
+                                                                                                            onChange={() => {
+                                                                                                                handleClickPermission(child2.number)
+                                                                                                            }}
+                                                                                                        >{child2.title}</Checkbox>
+                                                                                                    </div>
+                                                                                                )
+
+                                                                                            })}
+                                                                                        </div>
+
+                                                                                    }
+                                                                                </div>
+                                                                            )
+                                                                        })}
+                                                                    </div>
+
+                                                                </div>
+                                                            )
+                                                        })
+                                                    }
+                                                </div>
+                                                :
+                                                <Input
+                                                    disabled={state === "read"}
+                                                    type={input.type}
+                                                    name={input.name}
+                                                    onChange={(ev) => handleChangeRequest(ev.target.name, ev.target.value)}
+                                                    value={request[input.name]}
+                                                />
 
                                     }
                                 </div>
                             </div>
                         )
                     })}
-                  
+
                 </div>
                 {
                     <div className="flex justify-between mt-[30px]">
-                        <Button onClick={handleCancle}>Hủy</Button>
+                        <Button onClick={handleCancel}>Hủy</Button>
                         <Button form="tao-nhan-vien" type="submit" className="bg-[#00f] text-white" onClick={onSubmit}>
                             {state === "update" ? "Cập nhật" : "Tạo"}
                         </Button>
@@ -295,10 +342,10 @@ const NhanVien = () => {
                 "organ": organData.data.name,
                 "department": departmentData.data.name,
                 "role": roleStr,
-                // "update": <span className="cursor-pointer" onClick={() => {
-                //     setModalOpen(true)
-                //     setId(data.id)
-                // }}><i className="fa-regular fa-pen-to-square"></i></span>
+                "update": <span className="cursor-pointer" onClick={() => {
+                    setModalOpen(true)
+                    setId(data.id)
+                }}><i className="fa-regular fa-pen-to-square"></i></span>
             })
         }
 

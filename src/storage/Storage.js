@@ -85,12 +85,14 @@ export const TABS_SIDEBAR = [
 		title: "Thu thập và nộp lưu",
 		numChildTabs: 6,
 		number: 1,
+		isParent: true,
 		childTabs: [
 			{
 				title: "Tạo kế hoạch thu thập",
 				to: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 				key: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 				number: 2,
+				parent: 1,
 			},
 
 			{
@@ -98,24 +100,28 @@ export const TABS_SIDEBAR = [
 				to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
 				key: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
 				number: 3,
+				parent: 1,
 			},
 			{
 				title: "Kế hoạch thu thập bị từ chối",
 				to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
 				key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
 				number: 4,
+				parent: 1,
 			},
 			{
 				title: "Kế hoạch thu thập được phê duyệt",
 				to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
 				key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
 				number: 5,
+				parent: 1,
 			},
 			{
 				title: "Thu thập hồ sơ",
 				to: "/thu-thap-va-nop-luu/thu-thap-ho-so",
 				key: "/thu-thap-va-nop-luu/thu-thap-ho-so",
 				number: 6,
+				parent: 1,
 			},
 			//{ title: "Nộp lưu cơ quan", to: "/thu-thap-va-nop-luu/nop-luu-co-quan", key: "/thu-thap-va-nop-luu/nop-luu-co-quan" },
 			{
@@ -123,24 +129,28 @@ export const TABS_SIDEBAR = [
 				to: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu",
 				key: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu",
 				number: 7,
+				parent: 1,
 			},
 			{
 				title: "Hồ sơ nộp lưu bị trả về",
 				to: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
 				key: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
 				number: 8,
+				parent: 1,
 			},
 			{
 				title: "Hồ sơ đến hạn nộp lưu",
 				to: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu",
 				key: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu",
 				number: 9,
+				parent: 1,
 			},
 			{
 				title: "Hồ sơ đã nhận nộp lưu",
 				to: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
 				key: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
 				number: 10,
+				parent: 1,
 			},
 			// {
 			// 	title: "Hồ sơ nộp lưu bị trả về",
@@ -152,6 +162,7 @@ export const TABS_SIDEBAR = [
 				to: "/thu-thap-va-nop-luu/bien-ban-ban-giao",
 				key: "/thu-thap-va-nop-luu/bien-ban-ban-giao",
 				number: 11,
+				parent: 1,
 			},
 		],
 	},
@@ -164,18 +175,21 @@ export const TABS_SIDEBAR = [
 		title: "Biên mục chỉnh lý",
 		numChildTabs: 2,
 		number: 12,
+		isParent: true,
 		childTabs: [
 			{
 				title: "Kế hoạch chỉnh lý",
 				to: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
 				key: "/bien-muc-chinh-ly/ke-hoach-chinh-ly",
 				number: 13,
+				parent: 12,
 			},
 			{
 				title: "Biên mục hồ sơ",
 				to: "/bien-muc-chinh-ly/bien-muc-ho-so",
 				key: "/bien-muc-chinh-ly/bien-muc-ho-so",
 				number: 14,
+				parent: 12,
 
 			},
 			{
@@ -183,12 +197,14 @@ export const TABS_SIDEBAR = [
 				to: "/bien-muc-chinh-ly/phe-duyet-luu-kho",
 				key: "/bien-muc-chinh-ly/phe-duyet-luu-kho",
 				number: 15,
+				parent: 12,
 			},
 			{
 				title: "Hồ sơ chỉnh lý bị trả về",
 				to: "/bien-muc-chinh-ly/ho-so-chinh-ly-bi-tra-ve",
 				key: "/bien-muc-chinh-ly/ho-so-chinh-ly-bi-tra-ve",
 				number: 16,
+				parent: 12,
 			},
 			{
 				title: "Biên mục bổ sung",
@@ -198,12 +214,15 @@ export const TABS_SIDEBAR = [
 				display: false,
 				type: ["kho"],
 				number: 17,
+				parent: 12,
+				isParent: true,
 				childTabs: [
 					{
 						title: "Bổ sung hồ sơ tài liệu",
 						to: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu",
 						key: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu",
 						number: 18,
+						parent: 17,
 						numChildTabs: 0,
 					},
 					{
@@ -211,6 +230,7 @@ export const TABS_SIDEBAR = [
 						to: "/bien-muc-chinh-ly/bien-muc-bo-sung/ho-so-tai-lieu-da-duoc-bo-sung",
 						key: "/bien-muc-chinh-ly/bien-muc-bo-sung/ho-so-tai-lieu-da-duoc-bo-sung",
 						number: 19,
+						parent: 17,
 						numChildTabs: 0,
 					},
 					{
@@ -218,6 +238,7 @@ export const TABS_SIDEBAR = [
 						to: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu-da-luu-kho",
 						key: "/bien-muc-chinh-ly/bien-muc-bo-sung/bo-sung-ho-so-tai-lieu-da-luu-kho",
 						number: 20,
+						parent: 17,
 						numChildTabs: 0,
 					},
 					{
@@ -225,6 +246,7 @@ export const TABS_SIDEBAR = [
 						to: "/bien-muc-chinh-ly/bien-muc-bo-sung/yeu-cau-bo-sung-ho-so-tai-lieu-da-luu-kho",
 						key: "/bien-muc-chinh-ly/bien-muc-bo-sung/yeu-cau-bo-sung-ho-so-tai-lieu-da-luu-kho",
 						number: 21,
+						parent: 17,
 						numChildTabs: 0,
 					},
 				],
@@ -237,6 +259,8 @@ export const TABS_SIDEBAR = [
 				display: false,
 				type: ["kho"],
 				number: 22,
+				parent: 12,
+				isParent: true,
 				childTabs: [
 					{
 						title: "Duyệt bổ sung hồ sơ tài liệu",
@@ -244,6 +268,7 @@ export const TABS_SIDEBAR = [
 						key: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu",
 						numChildTabs: 0,
 						number: 23,
+						parent: 22,
 					},
 					{
 						title: "Duyệt bổ sung hồ sơ tài liệu đã lưu kho",
@@ -251,6 +276,7 @@ export const TABS_SIDEBAR = [
 						key: "/bien-muc-chinh-ly/phe-duyet-bien-muc-bo-sung/duyet-bo-sung-ho-so-tai-lieu-da-luu-kho",
 						numChildTabs: 0,
 						number: 24,
+						parent: 22,
 					}
 				],
 			}
@@ -276,30 +302,35 @@ export const TABS_SIDEBAR = [
 		title: "Lưu trữ cơ quan",
 		numChildTabs: 3,
 		number: 25,
+		isParent: true,
 		childTabs: [
 			{
 				title: "Hồ sơ tài liệu giao nộp",
 				to: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
 				key: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
 				number: 26,
+				parent: 25,
 			},
 			{
 				title: "Kho lưu trữ cơ quan",
 				to: "/luu-tru-co-quan/kho-luu-tru-co-quan",
 				key: "/luu-tru-co-quan/kho-luu-tru-co-quan",
 				number: 27,
+				parent: 25,
 			},
 			{
 				title: "HS đến hạn nộp lưu LS",
 				to: "/luu-tru-co-quan/ho-so-den-han-nop-luu-lich-su",
 				key: "/luu-tru-co-quan/ho-so-den-han-nop-luu-lich-su",
 				number: 28,
+				parent: 25,
 			},
 			{
 				title: "Hồ sơ bị trả về",
 				to: "/luu-tru-co-quan/ho-so-bi-tra-ve",
 				key: "/luu-tru-co-quan/ho-so-bi-tra-ve",
 				number: 29,
+				parent: 25,
 			},
 		],
 	},
@@ -312,12 +343,14 @@ export const TABS_SIDEBAR = [
 		title: "Lưu trữ lịch sử",
 		numChildTabs: 3,
 		number: 30,
+		isParent: true,
 		childTabs: [
 			{
 				title: "Tạo kế hoạch nộp lưu lịch sử",
 				to: "/luu-tru-lich-su/tao-ke-hoach-nop-luu-lich-su",
 				key: "/luu-tru-lich-su/tao-ke-hoach-nop-luu-lich-su",
 				number: 31,
+				parent: 30,
 			},
 			// {
 			// 	title: "Kế hoạch lưu trữ lịch sử bị từ chối",
@@ -329,24 +362,28 @@ export const TABS_SIDEBAR = [
 				to: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
 				key: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
 				number: 32,
+				parent: 30,
 			},
 			{
 				title: "Sở Nội vụ phê duyệt",
 				to: "/luu-tru-lich-su/so-noi-vu-phe-duyet",
 				key: "/luu-tru-lich-su/so-noi-vu-phe-duyet",
 				number: 77,
+				parent: 30,
 			},
 			{
 				title: "Kho lưu trữ lịch sử",
 				to: "/luu-tru-lich-su/kho-luu-tru-lich-su",
 				key: "/luu-tru-lich-su/kho-luu-tru-lich-su",
 				number: 33,
+				parent: 30,
 			},
 			{
 				title: "Biên bản bàn giao",
 				to: "/luu-tru-lich-su/bien-ban-ban-giao",
 				key: "/luu-tru-lich-su/bien-ban-ban-giao",
 				number: 34,
+				parent: 30,
 			},
 		],
 	},
@@ -359,30 +396,35 @@ export const TABS_SIDEBAR = [
 		title: "Lưu trữ tổ chức, cá nhân",
 		numChildTabs: 4,
 		number: 35,
+		isParent: true,
 		childTabs: [
 			{
 				title: "Tạo hồ sơ thực hiện thủ tục hành chính",
 				to: "/kho-luu-tru-to-chuc-ca-nhan/tao-ho-so-thuc-hien-thu-tuc-hanh-chinh",
 				key: "/kho-luu-tru-to-chuc-ca-nhan/tao-ho-so-thuc-hien-thu-tuc-hanh-chinh",
 				number: 36,
+				parent: 35,
 			},
 			{
 				title: "Duyệt hồ sơ thực hiện thủ tục hành chính",
 				to: "/kho-luu-tru-to-chuc-ca-nhan/duyet-ho-so-thuc-hien-thu-tuc-hanh-chinh",
 				key: "/kho-luu-tru-to-chuc-ca-nhan/duyet-ho-so-thuc-hien-thu-tuc-hanh-chinh",
 				number: 37,
+				parent: 35,
 			},
 			{
 				title: "Hồ sơ thực hiện thủ tục hành chính bị từ chối",
 				to: "/kho-luu-tru-to-chuc-ca-nhan/ho-so-thuc-hien-thu-tuc-hanh-chinh-bi-tu-choi",
 				key: "/kho-luu-tru-to-chuc-ca-nhan/ho-so-thuc-hien-thu-tuc-hanh-chinh-bi-tu-choi",
 				number: 38,
+				parent: 35,
 			},
 			{
 				title: "Kho hồ sơ thực hiện thủ tục hành chính",
 				to: "/kho-luu-tru-to-chuc-ca-nhan/kho-ho-so-thuc-hien-thu-tuc-hanh-chinh",
 				key: "/kho-luu-tru-to-chuc-ca-nhan/kho-ho-so-thuc-hien-thu-tuc-hanh-chinh",
 				number: 39,
+				parent: 35,
 			},
 		]
 	},
@@ -395,6 +437,7 @@ export const TABS_SIDEBAR = [
 		title: "Tiêu hủy hồ sơ",
 		numChildTabs: 3,
 		number: 40,
+		isParent: true,
 		childTabs: [
 			{
 				icon: '<i class="fa-regular fa-newspaper"></i>',
@@ -404,6 +447,7 @@ export const TABS_SIDEBAR = [
 				display: false,
 				type: ["hoso"],
 				number: 41,
+				parent: 40,
 			},
 			{
 				icon: '<i class="fa-regular fa-newspaper"></i>',
@@ -414,12 +458,15 @@ export const TABS_SIDEBAR = [
 				numChildTabs: 3,
 				isExpand: false,
 				number: 44,
+				parent: 40,
+				isParent: true,
 				childTabs: [
 					{
 						title: "Tạo quyết định",
 						to: "/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh",
 						key: "/tieu-huy-ho-so/quyet-dinh/tao-quyet-dinh",
 						number: 45,
+						parent: 44,
 						numChildTabs: 0,
 					},
 					{
@@ -427,6 +474,7 @@ export const TABS_SIDEBAR = [
 						to: "/tieu-huy-ho-so/quyet-dinh/duyet-quyet-dinh",
 						key: "/tieu-huy-ho-so/quyet-dinh/duyet-quyet-dinh",
 						number: 46,
+						parent: 44,
 						numChildTabs: 0,
 					}
 				],
@@ -439,12 +487,15 @@ export const TABS_SIDEBAR = [
 				numChildTabs: 3,
 				isExpand: false,
 				number: 48,
+				parent: 40,
+				isParent: true,
 				childTabs: [
 					{
 						title: "Danh sách hồ sơ bị tiêu huỷ",
 						to: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-bi-tieu-huy",
 						key: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-bi-tieu-huy",
 						number: 49,
+						parent: 48,
 						numChildTabs: 0,
 					},
 					{
@@ -452,6 +503,7 @@ export const TABS_SIDEBAR = [
 						to: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-duoc-khoi-phuc",
 						key: "/tieu-huy-ho-so/khoi-phuc/danh-sach-ho-so-duoc-khoi-phuc",
 						number: 50,
+						parent: 48,
 						numChildTabs: 0,
 					}
 				],
@@ -466,24 +518,28 @@ export const TABS_SIDEBAR = [
 		type: ["hoso"],
 		numChildTabs: 3,
 		number: 52,
+		isParent: true,
 		childTabs: [
 			{
 				title: "Tìm kiếm và đăng ký mượn hồ sơ",
 				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
 				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-ho-so",
 				number: 53,
+				parent: 52,
 			},
 			{
 				title: "Tìm kiếm và đăng ký mượn văn bản",
 				to: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
 				key: "/quan-li-thong-tin-khai-thac/tim-kiem-va-dang-ky-muon-van-ban",
 				number: 54,
+				parent: 52,
 			},
 			{
 				title: "Giỏ tài liệu",
 				to: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
 				key: "/quan-li-thong-tin-khai-thac/gio-tai-lieu",
 				number: 55,
+				parent: 52,
 			},
 			// {
 			// 	title: "Tìm kiếm nâng cao",
@@ -495,12 +551,14 @@ export const TABS_SIDEBAR = [
 				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
 				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-tai-lieu",
 				number: 56,
+				parent: 52,
 			},
 			{
 				title: "Danh sách yêu cầu chứng thực",
 				to: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
 				key: "/quan-li-thong-tin-khai-thac/danh-sach-yeu-cau-sao-ho-so-va-chung-thuc",
 				number: 57,
+				parent: 52,
 			}
 		],
 	},
@@ -513,6 +571,7 @@ export const TABS_SIDEBAR = [
 		title: "Khai báo danh mục",
 		numChildTabs: 3,
 		number: 58,
+		isParent: true,
 		childTabs: [
 			{
 				icon: '<i class="fa-regular fa-newspaper"></i>',
@@ -521,6 +580,7 @@ export const TABS_SIDEBAR = [
 				key: "/khai-bao-danh-muc/danh-muc-co-quan",
 				display: false,
 				number: 59,
+				parent: 58,
 				type: ["coquan"],
 			},
 			{
@@ -530,6 +590,7 @@ export const TABS_SIDEBAR = [
 				key: "/khai-bao-danh-muc/danh-muc-phong",
 				display: false,
 				number: 60,
+				parent: 58,
 				type: ["coquan"],
 			},
 			// {
@@ -549,6 +610,7 @@ export const TABS_SIDEBAR = [
 				display: false,
 				type: ["coquan"],
 				number: 62,
+				parent: 58,
 			},
 			{
 				icon: '<i class="fa-regular fa-newspaper"></i>',
@@ -558,6 +620,7 @@ export const TABS_SIDEBAR = [
 				display: false,
 				type: ["coquan"],
 				number: 63,
+				parent: 58,
 			},
 			{
 				icon: '<i class="fa-regular fa-newspaper"></i>',
@@ -567,6 +630,7 @@ export const TABS_SIDEBAR = [
 				display: false,
 				type: ["coquan"],
 				number: 64,
+				parent: 58,
 			},
 			{
 				icon: '<i class="fa-regular fa-newspaper"></i>',
@@ -576,6 +640,7 @@ export const TABS_SIDEBAR = [
 				display: false,
 				type: ["coquan"],
 				number: 65,
+				parent: 58,
 			},
 			{
 				title: "Danh mục kho lưu trữ",
@@ -585,6 +650,8 @@ export const TABS_SIDEBAR = [
 				display: false,
 				type: ["kho"],
 				number: 66,
+				parent: 58,
+				isParent: true,
 				childTabs: [
 					{
 						title: "Kho",
@@ -592,6 +659,7 @@ export const TABS_SIDEBAR = [
 						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/kho",
 						numChildTabs: 0,
 						number: 67,
+						parent: 66,
 					},
 					{
 						title: "Phòng kho",
@@ -599,6 +667,7 @@ export const TABS_SIDEBAR = [
 						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/phong-kho",
 						numChildTabs: 0,
 						number: 68,
+						parent: 66,
 					},
 					{
 						title: "Kệ",
@@ -606,6 +675,7 @@ export const TABS_SIDEBAR = [
 						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/ke",
 						numChildTabs: 0,
 						number: 69,
+						parent: 66,
 					},
 					{
 						title: "Hộp",
@@ -613,6 +683,7 @@ export const TABS_SIDEBAR = [
 						key: "/khai-bao-danh-muc/danh-muc-kho-luu-tru/hop",
 						numChildTabs: 0,
 						number: 70,
+						parent: 66,
 					},
 				],
 			},
@@ -627,6 +698,7 @@ export const TABS_SIDEBAR = [
 		to: "/ho-so/tao-ho-so-dien-tu",
 		key: "/ho-so/tao-ho-so-dien-tu",
 		number: 71,
+		isParent: false,
 		display: true,
 	},
 	{
@@ -637,6 +709,7 @@ export const TABS_SIDEBAR = [
 		to: "/tra-cuu-va-tim-kiem",
 		key: "/tra-cuu-va-tim-kiem",
 		number: 72,
+		isParent: false,
 		display: true,
 	},
 	{
@@ -647,6 +720,7 @@ export const TABS_SIDEBAR = [
 		to: "/bao-cao-va-thong-ke",
 		key: "/bao-cao-va-thong-ke",
 		number: 73,
+		isParent: false,
 		display: true,
 	},
 	// {
