@@ -1,13 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import DanhMucCoQuan from "."
 import { STAFF, STAFF_DECENTRALIZATION } from "../../../storage/StorageOffice"
-import { Input, Modal, Button, Select, Collapse, Checkbox, Row, Col } from "antd";
-import { GetKey } from "../../../custom/Function";
+import { Input, Modal, Button, Select, Checkbox } from "antd";
 import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../../../custom/Function";
 import { Link, useParams } from "react-router-dom";
-import { getAllPermissionsRelate, getDepartmentbyId, getOrganbyId } from "./helper";
+import { getAllPermissionsRelate, getDepartmentbyId, getOrganbyId, getParentOfPermission } from "./helper";
 import { ACTION_GROUP, PERMISSION_GROUP, TABS_SIDEBAR } from "src/storage/Storage";
 import UserAPIService from "src/service/api/userAPIService";
 const Search = Input.Search
@@ -82,11 +81,32 @@ const Form = ({
     }, [id, modalOpen])
 
     const handleClickPermission = (group) => {
+        let _listPermission = [...listPermission];
         const listPermissionOfGroup = getAllPermissionsRelate(group);
+
         if (listPermission.includes(group)) {
-            setListPermission(prev => prev.filter((item) => !listPermissionOfGroup.includes(item)))
+            const parent = getParentOfPermission(group);
+            _listPermission = _listPermission.filter((item) => item != group);
+            console.log('_listPermission', _listPermission);
+            if(parent.length > 0) {
+                const root = parent[0];
+                if(!checkChecked(root)) {
+                    _listPermission = _listPermission.filter((item) => item != root);
+                }
+                if(parent.length > 1) {
+                    const root2 = parent[1];
+                    if(!checkChecked(root2)) {
+                        _listPermission = _listPermission.filter((item) => item != root2);
+                    }
+                }
+                console.log('_listPermission', _listPermission);
+                setListPermission([..._listPermission]);
+            }
+            else 
+                setListPermission(prev => prev.filter((item) => !listPermissionOfGroup.includes(item)))
         }else {
-            setListPermission(prev => [...prev, ...listPermissionOfGroup])
+            const parent = getParentOfPermission(group);
+            setListPermission(prev => [...prev, ...listPermissionOfGroup].filter((item) => !parent.includes(item)).concat(parent));
         }
     }
 
@@ -102,6 +122,7 @@ const Form = ({
         setModalOpen(false)
     }
 
+    console.log(listPermission);
     const handleChangeRequest = (name, value) => {
         console.log(name, value);
         setRequest(prev => ({

@@ -29,3 +29,20 @@ export const getAllPermissionsRelate = (group) => {
     }
     return listPermissionOfGroup;
 }
+
+export const getParentOfPermission = (permission) => {
+    const parent = [];
+    for(const item of TABS_SIDEBAR) {
+        let listPermissionOfGroup = getAllPermissionsRelate(item.number);
+        if(!listPermissionOfGroup.includes(permission)) continue;
+        parent.push(item.number);
+        if(item.childTabs) {
+            for(const child of item.childTabs) {
+                listPermissionOfGroup = getAllPermissionsRelate(child.number);
+                if(!listPermissionOfGroup.includes(permission)) continue;
+                parent.push(child.number);
+            }
+        }
+    }
+    return parent;
+}
