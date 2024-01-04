@@ -346,7 +346,7 @@ const UpdatePassword = ({
             return;
         }
 
-        await UserAPIService.changePassword(password);
+        await UserAPIService.changePassword({new_password: password});
         notifySuccess("Cập nhật mật khẩu thành công");
         setModalOpen(false);
     }
