@@ -5,6 +5,7 @@ const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL
 const API_ORGAN_GET_SINGLE_DEPARTMENT = import.meta.env.VITE_API_ORGAN_GET_SINGLE_DEPARTMENT;
 const API_GET_USER_BY_ID = import.meta.env.VITE_API_GET_USER_BY_ID;
 const API_POST_USER = import.meta.env.VITE_API_ORGAN_POST_STAFF;
+const API_UPDATE_USER_PASSWORD = import.meta.env.VITE_API_UPDATE_USER_PASSWORD;
 const UserAPIService = {
     getUserInfo: async () => {
         try {
@@ -28,29 +29,38 @@ const UserAPIService = {
             return null;
         }
     },
-    getUserById: async(id) => {
+    getUserById: async (id) => {
         try {
             const response = await axiosHttpService.get(API_GET_USER_BY_ID + '/' + id);
             return response.data;
-        }catch(err) {
+        } catch (err) {
             console.log(err);
             return null;
         }
     },
-    updateUserById: async(id, data) => {
+    updateUserById: async (id, data) => {
         try {
             const response = await axiosHttpService.put(API_GET_USER_BY_ID + '/' + id, data);
             return response.data;
-        }catch(err) {
+        } catch (err) {
             console.log(err);
             return null;
         }
     },
-    createUser: async(data) => {
+    createUser: async (data) => {
         try {
             const response = await axiosHttpService.post(API_POST_USER, data);
             return response.data;
-        }catch(err) {
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    },
+    changePassword: async (data) => {
+        try {
+            const response = await axiosHttpService.put(API_UPDATE_USER_PASSWORD, data);
+            return response.data;
+        } catch (err) {
             console.log(err);
             return null;
         }

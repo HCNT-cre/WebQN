@@ -85,22 +85,22 @@ const Form = ({
         if (listPermission.includes(group)) {
             const parent = getParentOfPermission(group);
             _listPermission = _listPermission.filter((item) => item != group);
-            if(parent.length > 0) {
+            if (parent.length > 0) {
                 const root = parent[0];
-                if(!checkChecked(root)) {
+                if (!checkChecked(root)) {
                     _listPermission = _listPermission.filter((item) => item != root);
                 }
-                if(parent.length > 1) {
+                if (parent.length > 1) {
                     const root2 = parent[1];
-                    if(!checkChecked(root2)) {
+                    if (!checkChecked(root2)) {
                         _listPermission = _listPermission.filter((item) => item != root2);
                     }
                 }
                 setListPermission([..._listPermission]);
             }
-            else 
+            else
                 setListPermission(prev => prev.filter((item) => !listPermissionOfGroup.includes(item)))
-        }else {
+        } else {
             const parent = getParentOfPermission(group);
             setListPermission(prev => [...prev, ...listPermissionOfGroup].filter((item) => !parent.includes(item)).concat(parent));
         }
@@ -109,7 +109,7 @@ const Form = ({
     console.log(listPermission);
     const checkChecked = (group) => {
         const listPermissionOfGroup = getAllPermissionsRelate(group);
-        if(listPermissionOfGroup.length >= 2) {
+        if (listPermissionOfGroup.length >= 2) {
             listPermissionOfGroup.shift();
         }
         return listPermissionOfGroup.every((item) => listPermission.includes(item));
@@ -137,7 +137,7 @@ const Form = ({
         }
 
         request["menu_permission"] = listPermission.join('-') + '-' + request["action"];
-        
+
         if (request["is_staff"] === undefined || request["is_staff"] === null) request["is_staff"] = true;
         if (request["role"] === undefined) request["role"] = null;
         for (const input of STAFF_DECENTRALIZATION) {
@@ -180,7 +180,7 @@ const Form = ({
                 <div>
                     {STAFF_DECENTRALIZATION.map((input, index) => {
                         return (
-                            <div className="flex mb-[30px]" key={index}>
+                            (!(input.name === 'password') || !id) && <div className="flex mb-[30px]" key={index}>
                                 <div className={`w-[30%]  ${input.require === true ? "after-form" : ""}`}>
                                     {input.label}
                                 </div>
@@ -325,6 +325,54 @@ const Read = ({
     return <Form modalOpen={modalOpenRead} setModalOpen={setModalOpenRead} id={id} fetchFieldData={fetchFieldData} idOrgan={idOrgan} state="read" />
 }
 
+const UpdatePassword = ({
+    id,
+    modalOpen,
+    setModalOpen,
+}) => {
+    const [password, setPassword] = useState(null);
+
+    const handleChangePassword = (value) => {
+        setPassword(value);
+    }
+
+    const handleCancel = () => {
+        setModalOpen(false);
+    }
+
+    const handleOk = async () => {
+        if (!password) {
+            notifyError("Vui lòng nhập mật khẩu");
+            return;
+        }
+
+        await UserAPIService.changePassword(password);
+        notifySuccess("Cập nhật mật khẩu thành công");
+        setModalOpen(false);
+    }
+
+    return (
+
+        <Modal
+            title="Cập nhật mật khẩu"
+            style={{
+                top: 20,
+            }}
+            className="w-[600px]"
+            open={modalOpen}
+            onCancel={handleCancel}
+            onOk={handleOk}
+        >
+            <Input.Password
+                placeholder="Mật khẩu mới"
+                onChange={(ev) => handleChangePassword(ev.target.value)}
+
+            />
+        </Modal>
+    )
+}
+
+
 const NhanVien = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [fieldData, setFieldData] = useState([])
@@ -334,6 +382,7 @@ const NhanVien = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [modalOpenRead, setModalOpenRead] = useState(false)
     const [organ, setOrgan] = useState(null);
+    const [openUpdatePassword, setOpenUpdatePassword] = useState(false)
     const params = useParams()
     const [department, setDepartment] = useState(null);
 
@@ -360,10 +409,19 @@ const NhanVien = () => {
                 "organ": organData.data.name,
                 "department": departmentData.data.name,
                 "role": roleStr,
-                "update": <span className="cursor-pointer" onClick={() => {
-                    setModalOpen(true)
-                    setId(data.id)
-                }}><i className="fa-regular fa-pen-to-square"></i></span>
+                "update":
+                    <div className="flex justify-between">
+                        <div className="cursor-pointer" onClick={() => {
+                            setModalOpen(true)
+                            setId(data.id)
+                        }}><i className="fa-regular fa-pen-to-square"></i></div>
+
+                        <div className="cursor-pointer" onClick={() => {
+                            setOpenUpdatePassword(true)
+                            setId(data.id)
+                        }}><i className="fa-solid fa-lock"></i></div>
+                    </div>
+
             })
         }
 
@@ -432,9 +490,14 @@ const NhanVien = () => {
                 setModalOpenRead={setModalOpenRead}
                 id={id}
                 idOrgan={params.organ_id}
-
             >
             </Read>
+
+            <UpdatePassword
+                id={id}
+                modalOpen={openUpdatePassword}
+                setModalOpen={setOpenUpdatePassword}
+            />
         </div>
 
     )
