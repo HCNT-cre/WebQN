@@ -59,8 +59,6 @@ const Form = ({
             }
             setRole(role)
         }
-
-
         fetchRole();
         fetchDepartment()
     }, [idOrgan])
@@ -87,7 +85,6 @@ const Form = ({
         if (listPermission.includes(group)) {
             const parent = getParentOfPermission(group);
             _listPermission = _listPermission.filter((item) => item != group);
-            console.log('_listPermission', _listPermission);
             if(parent.length > 0) {
                 const root = parent[0];
                 if(!checkChecked(root)) {
@@ -99,7 +96,6 @@ const Form = ({
                         _listPermission = _listPermission.filter((item) => item != root2);
                     }
                 }
-                console.log('_listPermission', _listPermission);
                 setListPermission([..._listPermission]);
             }
             else 
@@ -110,6 +106,7 @@ const Form = ({
         }
     }
 
+    console.log(listPermission);
     const checkChecked = (group) => {
         const listPermissionOfGroup = getAllPermissionsRelate(group);
         if(listPermissionOfGroup.length >= 2) {

@@ -35,6 +35,7 @@ export const getParentOfPermission = (permission) => {
     for(const item of TABS_SIDEBAR) {
         let listPermissionOfGroup = getAllPermissionsRelate(item.number);
         if(!listPermissionOfGroup.includes(permission)) continue;
+        if(permission == item.number) break;
         parent.push(item.number);
         if(item.childTabs) {
             for(const child of item.childTabs) {
