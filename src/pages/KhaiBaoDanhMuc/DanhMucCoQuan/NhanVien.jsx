@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import DanhMucCoQuan from "."
 import { STAFF, STAFF_DECENTRALIZATION } from "../../../storage/StorageOffice"
-import { Input, Modal, Button, Select, Checkbox } from "antd";
+import { Input, Modal, Button, Select, Checkbox, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../../../custom/Function";
@@ -346,9 +346,12 @@ const UpdatePassword = ({
             return;
         }
 
-        await UserAPIService.changePassword({new_password: password});
-        notifySuccess("Cập nhật mật khẩu thành công");
-        setModalOpen(false);
+        const res = await UserAPIService.changePassword({ new_password: password }, id);
+        if (res) {
+            notifySuccess("Cập nhật mật khẩu thành công");
+            setModalOpen(false);
+        }
+        else notifyError("Cập nhật mật khẩu thất bại");
     }
 
     return (
@@ -371,6 +374,68 @@ const UpdatePassword = ({
         </Modal>
     )
 }
+
+
+const Delete = ({ id, reFetchData }) => {
+    const [open, setOpen] = useState(false);
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleConfirm = async () => {
+        await UserAPIService.deleteUserById(id);
+        setTimeout(() => {
+            reFetchData();
+            setOpen(false);
+            notifySuccess("Xóa nhân viên thành công");
+        }, 500)
+    };
+
+    useEffect(() => {
+        const popupContainer = document.querySelectorAll(
+            ".ant-popover.ant-popconfirm.css-dev-only-do-not-override-1fviqcj.css-dev-only-do-not-override-1fviqcj.ant-popover-placement-top"
+        )[0];
+
+        if (popupContainer === undefined) return;
+
+        const buttonAccepts = document.querySelectorAll(
+            ".ant-popconfirm-buttons > .ant-btn-primary"
+        );
+        buttonAccepts.forEach((buttonCancel) => {
+            buttonCancel.textContent = "Xóa";
+        });
+
+        const buttonCancels = document.querySelectorAll(
+            ".ant-popconfirm-buttons > .ant-btn-default "
+        );
+        buttonCancels.forEach((buttonAccept) => {
+            buttonAccept.textContent = "Hủy";
+        });
+    }, [open]);
+
+    return (
+        <Popconfirm
+            className="p-0"
+            title="Xóa"
+            open={open}
+            description="Bạn có chắc chắn xóa?"
+            onConfirm={handleConfirm}
+            onCancel={handleClose}
+        >
+            <Button
+                className="border-none"
+                onClick={() => {
+                    setOpen(true);
+                }}
+                title="Xóa"
+            >
+                <i className="fa-solid fa-trash-can"></i>
+            </Button>
+        </Popconfirm>
+
+    );
+};
 
 
 const NhanVien = () => {
@@ -410,7 +475,7 @@ const NhanVien = () => {
                 "department": departmentData.data.name,
                 "role": roleStr,
                 "update":
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                         <div className="cursor-pointer" onClick={() => {
                             setModalOpen(true)
                             setId(data.id)
@@ -420,6 +485,8 @@ const NhanVien = () => {
                             setOpenUpdatePassword(true)
                             setId(data.id)
                         }}><i className="fa-solid fa-lock"></i></div>
+
+                        <Delete id={data.id} reFetchData={fetchFieldData} />
                     </div>
 
             })
@@ -498,6 +565,7 @@ const NhanVien = () => {
                 modalOpen={openUpdatePassword}
                 setModalOpen={setOpenUpdatePassword}
             />
+
         </div>
 
     )

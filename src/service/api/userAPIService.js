@@ -56,14 +56,23 @@ const UserAPIService = {
             return null;
         }
     },
-    changePassword: async (data) => {
+    changePassword: async (data, id) => {
         try {
-            const response = await axiosHttpService.put(API_UPDATE_USER_PASSWORD, data);
-            return response.data;
+            await axiosHttpService.post(API_UPDATE_USER_PASSWORD + '/' + id, data);
+            return "suceess";
         } catch (err) {
             console.log(err);
             return null;
         }
+    },
+    deleteUserById: async (id) => {
+        try{
+            const response = await axiosHttpService.delete(API_GET_USER_BY_ID + '/' + id);
+            return response.data;
+        }catch(err){
+            console.log(err);
+            return null;
+        }   
     }
 }
 
