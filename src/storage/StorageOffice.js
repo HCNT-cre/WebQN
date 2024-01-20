@@ -100,7 +100,7 @@ export const STAFF_DECENTRALIZATION = [
     { type: "select", require: true, name: "department", label: "Phòng ban" },
     { type: "select", require: false, name: "role", label: "Chức vụ" },
     { type: "list_checkbox", require: true, name: "menu_permission", label: "Menu được phép truy cập" },
-    { type: "select", require: true, name: "action", label: "Nhóm hành động" },
+    { type: "select", require: false, name: "action", label: "Nhóm hành động" },
 ]
 
 export const ORGAN_DECENTRALIZATION_INPUTS = [

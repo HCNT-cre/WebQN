@@ -106,7 +106,6 @@ const Form = ({
         }
     }
 
-    console.log(listPermission);
     const checkChecked = (group) => {
         const listPermissionOfGroup = getAllPermissionsRelate(group);
         if (listPermissionOfGroup.length >= 2) {
@@ -119,7 +118,6 @@ const Form = ({
         setModalOpen(false)
     }
 
-    console.log(listPermission);
     const handleChangeRequest = (name, value) => {
         console.log(name, value);
         setRequest(prev => ({
@@ -141,7 +139,7 @@ const Form = ({
         if (request["is_staff"] === undefined || request["is_staff"] === null) request["is_staff"] = true;
         if (request["role"] === undefined) request["role"] = null;
         for (const input of STAFF_DECENTRALIZATION) {
-            if (input.require && !request[input.name]) {
+        if (input.require && !request[input.name] && input.name != 'password') {
                 notifyError("Vui lòng nhập " + input.label)
                 return
             }
