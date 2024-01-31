@@ -59,6 +59,7 @@ import { useEffect, useState } from "react";
 import { setUserPermission } from "./actions/userPermission"
 import DuyetSaoHoSo from "./pages/QuanLiKhaiThac/SaoHoSo";
 import DuyetSaoVaChungThucHoSo from "./pages/QuanLiKhaiThac/SaoVaChungThuc";
+import TheoDoiKeHoach from "./pages/LuuTruLichSu/TheoDoiKeHoach";
 
 import axiosHttpService from "src/utils/httpService";
 import DuyetKeHoachChinhLy from "./pages/BienMucChinhLy/DuyetKeHoachChinhLy";
@@ -84,6 +85,7 @@ import HoSoTTHCBiTuChoi from "./pages/LuuTruToChucCaNhan/HoSoTTHCBiTuChoi";
 import KhoHoSoTTHC from "./pages/LuuTruToChucCaNhan/KhoHoSoTTHC";
 import HoSoChinhLyBiTraVe from "./pages/BienMucChinhLy/HoSoChinhLyBiTraVe";
 import HoSoDenHanNopLuu from "./pages/ThuThapVaNopLuu/HoSoDenHanNopLuu";
+import KeHochNopLuuLichSu from "./pages/LuuTruCoQuan/KeHoachNopLuuLichSu";
 import InitApp from "./init";
 import { LoginAction } from "./service/actions/authenAction";
 import { Fragment } from "react";
@@ -227,6 +229,14 @@ const App = () => {
         { path: "/ho-so/ho-so-den-han-nop-luu", element: <DueFile /> },
         { path: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve", element: <HoSoNopLuuBiTraVe /> },
         { path: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu", element: <HoSoDenHanNopLuu /> },
+        {
+            path: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su",
+            element: <TheoDoiKeHoach />,
+        },
+        {
+            path: "/nop-luu-lich-su/ke-hoach-nop-luu-lich-su",
+            element: <KeHochNopLuuLichSu />,
+        },
         {
             path: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
             element: <HoSoTaiLieuGiaoNop />,
