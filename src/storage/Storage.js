@@ -55,6 +55,9 @@ export const ENUM_STATE_PLAN = {
 	TU_CHOI: "Trả về",
 	CHAP_NHAN: "Đã duyệt",
 	DOI_SO_NOI_VU_DUYET: "Đợi Sở Nội vụ duyệt",
+	DOI_THU_THAP: "Đợi thu thập",
+	DOI_THAM_DINH: "Đợi thẩm định",
+	DA_THU_THAP: "Đã thu thập",
 }
 
 export const ENUM_STATE_BMCL = {

@@ -454,7 +454,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 	];
 
 	const handleDownloadAttachment = async (fileUrl) => {
-		const response = await axiosHttpService.get('http://localhost' + fileUrl, {
+		const response = await axiosHttpService.get(fileUrl, {
 			responseType: "blob",
 		});
 		const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));

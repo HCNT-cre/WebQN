@@ -89,6 +89,7 @@ import KeHochNopLuuLichSu from "./pages/LuuTruCoQuan/KeHoachNopLuuLichSu";
 import InitApp from "./init";
 import { LoginAction } from "./service/actions/authenAction";
 import { Fragment } from "react";
+import ThamDinhHoSo from "./pages/LuuTruLichSu/ThamDinhHoSo";
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
 function LoggedIn() {
@@ -523,6 +524,10 @@ const App = () => {
         {
             path: "/kho-luu-tru-to-chuc-ca-nhan/kho-ho-so-thuc-hien-thu-tuc-hanh-chinh",
             element: <KhoHoSoTTHC />
+        },
+        {
+            path: "/luu-tru-lich-su/tham-dinh-ho-so",
+            element: <ThamDinhHoSo />
         },
     ];
 
