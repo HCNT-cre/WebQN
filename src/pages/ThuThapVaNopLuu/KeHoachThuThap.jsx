@@ -56,7 +56,6 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	}, []);
 
 	const handleOk = async () => {
-		console.log(fileUploaded);
 		const formData = new FormData();
 		fileList.forEach((file) => {
 			console.log(file);

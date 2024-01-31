@@ -659,6 +659,9 @@ export const TABS_SIDEBAR = [
 				key: "/luu-tru-lich-su/kho-luu-tru-lich-su",
 				number: 33,
 				parent: 30,
+				isParent: true,
+				numChildTabs: 0,
+				childTabs:[]
 			},
 			{
 				key: "/tieu-huy-ho-so/",

@@ -19,6 +19,7 @@ const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
+	{ title: "Văn bản đính kèm", key: "attachment", width: "100%" },
 	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
@@ -31,11 +32,18 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [request, setRequest] = useState({});
 	const [organ, setOrgan] = useState([]);
 	const [reset, setReset] = useState(false);
+	const [fileUploaded, setFileUploaded] = useState([]);
 
 	const handleCreate = async () => {
+		request["attachment"] = fileUploaded[0];
 		request["state"] = "Mới lập";
 		request["type"] = ENUM_TYPE_PLAN.NOP_LUU_LICH_SU;
-		const response = await axiosHttpService.post(`${API_GET_PLAN}`, request);
+		const response = await axiosHttpService.post(`${API_GET_PLAN}`, request, {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'multipart/form-data',
+			}
+		});
 		const idPlan = response.data.id;
 
 		selectedFiles.forEach(async (file) => {
@@ -137,14 +145,29 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 					/>
 				</div>
 				<div className="flex justify-between py-[12px]">
-					<span>Hồ sơ</span>
-					<div
-						className="w-[70%]"
-					>
-						<Button onClick={() => {
-							setOpenModalAddFile(true)
-						}}> Chọn hồ sơ </Button>
-					</div>
+					<span>Văn bản đính kèm</span>
+					<form encType="multipart/form-data">
+						<label
+							className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
+							htmlFor="file-upload"
+						>
+							<p className="ml-[8px]">Thêm văn bản</p>
+						</label>
+						<input
+							onClick={(ev) => {
+								ev.target.value = "";
+							}}
+							type="file"
+							id="file-upload"
+							name="file-upload"
+							className="hidden"
+							onChange={(ev) => {
+								setFileUploaded(Array.from(ev.target.files));
+							}}
+							accept="application/pdf"
+							multiple
+						></input>
+					</form>
 				</div>
 			</div>
 			<SuaHoSo
@@ -329,7 +352,7 @@ const Update = ({ reFetchData, id }) => {
 						value={request["organ_name"]}
 					/>
 				</div>
-				<div className="flex justify-between py-[12px]">
+				{/**  <div className="flex justify-between py-[12px]">
 					<span>Thêm hồ sơ</span>
 					<div
 						className="w-[70%]"
@@ -348,7 +371,7 @@ const Update = ({ reFetchData, id }) => {
 							setOpenModalDeleteFile(true)
 						}}> Xoá hồ sơ trong kế hoạch</Button>
 					</div>
-				</div>
+					</div> */}
 				<XoaHoSo
 					open={openModalDeleteFile}
 					idPlan={id}
@@ -430,6 +453,18 @@ const TaoKeHoachLuuTruLichSu = () => {
 		// },
 	];
 
+	const handleDownloadAttachment = async (fileUrl) => {
+		const response = await axiosHttpService.get('http://localhost' + fileUrl, {
+			responseType: "blob",
+		});
+		const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+		const link = document.createElement("a");
+		link.href = downloadUrl;
+		link.setAttribute("download", fileUrl.split("/").pop());
+		document.body.appendChild(link);
+		link.click();
+	};
+
 	const reFetchData = async () => {
 		setIsLoading(true);
 		const res = await axiosHttpService.get(`${API_GET_PLAN_BY_TYPE}/${ENUM_TYPE_PLAN.NOP_LUU_LICH_SU}`);
@@ -440,9 +475,16 @@ const TaoKeHoachLuuTruLichSu = () => {
 			// if (rawData.state === ENUM_STATE_PLAN.CHO_DUYET) color = "bg-green-500";
 			// else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";
 			// else if (rawData.state === ENUM_STATE_PLAN.CHAP_NHAN) color = "bg-blue-600";
+			let attachmentName = rawData.attachment;
+			if (attachmentName) {
+				attachmentName = attachmentName.split("/").pop();
+			}else {
+				attachmentName = "";
+			}
 			const row = {
 				id: rawData.id,
 				name: rawData.name,
+				attachment: <button onClick={() => handleDownloadAttachment(rawData.attachment)}>{attachmentName}</button>,
 				start_date: rawData.start_date,
 				organ_name: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
