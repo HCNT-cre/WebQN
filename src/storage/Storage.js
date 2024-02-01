@@ -494,7 +494,7 @@ export const TABS_SIDEBAR = [
 						parent: 81,
 					},
 					{
-						title: "Phê duyệt kế hoạch nộp lưu lịch sử",
+						title: "Phê duyệt và gửi kế hoạch nộp lưu lịch sử",
 						to: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
 						key: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
 						number: 32,

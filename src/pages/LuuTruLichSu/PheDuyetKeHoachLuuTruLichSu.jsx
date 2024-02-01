@@ -277,9 +277,20 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
 
+	const handleConfirmPlan = async () => {
+		const ids = stateCheckBox.map((item) => item.split('checkbox')[1]);
+		ids.forEach(async (id) => {
+			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.CHAP_NHAN);
+		});
+		setTimeout(() => {
+			notifySuccess("Duyệt thành công");
+			reFetchData();
+		}, 300);
+	};
+
+
     const handleSendPlan = async () => {
         const ids = stateCheckBox.map((item) => item.split('checkbox')[1]);
-        console.log(ids);
         ids.forEach(async (id) => {
             await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DOI_THU_THAP);
         });
@@ -300,6 +311,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 			title: "Duyệt kế hoạch",
 			btn_class_name: "custom-btn-add-file",
 			icon: <i className="fa-solid fa-plus"></i>,
+			onClick: handleConfirmPlan,
 		},
         {
 			title: "Gửi đến các cơ quan",
@@ -326,7 +338,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 		const rawDatas = res.data;
 		const plan = [];
 		for (const rawData of rawDatas) {
-            if (rawData.state != 'Đợi duyệt') continue;
+            if (rawData.state != 'Đợi duyệt' && rawData.state != 'Đã duyệt') continue;
 			// let color = "bg-indigo-700";
 			// if (rawData.state === ENUM_STATE_PLAN.CHO_DUYET) color = "bg-green-500";
 			// else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";
@@ -345,7 +357,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 				organ_name: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
 				function: (
-					<div className="flex ">
+					<div className="flex "> 
 						<Delete id={rawData.id} reFetchData={reFetchData} />
 						<Update id={rawData.id} reFetchData={reFetchData} />
 					</div>
@@ -413,7 +425,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 					return (
 						<div
 							key={index}
-							className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex"
+							className="w-[15%] text-white text-center px-[5px] rounded-[5px] flex"
 						>
 							<Button
 								onClick={item.onClick}

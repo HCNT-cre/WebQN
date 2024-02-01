@@ -19,6 +19,7 @@ const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
+	{ title: "Văn bản đính kèm", key: "attachment", width: "100%" },
 	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
@@ -383,7 +384,7 @@ const KeHoachNopLuuLichSu = () => {
 		try {
 			stateCheckBox.forEach(async (item) => {
 				const id = parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))
-				await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.CHO_DUYET);
+				await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DA_THU_THAP);
 				await FileAPIService.updateStateByIdPlan(id, {
 					current_state: 4, // luu tru co quan
 					new_state: 5, // nop luu lich su
@@ -401,6 +402,17 @@ const KeHoachNopLuuLichSu = () => {
 			notifyError("Gửi kế hoạch thất bại");
 		}
 
+	};
+	const handleDownloadAttachment = async (fileUrl) => {
+		const response = await axiosHttpService.get(fileUrl, {
+			responseType: "blob",
+		});
+		const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+		const link = document.createElement("a");
+		link.href = downloadUrl;
+		link.setAttribute("download", fileUrl.split("/").pop());
+		document.body.appendChild(link);
+		link.click();
 	};
 
 	const BUTTON_ACTIONS = [
@@ -436,13 +448,21 @@ const KeHoachNopLuuLichSu = () => {
 		const rawDatas = res.data;
 		const plan = [];
 		for (const rawData of rawDatas) {
+			if (rawData.state != 'Đợi thu thập' && rawData.state != 'Đã thu thập') continue;
 			// let color = "bg-indigo-700";
 			// if (rawData.state === ENUM_STATE_PLAN.CHO_DUYET) color = "bg-green-500";
 			// else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";
 			// else if (rawData.state === ENUM_STATE_PLAN.CHAP_NHAN) color = "bg-blue-600";
+			let attachmentName = rawData.attachment;
+			if (attachmentName) {
+				attachmentName = attachmentName.split("/").pop();
+			}else {
+				attachmentName = "";
+			}
 			const row = {
 				id: rawData.id,
 				name: rawData.name,
+				attachment: <button onClick={() => handleDownloadAttachment(rawData.attachment)}>{attachmentName}</button>,
 				start_date: rawData.start_date,
 				organ_name: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
