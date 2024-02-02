@@ -398,6 +398,7 @@ const BasePage = ({
 	excel = true,
 	havePlan = true,
 	soNoiVuDuyet = false,
+	thamDinhHoSo = false,
 }) => {
 	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
@@ -786,6 +787,20 @@ const BasePage = ({
 		}
 	};
 
+	const handleChangeStateOfPlan = async (newState) => {
+		if (filterByPlan === null) {
+			notifyError("Vui lòng chọn kế hoạch")
+			return;
+		}
+
+		try {
+			await PlanAPIService.updateStatePlan(filterByPlan, newState);
+			notifySuccess("Thay đổi trạng thái thành công");
+			reset();
+		} catch (error) {
+			notifyError("Thay đổi trạng thái thất bại");
+		}
+	}
 
 	const handleChangeStateFile = async (newState) => {
 		const listState = [];
@@ -1060,8 +1075,22 @@ const BasePage = ({
 									Phê duyệt lưu trữ lịch sử
 								</Button>
 							</div>
-
 							}
+
+							{thamDinhHoSo && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
+								<Button
+									onClick={() => handleChangeStateOfPlan(ENUM_STATE_PLAN.DOI_THAM_DINH)}
+									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
+								>
+									<div className="mr-[8px]">
+										<i className="fa-solid fa-check"></i>
+									</div>
+									Gửi hồ sơ để thẩm định
+								</Button>
+							</div>
+							}
+
+
 							{pheDuyetTieuHuy && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
 									onClick={() => handleChangeStateFileOfPlanTieuHuy({ "current_state": 15, "new_state": 16 })}
