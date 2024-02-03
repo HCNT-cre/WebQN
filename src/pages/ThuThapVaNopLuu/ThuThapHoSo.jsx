@@ -4,7 +4,7 @@ import BasePage from "../BasePage";
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 
 const filtePlanCondition = (file) => {
-    const state = (file.type === ENUM_TYPE_PLAN.THU_THAP_NOP_LUU && file.state === ENUM_STATE_PLAN.CHAP_NHAN);
+    const state = (file.type === ENUM_TYPE_PLAN.THU_THAP_NOP_LUU && file.state === ENUM_STATE_PLAN.DA_DUYET);
     return state;
 }
 

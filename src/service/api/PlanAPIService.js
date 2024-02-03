@@ -66,6 +66,28 @@ const PlanAPIService = {
         return response.data;
     },
 
+    getOrganByPlanId: async (id) => {
+        const response = await axiosHttpService.get(API_PLAN + '/' + id);
+        return [{
+            id: response.data.organ,
+            plan_name: response.data.name,
+            organ_name: response.data.organ_name,
+            progress: "", // t is short for temp
+        }];
+    },
+
+    getOrganByPlan: async () => {
+        const response = await axiosHttpService.get(API_PLAN);
+        return response.data.map((plan) => {
+            return {
+                id: plan.organ,
+                plan_name: plan.name,
+                organ_name: plan.organ_name,
+                progress: "", // t is short for temp
+            }
+        })
+    }
+
 }
 
 export default PlanAPIService;

@@ -53,7 +53,7 @@ export const ENUM_STATE_PLAN = {
 	TAO_MOI: "Mới lập",
 	CHO_DUYET: "Đợi duyệt",
 	TU_CHOI: "Trả về",
-	CHAP_NHAN: "Đã duyệt",
+	DA_DUYET: "Đã duyệt",
 	DOI_SO_NOI_VU_DUYET: "Đợi Sở Nội vụ duyệt",
 	DOI_THU_THAP: "Đợi thu thập",
 	DOI_THAM_DINH: "Đợi thẩm định",
@@ -664,7 +664,7 @@ export const TABS_SIDEBAR = [
 				parent: 30,
 				isParent: true,
 				numChildTabs: 0,
-				childTabs:[]
+				childTabs: []
 			},
 			{
 				key: "/tieu-huy-ho-so/",

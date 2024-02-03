@@ -932,7 +932,7 @@ export const ModalPlan = () => {
     const handleOk = async () => {
         await axiosHttpService.put(API_PLAN + '/' + oldState.id, {
             ...oldState,
-            state: ENUM_STATE_PLAN.CHAP_NHAN,
+            state: ENUM_STATE_PLAN.DA_DUYET,
             type: type
         });
 

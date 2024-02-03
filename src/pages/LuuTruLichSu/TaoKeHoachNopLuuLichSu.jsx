@@ -471,6 +471,8 @@ const TaoKeHoachLuuTruLichSu = () => {
 		const rawDatas = res.data;
 		const plan = [];
 		for (const rawData of rawDatas) {
+			console.log(rawData);
+			if(rawData.state != ENUM_STATE_PLAN.TAO_MOI && rawData.state != ENUM_STATE_PLAN.CHO_DUYET && rawData.state != ENUM_STATE_PLAN.DA_DUYET) continue;
 			// let color = "bg-indigo-700";
 			// if (rawData.state === ENUM_STATE_PLAN.CHO_DUYET) color = "bg-green-500";
 			// else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";

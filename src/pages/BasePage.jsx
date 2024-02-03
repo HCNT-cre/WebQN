@@ -399,6 +399,7 @@ const BasePage = ({
 	havePlan = true,
 	soNoiVuDuyet = false,
 	thamDinhHoSo = false,
+	filterOrganByPlan = false,
 }) => {
 	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
@@ -625,17 +626,25 @@ const BasePage = ({
 
 	const reset = () => {
 		const fetchFileData = async () => {
-			try {
+			if(!filterOrganByPlan) {
+				try {
+					setIsLoading(true);
+					const response = await axiosHttpService.get(
+						API_GOV_FILE_GET_ALL
+					);
+					setIsLoading(false);
+					setFiles(getFileFromResponse(response));
+					setDoesFilter(true);
+				} catch (err) {
+					console.log(err);
+				}
+			}else {
 				setIsLoading(true);
-				const response = await axiosHttpService.get(
-					API_GOV_FILE_GET_ALL
-				);
+				const organ = await PlanAPIService.getOrganByPlan()
 				setIsLoading(false);
-				setFiles(getFileFromResponse(response));
-				setDoesFilter(true);
-			} catch (err) {
-				console.log(err);
+				setFiles(organ);
 			}
+
 		};
 		fetchFileData();
 	};
@@ -741,7 +750,7 @@ const BasePage = ({
 		}
 
 		try {
-			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.CHAP_NHAN);
+			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.DA_DUYET);
 			const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, listState);
 			const error_code = response.data.error_code;
 			if (error_code === undefined) {
@@ -772,7 +781,7 @@ const BasePage = ({
 		}
 
 		try {
-			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.CHAP_NHAN);
+			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.DA_DUYET);
 			const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, listState);
 			const error_code = response.data.error_code;
 			if (error_code === undefined) {
@@ -930,13 +939,22 @@ const BasePage = ({
 	}
 
 	const handleFilterFileByPlan = async (value) => {
-		setIsLoading(true);
-		let res = await FileAPIService.getFileByPlanId(value);
-		res = getFileFromResponse({ data: res })
-		if (filter !== null) res = filter(res);
-		setFiles(res);
-		setIsLoading(false);
-		setFilterByPlan(value);
+		if(!filterOrganByPlan) {
+			setIsLoading(true);
+			let res = await FileAPIService.getFileByPlanId(value);
+			res = getFileFromResponse({ data: res })
+			if (filter !== null) res = filter(res);
+			setFiles(res);
+			setIsLoading(false);
+			setFilterByPlan(value);
+			return
+		}else {
+			const organ = await PlanAPIService.getOrganByPlanId(value);
+			console.log(organ + ":", organ);
+			setFiles(organ)
+			setIsLoading(false);
+			setFilterByPlan(value);
+		}
 	}
 
 	return (

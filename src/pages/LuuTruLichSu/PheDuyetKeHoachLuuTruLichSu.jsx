@@ -280,7 +280,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 	const handleConfirmPlan = async () => {
 		const ids = stateCheckBox.map((item) => item.split('checkbox')[1]);
 		ids.forEach(async (id) => {
-			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.CHAP_NHAN);
+			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DA_DUYET);
 		});
 		setTimeout(() => {
 			notifySuccess("Duyệt thành công");

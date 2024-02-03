@@ -5,7 +5,7 @@ const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
 
 
 const filtePlanCondition = (file) => {
-    const state = (file.type === ENUM_TYPE_PLAN.BIEN_MUC_CHINH_LY && file.state === ENUM_STATE_PLAN.CHAP_NHAN);
+    const state = (file.type === ENUM_TYPE_PLAN.BIEN_MUC_CHINH_LY && file.state === ENUM_STATE_PLAN.DA_DUYET);
     return state;
 }
 
