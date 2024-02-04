@@ -2,7 +2,7 @@ import BasePage from "../BasePage";
 import { ENUM_STATE_FILE, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
 const filterPlan = (file) => {
-    return (file.type === ENUM_TYPE_PLAN.NOP_LUU_LICH_SU && file.state === ENUM_STATE_PLAN.CHO_DUYET)
+    return (file.type === ENUM_TYPE_PLAN.NOP_LUU_LICH_SU && file.state === ENUM_STATE_PLAN.DOI_THAM_DINH)
 }
 
 
