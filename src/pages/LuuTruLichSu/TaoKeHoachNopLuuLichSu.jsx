@@ -253,6 +253,7 @@ const Update = ({ reFetchData, id }) => {
 	const [removeFile, setRemoveFile] = useState([]);
 	const [resetRemove, setResetRemove] = useState(false);
 	const [resetAdd, setResetAdd] = useState(false);
+	const [fileUploaded, setFileUploaded] = useState([]);
 	useEffect(() => {
 		const getPlan = async () => {
 			const { data } = await axiosHttpService.get(API_GET_PLAN + '/' + id);
@@ -298,7 +299,15 @@ const Update = ({ reFetchData, id }) => {
 	}
 
 	const handleOk = async () => {
-		await axiosHttpService.put(API_GET_PLAN + '/' + id, request);
+		if (fileUploaded.length > 0) {
+            request["attachment"] = fileUploaded[0];
+        }
+		await axiosHttpService.put(API_GET_PLAN + '/' + id, request,  {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'multipart/form-data',
+			}
+		});
 		await handleRemoveFile();
 		await handleAddFile();
 		setResetAdd(true);
@@ -351,6 +360,31 @@ const Update = ({ reFetchData, id }) => {
 						className="w-[70%]"
 						value={request["organ_name"]}
 					/>
+				</div>
+				<div className="flex justify-between py-[12px]">
+					<span>Văn bản đính kèm</span>
+					<form encType="multipart/form-data">
+						<label
+							className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
+							htmlFor="file-upload"
+						>
+							<p className="ml-[8px]">Thêm văn bản</p>
+						</label>
+						<input
+							onClick={(ev) => {
+								ev.target.value = "";
+							}}
+							type="file"
+							id="file-upload"
+							name="file-upload"
+							className="hidden"
+							onChange={(ev) => {
+								setFileUploaded(Array.from(ev.target.files));
+							}}
+							accept="application/pdf"
+							multiple
+						></input>
+					</form>
 				</div>
 				{/**  <div className="flex justify-between py-[12px]">
 					<span>Thêm hồ sơ</span>
