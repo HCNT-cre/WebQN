@@ -326,8 +326,9 @@ const DocCategory = ({ eOffice = true }) => {
                       Số hóa tài liệu
                     </button>
                   </div>
-
-                  <div className="w-[12.5%] text-white text-center px-[5px] flex">
+                  
+                  {/* Remove eoffice button */}
+                  {/* <div className="w-[12.5%] text-white text-center px-[5px] flex">
 
                     <button
                       className="rounded-[5px] h-[30px] flex justify-center bg-green-500 w-full px-[4px] items-center text-[12px]"
@@ -337,7 +338,8 @@ const DocCategory = ({ eOffice = true }) => {
                       </div>
                       Thêm VB từ EOFFICE
                     </button>
-                  </div>
+                  </div> */}
+                  
                   <div className="w-[12.5%] text-white text-center px-[5px] flex">
 
                     <button
