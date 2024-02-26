@@ -144,11 +144,12 @@ const Login = () => {
           <LoginButton onClick={() => handleLogin(false)}>
             Đăng nhập
           </LoginButton>
-          <SsoButton
+          {/* Remove login with SSO */}
+          {/* <SsoButton
             onClick={() => handleLogin(true)}
           >
             Đăng nhập SSO
-          </SsoButton>
+          </SsoButton> */}
         </ButtonContainer>
       </LoginForm>
     </LoginContainer>
