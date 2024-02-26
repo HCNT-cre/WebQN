@@ -87,6 +87,7 @@ import HoSoDenHanNopLuu from "./pages/ThuThapVaNopLuu/HoSoDenHanNopLuu";
 
 import ThongKeHienTrangSoHoaKhoLuuTru from "./pages/BaoCaoThongKe/ThongKeHienTrangSoHoaKhoLuuTru";
 import ThongKeHopCap from "./pages/BaoCaoThongKe/ThongKeHopCap";
+import ThongKeKhaiThac from "./pages/BaoCaoThongKe/ThongKeKhaiThac";
 
 import InitApp from "./init";
 import { LoginAction } from "./service/actions/authenAction";
@@ -526,7 +527,10 @@ const App = () => {
             path: "/bao-cao-va-thong-ke/thong-ke-hop-cap",
             element: <ThongKeHopCap />
         },
-
+        {
+            path: "/bao-cao-va-thong-ke/thong-ke-khai-thac",
+            element: <ThongKeKhaiThac />
+        }
     ];
 
     return (

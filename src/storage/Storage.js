@@ -364,13 +364,13 @@ export const TABS_SIDEBAR = [
 				number: 32,
 				parent: 30,
 			},
-			{
-				title: "Sở Nội vụ phê duyệt",
-				to: "/luu-tru-lich-su/so-noi-vu-phe-duyet",
-				key: "/luu-tru-lich-su/so-noi-vu-phe-duyet",
-				number: 77,
-				parent: 30,
-			},
+			// {
+			// 	title: "Sở Nội vụ phê duyệt",
+			// 	to: "/luu-tru-lich-su/so-noi-vu-phe-duyet",
+			// 	key: "/luu-tru-lich-su/so-noi-vu-phe-duyet",
+			// 	number: 77,
+			// 	parent: 30,
+			// },
 			{
 				title: "Kho lưu trữ lịch sử",
 				to: "/luu-tru-lich-su/kho-luu-tru-lich-su",
@@ -738,11 +738,11 @@ export const TABS_SIDEBAR = [
 			},
 			{
 				title: "Thống kê khai thác",
-				to: "/khai-bao-danh-muc/danh-muc-co-quan",
-				key: "/khai-bao-danh-muc/danh-muc-co-quan",
+				to: "/bao-cao-va-thong-ke/thong-ke-khai-thac",
+				key: "/bao-cao-va-thong-ke/thong-ke-khai-thac",
 				number: 82,
 				parent: 73,
-			}
+			},
 		],
 	},
 
