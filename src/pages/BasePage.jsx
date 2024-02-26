@@ -709,7 +709,7 @@ const BasePage = ({
 		}
 
 		try {
-			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.DOI_SO_NOI_VU_DUYET);
+			await PlanAPIService.updateStatePlan(filterByPlan, ENUM_STATE_PLAN.CHAP_NHAN);
 			const response = await axiosHttpService.post(API_UPDATE_STATE_GOV_FILE, listState);
 			const error_code = response.data.error_code;
 			if (error_code === undefined) {
