@@ -1040,13 +1040,13 @@ const BasePage = ({
 							</div>}
 							{pheDuyetLuuTruLichSu && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
 								<Button
-									onClick={() => handleChangeStateFileOfPlan({ "current_state": 5, "new_state": 18 })}
+									onClick={() => handleChangeStateFileOfPlan({ "current_state": 5, "new_state": 6 })}
 									className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
 								>
 									<div className="mr-[8px]">
 										<i className="fa-solid fa-check"></i>
 									</div>
-									Gửi Sở Nội vụ phê duyệt
+									Phê duyệt lưu trữ lịch sử
 								</Button>
 							</div>}
 							{soNoiVuDuyet && <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
