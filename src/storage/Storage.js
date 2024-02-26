@@ -716,13 +716,37 @@ export const TABS_SIDEBAR = [
 		isExpand: false,
 		icon: '<i class="fa-regular fa-newspaper"></i>',
 		title: "Báo cáo và thống kê",
-		numChildTabs: 0,
-		to: "/bao-cao-va-thong-ke",
+		numChildTabs: 2,
 		key: "/bao-cao-va-thong-ke",
 		number: 73,
-		isParent: false,
+		isParent: true,
 		display: true,
+		childTabs: [
+			{
+				title: "Thống kê hiện trạng số hoá kho lưu trữ",
+				to: "/bao-cao-va-thong-ke/thong-ke-hien-trang-so-hoa-kho-luu-tru",
+				key: "/bao-cao-va-thong-ke/thong-ke-hien-trang-so-hoa-kho-luu-tru",
+				number: 80,
+				parent: 73,
+			},
+			{
+				title: "Thống kê hộp/cặp",
+				to: "/khai-bao-danh-muc/danh-muc-co-quan",
+				key:"/khai-bao-danh-muc/danh-muc-co-quan",
+				number: 81,
+				parent: 73,
+			},
+			{
+				title: "Thống kê khai thác",
+				to: "/khai-bao-danh-muc/danh-muc-co-quan",
+				key: "/khai-bao-danh-muc/danh-muc-co-quan",
+				number: 82,
+				parent: 73,
+			}
+		],
 	},
+
+	
 	// {
 	// 	key: "/quan-ly-he-thong/",
 	// 	isExpand: false,

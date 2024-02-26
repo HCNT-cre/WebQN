@@ -84,6 +84,8 @@ import HoSoTTHCBiTuChoi from "./pages/LuuTruToChucCaNhan/HoSoTTHCBiTuChoi";
 import KhoHoSoTTHC from "./pages/LuuTruToChucCaNhan/KhoHoSoTTHC";
 import HoSoChinhLyBiTraVe from "./pages/BienMucChinhLy/HoSoChinhLyBiTraVe";
 import HoSoDenHanNopLuu from "./pages/ThuThapVaNopLuu/HoSoDenHanNopLuu";
+
+import ThongKeHienTrangSoHoaKhoLuuTru from "./pages/BaoCaoThongKe/ThongKeHienTrangSoHoaKhoLuuTru";
 import InitApp from "./init";
 import { LoginAction } from "./service/actions/authenAction";
 import { Fragment } from "react";
@@ -514,6 +516,10 @@ const App = () => {
             path: "/kho-luu-tru-to-chuc-ca-nhan/kho-ho-so-thuc-hien-thu-tuc-hanh-chinh",
             element: <KhoHoSoTTHC />
         },
+        {
+            path: "bao-cao-va-thong-ke/thong-ke-hien-trang-so-hoa-kho-luu-tru",
+            element: <ThongKeHienTrangSoHoaKhoLuuTru />
+        }
     ];
 
     return (
