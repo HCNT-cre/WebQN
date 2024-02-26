@@ -32,50 +32,39 @@ h3 {
 
 .statistics-container {
     border: 2px solid #ccc;
-    /* Định dạng viền */
     border-radius: 8px;
-    /* Bo góc */
     padding: 10px;
-    /* Định dạng khoảng cách bên trong */
     width: 30%;
-    /* Độ rộng của container */
     background-color: #f9f9f9;
-    /* Màu nền */
-    margin-right: 1em;
+    margin-right: 3em;
 }
 
 .statistics-list {
     list-style: none;
-    /* Loại bỏ dấu đầu dòng */
     padding: 0;
-    /* Định dạng khoảng cách bên trong */
     color: #333;
-    /* Màu chữ */
     font-size: 16px;
-    /* Kích thước chữ */
     font-weight: bold;
 }
 
 .statistics-list li {
     margin-bottom: 8px;
-    /* Định dạng khoảng cách giữa các mục */
 }
 
 .print-button {
-    display: block; /* Hiển thị dạng block để chiếm toàn bộ chiều rộng của container */
-    width: 100%; /* Chiều rộng là 100% của container */
-    padding: 10px; /* Khoảng cách bên trong của nút */
-    margin-top: 10px; /* Khoảng cách từ trên xuống */
-    background-color: #007bff; /* Màu nền của nút */
-    color: #fff; /* Màu chữ của nút */
-    border: none; /* Loại bỏ viền */
-    border-radius: 5px; /* Bo góc */
-    cursor: pointer; /* Biểu tượng chuột khi di chuột vào nút */
-    font-size: 16px; /* Kích thước chữ */
-    font-weight: bold; /* Độ đậm */
-  }
-  
-  .print-button:hover {
-    background-color: #0056b3; /* Màu nền khi di chuột vào */
-  }
-  
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.print-button:hover {
+    background-color: #0056b3;
+}

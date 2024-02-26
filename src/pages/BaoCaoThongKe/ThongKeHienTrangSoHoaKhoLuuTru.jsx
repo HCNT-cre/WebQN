@@ -118,7 +118,7 @@ const ThongKeHienTrangSoHoaKhoLuuTru = () => {
     return (
         <div className="flex">
             <div className="w-full  ml-[1em] mr-[1em] h-[600px] flex justify-top items-center flex-col ">
-                <div className="text-[23px] font-bold text-center mt-[5px] text-blue-500">
+                <div className="text-[28px] font-bold text-center mb-[0.5em] mt-[5px] text-blue-500">
                     Thống kê hiện trạng số hoá kho lưu trữ
                 </div>
                 <div className="w-full">
