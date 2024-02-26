@@ -731,8 +731,8 @@ export const TABS_SIDEBAR = [
 			},
 			{
 				title: "Thống kê hộp/cặp",
-				to: "/khai-bao-danh-muc/danh-muc-co-quan",
-				key:"/khai-bao-danh-muc/danh-muc-co-quan",
+				to: "/bao-cao-va-thong-ke/thong-ke-hop-cap",
+				key:"/bao-cao-va-thong-ke/thong-ke-hop-cap",
 				number: 81,
 				parent: 73,
 			},
