@@ -1,5 +1,6 @@
 export const KE_HOACH_CHINH_LY_FIELD_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
+	{ title: "Văn bản đính kèm", key: "attachment", width: "100%" },
 	{ title: "Năm bắt đầu", key: "start_date", width: "50%" },
 	{ title: "Năm kết thúc", key: "end_date", width: "50%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
@@ -11,5 +12,6 @@ export const KE_HOACH_CHINH_LY_INPUT= [
 	{ type:"date", require:true, label: "Năm bắt đầu", name: "start_date"},
 	{ type:"date", require:true, label: "Năm kết thúc", name: "end_date"},
 	{ type:"text", require:true, label: "Cơ quan / Đơn vị lập kế hoạch", name: "organ", disabled: true},
+	{ type:"file", require:true, label: "Văn bản đính kèm", name: "attachment"},
 ];
 

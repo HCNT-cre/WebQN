@@ -43,7 +43,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		getOrgan();
 	}, []);
 
-	const handleOk = async () => {
+	const 	handleOk = async () => {
 		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
 		request["attachment"] = fileUploaded[0];
 		request["type"] = ENUM_TYPE_PLAN.THU_THAP_NOP_LUU;

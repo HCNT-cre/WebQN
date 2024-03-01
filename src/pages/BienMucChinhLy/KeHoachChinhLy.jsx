@@ -16,33 +16,39 @@ import UserAPIService from "src/service/api/userAPIService";
 
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [request, setRequest] = useState({});
-	const [organName, setOrganName] = useState(null);
-
+	const [organ, setOrgan] = useState(null);
+	const [fileUploaded, setFileUploaded] = useState([]);
 
 	useEffect(() => {
 		const getOrgan = async () => {
-			const organ = await UserAPIService.getUserOrgan();
-			setOrganName(organ.name);
-			handleChangeRequest('organ', organ.id);
-
+			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
+			const _ = data.map((item) => {
+				return {
+					label: item.name,
+					value: item.id,
+				};
+			});
+			setOrgan(_);
 		};
+
 		getOrgan();
 	}, []);
 
 	const handleOk = async () => {
 		request["state"] = ENUM_STATE_PLAN.CHAP_NHAN;
+		request["attachment"] = fileUploaded[0];
 		request["type"] = ENUM_TYPE_PLAN.BIEN_MUC_CHINH_LY;
 
-		await axiosHttpService.post(`${API_PLAN}`, request),
+		await axiosHttpService.post(`${API_PLAN}`, request,
 		{
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'multipart/form-data',
 			}
-		};
+		});
 		setTimeout(() => {
-			reFetchData();
 			setRequest({});
+			reFetchData();
 			setModelOpen(false);
 		}, 500);
 	};
@@ -69,25 +75,77 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 			onCancel={handleCancel}
 		>
 			<div>
-				{KE_HOACH_CHINH_LY_INPUT.map((item, index) => {
-					return (
-						<div key={index}>
-							{
-								<div className="flex justify-between py-[12px]">
-									<span>{item.label}</span>
-									<Input
-										name={item.name}
-										onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
-										type={item.type}
-										className="w-[70%]"
-										value={item.name === 'organ' ? organName : request[item.name]}
-										disabled={item.disabled}
-									/>
-								</div>
-							}
-						</div>
-					);
-				})}
+				<div className="flex justify-between py-[12px]">
+					<span>Tên kế hoạch</span>
+					<Input
+						name="name"
+						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
+						type="text"
+						className="w-[70%]"
+						value={request["name"]}
+					/>
+				</div>
+
+				<div className="flex justify-between py-[12px]">
+					<span>Ngày kế hoạch</span>
+					<Input
+						name="start_date"
+						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
+						type="date"
+						className="w-[70%]"
+						value={request["date"]}
+					/>
+				</div>
+
+				<div className="flex justify-between py-[12px]">
+					<span>Ngày kết thúc</span>
+					<Input
+						name="end_date"
+						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
+						type="date"
+						className="w-[70%]"
+						value={request["end_date"]}
+					/>
+				</div>
+
+
+				<div className="flex justify-between py-[12px]">
+					<span>Cơ quan / Đơn vị </span>
+					<Select
+						name="organ"
+						onChange={(value) => handleChangeRequest("organ", value)}
+						className="w-[70%]"
+						value={request["organ"]}
+						options={organ}
+					/>
+				</div>
+
+
+				<div className="flex justify-between py-[12px]">
+					<span>Văn bản đính kèm</span>
+					<form encType="multipart/form-data">
+						<label
+							className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
+							htmlFor="file-upload"
+						>
+							<p className="ml-[8px]">Thêm văn bản</p>
+						</label>
+						<input
+							onClick={(ev) => {
+								ev.target.value = "";
+							}}
+							type="file"
+							id="file-upload"
+							name="file-upload"
+							className="hidden"
+							onChange={(ev) => {
+								setFileUploaded(Array.from(ev.target.files));
+							}}
+							accept="application/pdf"
+							multiple
+						></input>
+					</form>
+				</div>
 			</div>
 		</Modal>
 	);
@@ -174,7 +232,7 @@ const Update = ({ reFetchData, id }) => {
 				name: data.name,
 				start_date: data.start_date,
 				end_date: data.end_date,
-				organ: data.organ,
+				organ: data.organ_name,
 				state: data.state,
 			});
 		};
@@ -302,15 +360,34 @@ const KeHoachChinhLy = () => {
 
 	];
 
+	const handleDownloadAttachment = async (fileUrl) => {
+		const response = await axiosHttpService.get(fileUrl, {
+			responseType: "blob",
+		});
+		const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+		const link = document.createElement("a");
+		link.href = downloadUrl;
+		link.setAttribute("download", fileUrl.split("/").pop());
+		document.body.appendChild(link);
+		link.click();
+	};
+
 	const reFetchData = async () => {
 		setIsLoading(true);
 		const res = await axiosHttpService.get(`${API_PLAN_BY_ID + '/' + 2}`);
 		const rawDatas = res.data.reverse();
 		const plan = [];
 		for (const rawData of rawDatas) {
+			let attachmentName = rawData.attachment;
+			if (attachmentName) {
+				attachmentName = attachmentName.split("/").pop();
+			}else {
+				attachmentName = "";
+			}
 			const row = {
 				id: rawData.id,
 				name: rawData.name,
+				attachment: <button onClick={() => handleDownloadAttachment(rawData.attachment)}>{attachmentName}</button>,
 				start_date: rawData.start_date,
 				end_date: rawData.end_date,
 				organ: rawData.organ_name,

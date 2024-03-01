@@ -19,6 +19,7 @@ const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
+	{ title: "Văn bản đính kèm", key: "attachment", width: "100%" },
 	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
@@ -30,12 +31,20 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [selectedFiles, setSelectedFiles] = useState([]);
 	const [request, setRequest] = useState({});
 	const [organ, setOrgan] = useState([]);
+	const [fileUploaded, setFileUploaded] = useState([]);
 	const [reset, setReset] = useState(false);
 
 	const handleCreate = async () => {
 		request["state"] = "Mới lập";
 		request["type"] = ENUM_TYPE_PLAN.NOP_LUU_LICH_SU;
-		const response = await axiosHttpService.post(`${API_GET_PLAN}`, request);
+		request["attachment"] = fileUploaded[0];
+		const response = await axiosHttpService.post(`${API_GET_PLAN}`, request,
+		{
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'multipart/form-data',
+			}
+		});
 		const idPlan = response.data.id;
 
 		selectedFiles.forEach(async (file) => {
@@ -136,6 +145,31 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 						options={organ}
 					/>
 				</div>
+				<div className="flex justify-between py-[12px] mr-[49%]">
+					<span>Văn bản đính kèm</span>
+					<form encType="multipart/form-data">
+						<label
+							className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
+							htmlFor="file-upload"
+						>
+							<p>Thêm văn bản</p>
+						</label>
+						<input
+							onClick={(ev) => {
+								ev.target.value = "";
+							}}
+							type="file"
+							id="file-upload"
+							name="file-upload"
+							className="hidden"
+							onChange={(ev) => {
+								setFileUploaded(Array.from(ev.target.files));
+							}}
+							accept="application/pdf"
+							multiple
+						></input>
+					</form>
+				</div>
 				<div className="flex justify-between py-[12px]">
 					<span>Hồ sơ</span>
 					<div
@@ -230,6 +264,7 @@ const Update = ({ reFetchData, id }) => {
 	const [removeFile, setRemoveFile] = useState([]);
 	const [resetRemove, setResetRemove] = useState(false);
 	const [resetAdd, setResetAdd] = useState(false);
+	const [fileUploaded, setFileUploaded] = useState([]);
 	useEffect(() => {
 		const getPlan = async () => {
 			const { data } = await axiosHttpService.get(API_GET_PLAN + '/' + id);
@@ -275,7 +310,15 @@ const Update = ({ reFetchData, id }) => {
 	}
 
 	const handleOk = async () => {
-		await axiosHttpService.put(API_GET_PLAN + '/' + id, request);
+		if (fileUploaded.length > 0) {
+            request["attachment"] = fileUploaded[0];
+        }
+		await axiosHttpService.put(API_GET_PLAN + '/' + id, request,  {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'multipart/form-data',
+			}
+		});
 		await handleRemoveFile();
 		await handleAddFile();
 		setResetAdd(true);
@@ -328,6 +371,31 @@ const Update = ({ reFetchData, id }) => {
 						className="w-[70%]"
 						value={request["organ_name"]}
 					/>
+				</div>
+				<div className="flex justify-between py-[12px]">
+					<span>Văn bản đính kèm</span>
+					<form encType="multipart/form-data">
+						<label
+							className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
+							htmlFor="file-upload"
+						>
+							<p className="ml-[8px]">Thêm văn bản</p>
+						</label>
+						<input
+							onClick={(ev) => {
+								ev.target.value = "";
+							}}
+							type="file"
+							id="file-upload"
+							name="file-upload"
+							className="hidden"
+							onChange={(ev) => {
+								setFileUploaded(Array.from(ev.target.files));
+							}}
+							accept="application/pdf"
+							multiple
+						></input>
+					</form>
 				</div>
 				<div className="flex justify-between py-[12px]">
 					<span>Thêm hồ sơ</span>
@@ -430,12 +498,30 @@ const TaoKeHoachLuuTruLichSu = () => {
 		// },
 	];
 
+	const handleDownloadAttachment = async (fileUrl) => {
+		const response = await axiosHttpService.get(fileUrl, {
+			responseType: "blob",
+		});
+		const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+		const link = document.createElement("a");
+		link.href = downloadUrl;
+		link.setAttribute("download", fileUrl.split("/").pop());
+		document.body.appendChild(link);
+		link.click();
+	};
+
 	const reFetchData = async () => {
 		setIsLoading(true);
 		const res = await axiosHttpService.get(`${API_GET_PLAN_BY_TYPE}/${ENUM_TYPE_PLAN.NOP_LUU_LICH_SU}`);
 		const rawDatas = res.data;
 		const plan = [];
 		for (const rawData of rawDatas) {
+			let attachmentName = rawData.attachment;
+			if (attachmentName) {
+				attachmentName = attachmentName.split("/").pop();
+			}else {
+				attachmentName = "";
+			}
 			// let color = "bg-indigo-700";
 			// if (rawData.state === ENUM_STATE_PLAN.CHO_DUYET) color = "bg-green-500";
 			// else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";
@@ -443,6 +529,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 			const row = {
 				id: rawData.id,
 				name: rawData.name,
+				attachment: <button onClick={() => handleDownloadAttachment(rawData.attachment)}>{attachmentName}</button>,
 				start_date: rawData.start_date,
 				organ_name: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
