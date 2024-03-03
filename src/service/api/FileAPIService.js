@@ -18,7 +18,9 @@ const FileAPIService = {
     },
 
     searchFile: async (query) => {        
-        let request = API_GOV_FILE_SEARCH + 1 + "&" + query;
+        let request = API_GOV_FILE_SEARCH 
+        if(query !== "") request += "&" + query;
+        console.log("request", request)
         const response = await axiosHttpService.get(request);
         return response.data;
     },
