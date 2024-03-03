@@ -90,6 +90,11 @@ import InitApp from "./init";
 import { LoginAction } from "./service/actions/authenAction";
 import { Fragment } from "react";
 import ThamDinhHoSo from "./pages/LuuTruLichSu/ThamDinhHoSo";
+
+import ThongKeHienTrangSoHoaKhoLuuTru from "./pages/BaoCaoThongKe/ThongKeHienTrangSoHoaKhoLuuTru";
+import ThongKeHopCap from "./pages/BaoCaoThongKe/ThongKeHopCap";
+import ThongKeKhaiThac from "./pages/BaoCaoThongKe/ThongKeKhaiThac";
+
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
 function LoggedIn() {
@@ -529,6 +534,18 @@ const App = () => {
             path: "/luu-tru-lich-su/tham-dinh-ho-so",
             element: <ThamDinhHoSo />
         },
+        {
+            path: "/bao-cao-va-thong-ke/thong-ke-hien-trang-so-hoa-kho-luu-tru",
+            element: <ThongKeHienTrangSoHoaKhoLuuTru />
+        },
+        {
+            path: "/bao-cao-va-thong-ke/thong-ke-hop-cap",
+            element: <ThongKeHopCap />
+        },
+        {
+            path: "/bao-cao-va-thong-ke/thong-ke-khai-thac",
+            element: <ThongKeKhaiThac />
+        }
     ];
 
     return (
