@@ -16,6 +16,7 @@ const API_STORAGE_GET_ORGAN_ALL =
 const API_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN;
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
+	{ title: "Văn bản đính kèm", key: "attachment", width: "100%" },
 	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
@@ -25,21 +26,8 @@ const FIELDS_TABLE = [
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [request, setRequest] = useState({});
 	const [organ, setOrgan] = useState([]);
-	const [fileList, setFileList] = useState([]);
 	const [fileUploaded, setFileUploaded] = useState([]);
-	const props = {
-		onRemove: (file) => {
-			const index = fileList.indexOf(file);
-			const newFileList = fileList.slice();
-			newFileList.splice(index, 1);
-			setFileList(newFileList);
-		},
-		beforeUpload: (file) => {
-			setFileList([...fileList, file]);
-			return false;
-		},
-		fileList,
-	};
+	
 	useEffect(() => {
 		const getOrgan = async () => {
 			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
@@ -55,12 +43,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		getOrgan();
 	}, []);
 
-	const handleOk = async () => {
-		const formData = new FormData();
-		fileList.forEach((file) => {
-			console.log(file);
-			formData.append('files', file);
-		});
+	const 	handleOk = async () => {
 		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
 		request["attachment"] = fileUploaded[0];
 		request["type"] = ENUM_TYPE_PLAN.THU_THAP_NOP_LUU;
@@ -72,8 +55,8 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 			}
 		});
 		setTimeout(() => {
-			reFetchData();
 			setRequest({});
+			reFetchData();
 			setModelOpen(false);
 		}, 500);
 	};
@@ -236,6 +219,8 @@ const Update = ({
 	const [request, setRequest] = useState({});
 
 	const [fileList, setFileList] = useState([]);
+
+	const [fileUploaded, setFileUploaded] = useState([]);
 	const props = {
 		onRemove: (file) => {
 			const index = fileList.indexOf(file);
@@ -286,9 +271,19 @@ const Update = ({
 	};
 
 	const handleOk = async () => {
-		await axiosHttpService.put(API_PLAN + '/' + id, request);
+		if (fileUploaded.length > 0) {
+            request["attachment"] = fileUploaded[0];
+        }
+		await axiosHttpService.put(API_PLAN + '/' + id, request,  {
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'multipart/form-data',
+			}
+		});
+		
 		setModalOpen(false);
 		reFetchData();
+		notifySuccess("Cập nhật thành công");
 	};
 
 	const handleCancle = () => {
@@ -342,13 +337,28 @@ const Update = ({
 
 				<div className="flex justify-between py-[12px]">
 					<span>Văn bản đính kèm</span>
-					<Upload
-						{...props}
-						className="w-[70%]"
-						name="file"
-					>
-						<Button>Tải tệp lên</Button>
-					</Upload>
+					<form encType="multipart/form-data">
+						<label
+							className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
+							htmlFor="file-upload"
+						>
+							<p className="ml-[8px]">Thêm văn bản</p>
+						</label>
+						<input
+							onClick={(ev) => {
+								ev.target.value = "";
+							}}
+							type="file"
+							id="file-upload"
+							name="file-upload"
+							className="hidden"
+							onChange={(ev) => {
+								setFileUploaded(Array.from(ev.target.files));
+							}}
+							accept="application/pdf"
+							multiple
+						></input>
+					</form>
 				</div>
 			</Modal>
 		</div>
@@ -363,6 +373,7 @@ const KeHoachThuThap = () => {
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
 	const [mapOrgan, setMapOrgan] = useState({});
+	const [fileUploaded, setFileUploaded] = useState([]);
 	const handleSendCollectPlan = async () => {
 		const planIds = stateCheckBox.map((item) => {
 			return Number(item.split("checkbox")[1]);
@@ -411,6 +422,18 @@ const KeHoachThuThap = () => {
 		setId(id);
 	}
 
+	const handleDownloadAttachment = async (fileUrl) => {
+		const response = await axiosHttpService.get(fileUrl, {
+			responseType: "blob",
+		});
+		const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+		const link = document.createElement("a");
+		link.href = downloadUrl;
+		link.setAttribute("download", fileUrl.split("/").pop());
+		document.body.appendChild(link);
+		link.click();
+	};
+
 	const reFetchData = async () => {
 		setIsLoading(true);
 		const res = await axiosHttpService.get(`${API_PLAN_BY_TYPE + '/' + 1}`);
@@ -422,12 +445,19 @@ const KeHoachThuThap = () => {
 		const mapOrgan = {};
 		for (const rawData of rawDatas) {
 			mapOrgan[rawData.id] = rawData.organ;
+			let attachmentName = rawData.attachment;
+			if (attachmentName) {
+				attachmentName = attachmentName.split("/").pop();
+			}else {
+				attachmentName = "";
+			}
 			const row = {
 				id: rawData.id,
 				name: <p
 					onClick={() => handleClickUpdate(rawData.id)}
 					className="cursor-pointer hover:underline"
 				> {rawData.name} </p>,
+				attachment: <button onClick={() => handleDownloadAttachment(rawData.attachment)}>{attachmentName}</button>,
 				start_date: rawData.start_date,
 				organ: rawData.organ_name,
 				state: <button>{rawData.state}</button>,

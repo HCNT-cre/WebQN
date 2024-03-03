@@ -12,6 +12,7 @@ const API_STORAGE_GET_ORGAN_ALL =
 
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
+	{ title: "Văn bản đính kèm", key: "attachment", width: "100%" },
 	{ title: "Ngày kế hoạch", key: "date", width: "100%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
@@ -272,6 +273,19 @@ const PheDuyetKeHoachThuThap = () => {
 	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
 	const ref = useRef();
+
+	const handleDownloadAttachment = async (fileUrl) => {
+		const response = await axiosHttpService.get(fileUrl, {
+			responseType: "blob",
+		});
+		const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+		const link = document.createElement("a");
+		link.href = downloadUrl;
+		link.setAttribute("download", fileUrl.split("/").pop());
+		document.body.appendChild(link);
+		link.click();
+	};
+
 	const reFetchData = async () => {
 		setIsLoading(true);
 		const res = await axiosHttpService.get(`${API_COLLECTION_PLAN}`);
@@ -282,12 +296,19 @@ const PheDuyetKeHoachThuThap = () => {
 
 		const plan = [];
 		for (const rawData of rawDatas) {
+			let attachmentName = rawData.attachment;
+			if (attachmentName) {
+				attachmentName = attachmentName.split("/").pop();
+			}else {
+				attachmentName = "";
+			}
 			const row = {
 				id: rawData.id,
 				name: <p
 					onClick={() => handleClickUpdate(rawData.id)}
 					className="cursor-pointer hover:underline"
 				> {rawData.name} </p>,
+				attachment: <button onClick={() => handleDownloadAttachment(rawData.attachment)}>{attachmentName}</button>,
 				date: rawData.start_date,
 				organ: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
@@ -337,6 +358,7 @@ const PheDuyetKeHoachThuThap = () => {
 		reFetchData();
 	}, []);
 
+	
 	return (
 		<div className="w-full">
 			<div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
