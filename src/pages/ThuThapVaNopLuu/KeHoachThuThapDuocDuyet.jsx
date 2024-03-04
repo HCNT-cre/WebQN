@@ -249,7 +249,7 @@ const KeHoachThuThapDuocPheDuyet = () => {
 		const res = await axiosHttpService.get(`${API_COLLECTION_PLAN}`);
 
 		const rawDatas = res.data.reverse().filter((data) => {
-			return data.state === ENUM_STATE_PLAN.CHAP_NHAN && data.type == 1;
+			return data.state === ENUM_STATE_PLAN.DA_DUYET && data.type == 1;
 		});
 
 		const plan = [];

@@ -930,6 +930,7 @@ export const ModalPlan = () => {
     const reFetchData = useSelector(state => state.modalPlanReducer.reFetchData);
     const oldState = useSelector(state => state.modalPlanReducer.oldState);
     const handleOk = async () => {
+        delete oldState["attachment"];
         await axiosHttpService.put(API_PLAN + '/' + oldState.id, {
             ...oldState,
             state: ENUM_STATE_PLAN.DA_DUYET,
@@ -946,6 +947,7 @@ export const ModalPlan = () => {
     }
 
     const handleCancle = async () => {
+        delete oldState["attachment"];
         await axiosHttpService.put(API_PLAN + '/' + id, {
             ...oldState,
             state: ENUM_STATE_PLAN.TU_CHOI,
