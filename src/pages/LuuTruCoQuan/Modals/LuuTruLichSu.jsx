@@ -60,28 +60,28 @@ export const ModalConfirmSendPlan = ({
 
             <div className="flex flex-col gap-y-[10px]">
                 <div className="flex items-center">
-                    <div className="text-[20px] bold">Bên gửi: &nbsp;</div>
-                    <div className="text-[20px]">{organ.name}</div>
+                    <div className="text-[16px] bold">Bên gửi: &nbsp;</div>
+                    <div className="text-[16px]">{organ.name}</div>
                 </div>
 
                 <div className="flex items-center">
-                    <div className="text-[20px] bold">Bên nhận: &nbsp;</div>
-                    <div className="text-[20px]">Trung tâm lưu trữ lịch sử</div>
+                    <div className="text-[16px] bold">Bên nhận: &nbsp;</div>
+                    <div className="text-[16px]">Trung tâm lưu trữ lịch sử</div>
                 </div>
 
                 <div className="flex items-center">
-                    <div className="text-[20px] bold">Tên kế hoạch: &nbsp;</div>
-                    <div className="text-[20px]">{name}</div>
+                    <div className="text-[16px] bold">Tên kế hoạch: &nbsp;</div>
+                    <div className="text-[16px]">{name}</div>
                 </div>
 
                 <div>
-                    <p className="text-[20px] bold">Danh sách hồ sơ:</p>
-                    <ul className="ml-[20px]">
+                    <p className="text-[16px] bold">Danh sách hồ sơ:</p>
+                    <ul className="ml-[30px]">
                         {files.map((file, index) => {
                             return (
                                 <li key={index}>
                                     <div className="flex items-center">
-                                        <div className="text-[20px]">{file.title}</div>
+                                        <div className="text-[14px]">- {file.title}</div>
                                     </div>
                                 </li>
                             )
