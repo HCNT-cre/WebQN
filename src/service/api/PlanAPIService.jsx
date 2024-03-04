@@ -1,5 +1,6 @@
 import { ENUM_TYPE_PLAN } from "src/storage/Storage";
 import axiosHttpService from "src/utils/httpService";
+import { AddWatchTheoDoiNopLuuLichSu } from "../helper/Plan";
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_FILE_BY_PLAN_NNLS_ID = import.meta.env.VITE_API_GET_FILE_BY_PLAN_NNLS_ID;
 const API_REMOVE_FILE_FROM_PLAN = import.meta.env.VITE_API_REMOVE_FILE_FROM_PLAN;
@@ -84,6 +85,7 @@ const PlanAPIService = {
                 plan_name: plan.name,
                 organ_name: plan.organ_name,
                 progress: "", // t is short for temp
+                watch: <AddWatchTheoDoiNopLuuLichSu item={plan}/>,
             }
         })
     }

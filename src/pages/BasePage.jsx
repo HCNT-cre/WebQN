@@ -22,6 +22,7 @@ import UserAPIService from "src/service/api/userAPIService";
 import FileAPIService from "src/service/api/FileAPIService";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import SoNoiVuPheDuyet from "./LuuTruLichSu/SoNoiVuPheDuyet";
+import { ModalConfirmSendPlan } from "./LuuTruCoQuan/Modals/LuuTruLichSu";
 // import ExcelAPIService from "src/service/api/execAPIService";
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
@@ -640,7 +641,7 @@ const BasePage = ({
 				}
 			}else {
 				setIsLoading(true);
-				const organ = await PlanAPIService.getOrganByPlan()
+				const organ = await PlanAPIService.getOrganByPlan()		
 				setIsLoading(false);
 				setFiles(organ);
 			}
@@ -950,7 +951,6 @@ const BasePage = ({
 			return
 		}else {
 			const organ = await PlanAPIService.getOrganByPlanId(value);
-			console.log(organ + ":", organ);
 			setFiles(organ)
 			setIsLoading(false);
 			setFilterByPlan(value);
@@ -1206,6 +1206,7 @@ const BasePage = ({
 					<ModalModificationDocumentAddedDocument />
 					<ModalModificationDocumentRequireAddDoc />
 					<ModalRecoverFile />
+					<ModalConfirmSendPlan handleSendPlan={null}/>
 					<PlanAndCategoryFile
 						open={modalOpen}
 						setOpen={setModalOpen}
