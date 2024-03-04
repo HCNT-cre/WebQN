@@ -3,13 +3,15 @@ import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
-import { ENUM_STATE_FILE, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
+import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
 import ThemHoSo from "src/pages/LuuTruLichSu/modals/ThemHoSoLuuTruLS";
 import SuaHoSo from "../LuuTruLichSu/modals/SuaHoSoLuuTruLS";
 import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import XoaHoSo from "../LuuTruLichSu/modals/XoaHoSoLuuTruLS";
+import { useDispatch } from "react-redux";
+import { ModalConfirmSendPlan } from "./Modals/LuuTruLichSu";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
@@ -23,7 +25,7 @@ const FIELDS_TABLE = [
 	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
-	{ title: "Chức năng", key: "function", width: "120px" },
+	{ title: "Chức năng", key: "function", width: "180px" },
 ];
 
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
@@ -258,14 +260,14 @@ const Update = ({ reFetchData, id }) => {
 	};
 
 	const handleRemoveFile = async () => {
-        for(const checkbox of removeFile){
-            const idFile = checkbox.split('checkbox')[1]
-            await PlanAPIService.removeFileFromPlan(idFile);    
-        }
-    };
+		for (const checkbox of removeFile) {
+			const idFile = checkbox.split('checkbox')[1]
+			await PlanAPIService.removeFileFromPlan(idFile);
+		}
+	};
 
 	const handleAddFile = async () => {
-		for(const checkbox of addFile){
+		for (const checkbox of addFile) {
 			const idFile = checkbox.split('checkbox')[1]
 			const payload = {
 				plan_id: id,
@@ -376,33 +378,53 @@ const Update = ({ reFetchData, id }) => {
 const KeHoachNopLuuLichSu = () => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
-	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
-
-	const handleSendPlan = async () => {
-		setIsLoading(true);
+	const dispatch = useDispatch();
+	const handleClick = (id, name) => {
+		dispatch({ type: "open_modal_confirm_send_plan_luu_tru_lich_su", id, name });
+	};
+	const handleSendPlan = async (id) => {
 		try {
-			stateCheckBox.forEach(async (item) => {
-				const id = parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))
-				await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DA_THU_THAP);
-				await FileAPIService.updateStateByIdPlan(id, {
-					current_state: 4, // luu tru co quan
-					new_state: 5, // nop luu lich su
-				});
-			})
-
+			console.log("id", id);
+			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DA_THU_THAP);
+			await FileAPIService.updateStateByIdPlan(id, {
+				current_state: 4, // luu tru co quan
+				new_state: 5, // nop luu lich su
+			});
 			setTimeout(() => {
 				reFetchData();
-				setIsLoading(false);
 				notifySuccess("Gửi kế hoạch thành công");
 			}, 500);
-
 		} catch (err) {
 			console.log("err in send plan nop luu lich su", err)
 			notifyError("Gửi kế hoạch thất bại");
 		}
+	}
 
-	};
+	// const handleSendPlan = async () => {
+	// 	setIsLoading(true);
+	// 	try {
+	// 		stateCheckBox.forEach(async (item) => {
+	// 			const id = parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))
+	// 			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DA_THU_THAP);
+	// 			await FileAPIService.updateStateByIdPlan(id, {
+	// 				current_state: 4, // luu tru co quan
+	// 				new_state: 5, // nop luu lich su
+	// 			});
+	// 		})
+
+	// 		setTimeout(() => {
+	// 			reFetchData();
+	// 			setIsLoading(false);
+	// 			notifySuccess("Gửi kế hoạch thành công");
+	// 		}, 500);
+
+	// 	} catch (err) {
+	// 		console.log("err in send plan nop luu lich su", err)
+	// 		notifyError("Gửi kế hoạch thất bại");
+	// 	}
+
+	// };
 	const handleDownloadAttachment = async (fileUrl) => {
 		const response = await axiosHttpService.get(fileUrl, {
 			responseType: "blob",
@@ -429,12 +451,12 @@ const KeHoachNopLuuLichSu = () => {
 		// 		setModalOpen(true);
 		// 	},
 		// },
-		{
-			title: "Gửi kế hoạch",
-			btn_class_name: "custom-btn-clear-filter",
-			onClick: handleSendPlan,
-			icon: <i className="fa-solid fa-sync"></i>,
-		},
+		// {
+		// 	title: "Gửi kế hoạch",
+		// 	btn_class_name: "custom-btn-clear-filter",
+		// 	onClick: handleOpenModal,
+		// 	icon: <i className="fa-solid fa-sync"></i>,
+		// },
 		// {
 		// 	title: "Duyệt kế hoạch",
 		// 	btn_class_name: "custom-btn-export-excel",
@@ -456,7 +478,7 @@ const KeHoachNopLuuLichSu = () => {
 			let attachmentName = rawData.attachment;
 			if (attachmentName) {
 				attachmentName = attachmentName.split("/").pop();
-			}else {
+			} else {
 				attachmentName = "";
 			}
 			const row = {
@@ -470,6 +492,11 @@ const KeHoachNopLuuLichSu = () => {
 					<div className="flex ">
 						<Delete id={rawData.id} reFetchData={reFetchData} />
 						<Update id={rawData.id} reFetchData={reFetchData} />
+						<div>
+							<Button onClick={() => handleClick(rawData.id, rawData.name)} className="border-none">
+								<i className="fa-regular fa-pen-to-square"></i>
+							</Button>
+						</div>
 					</div>
 				),
 			};
@@ -550,11 +577,9 @@ const KeHoachNopLuuLichSu = () => {
 			</div>
 
 			<Table
-				setStateCheckBox={setStateCheckBox}
 				fieldNames={FIELDS_TABLE}
 				fieldDatas={plan}
 				isLoading={isLoading}
-				isCheckBox={true}
 			/>
 
 			<Create
@@ -562,6 +587,9 @@ const KeHoachNopLuuLichSu = () => {
 				setModelOpen={setModalOpen}
 				reFetchData={reFetchData}
 			/>
+
+			<ModalConfirmSendPlan handleSendPlan={handleSendPlan} />
+
 		</div>
 	);
 };

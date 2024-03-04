@@ -21,6 +21,7 @@ import cartReducer from 'src/service/reducers/cartReducer'
 import ModalPlanReducer from './modalPlan'
 import AuthenReducer from './authen'
 import ModalRecoverFileReducer from './modalRecoverFile'
+import ModalConfirmSendPlanLuuTruLichSuReducer from './modalConfirmSendPlanLuuTruLichSu'
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
@@ -43,7 +44,8 @@ const rootReducer = combineReducers({
     cart: cartReducer,
     modalPlanReducer: ModalPlanReducer,
     authen: AuthenReducer,
-    modalRecoverFile: ModalRecoverFileReducer
+    modalRecoverFile: ModalRecoverFileReducer,
+    modalConfirmSendPlanLuuTruLichSu: ModalConfirmSendPlanLuuTruLichSuReducer,
 })
 
 export default rootReducer

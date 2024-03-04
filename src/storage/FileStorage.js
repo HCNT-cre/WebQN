@@ -73,3 +73,15 @@ export const RIGHTS = [
     { value: "Không công khai", label: "Không công khai" },
     { value: "Riêng tư", label: "Riêng tư" },
 ]
+
+export const FIELDS_TABLE_SEND_NLLS_PLAN = [
+    { title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
+    { title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
+    { title: "Phông", key: "organ_id_name", width: "100%" },
+    { title: "Số lượng tờ", key: "sheet_number", width: "70px" },
+    { title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
+    { title: "Thời gian bắt đầu", key: "start_date", width: "100%" },
+    { title: "Thời gian kết thúc", key: "end_date", width: "100%" },
+    { title: "Thời hạn bảo quản", key: "maintenance_name", width: "100%" },
+    { title: "Chế độ sử dụng", key: "rights", width: "100%" },
+]
