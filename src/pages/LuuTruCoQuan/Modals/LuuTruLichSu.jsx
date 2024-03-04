@@ -1,10 +1,8 @@
 import { Modal } from "antd"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Table } from "src/custom/Components"
 import PlanAPIService from "src/service/api/PlanAPIService"
 import UserAPIService from "src/service/api/userAPIService"
-import { FIELDS_TABLE_SEND_NLLS_PLAN } from "src/storage/FileStorage"
 
 export const ModalConfirmSendPlan = ({
     handleSendPlan

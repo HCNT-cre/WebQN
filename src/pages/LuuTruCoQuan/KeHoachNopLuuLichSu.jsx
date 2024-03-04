@@ -25,7 +25,8 @@ const FIELDS_TABLE = [
 	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
-	{ title: "Chức năng", key: "function", width: "180px" },
+	{ title: "Chức năng", key: "function", width: "120px" },
+	{ title: "Gửi hồ sơ", key: "send", width: "90px" },
 ];
 
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
@@ -492,13 +493,15 @@ const KeHoachNopLuuLichSu = () => {
 					<div className="flex ">
 						<Delete id={rawData.id} reFetchData={reFetchData} />
 						<Update id={rawData.id} reFetchData={reFetchData} />
-						<div>
-							<Button onClick={() => handleClick(rawData.id, rawData.name)} className="border-none">
-								<i className="fa-regular fa-pen-to-square"></i>
-							</Button>
-						</div>
 					</div>
 				),
+				send: (
+					<div>
+						<Button onClick={() => handleClick(rawData.id, rawData.name)} className="border-none">
+							<i className="fa-solid fa-paper-plane"></i>
+						</Button>
+					</div>
+				)
 			};
 			plan.push(row);
 		}
