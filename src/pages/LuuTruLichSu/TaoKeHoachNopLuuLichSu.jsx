@@ -502,7 +502,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 	const reFetchData = async () => {
 		setIsLoading(true);
 		const res = await axiosHttpService.get(`${API_GET_PLAN_BY_TYPE}/${ENUM_TYPE_PLAN.NOP_LUU_LICH_SU}`);
-		const rawDatas = res.data;
+		const rawDatas = res.data.reverse();
 		const plan = [];
 		for (const rawData of rawDatas) {
 			console.log(rawData);

@@ -35,7 +35,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	}, []);
 
 	const handleOk = async () => {
-		request["state"] = ENUM_STATE_PLAN.CHAP_NHAN;
+		request["state"] = ENUM_STATE_PLAN.DA_DUYET;
 		request["attachment"] = fileUploaded[0];
 		request["type"] = ENUM_TYPE_PLAN.BIEN_MUC_CHINH_LY;
 
