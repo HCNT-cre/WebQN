@@ -998,17 +998,17 @@ export const TABS_SIDEBAR = [
 		isParent: false,
 		display: true,
 	},
-	{
-		isExpand: false,
-		icon: '<i class="fa-regular fa-newspaper"></i>',
-		title: "Báo cáo và thống kê",
-		numChildTabs: 0,
-		to: "/bao-cao-va-thong-ke",
-		key: "/bao-cao-va-thong-ke",
-		number: 73,
-		isParent: false,
-		display: true,
-	},
+	// {
+	// 	isExpand: false,
+	// 	icon: '<i class="fa-regular fa-newspaper"></i>',
+	// 	title: "Báo cáo và thống kê",
+	// 	numChildTabs: 0,
+	// 	to: "/bao-cao-va-thong-ke",
+	// 	key: "/bao-cao-va-thong-ke",
+	// 	number: 73,
+	// 	isParent: false,
+	// 	display: true,
+	// },
 
 	{
 		isExpand: false,
