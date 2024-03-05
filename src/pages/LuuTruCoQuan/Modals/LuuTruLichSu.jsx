@@ -55,7 +55,7 @@ export const ModalConfirmSendPlan = ({
             onCancel={handleCancel}
             onOk={handleOk}
             open={open}
-            title="Xác nhận gửi kế hoạch"
+            title="Biên bản bàn giao"
         >
 
             <div className="flex flex-col gap-y-[10px]">
