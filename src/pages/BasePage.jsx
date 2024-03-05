@@ -11,7 +11,7 @@ import { OpenFile, EditFile, CreateFile } from "../actions/formFile";
 import File from "../components/Form/File/File";
 import { FIELDS_TABLE } from "../storage/FileStorage";
 import { ENUM_STATE_BMCL, ENUM_STATE_FILE, ENUM_STATE_PLAN, STATE } from "../storage/Storage";
-import { DeleteData, GetKey } from "../custom/Function";
+import { DeleteData, GetKey, reloadPage } from "../custom/Function";
 import { useButtonClickOutside } from "../custom/Hook";
 import { Link } from "react-router-dom";
 import { notifyError, notifySuccess } from "../custom/Function";
@@ -114,7 +114,7 @@ const PlanAndCategoryFile = ({
 				<Select
 					name="collectionPlan"
 					className="w-[70%]"
-					options={collectionPlan}
+					options={collectionPlan.reverse()}
 					onChange={(value) => setSelectedPlan(value)}
 				/>
 			</div>
@@ -806,6 +806,7 @@ const BasePage = ({
 			await PlanAPIService.updateStatePlan(filterByPlan, newState);
 			notifySuccess("Thay đổi trạng thái thành công");
 			reset();
+			reloadPage();
 		} catch (error) {
 			notifyError("Thay đổi trạng thái thất bại");
 		}
