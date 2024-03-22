@@ -21,7 +21,7 @@ const SideBarTab = ({ tab, sideBarWidth, currentTab, setCurrentTab, toggleExpand
                         {tab.icon && <span dangerouslySetInnerHTML={{ __html: tab.icon }} />}
                     </div>
 
-                    {sideBarWidth === 250 && <p className="whitespace-normal">{tab.title}</p>}
+                    {sideBarWidth === 250 && <p className="whitespace-normal text-[12.5px]">{tab.title}</p>}
 
                     <div className="flex items-center mx-[10px] w-[16px]">
                         {tab.numChildTabs > 0 && sideBarWidth === 250 &&

@@ -116,7 +116,7 @@ export const TABS_SIDEBAR = [
 				parent: 25,
 				childTabs: [
 					{
-						title: "Tạo kế hoạch thu thập",
+						title: "Tạo kế hoạch",
 						to: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 						key: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",
 						number: 2,
@@ -124,21 +124,21 @@ export const TABS_SIDEBAR = [
 					},
 
 					{
-						title: "Phê duyệt kế hoạch thu thập",
+						title: "Phê duyệt kế hoạch",
 						to: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
 						key: "/thu-thap-va-nop-luu/phe-duyet-ke-hoach-thu-thap",
 						number: 3,
 						parent: 1,
 					},
 					{
-						title: "Kế hoạch thu thập bị từ chối",
+						title: "Kế hoạch bị từ chối",
 						to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
 						key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-bi-tu-choi",
 						number: 4,
 						parent: 1,
 					},
 					{
-						title: "Kế hoạch thu thập được phê duyệt",
+						title: "Kế hoạch được duyệt",
 						to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
 						key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
 						number: 5,
@@ -153,28 +153,28 @@ export const TABS_SIDEBAR = [
 					},
 					//{ title: "Nộp lưu cơ quan", to: "/thu-thap-va-nop-luu/nop-luu-co-quan", key: "/thu-thap-va-nop-luu/nop-luu-co-quan" },
 					{
-						title: "Duyệt hồ sơ nộp lưu",
+						title: "Duyệt hồ sơ",
 						to: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu",
 						key: "/thu-thap-va-nop-luu/duyet-ho-so-nop-luu",
 						number: 7,
 						parent: 1,
 					},
 					{
-						title: "Hồ sơ nộp lưu bị trả về",
+						title: "Hồ sơ nộp bị trả về",
 						to: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
 						key: "/thu-thap-va-nop-luu/ho-so-nop-luu-bi-tra-ve",
 						number: 8,
 						parent: 1,
 					},
 					{
-						title: "Hồ sơ đến hạn nộp lưu",
+						title: "Hồ sơ đến hạn",
 						to: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu",
 						key: "/thu-thap-va-nop-luu/ho-so-den-han-nop-luu",
 						number: 9,
 						parent: 1,
 					},
 					{
-						title: "Hồ sơ đã nhận nộp lưu",
+						title: "Hồ sơ đã nộp lưu",
 						to: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
 						key: "/thu-thap-va-nop-luu/ho-so-da-nhan-nop-luu",
 						number: 10,
@@ -229,7 +229,7 @@ export const TABS_SIDEBAR = [
 						parent: 12,
 					},
 					{
-						title: "Hồ sơ chỉnh lý bị trả về",
+						title: "Hồ sơ bị trả về",
 						to: "/bien-muc-chinh-ly/ho-so-chinh-ly-bi-tra-ve",
 						key: "/bien-muc-chinh-ly/ho-so-chinh-ly-bi-tra-ve",
 						number: 16,
@@ -324,14 +324,14 @@ export const TABS_SIDEBAR = [
 				isParent: true,
 				childTabs: [
 					{
-						title: "Hồ sơ tài liệu giao nộp",
+						title: "Hồ sơ tài liệu",
 						to: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
 						key: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
 						number: 26,
 						parent: 79,
 					},
 					{
-						title: "Kho lưu trữ cơ quan",
+						title: "Kho lưu trữ",
 						to: "/luu-tru-co-quan/kho-luu-tru-co-quan",
 						key: "/luu-tru-co-quan/kho-luu-tru-co-quan",
 						number: 27,
@@ -353,7 +353,7 @@ export const TABS_SIDEBAR = [
 				isParent: true,
 				childTabs: [
 					{
-						title: "Kế hoạch nộp lưu lịch sử",
+						title: "Kế hoạch nộp lưu",
 						to: "/nop-luu-lich-su/ke-hoach-nop-luu-lich-su",
 						key: "/nop-luu-lich-su/ke-hoach-nop-luu-lich-su",
 						number: 80,
@@ -487,14 +487,14 @@ export const TABS_SIDEBAR = [
 				isParent: true,
 				childTabs: [
 					{
-						title: "Tạo kế hoạch nộp lưu lịch sử",
+						title: "Tạo kế hoạch",
 						to: "/luu-tru-lich-su/tao-ke-hoach-nop-luu-lich-su",
 						key: "/luu-tru-lich-su/tao-ke-hoach-nop-luu-lich-su",
 						number: 31,
 						parent: 81,
 					},
 					{
-						title: "Phê duyệt và gửi kế hoạch nộp lưu lịch sử",
+						title: "Phê duyệt và gửi đi",
 						to: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
 						key: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
 						number: 32,
@@ -502,7 +502,7 @@ export const TABS_SIDEBAR = [
 					},
 
 					{
-						title: "Theo dõi kế hoạch nộp lưu lịch sử",
+						title: "Theo dõi kế hoạch",
 						to: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su",
 						key: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su",
 						number: 104,
