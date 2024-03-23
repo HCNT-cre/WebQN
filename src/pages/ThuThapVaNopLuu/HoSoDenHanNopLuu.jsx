@@ -38,9 +38,35 @@ const HoSoDenHanNopLuu = () => {
 
         return newFiles
     }
+    
+    const filterFileExcel = (files) => {
+        let today = new Date()
+        const y = today.getFullYear();
+        const m = today.getMonth() + 1; // Months start at 0!
+        const d = today.getDate();
+
+        today = new Date(`${y}-${m}-${d}`)
+        const dateDiff = (start_date, end_date = today) => {
+            start_date = new Date(start_date)
+            const diffTime = end_date - start_date
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            return diffDays / 365
+        }
+        if(files && files.length > 0) {
+            return files.filter((file) => {
+                if (file.end_date === null || file.end_date === undefined || ( file.state != 2) ) return false;
+
+                if (dateDiff(file.end_date) >= 1)
+                    return true
+            })
+        }
+        return []
+    }
 
 
-    return <BasePage parent={parent} current={current} filter={filter} />
+
+    return <BasePage filterFileExcel={filterFileExcel} parent={parent} current={current} filter={filter} />
 }
 
 export default HoSoDenHanNopLuu;

@@ -45,6 +45,7 @@ const ThamDinhHoSo = () => {
     return <BasePage
         filtePlanCondition={filterPlan}
         parent={parent}
+        excel={false}
         current={current}
         filter={filter}
         isCheckBox={false}

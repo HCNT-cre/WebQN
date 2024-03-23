@@ -25,6 +25,14 @@ const HoSoTaiLieuGiaoNop = () => {
         return newFiles
     }
 
+const filterFileExcel = (files) => {
+    if(files && files.length > 0) {
+        return files.filter((file) => {
+            return file.state == 10
+        })
+    }
+    return []
+}
 
     return <BasePage 
         parent={parent}
@@ -33,6 +41,7 @@ const HoSoTaiLieuGiaoNop = () => {
         isCheckBox={false}
         buttonFuctions={<ButtonFuctions />}
         currentStateModal={ENUM_STATE_FILE.LUU_TRU_CO_QUAN}
+        filterFileExcel={filterFileExcel}
         eOffice={false} />
 }
 

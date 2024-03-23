@@ -29,6 +29,7 @@ const TheoDoiKeHoach = () => {
         filtePlanCondition={filterPlan}
         thamDinhHoSo={true}
         parent={parent}
+        excel={false}
         current={current}
         isCheckBox={false}
         haveActionButton={false} 

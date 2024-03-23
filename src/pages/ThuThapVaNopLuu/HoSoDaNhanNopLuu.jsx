@@ -23,6 +23,15 @@ const HoSoDaNhanNopLuu = () => {
     return newFiles;
   };
 
+  const filterFileExcel = (files) => {
+    if(files && files.length > 0) {
+        return files.filter((file) => {
+            return file.state == 9
+        })
+    }
+    return []
+}
+
   return (
     <BasePage
       parent={parent}
@@ -32,6 +41,7 @@ const HoSoDaNhanNopLuu = () => {
       eOffice={false}
       XepVaoKho={true}
       haveActionButton={false}
+      filterFileExcel={filterFileExcel}
     />
   );
 };

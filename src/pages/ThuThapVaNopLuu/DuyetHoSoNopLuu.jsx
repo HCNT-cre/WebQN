@@ -22,6 +22,14 @@ const DuyetHoSoNopLuu = () => {
         }
         return newFiles
     }
+    const filterFileExcel = (files) => {
+        if(files && files.length > 0) {
+            return files.filter((file) => {
+                return file.state == 3
+            })
+        }
+        return []
+    }
 
 
     return <BasePage
@@ -32,6 +40,7 @@ const DuyetHoSoNopLuu = () => {
         buttonFuctions={<ButtonFuctions />}
         eOffice={false}
         haveActionButton={false}
+        filterFileExcel={filterFileExcel}
     />
 }
 

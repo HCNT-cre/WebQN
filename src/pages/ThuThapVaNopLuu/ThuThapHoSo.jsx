@@ -34,6 +34,14 @@ const ThuThapHoSo = () => {
 
         return newFiles;
     };
+    const filterFileExcel = (files) => {
+        if(files && files.length > 0) {
+            return files.filter((file) => {
+                return file.state == 1 || file.state == 2
+            })
+        }
+        return []
+    }
 
     return (
         <BasePage
@@ -44,6 +52,7 @@ const ThuThapHoSo = () => {
             eOffice={true}
             apiPlan={API_PLAN}
             filtePlanCondition={filtePlanCondition}
+            filterFileExcel={filterFileExcel}
         />
     );
 };

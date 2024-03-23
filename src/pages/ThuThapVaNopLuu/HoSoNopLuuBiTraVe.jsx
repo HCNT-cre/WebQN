@@ -30,7 +30,16 @@ const HoSoNopLuuBiTraVe = () => {
 
         return newFiles
     }
-    return <BasePage parent={parent} current={current} filter={filter} />
+
+    const filterFileExcel = (files) => {
+        if(files && files.length > 0) {
+            return files.filter((file) => {
+                return file.state == 7
+            })
+        }
+        return []
+    }
+    return <BasePage parent={parent} current={current} filter={filter} filterFileExcel={filterFileExcel}/>
 }
 
 export default HoSoNopLuuBiTraVe;

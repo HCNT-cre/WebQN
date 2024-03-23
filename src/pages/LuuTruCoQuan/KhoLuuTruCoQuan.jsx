@@ -14,7 +14,6 @@ export const FIELDS_TABLE = [
     { title: "Chức năng", key: "Function", width: "120px" },
 ]
 
-
 const KhoLuuTruCoQuan = () => {
     const parent = [
         {
@@ -50,8 +49,35 @@ const KhoLuuTruCoQuan = () => {
         return newFiles
     }
 
+    const filterFileExcel = (files) => {
+        if (files && files.length > 0) {
+            return files.filter((file) => {
+                if (file.state != 4) return false;
+                let today = new Date()
+                const y = today.getFullYear();
+                const m = today.getMonth() + 1; // Months start at 0!
+                const d = today.getDate();
+                today = new Date(`${y}-${m}-${d}`);
+                const endDate = new Date(file.end_date);
+                endDate.setFullYear(endDate.getFullYear() + Number(file.maintenance_name));
+                if( DateDiff(endDate, today) < 0 || file.maintenance_name === 'Vĩnh viễn')
+                    return true;
+            })
+        }
+        return []
+    }
 
-    return <BasePage parent={parent} haveActionButton={false} current={current} filter={filter} fieldsTableCustom={FIELDS_TABLE} luuTruCoQuan={true} />
+    return (
+        <BasePage
+            filterFileExcel={filterFileExcel}
+            parent={parent}
+            haveActionButton={false}
+            current={current}
+            filter={filter}
+            fieldsTableCustom={FIELDS_TABLE}
+            luuTruCoQuan={true}
+        />
+    )
 }
 
 export default KhoLuuTruCoQuan;

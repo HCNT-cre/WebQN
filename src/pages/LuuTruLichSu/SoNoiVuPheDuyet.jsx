@@ -48,6 +48,7 @@ const SoNoiVuPheDuyet = () => {
         current={current}
         filter={filter}
         isCheckBox={false}
+        excel={false}
         soNoiVuDuyet={true}
         haveActionButton={false}
         havePlan={true}
