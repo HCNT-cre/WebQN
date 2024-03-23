@@ -67,6 +67,14 @@ const KhoLuuTruLichSu = () => {
             }
             return newFiles
         }
+        const filterFileExcel = (files) => {
+            if(files && files.length > 0) {
+                return files.filter((file) => {
+                    return file.state == 6
+                })
+            }
+            return []
+        }
     // }, [allOrganStorageFiles]);
 
 
@@ -75,7 +83,7 @@ const KhoLuuTruLichSu = () => {
     current={current} 
     haveActionButton={false} 
     filter={filter} 
-    stateFileFilterExcel={4}
+    filterFileExcel={filterFileExcel}
     />
 }
 

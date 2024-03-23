@@ -32,7 +32,6 @@ const DuyetHoSoNopLuu = () => {
         buttonFuctions={<ButtonFuctions />}
         eOffice={false}
         haveActionButton={false}
-        stateFileFilterExcel={3}
     />
 }
 
