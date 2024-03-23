@@ -70,7 +70,13 @@ const KhoLuuTruLichSu = () => {
     // }, [allOrganStorageFiles]);
 
 
-    return <BasePage parent={parent} current={current} haveActionButton={false} filter={filter} />
+    return <BasePage 
+    parent={parent} 
+    current={current} 
+    haveActionButton={false} 
+    filter={filter} 
+    stateFileFilterExcel={4}
+    />
 }
 
 export default KhoLuuTruLichSu;

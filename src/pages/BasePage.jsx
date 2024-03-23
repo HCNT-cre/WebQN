@@ -401,6 +401,7 @@ const BasePage = ({
 	soNoiVuDuyet = false,
 	thamDinhHoSo = false,
 	filterOrganByPlan = false,
+	stateFileFilterExcel = null,
 }) => {
 	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
@@ -873,7 +874,13 @@ const BasePage = ({
 
 	const handleExportDocToExcel = () => {
 		const getExcel = async () => {
-			fileSheet.forEach((file) => {
+			const fileDownload = fileSheet.filter((file) => {
+				if (stateFileFilterExcel) {
+					return file.state == stateFileFilterExcel
+				}
+				return true;
+			})
+			fileDownload.forEach((file) => {
 				file.maintenance = file.maintenance_name;
 				if (file.maintenance_name !== "Vĩnh viễn") {
 					file.maintenance = file.maintenance_name + " năm";
@@ -881,7 +888,7 @@ const BasePage = ({
 			})
 			const response = await axiosCorsService.post(API_EXPORT_EXCEL, {
 				luong: 200,
-				data: fileSheet,
+				data: fileDownload,
 				cmd: "danhmuc"
 			}, {
 				responseType: "blob"
