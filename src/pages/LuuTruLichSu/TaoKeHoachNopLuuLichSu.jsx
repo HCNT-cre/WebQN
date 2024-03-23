@@ -10,12 +10,15 @@ import SuaHoSo from "./modals/SuaHoSoLuuTruLS";
 import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import XoaHoSo from "./modals/XoaHoSoLuuTruLS";
+
+import UserAPIService from "src/service/api/userAPIService";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
 const API_STORAGE_GET_ORGAN_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
+
 
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
@@ -31,8 +34,11 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [selectedFiles, setSelectedFiles] = useState([]);
 	const [request, setRequest] = useState({});
 	const [organ, setOrgan] = useState([]);
+    const [optionOrgan, setOptionOrgan] = useState([])
 	const [reset, setReset] = useState(false);
 	const [fileUploaded, setFileUploaded] = useState([]);
+
+	
 
 	const handleCreate = async () => {
 		request["attachment"] = fileUploaded[0];
@@ -74,6 +80,19 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		};
 
 		getOrgan();
+	}, []);
+
+	useEffect(() => {
+		const fetchOrganName = async () => {
+			const response = await UserAPIService.getUserOrgan();
+			let organObject = {
+				value: response.id,
+				label: response.name
+			}
+			setOptionOrgan([organObject]);
+			handleChangeRequest('organ', organObject.value)
+		}
+		fetchOrganName();
 	}, []);
 
 	const handleOk = async () => {
@@ -137,12 +156,19 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 				<div className="flex justify-between py-[12px]">
 					<span>Cơ quan / Đơn vị </span>
 					<Select
-						name="organ"
-						onChange={(value) => handleChangeRequest("organ", value)}
-						className="w-[70%]"
-						value={request["organ"]}
-						options={organ}
-					/>
+                        name="organ"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        defaultValue={optionOrgan[0]?.value}
+                        optionFilterProp="children"
+                        onChange={(value) => handleChangeRequest('organ', value)}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionOrgan}
+                        disabled={true}
+                    />
 				</div>
 				<div className="flex justify-between py-[12px]">
 					<span>Văn bản đính kèm</span>
