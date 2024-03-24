@@ -200,6 +200,7 @@ const AddDoc = ({
         setRequest(prev => {
             const cur = SetNull(prev)
             cur['gov_file_id'] = govFileID
+            cur['identifier'] =  organ.name
             return cur
         })
         if (isSubmitFormSuccess === true) {
