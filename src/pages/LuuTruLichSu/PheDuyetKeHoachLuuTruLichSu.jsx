@@ -3,12 +3,14 @@ import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import { Button, Input, Modal, Popconfirm, Select } from "antd";
 import ThemHoSo from "src/pages/LuuTruLichSu/modals/ThemHoSoLuuTruLS";
 import { notifySuccess } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import XoaHoSo from "./modals/XoaHoSoLuuTruLS";
+import { SendPlanToOrgan } from "./modals/SendPlanToOrgan";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
 
@@ -277,6 +279,12 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
 
+	const dispatch = useDispatch();
+	const handleSendPlanToOrgan = () => {
+		dispatch({ type: "open_table_send_plan_to_organ" });
+	};
+	
+
 	const handleConfirmPlan = async () => {
 		const ids = stateCheckBox.map((item) => item.split('checkbox')[1]);
 		ids.forEach(async (id) => {
@@ -317,7 +325,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 			title: "Gửi đến các cơ quan",
 			btn_class_name: "custom-btn-add-file",
 			icon: <i className="fa-solid fa-plus"></i>,
-            onClick: handleSendPlan,
+            onClick: handleSendPlanToOrgan,
 		}
 	];
     const handleDownloadAttachment = async (fileUrl) => {
@@ -447,6 +455,8 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 				isCheckBox={true}
                 selectedFiles={stateCheckBox}
 			/>
+
+			<SendPlanToOrgan />
 		</div>
 	);
 }

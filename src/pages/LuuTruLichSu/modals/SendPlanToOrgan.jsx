@@ -2,23 +2,25 @@ import { Modal, Input, Checkbox } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserAPIService from "src/service/api/userAPIService";
+import axiosHttpService, { axiosCorsService } from "src/utils/httpService";
+const API_STORAGE_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL
 
 const { Search } = Input;
 
-export const ChonNguoiDuyetKeHoach = (
+export const SendPlanToOrgan = (
     handleSendPlan
 ) => {
-    const open = useSelector(state => state.modalChoosePerson.state);
+    const open = useSelector(state => state.tableSendPlanToOrgan.state);
     const dispatch = useDispatch();
     const [userList, setUserList] = useState([]);
 
     const handleOk = () => {
-        dispatch({ type: "close_modal_choose_person" });
+        dispatch({ type: "close_table_send_plan_to_organ" });
         handleSendPlan();
     };
 
     const handleCancel = () => {
-        dispatch({ type: "close_modal_choose_person" });
+        dispatch({ type: "close_table_send_plan_to_organ" });
     };
 
     const handleSearch = () => {
@@ -33,9 +35,9 @@ export const ChonNguoiDuyetKeHoach = (
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const dataUser = await UserAPIService.getUserInfo();
-                const data = await UserAPIService.getAllUserByOrganID(dataUser.organ_id);
-                setUserList(data);
+                const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN)
+                console.log("organ:",res);
+                setUserList(res.data);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -48,7 +50,7 @@ export const ChonNguoiDuyetKeHoach = (
             open={open}
             onCancel={handleCancel}
             onOk={handleOk}
-            title="Chọn người duyệt kế hoạch"
+            title="Chọn cơ quan nhận kế hoạch"
             bodyStyle={{ maxHeight: '60vh', overflow: 'auto' }}
             width={500}
         >
@@ -56,7 +58,7 @@ export const ChonNguoiDuyetKeHoach = (
                 <Search placeholder="Tìm kiếm" onSearch={handleSearch} enterButton />
             </div>
             <div className="text-xl font-bold text-gray-800 mb-[5px]">
-                Danh sách nhân viên
+                Danh sách các cơ quan
             </div>
             <div className="flex flex-col mb-[5px]">
                 {userList.map(user => (
@@ -64,7 +66,7 @@ export const ChonNguoiDuyetKeHoach = (
                         key={user.id}
                         onChange={(e) => onChange(e, user.id)}
                     >
-                        {user.full_name}
+                        {user.name}
                     </Checkbox>
                 ))}
             </div>

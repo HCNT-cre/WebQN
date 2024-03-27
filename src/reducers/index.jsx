@@ -23,6 +23,7 @@ import AuthenReducer from './authen'
 import ModalRecoverFileReducer from './modalRecoverFile'
 import ModalConfirmSendPlanLuuTruLichSuReducer from './modalConfirmSendPlanLuuTruLichSu'
 import modalChoosePersonReducer from './modalChoosePerson'
+import tableSenPlanToOrganReducer from './tableSendPlanToOrgan'
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
@@ -48,6 +49,7 @@ const rootReducer = combineReducers({
     modalRecoverFile: ModalRecoverFileReducer,
     modalConfirmSendPlanLuuTruLichSu: ModalConfirmSendPlanLuuTruLichSuReducer,
     modalChoosePerson: modalChoosePersonReducer,
+    tableSendPlanToOrgan: tableSenPlanToOrganReducer,
 })
 
 export default rootReducer
