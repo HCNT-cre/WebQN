@@ -23,6 +23,7 @@ import FileAPIService from "src/service/api/FileAPIService";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import SoNoiVuPheDuyet from "./LuuTruLichSu/SoNoiVuPheDuyet";
 import { ModalConfirmSendPlan } from "./LuuTruCoQuan/Modals/LuuTruLichSu";
+import { ChonNguoiDuyetKeHoach } from "./LuuTruLichSu/modals/ChonNguoiDuyetKeHoach";
 // import ExcelAPIService from "src/service/api/execAPIService";
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
@@ -1210,6 +1211,7 @@ const BasePage = ({
 					<ModalModificationDocumentRequireAddDoc />
 					<ModalRecoverFile />
 					<ModalConfirmSendPlan handleSendPlan={null}/>
+					<ChonNguoiDuyetKeHoach handleSendPlan={null}/>
 					<PlanAndCategoryFile
 						open={modalOpen}
 						setOpen={setModalOpen}

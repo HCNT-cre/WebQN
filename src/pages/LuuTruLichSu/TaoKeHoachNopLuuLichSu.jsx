@@ -10,8 +10,9 @@ import SuaHoSo from "./modals/SuaHoSoLuuTruLS";
 import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import XoaHoSo from "./modals/XoaHoSoLuuTruLS";
-
+import { useDispatch } from "react-redux";
 import UserAPIService from "src/service/api/userAPIService";
+import {ChonNguoiDuyetKeHoach} from "./modals/ChonNguoiDuyetKeHoach";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
@@ -460,6 +461,10 @@ const TaoKeHoachLuuTruLichSu = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
+	const dispatch = useDispatch();
+	const handleChoosePerson = () => {
+		dispatch({ type: "open_modal_choose_person" });
+	};
 
 	const handleSendPlan = async () => {
 		setIsLoading(true);
@@ -503,7 +508,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 		{
 			title: "Gửi kế hoạch",
 			btn_class_name: "custom-btn-clear-filter",
-			onClick: handleSendPlan,
+			onClick: handleChoosePerson,
 			icon: <i className="fa-solid fa-sync"></i>,
 		},
 		// {
@@ -646,6 +651,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 				setModelOpen={setModalOpen}
 				reFetchData={reFetchData}
 			/>
+			<ChonNguoiDuyetKeHoach handleSendPlan={handleSendPlan}/>
 		</div>
 	);
 };
