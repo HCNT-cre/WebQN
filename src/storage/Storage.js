@@ -138,7 +138,7 @@ export const TABS_SIDEBAR = [
 						parent: 1,
 					},
 					{
-						title: "Kế hoạch được duyệt",
+						title: "Kế hoạch đã duyệt",
 						to: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
 						key: "/thu-thap-va-nop-luu/ke-hoach-thu-thap-duoc-duyet",
 						number: 5,
