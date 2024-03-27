@@ -2,6 +2,7 @@ import { Modal, Input, Checkbox } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserAPIService from "src/service/api/userAPIService";
+import { SearchOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 
@@ -53,7 +54,7 @@ export const ChonNguoiDuyetKeHoach = (
             width={500}
         >
             <div className="mb-[5px]">
-                <Search placeholder="Tìm kiếm" onSearch={handleSearch} enterButton />
+            <Input size="large" placeholder="Tìm kiếm" prefix={<SearchOutlined />} />
             </div>
             <div className="text-xl font-bold text-gray-800 mb-[5px]">
                 Danh sách nhân viên
