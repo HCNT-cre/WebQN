@@ -7,7 +7,6 @@ import FixDoc from "./FixDoc";
 import EOFFICE from "./EOFFICE";
 import { DeleteData, GetDataFromIDFile } from "../../../custom/Function";
 import { Button, Popconfirm, Input } from "antd";
-import * as XLSX from "xlsx/xlsx.mjs";
 
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,8 +15,7 @@ import DocumentAPIService from "src/service/api/DocumentAPIService";
 
 const API_DOCUMENT_GET = import.meta.env.VITE_API_DOCUMENT_GET;
 const API_DOCUMENT_DELETE = import.meta.env.VITE_API_DOCUMENT_DELETE;
-const API_EXPORT_EXCEL = import.meta.env.VITE_API_EXPORT_EXCEL;
-
+const API_EXPORT_EXCEL_DOC = import.meta.env.VITE_API_EXPORT_EXCEL_DOC
 const TABLE_FIELDS = [
   { title: "TT", key: "doc_ordinal", width: "50px" },
   { title: "Ngày ban hành", key: "issued_date", width: "100%" },
@@ -196,16 +194,9 @@ const DocCategory = ({ eOffice = true }) => {
 
   const handleExportExcel = async () => {
     const getExcel = async () => {
-      const response = await axiosHttpService.post(
-        API_EXPORT_EXCEL,
-        {
-          luong: 200,
-          data: fileSheet,
-        },
-        {
-          responseType: "blob",
-        }
-      );
+      const response = await axiosHttpService.get(API_EXPORT_EXCEL_DOC + '/' + govFileID, {
+        responseType: 'blob'
+      });
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -320,7 +311,6 @@ const DocCategory = ({ eOffice = true }) => {
                   </div>
                   <div className="w-[12.5%] text-white text-center px-[5px] flex">
                     <button
-                      onClick={() => scanToJpg()}
                       className="rounded-[5px] h-[30px] flex justify-center bg-red-500 w-full px-[4px] items-center text-[12px]"
                     >
                       Số hóa tài liệu
