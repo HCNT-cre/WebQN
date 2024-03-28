@@ -1,23 +1,32 @@
 import { Modal, Input, Checkbox } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import UserAPIService from "src/service/api/userAPIService";
-import axiosHttpService, { axiosCorsService } from "src/utils/httpService";
-import { UserOutlined, SearchOutlined} from '@ant-design/icons';
+import axiosHttpService from "src/utils/httpService";
+import { SearchOutlined} from '@ant-design/icons';
+import PlanAPIService from "src/service/api/PlanAPIService";
+import { ENUM_STATE_PLAN } from "src/storage/Storage";
+
 const API_STORAGE_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL
 
-const { Search } = Input;
-
 export const SendPlanToOrgan = (
-    handleSendPlan
 ) => {
     const open = useSelector(state => state.tableSendPlanToOrgan.state);
+    const planIds = useSelector(state => state.tableSendPlanToOrgan?.data?.planIds);
     const dispatch = useDispatch();
-    const [userList, setUserList] = useState([]);
+    const [organs, setOrgans] = useState([]);
+    const [organIds, setOrganIds] = useState([]);
 
-    const handleOk = () => {
-        dispatch({ type: "close_table_send_plan_to_organ" });
-        handleSendPlan();
+    const handleOk = async () => {
+        try {
+            await PlanAPIService.sendNLLSPLanOrgan(planIds, organIds);
+            planIds.forEach(async id => {
+                await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DOI_THU_THAP);
+            });
+            dispatch({ type: "close_table_send_plan_to_organ", success: true });
+        } catch (err) {
+            console.log(err);
+            dispatch({ type: "close_table_send_plan_to_organ", success: false });
+        }
     };
 
     const handleCancel = () => {
@@ -29,7 +38,11 @@ export const SendPlanToOrgan = (
     };
 
     const onChange = (e, userId) => {
-        console.log(`User with ID ${userId} checked: ${e.target.checked}`);
+        if (e.target.checked) {
+            setOrganIds([...organIds, userId]);
+        } else {
+            setOrganIds(organIds.filter(id => id !== userId));
+        }
     };
 
 
@@ -37,8 +50,7 @@ export const SendPlanToOrgan = (
         const fetchData = async () => {
             try {
                 const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN)
-                console.log("organ:",res);
-                setUserList(res.data);
+                setOrgans(res.data);
             } catch (error) {
                 console.error("Error fetching user data:", error);
             }
@@ -62,7 +74,7 @@ export const SendPlanToOrgan = (
                 Danh sách các cơ quan
             </div>
             <div className="flex flex-col mb-[5px]">
-                {userList.map(user => (
+                {organs && organs.map(user => (
                     <Checkbox
                         key={user.id}
                         onChange={(e) => onChange(e, user.id)}

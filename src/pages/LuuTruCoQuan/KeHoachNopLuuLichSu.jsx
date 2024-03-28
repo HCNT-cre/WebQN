@@ -402,30 +402,6 @@ const KeHoachNopLuuLichSu = () => {
 		}
 	}
 
-	// const handleSendPlan = async () => {
-	// 	setIsLoading(true);
-	// 	try {
-	// 		stateCheckBox.forEach(async (item) => {
-	// 			const id = parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))
-	// 			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DA_THU_THAP);
-	// 			await FileAPIService.updateStateByIdPlan(id, {
-	// 				current_state: 4, // luu tru co quan
-	// 				new_state: 5, // nop luu lich su
-	// 			});
-	// 		})
-
-	// 		setTimeout(() => {
-	// 			reFetchData();
-	// 			setIsLoading(false);
-	// 			notifySuccess("Gửi kế hoạch thành công");
-	// 		}, 500);
-
-	// 	} catch (err) {
-	// 		console.log("err in send plan nop luu lich su", err)
-	// 		notifyError("Gửi kế hoạch thất bại");
-	// 	}
-
-	// };
 	const handleDownloadAttachment = async (fileUrl) => {
 		const response = await axiosHttpService.get(fileUrl, {
 			responseType: "blob",
@@ -444,38 +420,14 @@ const KeHoachNopLuuLichSu = () => {
 			btn_class_name: "custom-btn-search",
 			icon: <i className="fa-solid fa-magnifying-glass"></i>,
 		},
-		// {
-		// 	title: "Tạo kế hoạch",
-		// 	btn_class_name: "custom-btn-add-file",
-		// 	icon: <i className="fa-solid fa-plus"></i>,
-		// 	onClick: () => {
-		// 		setModalOpen(true);
-		// 	},
-		// },
-		// {
-		// 	title: "Gửi kế hoạch",
-		// 	btn_class_name: "custom-btn-clear-filter",
-		// 	onClick: handleOpenModal,
-		// 	icon: <i className="fa-solid fa-sync"></i>,
-		// },
-		// {
-		// 	title: "Duyệt kế hoạch",
-		// 	btn_class_name: "custom-btn-export-excel",
-		// 	icon: <i className="fa-solid fa-file-excel"></i>,
-		// },
 	];
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		const res = await axiosHttpService.get(`${API_GET_PLAN_BY_TYPE}/${ENUM_TYPE_PLAN.NOP_LUU_LICH_SU}`);
-		const rawDatas = res.data.reverse();
+		const rawDatas = await PlanAPIService.getNLLSPlanByOrgan();
 		const plan = [];
 		for (const rawData of rawDatas) {
 			if (rawData.state != 'Đợi thu thập' && rawData.state != 'Đã thu thập') continue;
-			// let color = "bg-indigo-700";
-			// if (rawData.state === ENUM_STATE_PLAN.CHO_DUYET) color = "bg-green-500";
-			// else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";
-			// else if (rawData.state === ENUM_STATE_PLAN.CHAP_NHAN) color = "bg-blue-600";
 			let attachmentName = rawData.attachment;
 			if (attachmentName) {
 				attachmentName = attachmentName.split("/").pop();

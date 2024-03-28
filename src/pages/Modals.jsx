@@ -4,26 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { OpenFile } from "../actions/formFile";
 import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../custom/Function";
-import { ENUM_STATE_BMCL, ENUM_STATE_FILE, STATE } from "../storage/Storage";
-import { current } from "@reduxjs/toolkit";
-import { ENUM_TYPE_PLAN, ENUM_STATE_PLAN } from "../storage/Storage";
+import { ENUM_STATE_PLAN, ENUM_STATE_FILE, STATE } from "../storage/Storage";
 const API_GOV_FILE_UPDATE_STATE = import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE
 const API_GOV_FILE_SET_DRAWER = import.meta.env.VITE_API_GOV_FILE_SET_DRAWER
-const API_STORAGE_GET_SHELF_ALL = import.meta.env.VITE_API_STORAGE_GET_SHELF_ALL
-const API_STORAGE_GET_WAREHOUSEROOM_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSEROOM_ALL
-const API_STORAGE_GET_WAREHOUSE_ALL = import.meta.env.VITE_API_STORAGE_GET_WAREHOUSE_ALL
-const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL
-const API_STORAGE_GET_DRAWERS_ALL = import.meta.env.VITE_API_STORAGE_GET_DRAWERS_ALL
-
-const API_STORAGE_POST_FILE_ORGAN_STORAGE = import.meta.env.VITE_API_STORAGE_POST_FILE_ORGAN_STORAGE
-
-const API_DOCUMENT_MODIFICATION_APPROVE = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_APPROVE
-
-const API_DOCUMENT_MODIFICATION_REJECT = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT
-
-const API_DOCUMENT_MODIFICATION_REJECT_ADDED = import.meta.env.VITE_API_DOCUMENT_MODIFICATION_REJECT_ADDED
-
-const API_GET_WAREHOUSE_BY_ORGAN = import.meta.env.VITE_API_GET_WAREHOUSE_BY_ORGAN;
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 import UserAPIService from "src/service/api/userAPIService";
 import LuutrucoquanAPIService from "src/service/api/LuutrucoquanAPIService";

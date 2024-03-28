@@ -3,19 +3,36 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import UserAPIService from "src/service/api/userAPIService";
 import { SearchOutlined } from '@ant-design/icons';
+import PlanAPIService from "src/service/api/PlanAPIService";
+import FileAPIService from "src/service/api/FileAPIService";
+import { ENUM_STATE_PLAN } from "src/storage/Storage";
 
-const { Search } = Input;
 
 export const ChonNguoiDuyetKeHoach = (
-    handleSendPlan
 ) => {
+
     const open = useSelector(state => state.modalChoosePerson.state);
+    const planIds = useSelector(state => state.modalChoosePerson?.data?.planIds);
+    const [approverIds, setApproverIds] = useState([]);
     const dispatch = useDispatch();
     const [userList, setUserList] = useState([]);
 
-    const handleOk = () => {
-        dispatch({ type: "close_modal_choose_person" });
-        handleSendPlan();
+    const handleOk = async () => {
+        try {
+            planIds.forEach(async id => {
+                await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.CHO_DUYET);
+                await FileAPIService.updateStateByIdPlan(id, {
+                    current_state: 4, // luu tru co quan
+                    new_state: 5, // nop luu lich su
+                });
+            });
+            await PlanAPIService.sendNLLSPLanInternal(planIds, approverIds);
+            dispatch({ type: "close_modal_choose_person", success: true });
+        } catch (err) {
+            dispatch({ type: "close_modal_choose_person", success: false });
+        }
+
+
     };
 
     const handleCancel = () => {
@@ -28,6 +45,11 @@ export const ChonNguoiDuyetKeHoach = (
 
     const onChange = (e, userId) => {
         console.log(`User with ID ${userId} checked: ${e.target.checked}`);
+        if (e.target.checked) {
+            setApproverIds([...approverIds, userId]);
+        } else {
+            setApproverIds(approverIds.filter(id => id !== userId));
+        }
     };
 
 
@@ -54,13 +76,13 @@ export const ChonNguoiDuyetKeHoach = (
             width={500}
         >
             <div className="mb-[5px]">
-            <Input size="large" placeholder="Tìm kiếm" prefix={<SearchOutlined />} />
+                <Input size="large" placeholder="Tìm kiếm" prefix={<SearchOutlined />} />
             </div>
             <div className="text-xl font-bold text-gray-800 mb-[5px]">
                 Danh sách nhân viên
             </div>
             <div className="flex flex-col mb-[5px]">
-                {userList.map(user => (
+                {userList && userList.map(user => (
                     <Checkbox
                         key={user.id}
                         onChange={(e) => onChange(e, user.id)}

@@ -3,21 +3,20 @@ import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
-import { ENUM_STATE_FILE, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
-import FileAPIService from "src/service/api/FileAPIService";
+import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import ThemHoSo from "src/pages/LuuTruLichSu/modals/ThemHoSoLuuTruLS";
 import SuaHoSo from "./modals/SuaHoSoLuuTruLS";
 import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import XoaHoSo from "./modals/XoaHoSoLuuTruLS";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserAPIService from "src/service/api/userAPIService";
-import {ChonNguoiDuyetKeHoach} from "./modals/ChonNguoiDuyetKeHoach";
+import { ChonNguoiDuyetKeHoach } from "./modals/ChonNguoiDuyetKeHoach";
+import PropTypes from 'prop-types';
+
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
-const API_STORAGE_GET_ORGAN_ALL =
-	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 
 
@@ -34,12 +33,11 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [openModalAddFile, setOpenModalAddFile] = useState(false);
 	const [selectedFiles, setSelectedFiles] = useState([]);
 	const [request, setRequest] = useState({});
-	const [organ, setOrgan] = useState([]);
-    const [optionOrgan, setOptionOrgan] = useState([])
+	const [optionOrgan, setOptionOrgan] = useState([])
 	const [reset, setReset] = useState(false);
 	const [fileUploaded, setFileUploaded] = useState([]);
 
-	
+
 
 	const handleCreate = async () => {
 		request["attachment"] = fileUploaded[0];
@@ -63,25 +61,12 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 
 		setTimeout(() => {
 			reFetchData();
-			setRequest({});
+			setRequest({
+				"organ": request.organ,
+			});
 			setModelOpen(false);
 		}, 500);
 	};
-
-	useEffect(() => {
-		const getOrgan = async () => {
-			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
-			const _ = data.map((item) => {
-				return {
-					label: item.name,
-					value: item.id,
-				};
-			});
-			setOrgan(_);
-		};
-
-		getOrgan();
-	}, []);
 
 	useEffect(() => {
 		const fetchOrganName = async () => {
@@ -122,90 +107,94 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	};
 
 	return (
-		<Modal
-			title="Tạo mới"
-			style={{
-				top: 20,
-			}}
-			open={modalOpen}
-			onOk={handleOk}
-			onCancel={handleCancle}
-		>
-			<div>
-				<div className="flex justify-between py-[12px]">
-					<span>Tên kế hoạch</span>
-					<Input
-						name="name"
-						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
-						type="text"
-						className="w-[70%]"
-						value={request["name"]}
-					/>
+		<div>
+			<Modal
+				title="Tạo mới"
+				style={{
+					top: 20,
+				}}
+				open={modalOpen}
+				onOk={handleOk}
+				onCancel={handleCancle}
+			>
+				<div>
+					<div className="flex justify-between py-[12px]">
+						<span>Tên kế hoạch</span>
+						<Input
+							name="name"
+							onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
+							type="text"
+							className="w-[70%]"
+							value={request["name"]}
+						/>
+					</div>
+
+					<div className="flex justify-between py-[12px]">
+						<span>Ngày kế hoạch</span>
+						<Input
+							name="start_date"
+							onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
+							type="date"
+							className="w-[70%]"
+							value={request["start_date"]}
+						/>
+					</div>
+
+					<div className="flex justify-between py-[12px]">
+						<span>Cơ quan / Đơn vị </span>
+						<Select
+							name="organ"
+							className="w-[70%] bg-white outline-none rounded-md"
+							showSearch
+							allowClear
+							defaultValue={optionOrgan[0]?.value}
+							optionFilterProp="children"
+							onChange={(value) => handleChangeRequest('organ', value)}
+							filterOption={(input, option) =>
+								(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+							}
+							options={optionOrgan}
+							disabled={true}
+						/>
+					</div>
+					<div className="flex justify-between py-[12px]">
+						<span>Văn bản đính kèm</span>
+						<form encType="multipart/form-data">
+							<label
+								className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
+								htmlFor="file-upload"
+							>
+								<p className="ml-[8px]">Thêm văn bản</p>
+							</label>
+							<input
+								onClick={(ev) => {
+									ev.target.value = "";
+								}}
+								type="file"
+								id="file-upload"
+								name="file-upload"
+								className="hidden"
+								onChange={(ev) => {
+									setFileUploaded(Array.from(ev.target.files));
+								}}
+								accept="application/pdf"
+								multiple
+							></input>
+						</form>
+					</div>
 				</div>
 
-				<div className="flex justify-between py-[12px]">
-					<span>Ngày kế hoạch</span>
-					<Input
-						name="start_date"
-						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
-						type="date"
-						className="w-[70%]"
-						value={request["start_date"]}
-					/>
-				</div>
+				<SuaHoSo
+					open={openModalAddFile}
+					setOpen={setOpenModalAddFile}
+					selectedFiles={selectedFiles}
+					setSelectedFiles={setSelectedFiles}
+					doesReset={reset}
+					setDoesReset={setReset}
+				/>
+			</Modal>
+		</div>
 
-				<div className="flex justify-between py-[12px]">
-					<span>Cơ quan / Đơn vị </span>
-					<Select
-                        name="organ"
-                        className="w-[70%] bg-white outline-none rounded-md"
-                        showSearch
-                        allowClear
-                        defaultValue={optionOrgan[0]?.value}
-                        optionFilterProp="children"
-                        onChange={(value) => handleChangeRequest('organ', value)}
-                        filterOption={(input, option) =>
-                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-                        }
-                        options={optionOrgan}
-                        disabled={true}
-                    />
-				</div>
-				<div className="flex justify-between py-[12px]">
-					<span>Văn bản đính kèm</span>
-					<form encType="multipart/form-data">
-						<label
-							className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
-							htmlFor="file-upload"
-						>
-							<p className="ml-[8px]">Thêm văn bản</p>
-						</label>
-						<input
-							onClick={(ev) => {
-								ev.target.value = "";
-							}}
-							type="file"
-							id="file-upload"
-							name="file-upload"
-							className="hidden"
-							onChange={(ev) => {
-								setFileUploaded(Array.from(ev.target.files));
-							}}
-							accept="application/pdf"
-							multiple
-						></input>
-					</form>
-				</div>
-			</div>
-			<SuaHoSo
-				open={openModalAddFile}
-				setOpen={setOpenModalAddFile}
-				selectedFiles={selectedFiles}
-				setSelectedFiles={setSelectedFiles}
-				doesReset={reset}
-				setDoesReset={setReset}
-			/>
-		</Modal>
 	);
 };
 
@@ -308,14 +297,14 @@ const Update = ({ reFetchData, id }) => {
 	};
 
 	const handleRemoveFile = async () => {
-        for(const checkbox of removeFile){
-            const idFile = checkbox.split('checkbox')[1]
-            await PlanAPIService.removeFileFromPlan(idFile);    
-        }
-    };
+		for (const checkbox of removeFile) {
+			const idFile = checkbox.split('checkbox')[1]
+			await PlanAPIService.removeFileFromPlan(idFile);
+		}
+	};
 
 	const handleAddFile = async () => {
-		for(const checkbox of addFile){
+		for (const checkbox of addFile) {
 			const idFile = checkbox.split('checkbox')[1]
 			const payload = {
 				plan_id: id,
@@ -327,9 +316,9 @@ const Update = ({ reFetchData, id }) => {
 
 	const handleOk = async () => {
 		if (fileUploaded.length > 0) {
-            request["attachment"] = fileUploaded[0];
-        }
-		await axiosHttpService.put(API_GET_PLAN + '/' + id, request,  {
+			request["attachment"] = fileUploaded[0];
+		}
+		await axiosHttpService.put(API_GET_PLAN + '/' + id, request, {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'multipart/form-data',
@@ -462,35 +451,27 @@ const TaoKeHoachLuuTruLichSu = () => {
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
+	const modalState = useSelector(state => state.modalChoosePerson);
+
 	const handleChoosePerson = () => {
-		dispatch({ type: "open_modal_choose_person" });
+		dispatch({ type: "open_modal_choose_person", data: { "planIds": stateCheckBox.map(item => parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))) } });
 	};
 
-	const handleSendPlan = async () => {
-		setIsLoading(true);
-		try {
-			stateCheckBox.forEach(async (item) => {
-				const id = parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))
-				await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.CHO_DUYET);
-				await FileAPIService.updateStateByIdPlan(id, {
-					current_state: 4, // luu tru co quan
-					new_state: 5, // nop luu lich su
-				});
-			})
+	useEffect(() => {
+		if (modalState.state == false) {
+			if (modalState.success === true) {
+				setTimeout(() => {
+					reFetchData();
+					setIsLoading(false);
+					notifySuccess("Gửi kế hoạch thành công");
+				}, 500);
+			} else if (modalState.success === false) {
+				notifyError("Gửi kế hoạch thất bại");
+			}
 
-			setTimeout(() => {
-				reFetchData();
-				setIsLoading(false);
-				notifySuccess("Gửi kế hoạch thành công");
-			}, 500);
-
-		} catch (err) {
-			console.log("err in send plan nop luu lich su", err)
-			notifyError("Gửi kế hoạch thất bại");
 		}
-
-	};
-
+	}, [modalState?.state])
+	
 	const BUTTON_ACTIONS = [
 		{
 			title: "Tìm kiếm",
@@ -511,13 +492,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 			onClick: handleChoosePerson,
 			icon: <i className="fa-solid fa-sync"></i>,
 		},
-		// {
-		// 	title: "Duyệt kế hoạch",
-		// 	btn_class_name: "custom-btn-export-excel",
-		// 	icon: <i className="fa-solid fa-file-excel"></i>,
-		// },
 	];
-
 	const handleDownloadAttachment = async (fileUrl) => {
 		const response = await axiosHttpService.get(fileUrl, {
 			responseType: "blob",
@@ -537,15 +512,11 @@ const TaoKeHoachLuuTruLichSu = () => {
 		const plan = [];
 		for (const rawData of rawDatas) {
 			console.log(rawData);
-			if(rawData.state != ENUM_STATE_PLAN.TAO_MOI && rawData.state != ENUM_STATE_PLAN.CHO_DUYET && rawData.state != ENUM_STATE_PLAN.DA_DUYET) continue;
-			// let color = "bg-indigo-700";
-			// if (rawData.state === ENUM_STATE_PLAN.CHO_DUYET) color = "bg-green-500";
-			// else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";
-			// else if (rawData.state === ENUM_STATE_PLAN.CHAP_NHAN) color = "bg-blue-600";
+			if (rawData.state != ENUM_STATE_PLAN.TAO_MOI && rawData.state != ENUM_STATE_PLAN.CHO_DUYET && rawData.state != ENUM_STATE_PLAN.DA_DUYET) continue;
 			let attachmentName = rawData.attachment;
 			if (attachmentName) {
 				attachmentName = attachmentName.split("/").pop();
-			}else {
+			} else {
 				attachmentName = "";
 			}
 			const row = {
@@ -651,9 +622,25 @@ const TaoKeHoachLuuTruLichSu = () => {
 				setModelOpen={setModalOpen}
 				reFetchData={reFetchData}
 			/>
-			<ChonNguoiDuyetKeHoach handleSendPlan={handleSendPlan}/>
+			<ChonNguoiDuyetKeHoach/>
 		</div>
 	);
 };
+
+Create.propTypes = {
+	modalOpen: PropTypes.bool.isRequired,
+	setModelOpen: PropTypes.func.isRequired,
+	reFetchData: PropTypes.func.isRequired,
+}
+
+Delete.propTypes = {
+	id: PropTypes.number.isRequired,
+	reFetchData: PropTypes.func.isRequired,
+}
+
+Update.propTypes = {
+	id: PropTypes.number.isRequired,
+	reFetchData: PropTypes.func.isRequired,
+}
 
 export default TaoKeHoachLuuTruLichSu;

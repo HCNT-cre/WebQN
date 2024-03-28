@@ -1,20 +1,18 @@
 import { Table } from "src/custom/Components";
-import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
+import { ENUM_STATE_PLAN } from "src/storage/Storage";
 import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Button, Input, Modal, Popconfirm, Select } from "antd";
+import { Button, Input, Modal, Popconfirm } from "antd";
 import ThemHoSo from "src/pages/LuuTruLichSu/modals/ThemHoSoLuuTruLS";
-import { notifySuccess } from "src/custom/Function";
+import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import XoaHoSo from "./modals/XoaHoSoLuuTruLS";
 import { SendPlanToOrgan } from "./modals/SendPlanToOrgan";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
-
-const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
 
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
@@ -95,7 +93,7 @@ const Update = ({ reFetchData, id }) => {
 	const [removeFile, setRemoveFile] = useState([]);
 	const [resetRemove, setResetRemove] = useState(false);
 	const [resetAdd, setResetAdd] = useState(false);
-    const [fileUploaded, setFileUploaded] = useState([]);
+	const [fileUploaded, setFileUploaded] = useState([]);
 
 	useEffect(() => {
 		const getPlan = async () => {
@@ -124,14 +122,14 @@ const Update = ({ reFetchData, id }) => {
 	};
 
 	const handleRemoveFile = async () => {
-        for(const checkbox of removeFile){
-            const idFile = checkbox.split('checkbox')[1]
-            await PlanAPIService.removeFileFromPlan(idFile);    
-        }
-    };
+		for (const checkbox of removeFile) {
+			const idFile = checkbox.split('checkbox')[1]
+			await PlanAPIService.removeFileFromPlan(idFile);
+		}
+	};
 
 	const handleAddFile = async () => {
-		for(const checkbox of addFile){
+		for (const checkbox of addFile) {
 			const idFile = checkbox.split('checkbox')[1]
 			const payload = {
 				plan_id: id,
@@ -142,10 +140,10 @@ const Update = ({ reFetchData, id }) => {
 	}
 
 	const handleOk = async () => {
-        if (fileUploaded.length > 0) {
-            request["attachment"] = fileUploaded[0];
-        }
-		await axiosHttpService.put(API_GET_PLAN + '/' + id, request,  {
+		if (fileUploaded.length > 0) {
+			request["attachment"] = fileUploaded[0];
+		}
+		await axiosHttpService.put(API_GET_PLAN + '/' + id, request, {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'multipart/form-data',
@@ -204,7 +202,7 @@ const Update = ({ reFetchData, id }) => {
 						value={request["organ_name"]}
 					/>
 				</div>
-                <div className="flex justify-between py-[12px]">
+				<div className="flex justify-between py-[12px]">
 					<span>Văn bản đính kèm</span>
 					<form encType="multipart/form-data">
 						<label
@@ -274,16 +272,30 @@ const Update = ({ reFetchData, id }) => {
 
 
 const PheDuyetKeHoachLuuTruLichSu = () => {
-    const [modalOpen, setModalOpen] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
+	const modalState = useSelector(state => state.tableSendPlanToOrgan);
 
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (modalState.state == false) {
+			if (modalState.success === true) {
+				setTimeout(() => {
+					reFetchData();
+					setIsLoading(false);
+					notifySuccess("Gửi kế hoạch thành công");
+				}, 500);
+			} else if (modalState.success === false) {
+				notifyError("Gửi kế hoạch thất bại");
+			}
+		}
+	}, [modalState?.state])
+
 	const handleSendPlanToOrgan = () => {
-		dispatch({ type: "open_table_send_plan_to_organ" });
+		dispatch({ type: "open_table_send_plan_to_organ", data: { "planIds": stateCheckBox.map(item => parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))) } });
 	};
-	
 
 	const handleConfirmPlan = async () => {
 		const ids = stateCheckBox.map((item) => item.split('checkbox')[1]);
@@ -297,19 +309,19 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 	};
 
 
-    const handleSendPlan = async () => {
-        const ids = stateCheckBox.map((item) => item.split('checkbox')[1]);
-        ids.forEach(async (id) => {
-            await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DOI_THU_THAP);
-        });
-        
-        setTimeout(() => {
-            notifySuccess("Gửi thành công");
-            reFetchData();
-        }, 300);
-    }
+	const handleSendPlan = async () => {
+		const ids = stateCheckBox.map((item) => item.split('checkbox')[1]);
+		ids.forEach(async (id) => {
+			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DOI_THU_THAP);
+		});
 
-    const BUTTON_ACTIONS = [
+		setTimeout(() => {
+			notifySuccess("Gửi thành công");
+			reFetchData();
+		}, 300);
+	}
+
+	const BUTTON_ACTIONS = [
 		{
 			title: "Tìm kiếm",
 			btn_class_name: "custom-btn-search",
@@ -321,14 +333,15 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 			icon: <i className="fa-solid fa-plus"></i>,
 			onClick: handleConfirmPlan,
 		},
-        {
+		{
 			title: "Gửi đến các cơ quan",
 			btn_class_name: "custom-btn-add-file",
 			icon: <i className="fa-solid fa-plus"></i>,
-            onClick: handleSendPlanToOrgan,
+			onClick: handleSendPlanToOrgan,
 		}
 	];
-    const handleDownloadAttachment = async (fileUrl) => {
+
+	const handleDownloadAttachment = async (fileUrl) => {
 		const response = await axiosHttpService.get(fileUrl, {
 			responseType: "blob",
 		});
@@ -340,21 +353,16 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 		link.click();
 	};
 
-    const reFetchData = async () => {
+	const reFetchData = async () => {
 		setIsLoading(true);
-		const res = await axiosHttpService.get(`${API_GET_PLAN_BY_TYPE}/${ENUM_TYPE_PLAN.NOP_LUU_LICH_SU}`);
-		const rawDatas = res.data.reverse();
+		const rawDatas = await PlanAPIService.getNLLSPlanInternal();
 		const plan = [];
 		for (const rawData of rawDatas) {
-            if (rawData.state != 'Đợi duyệt' && rawData.state != 'Đã duyệt') continue;
-			// let color = "bg-indigo-700";
-			// if (rawData.state === ENUM_STATE_PLAN.CHO_DUYET) color = "bg-green-500";
-			// else if (rawData.state === ENUM_STATE_PLAN.TAO_MOI) color = "bg-lime-500";
-			// else if (rawData.state === ENUM_STATE_PLAN.CHAP_NHAN) color = "bg-blue-600";
+			if (rawData.state != 'Đợi duyệt' && rawData.state != 'Đã duyệt') continue;
 			let attachmentName = rawData.attachment;
 			if (attachmentName) {
 				attachmentName = attachmentName.split("/").pop();
-			}else {
+			} else {
 				attachmentName = "";
 			}
 			const row = {
@@ -365,7 +373,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 				organ_name: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
 				function: (
-					<div className="flex "> 
+					<div className="flex ">
 						<Delete id={rawData.id} reFetchData={reFetchData} />
 						<Update id={rawData.id} reFetchData={reFetchData} />
 					</div>
@@ -381,7 +389,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 		reFetchData();
 	}, []);
 
-    return (
+	return (
 		<div className="w-full">
 			<div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
 				<p className="text-[14px] font-300 cursor-pointer ">
@@ -453,7 +461,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 				fieldDatas={plan}
 				isLoading={isLoading}
 				isCheckBox={true}
-                selectedFiles={stateCheckBox}
+				selectedFiles={stateCheckBox}
 			/>
 
 			<SendPlanToOrgan />

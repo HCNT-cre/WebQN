@@ -1,6 +1,7 @@
 import { ENUM_TYPE_PLAN } from "src/storage/Storage";
 import axiosHttpService from "src/utils/httpService";
 import { AddWatchTheoDoiNopLuuLichSu } from "../helper/Plan";
+import UserAPIService from "./userAPIService";
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_FILE_BY_PLAN_NNLS_ID = import.meta.env.VITE_API_GET_FILE_BY_PLAN_NNLS_ID;
 const API_REMOVE_FILE_FROM_PLAN = import.meta.env.VITE_API_REMOVE_FILE_FROM_PLAN;
@@ -8,6 +9,10 @@ const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 const API_SET_PLAN_TIEU_HUY_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_TIEU_HUY_FOR_FILE;
 const API_GET_FILE_BY_PLAN_TIEUHUY_ID = import.meta.env.VITE_API_GET_FILE_BY_PLAN_TIEUHUY_ID;
 const API_REMOVE_FILE_FROM_PLAN_TIEUHUY = import.meta.env.VITE_API_REMOVE_FILE_FROM_PLAN_TIEUHUY;
+const API_SEND_NLLS_INTERNAL = import.meta.env.VITE_API_SEND_NLLS_INTERNAL
+const API_SEND_NLLS_ORGAN = import.meta.env.VITE_API_SEND_NLLS_ORGAN
+const API_GET_NLLS_INTERNAL = import.meta.env.VITE_API_GET_NLLS_INTERNAL
+const API_GET_NLLS_ORGAN = import.meta.env.VITE_API_GET_NLLS_ORGAN
 const PlanAPIService = {
     getPlanById: async (id) => {
         const response = await axiosHttpService.get(API_PLAN + '/' + id);
@@ -88,7 +93,39 @@ const PlanAPIService = {
                 watch: <AddWatchTheoDoiNopLuuLichSu item={plan}/>,
             }
         })
-    }
+    },
+
+    sendNLLSPLanInternal: async (planIds, approverIds) => {
+        const userInfo = await UserAPIService.getUserInfo();
+        const response = await axiosHttpService.post(API_SEND_NLLS_INTERNAL, {
+            "sender_id": userInfo.id,
+            "approver_ids": approverIds,
+            "plan_ids": planIds,
+        })
+        return response.status != 200 ? Error("Send NLLS Internal Error") : null
+    },
+
+    getNLLSPlanInternal: async () => {
+        const userInfo = await UserAPIService.getUserInfo();
+        const response = await axiosHttpService.get(API_GET_NLLS_INTERNAL + '/' + userInfo.id)
+        return response.data
+    },
+
+    sendNLLSPLanOrgan: async (planIds, organIds) => {
+        const userInfo = await UserAPIService.getUserInfo();
+        const response = await axiosHttpService.post(API_SEND_NLLS_ORGAN, {
+            "sender_id": userInfo.id,
+            "organ_ids": organIds,
+            "plan_ids": planIds,
+        })
+        return response.status != 200 ? Error("Send NLLS organ Error") : null
+    },
+
+    getNLLSPlanByOrgan: async () => {
+        const organ = await UserAPIService.getUserOrgan()
+        const response = await axiosHttpService.get(API_GET_NLLS_ORGAN + '/' + organ.id)
+        return response.data
+    },
 
 }
 

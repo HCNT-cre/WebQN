@@ -4,11 +4,13 @@ const modalChoosePersonReducer = (state = {state: false}, action) => {
             return {
                 ...state,
                 state: true,
+                data: action.data
             }
         case "close_modal_choose_person":
             return {
                 ...state,
                 state: false,
+                success: action.success
             }
         default:
             return state
