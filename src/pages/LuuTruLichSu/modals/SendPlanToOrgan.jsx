@@ -2,7 +2,7 @@ import { Modal, Input, Checkbox } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axiosHttpService from "src/utils/httpService";
-import { SearchOutlined} from '@ant-design/icons';
+import { SearchOutlined } from '@ant-design/icons';
 import PlanAPIService from "src/service/api/PlanAPIService";
 import { ENUM_STATE_PLAN } from "src/storage/Storage";
 
@@ -68,21 +68,24 @@ export const SendPlanToOrgan = (
             width={500}
         >
             <div className="mb-[5px]">
-            <Input size="large" placeholder="Tìm kiếm" prefix={<SearchOutlined />} />
+                <Input size="large" placeholder="Tìm kiếm" prefix={<SearchOutlined />} />
             </div>
             <div className="text-xl font-bold text-gray-800 mb-[5px]">
                 Danh sách các cơ quan
             </div>
-            <div className="flex flex-col mb-[5px]">
+            <div className="flex flex-col mb-5">
                 {organs && organs.map(user => (
-                    <Checkbox
-                        key={user.id}
-                        onChange={(e) => onChange(e, user.id)}
-                    >
-                        {user.name}
-                    </Checkbox>
+                    <label key={user.id} className="flex items-center border-b border-gray-200 py-2">
+                        <Checkbox
+                            onChange={(e) => onChange(e, user.id)}
+                            className="mr-4"
+                        />
+                        <div className="flex-1 font-medium">{user.name}</div>
+                    </label>
                 ))}
             </div>
+
+
         </Modal>
     );
 };
