@@ -73,7 +73,7 @@ export const ChonNguoiDuyetKeHoach = (
             onOk={handleOk}
             title="Chọn người duyệt kế hoạch"
             bodyStyle={{ maxHeight: '60vh', overflow: 'auto' }}
-            width={500}
+            width={550}
         >
             <div className="mb-[5px]">
                 <Input size="large" placeholder="Tìm kiếm" prefix={<SearchOutlined />} />
