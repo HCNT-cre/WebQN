@@ -336,7 +336,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 		{
 			title: "Gửi đến các cơ quan",
 			btn_class_name: "custom-btn-add-file",
-			icon: <i className="fa-solid fa-plus"></i>,
+			icon: <i class="fa-regular fa-share-from-square"></i>,
 			onClick: handleSendPlanToOrgan,
 		}
 	];
