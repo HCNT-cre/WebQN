@@ -424,7 +424,8 @@ const KeHoachNopLuuLichSu = () => {
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		const rawDatas = await PlanAPIService.getNLLSPlanByOrgan();
+		const res = await PlanAPIService.getNLLSPlanByOrgan();
+		const rawDatas = res.reverse();
 		const plan = [];
 		for (const rawData of rawDatas) {
 			if (rawData.state != 'Đợi thu thập' && rawData.state != 'Đã thu thập') continue;

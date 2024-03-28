@@ -81,16 +81,20 @@ export const ChonNguoiDuyetKeHoach = (
             <div className="text-xl font-bold text-gray-800 mb-[5px]">
                 Danh sách nhân viên
             </div>
-            <div className="flex flex-col mb-[5px]">
+            <div className="flex flex-col mb-5">
                 {userList && userList.map(user => (
-                    <Checkbox
-                        key={user.id}
-                        onChange={(e) => onChange(e, user.id)}
-                    >
-                        {user.full_name}
-                    </Checkbox>
+                    <label key={user.id} className="flex items-center border-b border-gray-200 py-2">
+                        <Checkbox
+                            onChange={(e) => onChange(e, user.id)}
+                            className="mr-4"
+                        />
+                        <div className="font-medium flex-1">{user.full_name}</div>
+                        <div className="font-bold ">{user.email}</div>
+                    </label>
                 ))}
             </div>
+
+
         </Modal>
     );
 };
