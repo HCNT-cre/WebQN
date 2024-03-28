@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../../../custom/Function";
 import { Link, useParams } from "react-router-dom";
-import { getAllPermissionsRelate, getDepartmentbyId, getOrganbyId, getParentOfPermission } from "./helper";
+import { getAllPermissionsRelate, getDepartmentById, getOrganbyId, getParentOfPermission, getRootPermission } from "./helper";
 import { ACTION_GROUP, PERMISSION_GROUP, TABS_SIDEBAR } from "src/storage/Storage";
 import UserAPIService from "src/service/api/userAPIService";
 const Search = Input.Search
@@ -119,7 +119,6 @@ const Form = ({
     }
 
     const handleChangeRequest = (name, value) => {
-        console.log(name, value);
         setRequest(prev => ({
             ...prev,
             [name]: value
@@ -128,13 +127,13 @@ const Form = ({
 
     const onSubmit = async (e) => {
         e.preventDefault();
-
+        
         if (!request) {
             notifyError("Vui lòng nhập đầy đủ thông tin")
             return
         }
-
-        request["menu_permission"] = listPermission.join('-') + '-' + request["action"];
+        
+        request["menu_permission"] = getRootPermission(listPermission).join('-') + '-' + request["action"];
 
         if (request["is_staff"] === undefined || request["is_staff"] === null) request["is_staff"] = true;
         if (request["role"] === undefined) request["role"] = null;
@@ -250,7 +249,6 @@ const Form = ({
                                                                             )
                                                                         })}
                                                                     </div>
-
                                                                 </div>
                                                             )
                                                         })
@@ -497,7 +495,7 @@ const NhanVien = () => {
     }
 
     const fetchDepartment = async () => {
-        const department = await getDepartmentbyId(params.department_id);
+        const department = await getDepartmentById(params.department_id);
         setDepartment(department);
     }
 

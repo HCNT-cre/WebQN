@@ -8,7 +8,7 @@ export const getOrganbyId = async (id) => {
     return res.data;
 }
 
-export const getDepartmentbyId = async (id) => {
+export const getDepartmentById = async (id) => {
     const res = await axiosHttpService.get(API_ORGAN_GET_SINGLE_DEPARTMENT + '/' + id);
     return res.data;
 }
@@ -46,4 +46,11 @@ export const getParentOfPermission = (permission) => {
         }
     }
     return parent;
+}
+
+export const getRootPermission = (permission) => {
+    permission.forEach(element => {
+        permission = permission.concat(getParentOfPermission(element));
+    });
+    return [...new Set(permission)]
 }

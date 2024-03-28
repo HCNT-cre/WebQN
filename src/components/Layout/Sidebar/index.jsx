@@ -12,7 +12,7 @@ const SideBarTab = ({ tab, sideBarWidth, currentTab, setCurrentTab, toggleExpand
     }
 
     return (
-        <div>
+        (tab.number == 0 || permissions.findIndex((permission) => permission == tab.number) >= 0 || permissions.length == 1) && <div>
             <Link to={tab.to} onClick={() => setCurrentTab(tab.key)} className={`
                 block ${sideBarWidth === 250 ? 'sidebar-items--large ' : 'sidebar-items--small '} 
             `}>
@@ -76,6 +76,7 @@ const SideBar = ({ sideBarWidth }) => {
         setSidebarTabs(updateTabs(sidebarTabs, key));
     };
 
+    console.log(permissions);
     return (
         permissions === null ? <Spin /> :
             <>
@@ -84,6 +85,7 @@ const SideBar = ({ sideBarWidth }) => {
                         <img className="w-[70px]" alt="Quoc Huy" src={QuocHuy} />
                     </Link>
                     {sidebarTabs.map((tab) => {
+                        console.log(tab.number);
                         return (
                             (tab.number == 0 || permissions.findIndex((permission) => permission == tab.number) >= 0 || permissions.length == 1) &&
                             <SideBarTab
