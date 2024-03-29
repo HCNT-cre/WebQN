@@ -310,7 +310,7 @@ export const TABS_SIDEBAR = [
 				isParent: true,
 				childTabs: [
 					{
-						title: "Hồ sơ tài liệu",
+						title: "Chờ xếp kho",
 						to: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
 						key: "/luu-tru-co-quan/ho-so-tai-lieu-giao-nop",
 						number: 26,
