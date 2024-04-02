@@ -454,6 +454,10 @@ const TaoKeHoachLuuTruLichSu = () => {
 	const modalState = useSelector(state => state.modalChoosePerson);
 
 	const handleChoosePerson = () => {
+		if (stateCheckBox.length === 0) {
+			notifyError("Vui lòng chọn kế hoạch cần gửi");
+			return;
+		}
 		dispatch({ type: "open_modal_choose_person", data: { "planIds": stateCheckBox.map(item => parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))) } });
 	};
 
