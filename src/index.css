@@ -156,6 +156,11 @@
     @apply font-medium text-black bg-purple-300 hover:bg-purple-400 !important;
 }
 
+.custom-btn-send-plan-to-organ {
+    @apply font-medium text-black bg-red-300 hover:bg-red-400 !important;
+
+}
+
 .ant-input-search-button {
     background-color: #00f !important;
     display: flex;

@@ -487,7 +487,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 			},
 		},
 		{
-			title: "Gửi kế hoạch",
+			title: "Gửi phê duyệt",
 			btn_class_name: "custom-btn-clear-filter",
 			onClick: handleChoosePerson,
 			icon: <i className="fa-solid fa-sync"></i>,

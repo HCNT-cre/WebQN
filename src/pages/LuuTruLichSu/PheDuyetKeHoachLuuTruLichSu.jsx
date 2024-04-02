@@ -294,11 +294,34 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 	}, [modalState?.state])
 
 	const handleSendPlanToOrgan = () => {
-		dispatch({ type: "open_table_send_plan_to_organ", data: { "planIds": stateCheckBox.map(item => parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))) } });
+		if (stateCheckBox.length === 0) {
+			notifyError("Vui lòng chọn kế hoạch cần gửi");
+			return;
+		}
+	
+		const ids = stateCheckBox.map(item => parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length)));
+		const filteredPlans = plan.filter(plan => ids.includes(plan.id));
+	
+		let hasPendingPlan = false; 
+	
+		filteredPlans.forEach(plan => {
+			if (plan.state.props.children == "Đợi duyệt") {
+				notifyError(plan.name + " chưa được duyệt");
+				hasPendingPlan = true; 
+			}
+		});
+	
+		if (!hasPendingPlan) {
+			dispatch({ type: "open_table_send_plan_to_organ", data: { "planIds": ids } });
+		}
 	};
 
 	const handleConfirmPlan = async () => {
 		const ids = stateCheckBox.map((item) => item.split('checkbox')[1]);
+		if (ids.length == 0) {
+			notifyError("Vui lòng chọn kế hoạch cần duyệt");
+			return;
+		}
 		ids.forEach(async (id) => {
 			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DA_DUYET);
 		});
@@ -316,7 +339,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 		});
 
 		setTimeout(() => {
-			notifySuccess("Gửi thành công");
+			notifySuccess("Gửi thành cônggg");
 			reFetchData();
 		}, 300);
 	}
@@ -335,7 +358,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 		},
 		{
 			title: "Gửi đến các cơ quan",
-			btn_class_name: "custom-btn-add-file",
+			btn_class_name: "custom-btn-send-plan-to-organ",
 			icon: <i class="fa-regular fa-share-from-square"></i>,
 			onClick: handleSendPlanToOrgan,
 		}
@@ -355,7 +378,8 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		const rawDatas = await PlanAPIService.getNLLSPlanInternal();
+		const res = await PlanAPIService.getNLLSPlanInternal();
+		const rawDatas = res.reverse();
 		const plan = [];
 		for (const rawData of rawDatas) {
 			if (rawData.state != 'Đợi duyệt' && rawData.state != 'Đã duyệt') continue;
