@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Popconfirm, Select, Upload } from "antd";
+import { Button, Form, Input, Modal, Popconfirm, Select, Upload } from "antd";
 import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
@@ -7,6 +7,7 @@ import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
 import UserAPIService from "src/service/api/userAPIService";
 import { notifySuccess } from "src/custom/Function";
+import { UploadOutlined } from '@ant-design/icons';
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 
 const API_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
@@ -27,7 +28,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [request, setRequest] = useState({});
 	const [organ, setOrgan] = useState([]);
 	const [fileUploaded, setFileUploaded] = useState([]);
-	
+
 	useEffect(() => {
 		const getOrgan = async () => {
 			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
@@ -43,15 +44,29 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		getOrgan();
 	}, []);
 
-	const 	handleOk = async () => {
+	function convert(input) {
+		let output = ""
+		for (var i = 0; i < input.length; i++) {
+			output += input[i].charCodeAt(0).toString(2) + " ";
+		}
+		return output
+	}
+
+	const handleOk = async () => {
 		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
-		request["attachment"] = fileUploaded[0];
 		request["type"] = ENUM_TYPE_PLAN.THU_THAP_NOP_LUU;
+
+		if (fileUploaded.length > 0) { 
+			fileUploaded.forEach((file, idx) => {
+				const key = "attachment" + idx;
+				request[key] = file;
+			})
+		}	
 
 		await axiosHttpService.post(`${API_PLAN}`, request, {
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'multipart/form-data',
+				"content-type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s'
 			}
 		});
 		setTimeout(() => {
@@ -73,7 +88,14 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	};
 
 
+	const handleFileUpload = (files) => {
+		const { fileList } = files;
 
+		const fileObjs = fileList.map((file) => {
+			return file.originFileObj;
+		});
+		setFileUploaded(fileObjs);
+	}
 	return (
 		<Modal
 			title="Tạo mới"
@@ -121,28 +143,25 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 
 				<div className="flex justify-between py-[12px]">
 					<span>Văn bản đính kèm</span>
-					<form encType="multipart/form-data">
-						<label
-							className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
-							htmlFor="file-upload"
+					<Form encType="multipart/form-data">
+						<Form.Item
+							rules={[
+								{
+									required: true,
+									message: 'Vui lòng chọn văn bản đính kèm'
+								}
+							]}
 						>
-							<p className="ml-[8px]">Thêm văn bản</p>
-						</label>
-						<input
-							onClick={(ev) => {
-								ev.target.value = "";
-							}}
-							type="file"
-							id="file-upload"
-							name="file-upload"
-							className="hidden"
-							onChange={(ev) => {
-								setFileUploaded(Array.from(ev.target.files));
-							}}
-							accept="application/pdf"
-							multiple
-						></input>
-					</form>
+							<Upload
+								multiple
+								accept="application/pdf"
+								beforeUpload={() => false}
+								onChange={handleFileUpload}
+							>
+								<Button htmlType="submit" icon={<UploadOutlined />}>Thêm văn bản</Button>
+							</Upload>
+						</Form.Item>
+					</Form>
 				</div>
 			</div>
 		</Modal>
@@ -272,15 +291,15 @@ const Update = ({
 
 	const handleOk = async () => {
 		if (fileUploaded.length > 0) {
-            request["attachment"] = fileUploaded[0];
-        }
-		await axiosHttpService.put(API_PLAN + '/' + id, request,  {
+			request["attachment"] = fileUploaded[0];
+		}
+		await axiosHttpService.put(API_PLAN + '/' + id, request, {
 			headers: {
 				'Accept': 'application/json',
 				'Content-Type': 'multipart/form-data',
 			}
 		});
-		
+
 		setModalOpen(false);
 		reFetchData();
 		notifySuccess("Cập nhật thành công");
@@ -448,7 +467,7 @@ const KeHoachThuThap = () => {
 			let attachmentName = rawData.attachment;
 			if (attachmentName) {
 				attachmentName = attachmentName.split("/").pop();
-			}else {
+			} else {
 				attachmentName = "";
 			}
 			const row = {

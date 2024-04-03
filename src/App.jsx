@@ -67,7 +67,6 @@ import KeHoachChinhLyBiTuChoi from "./pages/BienMucChinhLy/KeHoachChinhLyBiTuCho
 import BoSungHoSoTaiLieu from "./pages/BienMucChinhLy/BienMucBoSung/BoSungHoSoTaiLieu";
 import HoSoTaiLieuDaDuocBoSung from "./pages/BienMucChinhLy/BienMucBoSung/HoSoTaiLieuDaDuocBoSung";
 import TaoKeHoachLuuTruLichSu from "./pages/LuuTruLichSu/TaoKeHoachNopLuuLichSu";
-import PheDuyetKeHoachLuuTruLichSu from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu";
 import KeHoachLuuTruLichSuBiTuChoi from "./pages/LuuTruLichSu/KeHoachLuuTruLichSuBiTuChoi";
 import BoSungHoSoTaiLieuDaLuuKho from "./pages/BienMucChinhLy/BienMucBoSung/BoSungHoSoTaiLieuDaLuuKho";
 import YeuCauBoSungHoSoTaiLieuDaLuuKho from "./pages/BienMucChinhLy/BienMucBoSung/YeuCauBoSungHoSoTaiLieuDaLuuKho";
@@ -94,6 +93,9 @@ import ThamDinhHoSo from "./pages/LuuTruLichSu/ThamDinhHoSo";
 import ThongKeHienTrangSoHoaKhoLuuTru from "./pages/BaoCaoThongKe/ThongKeHienTrangSoHoaKhoLuuTru";
 import ThongKeHopCap from "./pages/BaoCaoThongKe/ThongKeHopCap";
 import ThongKeKhaiThac from "./pages/BaoCaoThongKe/ThongKeKhaiThac";
+import PheDuyetKeHoachNopLuuLichSuCoQuan from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu/PheDuyetKeHoachNopLuuLichSuCoQuan";
+import PheDuyetKeHoachNopLuuLichSuVanBan from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu/PheDuyetKeHoachNopLuuLichSuVanBan";
+import PheDuyetKeHoachLuuTruLichSu from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu/PheDuyetKeHoachLuuTruLichSu";
 
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
@@ -270,6 +272,14 @@ const App = () => {
         {
             path: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
             element: <PheDuyetKeHoachLuuTruLichSu />,
+        },
+        {
+            path: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su/:plan_id",
+            element: <PheDuyetKeHoachNopLuuLichSuCoQuan />
+        },
+        {
+            path: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su/:plan_id/:organ_id",
+            element: <PheDuyetKeHoachNopLuuLichSuVanBan />
         },
         {
             path: "/luu-tru-lich-su/kho-luu-tru-lich-su",

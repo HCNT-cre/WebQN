@@ -79,7 +79,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
                 const res = await axiosHttpService.get(API_STORAGE_GET_ORGAN + '/' + id)
                 setOrgan(res.data);
                 setRequest(res.data);
-                
+
             } catch (err) {
                 console.log(err);
             }
@@ -103,8 +103,8 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
     useEffect(() => {
         const fetchDistricts = async () => {
             if (!request.province) return;
-            
-            if(organ && request.province !== organ.province) {
+
+            if (organ && request.province !== organ.province) {
                 handleChangeRequest("district", null);
                 handleChangeRequest("ward", null);
             }
@@ -130,7 +130,7 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
     useEffect(() => {
         const fetchWards = async () => {
             if (!request.district) return;
-            if(organ && request.district !== organ.district) {
+            if (organ && request.district !== organ.district) {
                 handleChangeRequest("ward", null)
             }
             setWards([]);
@@ -218,13 +218,13 @@ const Form = ({ modalOpen, setModalOpen, id, fetchFieldData }) => {
                                                 input.name === "district" ? districts : wards}
                                             onChange={(ev) => handleChangeRequest(input.name, ev)}
                                             className="w-full"
-                                            value={ 
-                                                input.name === 'province'? request.provinceName :
-                                                input.name === 'district'? request.districtName :
-                                                input.name === 'ward'? request.wardName :
-                                                request[input.name]
-                                            } 
-                                            />
+                                            value={
+                                                input.name === 'province' ? request.provinceName :
+                                                    input.name === 'district' ? request.districtName :
+                                                        input.name === 'ward' ? request.wardName :
+                                                            request[input.name]
+                                            }
+                                        />
                                         : <Input
                                             type={input.type} name={input.name}
                                             defaultValue={request[input.name]}

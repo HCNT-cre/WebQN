@@ -113,10 +113,12 @@ const PlanAPIService = {
 
     sendNLLSPLanOrgan: async (planIds, organIds) => {
         const userInfo = await UserAPIService.getUserInfo();
+        const organ = await UserAPIService.getUserOrgan();
         const response = await axiosHttpService.post(API_SEND_NLLS_ORGAN, {
             "sender_id": userInfo.id,
             "organ_ids": organIds,
             "plan_ids": planIds,
+            "organ_sender_id": organ.id
         })
         return response.status != 200 ? Error("Send NLLS organ Error") : null
     },

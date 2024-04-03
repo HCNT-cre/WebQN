@@ -1,4 +1,4 @@
-import { Button, Input, Modal, Popconfirm, Select } from "antd";
+import {Button, Input, Modal, Popconfirm, Select, Form, Upload } from "antd";
 import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UserAPIService from "src/service/api/userAPIService";
 import { ChonNguoiDuyetKeHoach } from "./modals/ChonNguoiDuyetKeHoach";
 import PropTypes from 'prop-types';
+import { UploadOutlined } from '@ant-design/icons';
 
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
@@ -40,13 +41,20 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 
 
 	const handleCreate = async () => {
-		request["attachment"] = fileUploaded[0];
 		request["state"] = "Mới lập";
 		request["type"] = ENUM_TYPE_PLAN.NOP_LUU_LICH_SU;
+
+		if (fileUploaded.length > 0) { 
+			fileUploaded.forEach((file, idx) => {
+				const key = "attachment" + idx;
+				request[key] = file;
+			})
+		}	
+
 		const response = await axiosHttpService.post(`${API_GET_PLAN}`, request, {
 			headers: {
 				'Accept': 'application/json',
-				'Content-Type': 'multipart/form-data',
+				"content-type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s'
 			}
 		});
 		const idPlan = response.data.id;
@@ -106,6 +114,15 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		});
 	};
 
+	const handleFileUpload = (files) => {
+		const { fileList } = files;
+
+		const fileObjs = fileList.map((file) => {
+			return file.originFileObj;
+		});
+		setFileUploaded(fileObjs);
+	}
+
 	return (
 		<div>
 			<Modal
@@ -158,29 +175,26 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 						/>
 					</div>
 					<div className="flex justify-between py-[12px]">
-						<span>Văn bản đính kèm</span>
-						<form encType="multipart/form-data">
-							<label
-								className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
-								htmlFor="file-upload"
-							>
-								<p className="ml-[8px]">Thêm văn bản</p>
-							</label>
-							<input
-								onClick={(ev) => {
-									ev.target.value = "";
-								}}
-								type="file"
-								id="file-upload"
-								name="file-upload"
-								className="hidden"
-								onChange={(ev) => {
-									setFileUploaded(Array.from(ev.target.files));
-								}}
-								accept="application/pdf"
+					<span>Văn bản đính kèm</span>
+					<Form encType="multipart/form-data">
+						<Form.Item
+							rules={[
+								{
+									required: true,
+									message: 'Vui lòng chọn văn bản đính kèm'
+								}
+							]}
+						>
+							<Upload
 								multiple
-							></input>
-						</form>
+								accept="application/pdf"
+								beforeUpload={() => false}
+								onChange={handleFileUpload}
+							>
+								<Button htmlType="submit" icon={<UploadOutlined />}>Thêm văn bản</Button>
+							</Upload>
+						</Form.Item>
+					</Form>
 					</div>
 				</div>
 
