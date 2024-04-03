@@ -227,10 +227,11 @@ const Delete = ({ id, reFetchData }) => {
 	);
 };
 
-const AddFile = ({ reFetchData, id }) => {
+const AddFile = ({ id }) => {
 	const [openModalAddFile, setOpenModalAddFile] = useState(false);
 	const [addFile, setAddFile] = useState([]);
 	const [resetAdd, setResetAdd] = useState(false);
+	
 	return (
 		<div>
 			<Button
@@ -242,6 +243,7 @@ const AddFile = ({ reFetchData, id }) => {
 				<i className="fa-solid fa-plus"></i>
 			</Button>
 				<ThemHoSo
+					id={id}
 					open={openModalAddFile}
 					setOpen={setOpenModalAddFile}
 					selectedFiles={addFile}
@@ -253,87 +255,6 @@ const AddFile = ({ reFetchData, id }) => {
 	);
 };
 
-const WatchFile = ({ id, reFetchData }) => {
-	const [open, setOpen] = useState(false);
-	const [openModalAddFile, setOpenModalAddFile] = useState(false);
-	const [selectedFiles, setSelectedFiles] = useState([]);
-	const [reset, setReset] = useState(false);
-	return (
-		<div>
-			<Button
-				onClick={() => {
-					setOpen(true);
-				}}
-				className="border-none"
-			>
-				<i className="fa-solid fa-eye"></i>
-			</Button>
-			<Modal
-				open={open}
-				title="Xem hồ sơ"
-				onOk={async () => {
-					setOpen(false);
-				}}
-				onCancel={() => {
-					setOpen(false);
-				}}
-			>
-				<SuaHoSo
-					open={openModalAddFile}
-					setOpen={setOpenModalAddFile}
-					selectedFiles={selectedFiles}
-					setSelectedFiles={setSelectedFiles}
-					doesReset={reset}
-					setDoesReset={setReset}
-				/>
-			</Modal>
-		</div>
-	);
-};
-
-const RemoveFile = ({ id, reFetchData }) => {
-	const [open, setOpen] = useState(false);
-	const [openModalAddFile, setOpenModalAddFile] = useState(false);
-	const [selectedFiles, setSelectedFiles] = useState([]);
-	const [reset, setReset] = useState(false);
-	return (
-		<div>
-			<Button
-				onClick={() => {
-					setOpen(true);
-				}}
-				className="border-none"
-			>
-				<i className="fa-solid fa-minus"></i>
-			</Button>
-			<Modal
-				open={open}
-				title="Xóa hồ sơ"
-				onOk={async () => {
-					for (const checkbox of selectedFiles) {
-						const idFile = checkbox.split('checkbox')[1]
-						await PlanAPIService.removeFileFromPlan(idFile);
-					}
-					setReset(true);
-					reFetchData();
-					setOpen(false);
-				}}
-				onCancel={() => {
-					setOpen(false);
-				}}
-			>
-				<XoaHoSo
-					open={openModalAddFile}
-					setOpen={setOpenModalAddFile}
-					selectedFiles={selectedFiles}
-					setSelectedFiles={setSelectedFiles}
-					doesReset={reset}
-					setDoesReset={setReset}
-				/>
-			</Modal>
-		</div>
-	);
-};
 
 
 const Update = ({ reFetchData, id }) => {
@@ -535,9 +456,9 @@ const KeHoachNopLuuLichSu = () => {
 				state: <button>{rawData.state}</button>,
 				add_remove_file: (
 					<div className="flex justify-center">
-						<AddFile id={rawData.id} reFetchData={reFetchData} />
-						<RemoveFile id={rawData.id} reFetchData={reFetchData} />
-						<WatchFile id={rawData.id} reFetchData={reFetchData} />
+						<AddFile id={rawData.id} />
+						{/* <RemoveFile id={rawData.id} reFetchData={reFetchData} />
+						<WatchFile id={rawData.id} reFetchData={reFetchData} /> */}
 					</div>
 				),
 				function: (

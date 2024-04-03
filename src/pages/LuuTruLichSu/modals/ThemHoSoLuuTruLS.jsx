@@ -5,12 +5,18 @@ import { useEffect, useState } from "react";
 import { ENUM_STATE_FILE, STATE } from "src/storage/Storage";
 import { FIELDS_TABLE_STORE_ORGAN } from "src/storage/FileStorage";
 
+import { notifySuccess, notifyError } from "src/custom/Function";
+
+import PlanAPIService from "src/service/api/PlanAPIService";
+
+
 import axiosHttpService from "src/utils/httpService";
 import { Button, Input, Modal } from "antd";
 import PlanAPIService from "src/service/api/PlanAPIService";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
+const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 
 const fieldsTable = [...FIELDS_TABLE_STORE_ORGAN];
 fieldsTable.pop()
@@ -60,10 +66,12 @@ const ThemHoSo = ({
     selectedFiles,
     setSelectedFiles,
     doesReset,
-    setDoesReset
+    setDoesReset,
+    id,
 }) => {
     const [activeTab, setActiveTab] = useState("Tất cả");
     const [files, setFiles] = useState([]);
+	const [request, setRequest] = useState({});
     const [orgFiles, setOrgFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -209,8 +217,15 @@ const ThemHoSo = ({
         reset()
     }, [])
 
-    const handleAddFile = async () => {
-		for (const checkbox of addFile) {
+
+    
+	const handleOk = async () => {
+		if(selectedFiles.length === 0) {
+            notifyError("Vui lòng chọn hồ sơ cần thêm vào kế hoạch");
+            return;
+        }
+        
+		for (const checkbox of selectedFiles) {
 			const idFile = checkbox.split('checkbox')[1]
 			const payload = {
 				plan_id: id,
@@ -218,15 +233,9 @@ const ThemHoSo = ({
 			}
 			await PlanAPIService.setPlanForFile(payload);
 		}
-	}
-
-	const handleOk = async () => {
-		await axiosHttpService.put(API_GET_PLAN + '/' + id, request);
-		await handleAddFile();
-		setResetAdd(true);
-		reFetchData();
+        reset();
         setOpen(false);
-		notifySuccess("Cập nhật thành công");
+		notifySuccess("Thêm hồ sơ vào kế hoạch thành công");
 	};
 
 
