@@ -12,6 +12,7 @@ import PlanAPIService from "src/service/api/PlanAPIService";
 import XoaHoSo from "../LuuTruLichSu/modals/XoaHoSoLuuTruLS";
 import { useDispatch } from "react-redux";
 import { ModalConfirmSendPlan } from "./Modals/LuuTruLichSu";
+import { Watch } from "@mui/icons-material";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
@@ -20,13 +21,14 @@ const API_STORAGE_GET_ORGAN_ALL =
 const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
 
 const FIELDS_TABLE = [
-	{ title: "Tên kế hoạch", key: "name", width: "150%" },
-	{ title: "Văn bản đính kèm", key: "attachment", width: "100%" },
-	{ title: "Ngày kế hoạch", key: "start_date", width: "100%" },
+	{ title: "Tên kế hoạch", key: "name", width: "120%" },
+	{ title: "Văn bản đính kèm", key: "attachment", width: "70%" },
+	{ title: "Ngày kế hoạch", key: "start_date", width: "60%" },
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
-	{ title: "Chức năng", key: "function", width: "120px" },
-	{ title: "Gửi hồ sơ", key: "send", width: "90px" },
+	{ title: "Thêm / Xoá hồ sơ", key: "add_remove_file", width: "70%" },
+	{ title: "Chức năng", key: "function", width: "40%" },
+	{ title: "Gửi hồ sơ", key: "send", width: "60px" },
 ];
 
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
@@ -225,6 +227,115 @@ const Delete = ({ id, reFetchData }) => {
 	);
 };
 
+const AddFile = ({ reFetchData, id }) => {
+	const [openModalAddFile, setOpenModalAddFile] = useState(false);
+	const [addFile, setAddFile] = useState([]);
+	const [resetAdd, setResetAdd] = useState(false);
+	return (
+		<div>
+			<Button
+				onClick={() => {
+					setOpenModalAddFile(true)
+				}}
+				className="border-none"
+			>
+				<i className="fa-solid fa-plus"></i>
+			</Button>
+				<ThemHoSo
+					open={openModalAddFile}
+					setOpen={setOpenModalAddFile}
+					selectedFiles={addFile}
+					setSelectedFiles={setAddFile}
+					doesReset={resetAdd}
+					setDoesReset={setResetAdd}
+				/>
+		</div>
+	);
+};
+
+const WatchFile = ({ id, reFetchData }) => {
+	const [open, setOpen] = useState(false);
+	const [openModalAddFile, setOpenModalAddFile] = useState(false);
+	const [selectedFiles, setSelectedFiles] = useState([]);
+	const [reset, setReset] = useState(false);
+	return (
+		<div>
+			<Button
+				onClick={() => {
+					setOpen(true);
+				}}
+				className="border-none"
+			>
+				<i className="fa-solid fa-eye"></i>
+			</Button>
+			<Modal
+				open={open}
+				title="Xem hồ sơ"
+				onOk={async () => {
+					setOpen(false);
+				}}
+				onCancel={() => {
+					setOpen(false);
+				}}
+			>
+				<SuaHoSo
+					open={openModalAddFile}
+					setOpen={setOpenModalAddFile}
+					selectedFiles={selectedFiles}
+					setSelectedFiles={setSelectedFiles}
+					doesReset={reset}
+					setDoesReset={setReset}
+				/>
+			</Modal>
+		</div>
+	);
+};
+
+const RemoveFile = ({ id, reFetchData }) => {
+	const [open, setOpen] = useState(false);
+	const [openModalAddFile, setOpenModalAddFile] = useState(false);
+	const [selectedFiles, setSelectedFiles] = useState([]);
+	const [reset, setReset] = useState(false);
+	return (
+		<div>
+			<Button
+				onClick={() => {
+					setOpen(true);
+				}}
+				className="border-none"
+			>
+				<i className="fa-solid fa-minus"></i>
+			</Button>
+			<Modal
+				open={open}
+				title="Xóa hồ sơ"
+				onOk={async () => {
+					for (const checkbox of selectedFiles) {
+						const idFile = checkbox.split('checkbox')[1]
+						await PlanAPIService.removeFileFromPlan(idFile);
+					}
+					setReset(true);
+					reFetchData();
+					setOpen(false);
+				}}
+				onCancel={() => {
+					setOpen(false);
+				}}
+			>
+				<XoaHoSo
+					open={openModalAddFile}
+					setOpen={setOpenModalAddFile}
+					selectedFiles={selectedFiles}
+					setSelectedFiles={setSelectedFiles}
+					doesReset={reset}
+					setDoesReset={setReset}
+				/>
+			</Modal>
+		</div>
+	);
+};
+
+
 const Update = ({ reFetchData, id }) => {
 	const [request, setRequest] = useState({});
 	const [modalOpen, setModalOpen] = useState(false);
@@ -333,27 +444,7 @@ const Update = ({ reFetchData, id }) => {
 						value={request["organ_name"]}
 					/>
 				</div>
-				<div className="flex justify-between py-[12px]">
-					<span>Thêm hồ sơ</span>
-					<div
-						className="w-[70%]"
-					>
-						<Button onClick={() => {
-							setOpenModalAddFile(true)
-						}}> Thêm hồ sơ mới vào kế hoạch</Button>
-					</div>
-				</div>
-				<div className="flex justify-between py-[12px]">
-					<span>Xoá hồ sơ</span>
-					<div
-						className="w-[70%]"
-					>
-						<Button onClick={() => {
-							setOpenModalDeleteFile(true)
-						}}> Xoá hồ sơ trong kế hoạch</Button>
-					</div>
-				</div>
-				<XoaHoSo
+				{/* <XoaHoSo
 					open={openModalDeleteFile}
 					idPlan={id}
 					setOpen={setOpenModalDeleteFile}
@@ -369,7 +460,7 @@ const Update = ({ reFetchData, id }) => {
 					setSelectedFiles={setAddFile}
 					doesReset={resetAdd}
 					setDoesReset={setResetAdd}
-				/>
+				/> */}
 
 			</Modal>
 		</div>
@@ -442,12 +533,20 @@ const KeHoachNopLuuLichSu = () => {
 				start_date: rawData.start_date,
 				organ_name: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
+				add_remove_file: (
+					<div className="flex justify-center">
+						<AddFile id={rawData.id} reFetchData={reFetchData} />
+						<RemoveFile id={rawData.id} reFetchData={reFetchData} />
+						<WatchFile id={rawData.id} reFetchData={reFetchData} />
+					</div>
+				),
 				function: (
-					<div className="flex ">
+					<div className="flex justify-center">
 						<Delete id={rawData.id} reFetchData={reFetchData} />
 						<Update id={rawData.id} reFetchData={reFetchData} />
 					</div>
 				),
+				
 				send: (
 					<div>
 						<Button onClick={() => handleClick(rawData.id, rawData.name)} className="border-none">

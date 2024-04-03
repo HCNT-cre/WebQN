@@ -208,9 +208,26 @@ const ThemHoSo = ({
         reset()
     }, [])
 
-    const handleOk = () => {
+    const handleAddFile = async () => {
+		for (const checkbox of addFile) {
+			const idFile = checkbox.split('checkbox')[1]
+			const payload = {
+				plan_id: id,
+				gov_file_id: idFile,
+			}
+			await PlanAPIService.setPlanForFile(payload);
+		}
+	}
+
+	const handleOk = async () => {
+		await axiosHttpService.put(API_GET_PLAN + '/' + id, request);
+		await handleAddFile();
+		setResetAdd(true);
+		reFetchData();
         setOpen(false);
-    }
+		notifySuccess("Cập nhật thành công");
+	};
+
 
     useEffect(() => {
         if (doesReset) {
