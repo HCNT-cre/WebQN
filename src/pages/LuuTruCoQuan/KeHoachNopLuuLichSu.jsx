@@ -398,7 +398,6 @@ const KeHoachNopLuuLichSu = () => {
 	};
 	const handleSendPlan = async (id) => {
 		try {
-			console.log("id", id);
 			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DA_THU_THAP);
 			await FileAPIService.updateStateByIdPlan(id, {
 				current_state: 4, // luu tru co quan

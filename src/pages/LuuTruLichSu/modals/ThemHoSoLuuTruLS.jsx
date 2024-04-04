@@ -12,11 +12,8 @@ import PlanAPIService from "src/service/api/PlanAPIService";
 
 import axiosHttpService from "src/utils/httpService";
 import { Button, Input, Modal } from "antd";
-import PlanAPIService from "src/service/api/PlanAPIService";
-const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_GOV_FILE_SEARCH = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
-const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 
 const fieldsTable = [...FIELDS_TABLE_STORE_ORGAN];
 fieldsTable.pop()

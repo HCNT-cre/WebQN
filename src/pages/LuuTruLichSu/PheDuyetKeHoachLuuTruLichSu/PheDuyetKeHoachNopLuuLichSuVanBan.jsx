@@ -35,8 +35,8 @@ const PheDuyetKeHoachNopLuuLichSuVanBan
         for (const file of files) {
             newData.push({
                 "id": file.id,
-                "name": <Link to={`./${file.id}`} className="cursor-pointer">{file.name}</Link>,
-                "state": "Chưa nộp",
+                "name": file.title,
+                "state": <button> Chưa có </button>,
                 "action": "Chưa có"
             })
         }
@@ -64,9 +64,8 @@ const PheDuyetKeHoachNopLuuLichSuVanBan
                 }
                 breadcrumb={
                     <span>
-                        <Link to="/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su">Danh mục cơ quan</Link> /
-                        <Link to={`/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su/${params.plan_id}`}> Phòng ban </Link> / 
-                        <Link to={`/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su/${params.plan_id}/${params.organ_id}`}> Phòng ban </Link> / 
+                        <Link to={`/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su/${params.plan_id}`}> Cơ quan </Link> / 
+                        <Link to={`/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su/${params.plan_id}/${params.organ_id}`}> Kế hoạch </Link> / 
                     </span>
                 }
                 fieldNames={FILE_PLAN_NLLS}
