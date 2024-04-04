@@ -7,6 +7,7 @@ import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
 import ThemHoSo from "src/pages/LuuTruLichSu/modals/ThemHoSoLuuTruLS";
 import SuaHoSo from "../LuuTruLichSu/modals/SuaHoSoLuuTruLS";
+import XemDanhSach from "../LuuTruLichSu/modals/XemDanhSach";
 import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import XoaHoSo from "../LuuTruLichSu/modals/XoaHoSoLuuTruLS";
@@ -255,7 +256,59 @@ const AddFile = ({ id }) => {
 	);
 };
 
+const RemoveFile = ({ id }) => {
+	const [openModalDeleteFile, setOpenModalDeleteFile] = useState(false);
+	const [removeFile, setRemoveFile] = useState([]);
+	const [resetRemove, setResetRemove] = useState(false);
+	return (
+		<div>
+			<Button
+				onClick={() => {
+					setOpenModalDeleteFile(true)
+				}}
+				className="border-none"
+			>
+				<i className="fa-solid fa-minus"></i>
+			</Button>
+				<XoaHoSo
+					open={openModalDeleteFile}
+					idPlan={id}
+					setOpen={setOpenModalDeleteFile}
+					selectedFiles={removeFile}
+					setSelectedFiles={setRemoveFile}
+					doesReset={resetRemove}
+					setDoesReset={setResetRemove}
+				/>
+		</div>
+	);
+};
 
+const WatchFile = ({ id}) => {
+	const [openModalWatchFile, setOpenModalWatchFile] = useState(false);
+	const [watchFile, setWatchFile] = useState([]);
+	const [resetWatch, setResetWatch] = useState(false);
+	return (
+		<div>
+			<Button
+				onClick={() => {
+					setOpenModalWatchFile(true)
+				}}
+				className="border-none"
+			>
+				<i className="fa-solid fa-eye"></i>
+			</Button>
+				<XemDanhSach
+					open={openModalWatchFile}
+					idPlan={id}
+					setOpen={setOpenModalWatchFile}
+					selectedFiles={watchFile}
+					setSelectedFiles={setWatchFile}
+					doesReset={resetWatch}
+					setDoesReset={setResetWatch}
+				/>
+		</div>
+	);
+};
 
 const Update = ({ reFetchData, id }) => {
 	const [request, setRequest] = useState({});
@@ -456,14 +509,15 @@ const KeHoachNopLuuLichSu = () => {
 				add_remove_file: (
 					<div className="flex justify-center">
 						<AddFile id={rawData.id} />
-						{/* <RemoveFile id={rawData.id} reFetchData={reFetchData} />
-						<WatchFile id={rawData.id} reFetchData={reFetchData} /> */}
+						<RemoveFile id={rawData.id} />
+						<WatchFile id={rawData.id} />
+						{/* <WatchFile id={rawData.id} reFetchData={reFetchData} />  */}
 					</div>
 				),
 				function: (
 					<div className="flex justify-center">
-						<Delete id={rawData.id} reFetchData={reFetchData} />
-						<Update id={rawData.id} reFetchData={reFetchData} />
+						<Delete id={rawData.id}  />
+						<Update id={rawData.id} />
 					</div>
 				),
 				

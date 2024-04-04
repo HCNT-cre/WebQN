@@ -56,7 +56,7 @@ const filterFileEachTab = (files, text) => {
 }
 
 
-const XoaHoSo = ({
+const XemDanhSach = ({
     open,
     setOpen,
     selectedFiles,
@@ -204,18 +204,8 @@ const XoaHoSo = ({
     }, [])
 
     const handleOk = async () => {
-		if(selectedFiles.length === 0) {
-            notifyError("Vui lòng chọn hồ sơ cần xoá khỏi kế hoạch");
-            return;
-        }
-        
-		for (const checkbox of selectedFiles) {
-			const idFile = checkbox.split('checkbox')[1]
-			await PlanAPIService.removeFileFromPlan(idFile);
-		}
         reset();
         setOpen(false);
-		notifySuccess("Xoá hồ sơ khỏi kế hoạch thành công");
 	};
 
 
@@ -230,7 +220,7 @@ const XoaHoSo = ({
             style={{
                 top: 20,
             }}
-            title="Xoá hồ sơ"
+            title="Danh sách hồ sơ có trong kế hoạch"
             onCancel={() => setOpen(false)}
             onOk={handleOk}
             open={open}
@@ -332,4 +322,4 @@ const XoaHoSo = ({
     )
 }
 
-export default XoaHoSo 
+export default XemDanhSach 
