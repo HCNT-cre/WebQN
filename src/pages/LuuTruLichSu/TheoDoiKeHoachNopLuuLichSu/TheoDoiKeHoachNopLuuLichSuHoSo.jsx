@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import PheDuyetKeHoachNLLSBase from "src/pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu";
+import PheDuyetKeHoachNLLSBase from "src/pages/LuuTruLichSu/TheoDoiKeHoachNopLuuLichSu";
 import { Input, Spin } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -22,7 +22,7 @@ const SearchBar = () => {
 }
 
 
-const PheDuyetKeHoachNopLuuLichSuVanBan
+const TheoDoiKeHoachNopLuuLichSuHoSo
  = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [fieldData, setFieldData] = useState([])
@@ -58,14 +58,15 @@ const PheDuyetKeHoachNopLuuLichSuVanBan
             <PheDuyetKeHoachNLLSBase
                 title={
                     <span>
-                        <span >Phê Duyệt Kế Hoạch Nộp Lưu Lịch Sử</span> /
-                        <span className="text-black"> Cơ quan </span>
+                        <span >Theo dõi Kế Hoạch Nộp Lưu Lịch Sử</span> /
+                        <span className="text-black"> Cơ quan </span> /
+                        <span className="text-black"> Hồ sơ </span>
                     </span>
                 }
                 breadcrumb={
                     <span>
-                        <Link to={`/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su/${params.plan_id}`}> Cơ quan </Link> / 
-                        <Link to={`/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su/${params.plan_id}/${params.organ_id}`}> Kế hoạch </Link> / 
+                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su/${params.plan_id}`}> Theo dõi Kế Hoạch Nộp Lưu Lịch Sử </Link> / 
+                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su/${params.plan_id}/${params.organ_id}`}> Cơ quan </Link> / 
                     </span>
                 }
                 fieldNames={FILE_PLAN_NLLS}
@@ -77,5 +78,5 @@ const PheDuyetKeHoachNopLuuLichSuVanBan
     )
 }
 
-export default PheDuyetKeHoachNopLuuLichSuVanBan
+export default TheoDoiKeHoachNopLuuLichSuHoSo
 

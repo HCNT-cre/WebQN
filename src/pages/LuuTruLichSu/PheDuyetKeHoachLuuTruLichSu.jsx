@@ -9,8 +9,8 @@ import { Button, Input, Modal, Popconfirm } from "antd";
 import ThemHoSo from "src/pages/LuuTruLichSu/modals/ThemHoSoLuuTruLS";
 import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
-import XoaHoSo from "../modals/XoaHoSoLuuTruLS";
-import { SendPlanToOrgan } from "../modals/SendPlanToOrgan";
+import XoaHoSo from "./modals/XoaHoSoLuuTruLS";
+import { SendPlanToOrgan } from "./modals/SendPlanToOrgan";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
 
@@ -272,7 +272,6 @@ const Update = ({ reFetchData, id }) => {
 
 
 const PheDuyetKeHoachLuuTruLichSu = () => {
-	console.log('PheDuyetKeHoachLuuTruLichSu');
 	const [isLoading, setIsLoading] = useState(false);
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
@@ -377,7 +376,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 			}
 			const row = {
 				id: planRaw.id,
-				name: <Link to={`./${planRaw.id}`} className="cursor-pointer"> {planRaw.name}</Link>,
+				name: planRaw.name,
 				attachment: <button onClick={() => handleDownloadAttachment(planRaw.attachment)}>{attachment}</button>,
 				start_date: planRaw.start_date,
 				organ_name: planRaw.organ_name,

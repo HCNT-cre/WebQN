@@ -19,7 +19,6 @@ import WareHouse from "src/pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouse";
 import WareHouseRoom from "src/pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/WareHouseRoom";
 import Shelf from "src/pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Shelf";
 import Drawers from "src/pages/KhaiBaoDanhMuc/DanhMucKhoLuuTru/Drawers";
-import ReturnFile from "src/pages/Files/ReturnFile";
 import LoginSSO from "src/pages/LoginSSO";
 import HoSoBiTraVeCoQuan from "src/pages/LuuTruCoQuan/HoSoBiTraVeCoQuan";
 import NhanVien from "src/pages/KhaiBaoDanhMuc/DanhMucCoQuan/NhanVien";
@@ -53,14 +52,13 @@ import PheDuyetLuuKho from "./pages/BienMucChinhLy/PheDuyetLuuKho";
 import HoSoNopLuuBiTraVe from "./pages/ThuThapVaNopLuu/HoSoNopLuuBiTraVe";
 import KeHoachThuThapBiTuChoi from "./pages/ThuThapVaNopLuu/KeHoachThuThapBiTuChoi";
 import PheDuyetKeHoachThuThap from "./pages/ThuThapVaNopLuu/PheDuyetKeHoachThuThap";
-import { useSelector, useDispatch } from "react-redux";
+import {useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { setUserPermission } from "./actions/userPermission"
 import DuyetSaoHoSo from "./pages/QuanLiKhaiThac/SaoHoSo";
 import DuyetSaoVaChungThucHoSo from "./pages/QuanLiKhaiThac/SaoVaChungThuc";
-import TheoDoiKeHoach from "./pages/LuuTruLichSu/TheoDoiKeHoach";
-
+import TheoDoiKeHoach from "./pages/LuuTruLichSu/TheoDoiKeHoachNopLuuLichSu/TheoDoiKeHoach";
 import axiosHttpService from "src/utils/httpService";
 import DuyetKeHoachChinhLy from "./pages/BienMucChinhLy/DuyetKeHoachChinhLy";
 import KeHoachChinhLyBiTuChoi from "./pages/BienMucChinhLy/KeHoachChinhLyBiTuChoi";
@@ -93,9 +91,9 @@ import ThamDinhHoSo from "./pages/LuuTruLichSu/ThamDinhHoSo";
 import ThongKeHienTrangSoHoaKhoLuuTru from "./pages/BaoCaoThongKe/ThongKeHienTrangSoHoaKhoLuuTru";
 import ThongKeHopCap from "./pages/BaoCaoThongKe/ThongKeHopCap";
 import ThongKeKhaiThac from "./pages/BaoCaoThongKe/ThongKeKhaiThac";
-import PheDuyetKeHoachNopLuuLichSuCoQuan from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu/PheDuyetKeHoachNopLuuLichSuCoQuan";
-import PheDuyetKeHoachNopLuuLichSuVanBan from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu/PheDuyetKeHoachNopLuuLichSuVanBan";
-import PheDuyetKeHoachLuuTruLichSu from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu/PheDuyetKeHoachLuuTruLichSu";
+import TheoDoiKeHoachNopLuuLichSuCoQuan from "./pages/LuuTruLichSu/TheoDoiKeHoachNopLuuLichSu/TheoDoiKeHoachNopLuuLichSuCoQuan";
+import TheoDoiKeHoachNopLuuLichSuHoSo from "./pages/LuuTruLichSu/TheoDoiKeHoachNopLuuLichSu/TheoDoiKeHoachNopLuuLichSuHoSo";
+import PheDuyetKeHoachLuuTruLichSu from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu";
 
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
@@ -193,7 +191,6 @@ const loginSSOPage = () => {
 }
 
 const App = () => {
-    const [isLoading, setIsLoading] = useState(true);
     const isLogin = localStorage.getItem("isLogin");
 
     const dispatch = useDispatch();
@@ -223,7 +220,6 @@ const App = () => {
             if (window.location.pathname === "/dang-nhap") return;
             dispatch({ type: "LOGOUT" });
         }
-        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -240,6 +236,14 @@ const App = () => {
         {
             path: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su",
             element: <TheoDoiKeHoach />,
+        },
+        {
+            path: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su/:plan_id",
+            element: <TheoDoiKeHoachNopLuuLichSuCoQuan />
+        },
+        {
+            path: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su/:plan_id/:organ_id",
+            element: <TheoDoiKeHoachNopLuuLichSuHoSo />
         },
         {
             path: "/nop-luu-lich-su/ke-hoach-nop-luu-lich-su",
@@ -272,14 +276,6 @@ const App = () => {
         {
             path: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
             element: <PheDuyetKeHoachLuuTruLichSu />,
-        },
-        {
-            path: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su/:plan_id",
-            element: <PheDuyetKeHoachNopLuuLichSuCoQuan />
-        },
-        {
-            path: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su/:plan_id/:organ_id",
-            element: <PheDuyetKeHoachNopLuuLichSuVanBan />
         },
         {
             path: "/luu-tru-lich-su/kho-luu-tru-lich-su",

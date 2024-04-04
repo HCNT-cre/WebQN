@@ -111,6 +111,12 @@ const PlanAPIService = {
         return response.data
     },
 
+    getSentNLLSPlan: async () => {
+        const userInfo = await UserAPIService.getUserInfo();
+        const response = await axiosHttpService.get(API_GET_NLLS_INTERNAL + '/' + userInfo.id)
+        return response.data
+    },
+
     sendNLLSPLanOrgan: async (planIds, organIds) => {
         const userInfo = await UserAPIService.getUserInfo();
         const organ = await UserAPIService.getUserOrgan();
