@@ -487,7 +487,7 @@ export const TABS_SIDEBAR = [
 						parent: 81,
 					},
 					{
-						title: "Phê duyệt và gửi đi",
+						title: "Phê duyệt và gửi",
 						to: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
 						key: "/luu-tru-lich-su/phe-duyet-ke-hoach-nop-luu-lich-su",
 						number: 32,
@@ -495,7 +495,7 @@ export const TABS_SIDEBAR = [
 					},
 
 					{
-						title: "Theo dõi và thẩm định",
+						title: "Thẩm định hồ sơ",
 						to: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su",
 						key: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su",
 						number: 104,
@@ -511,7 +511,7 @@ export const TABS_SIDEBAR = [
 					// },
 
 					{
-						title: "Sở Nội vụ phê duyệt",
+						title: "Sở Nội vụ duyệt",
 						to: "/luu-tru-lich-su/so-noi-vu-phe-duyet",
 						key: "/luu-tru-lich-su/so-noi-vu-phe-duyet",
 						number: 77,
