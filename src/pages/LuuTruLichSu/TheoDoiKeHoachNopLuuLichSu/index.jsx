@@ -11,7 +11,7 @@ export const PheDuyetKeHoachNLLSBase = ({
         <div className="w-full">
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
                 <p className="text-[14px] font-300 cursor-pointer ">
-                    <span className="text-[rgba(0,0,0,.45)]">Phê Duyệt Kế Hoạch Nộp Lưu Lịch Sử / {breadcrumb}
+                    <span className="text-[rgba(0,0,0,.45)]">Lưu trữ lịch sử / {breadcrumb}
                     </span>
                 </p>
             </div>

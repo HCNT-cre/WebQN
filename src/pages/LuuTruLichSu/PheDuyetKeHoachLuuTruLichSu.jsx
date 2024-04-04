@@ -403,12 +403,12 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 			<div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
 				<p className="text-[14px] font-300 cursor-pointer ">
 					<span className="text-[rgba(0,0,0,.45)]">
-						<Link to="/thu-thap-va-nop-luu/tham-dinh-ho-so">
+						<Link to="/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su">
 							Lưu trữ lịch sử /{" "}
 						</Link>
 					</span>
 					<span>
-						<Link to="/thu-thap-va-nop-luu/tham-dinh-ho-so">
+						<Link to="/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su">
 							Phê duyệt và gửi kế hoạch nộp lưu lịch sử
 						</Link>
 					</span>

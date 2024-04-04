@@ -62,8 +62,7 @@ const TheoDoiKeHoachNopLuuLichSuCoQuan = () => {
                 }
                 breadcrumb={
                     <span>
-                        <Link to="/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su">Theo Dõi Kế Hoạch Nộp Lưu Lịch Sử</Link> /
-                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su/${params.plan_id}`}> Cơ quan </Link>
+                        <Link to="/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su">Theo Dõi Kế Hoạch Nộp Lưu Lịch Sử</Link>
                     </span>
                 }
                 fieldNames={ORGAN_PLAN_NLLS}

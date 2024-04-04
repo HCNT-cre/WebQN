@@ -127,3 +127,9 @@ export const FILE_PLAN_NLLS = [
     { title: "trạng thái", key: "state", width: "100%" },
     { title: "Duyệt", key: "action", width: "100%" },
 ]
+
+export const THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU = [
+    { title: "Tên kế hoạch", key: "plan_name", width: "150%" },
+    { title: "Tên cơ quan", key: "organ_name", width: "100%" },
+    { title: "Trạng thái", key: "progress", width: "100%" },
+]

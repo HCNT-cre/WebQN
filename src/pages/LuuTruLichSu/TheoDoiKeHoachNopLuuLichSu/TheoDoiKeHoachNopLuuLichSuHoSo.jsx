@@ -65,8 +65,8 @@ const TheoDoiKeHoachNopLuuLichSuHoSo
                 }
                 breadcrumb={
                     <span>
-                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su/${params.plan_id}`}> Theo dõi Kế Hoạch Nộp Lưu Lịch Sử </Link> / 
-                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su/${params.plan_id}/${params.organ_id}`}> Cơ quan </Link> / 
+                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su`}> Theo dõi Kế Hoạch Nộp Lưu Lịch Sử </Link> / 
+                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su/${params.plan_id}`}> Cơ quan </Link> 
                     </span>
                 }
                 fieldNames={FILE_PLAN_NLLS}

@@ -3,12 +3,7 @@ import { Input } from "antd"
 import { Table } from "src/custom/Components"
 import { useState, useEffect } from "react"
 import PlanAPIService from "src/service/api/PlanAPIService";
-
-const FIELDS_TABLE = [
-    { title: "Tên kế hoạch", key: "plan_name", width: "150%" },
-    { title: "Tên cơ quan", key: "organ_name", width: "100%" },
-    { title: "Trạng thái", key: "progress", width: "100%" },
-]
+import { THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU } from "src/storage/StorageOffice";
 
 const TheoDoiKeHoach = () => {
     const [stateCheckBox, setStateCheckBox] = useState([]);
@@ -87,7 +82,7 @@ const TheoDoiKeHoach = () => {
 
         <Table
             setStateCheckBox={setStateCheckBox}
-            fieldNames={FIELDS_TABLE}
+            fieldNames={THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU}
             fieldDatas={plan}
             isLoading={isLoading}
             isCheckBox={true}
