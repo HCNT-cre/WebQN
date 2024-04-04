@@ -201,7 +201,7 @@ const XoaHoSo = ({
 
     useEffect(() => {
         reset()
-    }, [])
+    }, [open])
 
     const handleOk = async () => {
 		if(selectedFiles.length === 0) {

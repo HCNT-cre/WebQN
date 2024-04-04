@@ -201,7 +201,7 @@ const XemDanhSach = ({
 
     useEffect(() => {
         reset()
-    }, [])
+    }, [open])
 
     const handleOk = async () => {
         reset();

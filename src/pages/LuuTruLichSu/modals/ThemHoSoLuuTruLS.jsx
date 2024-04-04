@@ -212,7 +212,7 @@ const ThemHoSo = ({
 
     useEffect(() => {
         reset()
-    }, [])
+    }, [open])
 
 
     
