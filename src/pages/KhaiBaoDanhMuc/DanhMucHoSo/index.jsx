@@ -114,6 +114,11 @@ const Create = ({
                 </div>
 
                 <div className="flex justify-between py-[12px]">
+                    <span>Năm</span>
+                    <Input name="year" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="text" className="w-[70%]" value={request["year"]} />
+                </div>
+
+                <div className="flex justify-between py-[12px]">
                     <span>Đề mục / Nhóm lớn</span>
                     <Select
                         options={selectOrder}
@@ -293,6 +298,7 @@ const generateColumn = (
     order = null) => {
     return [
         { title: "Tên đề mục và tiêu đề hồ sơ", dataIndex: "name", key: "name" },
+        { title: "Năm", dataIndex: "year", key: "year" },
         {
             title: "Hành động",
             dataIndex: "",
@@ -314,7 +320,7 @@ const generateColumn = (
                                     setOrder(order)
                                     setParent(record.id)
                                 }}>
-                                <i class="fa-solid fa-plus"></i>
+                                <i className="fa-solid fa-plus"></i>
                             </div>
                         }
                     </div>)
