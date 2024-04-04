@@ -24,6 +24,7 @@ import ModalRecoverFileReducer from './modalRecoverFile'
 import ModalConfirmSendPlanLuuTruLichSuReducer from './modalConfirmSendPlanLuuTruLichSu'
 import modalChoosePersonReducer from './modalChoosePerson'
 import tableSenPlanToOrganReducer from './tableSendPlanToOrgan'
+import ModalStateNLLSPlanOrganReducer from './modalStateNLLSPlanOrgan'
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
@@ -50,6 +51,7 @@ const rootReducer = combineReducers({
     modalConfirmSendPlanLuuTruLichSu: ModalConfirmSendPlanLuuTruLichSuReducer,
     modalChoosePerson: modalChoosePersonReducer,
     tableSendPlanToOrgan: tableSenPlanToOrganReducer,
+    modalStateNLLSPlanOrgan: ModalStateNLLSPlanOrganReducer
 })
 
 export default rootReducer

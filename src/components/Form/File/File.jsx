@@ -178,7 +178,6 @@ const File = ({
         format: null
     })
 
-
     useEffect(() => {
         if (fileID === null || fileID === undefined) {
             const updatedRequest = {}

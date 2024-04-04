@@ -118,8 +118,8 @@ export const ORGAN_DECENTRALIZATION_INPUTS = [
 
 export const ORGAN_PLAN_NLLS = [
     { title: "Tên", key: "name", width: "100%" },
-    { title: "trạng thái", key: "state", width: "100%" },
-    { title: "Duyệt", key: "action", width: "100%" },
+    { title: "Trạng thái", key: "state", width: "150px" },
+    { title: "Duyệt", key: "action", width: "150px" },
 ]
 
 export const FILE_PLAN_NLLS = [

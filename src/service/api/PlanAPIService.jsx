@@ -13,6 +13,9 @@ const API_SEND_NLLS_INTERNAL = import.meta.env.VITE_API_SEND_NLLS_INTERNAL
 const API_SEND_NLLS_ORGAN = import.meta.env.VITE_API_SEND_NLLS_ORGAN
 const API_GET_NLLS_INTERNAL = import.meta.env.VITE_API_GET_NLLS_INTERNAL
 const API_GET_NLLS_ORGAN = import.meta.env.VITE_API_GET_NLLS_ORGAN
+const API_GET_SENT_PLAN_NLLS_BY_SENDER_ID = import.meta.env.VITE_API_GET_SENT_PLAN_NLLS_BY_SENDER_ID
+const API_UPDATE_STATE_NLLS_ORGAN = import.meta.env.VITE_API_UPDATE_STATE_NLLS_ORGAN
+
 const PlanAPIService = {
     getPlanById: async (id) => {
         const response = await axiosHttpService.get(API_PLAN + '/' + id);
@@ -113,7 +116,7 @@ const PlanAPIService = {
 
     getSentNLLSPlan: async () => {
         const userInfo = await UserAPIService.getUserInfo();
-        const response = await axiosHttpService.get(API_GET_NLLS_INTERNAL + '/' + userInfo.id)
+        const response = await axiosHttpService.get(API_GET_SENT_PLAN_NLLS_BY_SENDER_ID + '/' + userInfo.id)
         return response.data
     },
 
@@ -134,6 +137,15 @@ const PlanAPIService = {
         const response = await axiosHttpService.get(API_GET_NLLS_ORGAN + '/' + organ.id)
         return response.data
     },
+    updateStateNLLSOrgan : async (planId, organId, newState) => {
+        const response = await axiosHttpService.post(API_UPDATE_STATE_NLLS_ORGAN, {
+            plan_id: planId,
+            organ_id: organId,
+            state: newState
+        });
+        return response.data;
+    }
+
 
 }
 

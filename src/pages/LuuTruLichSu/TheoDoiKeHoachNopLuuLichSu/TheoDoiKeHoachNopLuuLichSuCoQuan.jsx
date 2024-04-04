@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PheDuyetKeHoachNLLSBase from "src/pages/LuuTruLichSu/TheoDoiKeHoachNopLuuLichSu";
-import { Input, Spin } from "antd";
+import { Input, Spin, Button } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import LuutrucoquanAPIService from "src/service/api/LuutrucoquanAPIService";
 import { ORGAN_PLAN_NLLS } from "src/storage/StorageOffice";
-
+import { ModalStateNLLSPlanOrgan } from "src/pages/Modals";
+import { useDispatch } from "react-redux";
 const Search = Input.Search
 
 
@@ -26,16 +27,23 @@ const TheoDoiKeHoachNopLuuLichSuCoQuan = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [fieldData, setFieldData] = useState([])
     const params = useParams();
+    const dispatch = useDispatch();
 
-    const fetchFieldData = async () => {
+    const handleClickOrgan = (planId, organId) => {
+        dispatch({ type: "open_modalStateNLLSPlanOrganReducer", planId, organId, reFetchData })
+    }
+    const reFetchData = async () => {
         setIsLoading(true)
-        const organs = await LuutrucoquanAPIService.getOrganByPlanId(params.plan_id);
+        const organs = await LuutrucoquanAPIService.getOrganAndStateOfNLLSPlan(params.plan_id);
         const newData = []
         for (const organ of organs) {
             newData.push({
                 "id": organ.id,
                 "name": <Link to={`./${organ.id}`} className="cursor-pointer">{organ.name}</Link>,
-                "state": <button>Chưa nộp</button>
+                "state": <button>{organ.state}</button>,
+                "action": <Button className="border-none shadow-none text-green-500" onClick={() => handleClickOrgan(organ.plan_id, organ.id)}>
+                    <i className="text-[20px] fa-regular fa-square-check"></i>
+                </Button>
             })
         }
         setFieldData(newData)
@@ -45,7 +53,7 @@ const TheoDoiKeHoachNopLuuLichSuCoQuan = () => {
     useEffect(() => {
         const fetchData = async () => {
             setIsLoading(true);
-            await fetchFieldData()
+            await reFetchData()
             setIsLoading(false);
         }
         fetchData();
@@ -70,6 +78,7 @@ const TheoDoiKeHoachNopLuuLichSuCoQuan = () => {
                 SearchBar={<SearchBar />}
                 isLoading={isLoading}
             />
+            <ModalStateNLLSPlanOrgan />
         </Spin>
     )
 }

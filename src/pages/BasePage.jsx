@@ -503,16 +503,6 @@ const BasePage = ({
 						});
 						break;
 				}
-
-				// newButton = cloneElement(buttonFuctions, {
-				// 	clickFunction: () => {
-				// 		dispatch({
-				// 			type: currentStateModal === ENUM_STATE.NOP_LUU_CO_QUAN ? "open_modal_confirm_nopluucoquan" : "open_modal_confirm_luutrucoquan",
-				// 			id: rawData.id,
-				// 			current_state: rawData.state,
-				// 		});
-				// 	},
-				// });
 			}
 
 			let row = {};
@@ -616,7 +606,7 @@ const BasePage = ({
 		const response = await axiosHttpService.get(request);
 		setFiles(getFileFromResponse(response));
 		setDoesFilter(true);
-		setSearch((prev) => ({
+		setSearch(() => ({
 			title: "",
 			organ_id: "",
 			offce: "",
@@ -629,7 +619,7 @@ const BasePage = ({
 
 	const reset = () => {
 		const fetchFileData = async () => {
-			if(!filterOrganByPlan) {
+			if (!filterOrganByPlan) {
 				try {
 					setIsLoading(true);
 					const response = await axiosHttpService.get(
@@ -641,9 +631,9 @@ const BasePage = ({
 				} catch (err) {
 					console.log(err);
 				}
-			}else {
+			} else {
 				setIsLoading(true);
-				const organ = await PlanAPIService.getOrganByPlan()		
+				const organ = await PlanAPIService.getOrganByPlan()
 				setIsLoading(false);
 				setFiles(organ);
 			}
@@ -876,11 +866,11 @@ const BasePage = ({
 	const handleExportDocToExcel = () => {
 		const getExcel = async () => {
 			const fileDownload = filterFileExcel != null ? filterFileExcel(fileSheet) : fileSheet;
-			
+
 			fileDownload.forEach((file) => {
 				file.maintenance = file.maintenance_name !== "Vĩnh viễn" ? file.maintenance_name + " năm" : file.maintenance_name;
 			});
-			
+
 			const response = await axiosCorsService.post(API_EXPORT_EXCEL, {
 				luong: 200,
 				data: fileDownload,
@@ -888,7 +878,7 @@ const BasePage = ({
 			}, {
 				responseType: "blob"
 			});
-			
+
 			const url = window.URL.createObjectURL(new Blob([response.data]));
 			const link = document.createElement('a');
 			link.href = url;
@@ -944,7 +934,7 @@ const BasePage = ({
 	}
 
 	const handleFilterFileByPlan = async (value) => {
-		if(!filterOrganByPlan) {
+		if (!filterOrganByPlan) {
 			setIsLoading(true);
 			let res = await FileAPIService.getFileByPlanId(value);
 			res = getFileFromResponse({ data: res })
@@ -953,7 +943,7 @@ const BasePage = ({
 			setIsLoading(false);
 			setFilterByPlan(value);
 			return
-		}else {
+		} else {
 			const organ = await PlanAPIService.getOrganByPlanId(value);
 			setFiles(organ)
 			setIsLoading(false);
@@ -1210,8 +1200,8 @@ const BasePage = ({
 					<ModalModificationDocumentAddedDocument />
 					<ModalModificationDocumentRequireAddDoc />
 					<ModalRecoverFile />
-					<ModalConfirmSendPlan handleSendPlan={null}/>
-					<ChonNguoiDuyetKeHoach handleSendPlan={null}/>
+					<ModalConfirmSendPlan handleSendPlan={null} />
+					<ChonNguoiDuyetKeHoach handleSendPlan={null} />
 					<PlanAndCategoryFile
 						open={modalOpen}
 						setOpen={setModalOpen}

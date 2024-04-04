@@ -60,6 +60,13 @@ export const ENUM_STATE_PLAN = {
 	DA_THU_THAP: "Đã thu thập",
 }
 
+export const ENUM_STATE_NLLS_PLAN = {
+	CHUA_NOP: "Chưa nộp",
+	DA_NOP: "Đã nộp",
+	DA_DUYET_NOP_LUU_LICH_SU_TU_CO_QUAN: "Đã duyệt nộp lưu lịch sử từ cơ quan",
+	TU_CHOI_NOP_LUU_LICH_SU_TU_CO_QUAN: "Từ chối nộp lưu lịch sử từ cơ quan",
+}
+
 export const ENUM_STATE_BMCL = {
 	BMCL_PHE_DUYET_LUU_KHO: "BMCL_PHE_DUYET_LUU_KHO",
 	BMCL_BO_SUNG_HO_SO_TAI_LIEU: "BMCL_BO_SUNG_HO_SO_TAI_LIEU",
@@ -488,20 +495,20 @@ export const TABS_SIDEBAR = [
 					},
 
 					{
-						title: "Theo dõi kế hoạch",
+						title: "Theo dõi và thẩm định",
 						to: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su",
 						key: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su",
 						number: 104,
 						parent: 81,
 					},
 
-					{
-						title: "Thẩm định hồ sơ",
-						to: "/luu-tru-lich-su/tham-dinh-ho-so",
-						key: "/luu-tru-lich-su/tham-dinh-ho-so",
-						number: 105,
-						parent: 81,
-					},
+					// {
+					// 	title: "Thẩm định hồ sơ",
+					// 	to: "/luu-tru-lich-su/tham-dinh-ho-so",
+					// 	key: "/luu-tru-lich-su/tham-dinh-ho-so",
+					// 	number: 105,
+					// 	parent: 81,
+					// },
 
 					{
 						title: "Sở Nội vụ phê duyệt",
@@ -1149,4 +1156,16 @@ export const ACTION_GROUP = [
 	{ label: "Gửi duyệt nộp lưu lịch sử", value: "204" },
 	{ label: "Thu thập và gửi duyệt nộp lưu cơ quan", value: "201-202-203" },
 	{ label: "Không", value: "" },
+]
+
+export const THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO = [
+	{ title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
+	{ title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
+	{ title: "Phông", key: "organ_id", width: "100%" },
+	{ title: "Số lượng tờ", key: "sheet_number", width: "70px" },
+	{ title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
+	{ title: "Thời gian bắt đầu", key: "start_date", width: "100%" },
+	{ title: "Thời gian kết thúc", key: "end_date", width: "100%" },
+	{ title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
+	{ title: "Chế độ sử dụng", key: "rights", width: "100%" },
 ]

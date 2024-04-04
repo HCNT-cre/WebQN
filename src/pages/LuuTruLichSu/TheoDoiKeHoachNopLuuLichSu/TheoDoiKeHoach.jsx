@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Input } from "antd"
+import { Input, Button } from "antd"
 import { Table } from "src/custom/Components"
 import { useState, useEffect } from "react"
 import PlanAPIService from "src/service/api/PlanAPIService";
@@ -7,29 +7,29 @@ import { THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU } from "src/storage/StorageOffice";
 
 const TheoDoiKeHoach = () => {
     const [stateCheckBox, setStateCheckBox] = useState([]);
-	const [plan, setPlan] = useState([]);
+    const [plan, setPlan] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const reFetchData = async () => {
-		setIsLoading(true);
-		const plansRaw = await PlanAPIService.getSentNLLSPlan();
-		const plans = [];
-		for (const planRaw of plansRaw) {
-			const row = {
-				id: planRaw.id,
-				name: <Link to={`./${planRaw.id}`} className="cursor-pointer"> {planRaw.name}</Link>,
-				organ_name: planRaw.organ_name,
-				state: <button>{planRaw.state}</button>,
-			};
-			plans.push(row);
-		}
-		setPlan(plans);
-		setIsLoading(false);
-	};
+        setIsLoading(true);
+        const plansRaw = await PlanAPIService.getSentNLLSPlan();
+        const plans = [];
+        for (const planRaw of plansRaw) {
+            const row = {
+                id: planRaw.id,
+                name: <Link to={`./${planRaw.id}`} className="cursor-pointer"> {planRaw.name}</Link>,
+                organ_name: planRaw.organ_name,
+                state: <button>{planRaw.state}</button>,
+            };
+            plans.push(row);
+        }
+        setPlan(plans);
+        setIsLoading(false);
+    };
 
-	useEffect(() => {
-		reFetchData();
-	}, []);
+    useEffect(() => {
+        reFetchData();
+    }, []);
 
     return <div className="w-full">
         <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
@@ -53,7 +53,7 @@ const TheoDoiKeHoach = () => {
 
         <div className="mt-[16px] mx-[24px] flex ">
             <div className="w-[11.11111%] px-[5px]">
-                <Input  
+                <Input
                     allowClear
                     name="title"
                     placeholder="Tìm kiếm tên kế hoạch"
@@ -78,6 +78,19 @@ const TheoDoiKeHoach = () => {
                     className="rounded-md border-[0.1rem] text-[12px] w-full px-[12px] py-[6px] truncate h-[32px]"
                 ></Input>
             </div>
+            <div className="w-[11.11111%] px-[5px]">
+                <Button
+                    onClick={() => null}
+                    className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
+                >
+                    <div className="mr-[8px]">
+                        <i className="fa-solid fa-check"></i>
+                    </div>
+                    Gửi Sở Nội vụ phê duyệt
+
+                </Button>
+            </div>
+
         </div>
 
         <Table

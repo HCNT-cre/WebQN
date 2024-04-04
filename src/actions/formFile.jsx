@@ -13,6 +13,7 @@ export const CreateFile = (category, plan) => {
 }
 
 export const OpenFile = (id = null) => {
+    console.log(id);
     return {
         type: "WATCH_FILE",
         id: id

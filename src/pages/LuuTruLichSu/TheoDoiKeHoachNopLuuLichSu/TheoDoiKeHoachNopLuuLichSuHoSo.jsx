@@ -2,10 +2,12 @@
 import PheDuyetKeHoachNLLSBase from "src/pages/LuuTruLichSu/TheoDoiKeHoachNopLuuLichSu";
 import { Input, Spin } from "antd";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { FILE_PLAN_NLLS } from "src/storage/StorageOffice";
+import { THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO } from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
-
+import { OpenFile } from "src/actions/formFile";
+import File from "src/components/Form/File/File";
 const Search = Input.Search
 
 
@@ -22,12 +24,15 @@ const SearchBar = () => {
 }
 
 
-const TheoDoiKeHoachNopLuuLichSuHoSo
- = () => {
+const TheoDoiKeHoachNopLuuLichSuHoSo = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [fieldData, setFieldData] = useState([])
     const params = useParams();
+    const dispatch = useDispatch();
 
+    const handleClickFile = (fileId) => {
+        dispatch(OpenFile(fileId));
+    }
     const fetchFieldData = async () => {
         setIsLoading(true)
         const files = await FileAPIService.getFileOfNLLSPlanByOrganId(params.plan_id, params.organ_id);
@@ -35,9 +40,15 @@ const TheoDoiKeHoachNopLuuLichSuHoSo
         for (const file of files) {
             newData.push({
                 "id": file.id,
-                "name": file.title,
-                "state": <button> Chưa có </button>,
-                "action": "Chưa có"
+                "gov_file_code": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.gov_file_code}</p>, 
+                "title": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.title}</p>, 
+                "organ_id": file.organ_id, 
+                "sheet_number": file.sheet_number, 
+                "TotalDoc": file.TotalDoc, 
+                "start_date": file.start_date, 
+                "end_date": file.end_date, 
+                "maintenance": file.maintenance, 
+                "rights": file.rights, 
             })
         }
         setFieldData(newData)
@@ -65,15 +76,16 @@ const TheoDoiKeHoachNopLuuLichSuHoSo
                 }
                 breadcrumb={
                     <span>
-                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su`}> Theo dõi Kế Hoạch Nộp Lưu Lịch Sử </Link> / 
-                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su/${params.plan_id}`}> Cơ quan </Link> 
+                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su`}> Theo dõi Kế Hoạch Nộp Lưu Lịch Sử </Link> /
+                        <Link to={`/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su/${params.plan_id}`}> Cơ quan </Link>
                     </span>
                 }
-                fieldNames={FILE_PLAN_NLLS}
+                fieldNames={THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO}
                 fieldDatas={fieldData}
                 SearchBar={<SearchBar />}
                 isLoading={isLoading}
             />
+            <File />
         </Spin>
     )
 }

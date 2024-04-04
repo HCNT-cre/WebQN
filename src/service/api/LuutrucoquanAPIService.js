@@ -26,7 +26,7 @@ const LuutrucoquanAPIService = {
         return response.data;
     },
 
-    getOrganByPlanId: async (planId) => {
+    getOrganAndStateOfNLLSPlan: async (planId) => {
         const response = await axiosHttpService.get(API_GET_ORGAN_BY_PLAN_NLLS + '/' + planId)
         return response.data
     }

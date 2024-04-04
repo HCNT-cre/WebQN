@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { OpenFile } from "../actions/formFile";
 import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../custom/Function";
-import { ENUM_STATE_PLAN, ENUM_STATE_FILE, STATE } from "../storage/Storage";
+import { ENUM_STATE_PLAN, ENUM_STATE_FILE, STATE, ENUM_STATE_NLLS_PLAN } from "../storage/Storage";
 const API_GOV_FILE_UPDATE_STATE = import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE
 const API_GOV_FILE_SET_DRAWER = import.meta.env.VITE_API_GOV_FILE_SET_DRAWER
 const API_PLAN = import.meta.env.VITE_API_PLAN;
@@ -959,6 +959,57 @@ export const ModalPlan = () => {
             onCancel={() => {
                 dispatch({
                     type: "close_modal_plan"
+                });
+            }}
+        >
+            <div className="flex justify-center">
+                <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleOk}>Duyệt</Button>
+                <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleCancle}>Từ chối</Button>
+            </div>
+        </Modal >
+    )
+}
+
+
+export const ModalStateNLLSPlanOrgan = () => {
+    const dispatch = useDispatch();
+    const open = useSelector(state => state.modalStateNLLSPlanOrgan.open);
+    const planId = useSelector(state => state.modalStateNLLSPlanOrgan.planId);
+    const organId = useSelector(state => state.modalStateNLLSPlanOrgan.organId);
+    const reFetchData = useSelector(state => state.modalStateNLLSPlanOrgan.reFetchData);
+
+    const handleOk = async () => {
+        await PlanAPIService.updateStateNLLSOrgan(planId, organId, ENUM_STATE_NLLS_PLAN.DA_DUYET_NOP_LUU_LICH_SU_TU_CO_QUAN);
+        notifySuccess("Đã duyệt");
+        dispatch({
+            type: "close_modalStateNLLSPlanOrganReducer"
+        });
+        setTimeout(() => {
+            reFetchData();
+        }, 500);
+    }
+    const handleCancle = async () => {
+        await PlanAPIService.updateStateNLLSOrgan(planId, organId, ENUM_STATE_NLLS_PLAN.TU_CHOI_NOP_LUU_LICH_SU_TU_CO_QUAN);
+        notifySuccess("Đã từ chối");
+        dispatch({
+            type: "close_modalStateNLLSPlanOrganReducer"
+        });
+        setTimeout(() => {
+            reFetchData();
+        }, 500);
+    }
+    return (
+        <Modal
+            footer={null}
+            title="Đồng ý duyệt"
+            style={{
+                top: 200,
+            }}
+            open={open}
+            onOk={handleOk}
+            onCancel={() => {
+                dispatch({
+                    type: "close_modalStateNLLSPlanOrganReducer"
                 });
             }}
         >
