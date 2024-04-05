@@ -516,8 +516,8 @@ const KeHoachNopLuuLichSu = () => {
 				),
 				function: (
 					<div className="flex justify-center">
-						<Delete id={rawData.id}  />
-						<Update id={rawData.id} />
+						<Delete id={rawData.id} reFetchData={reFetchData} />
+						<Update id={rawData.id} reFetchData={reFetchData}/>
 					</div>
 				),
 				
