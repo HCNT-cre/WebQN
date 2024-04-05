@@ -365,8 +365,9 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 
 	const reFetchData = async () => {
 		setIsLoading(true);
-		const plansRaw = await PlanAPIService.getNLLSPlanInternal();
+		const res = await PlanAPIService.getNLLSPlanInternal();
 		const plans = [];
+		const plansRaw =res.reverse();
 		for (const planRaw of plansRaw) {
 			let attachment = planRaw.attachments;
 			if (attachment) {
