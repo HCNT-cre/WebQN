@@ -17,7 +17,6 @@ const ModalStateNLLSPlanOrganReducer = (state = initState, action) => {
             }
         case "close_modalStateNLLSPlanOrganReducer":
             return {
-                ...state,
                 initState
             }
         default:

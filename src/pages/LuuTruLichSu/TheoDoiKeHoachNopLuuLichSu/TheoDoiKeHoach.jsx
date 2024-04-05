@@ -4,6 +4,9 @@ import { Table } from "src/custom/Components"
 import { useState, useEffect } from "react"
 import PlanAPIService from "src/service/api/PlanAPIService";
 import { THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU } from "src/storage/StorageOffice";
+import { notifyError, notifySuccess } from "src/custom/Function";
+import { ENUM_STATE_PLAN } from "src/storage/Storage";
+import FileAPIService from "src/service/api/FileAPIService";
 
 const TheoDoiKeHoach = () => {
     const [stateCheckBox, setStateCheckBox] = useState([]);
@@ -30,6 +33,28 @@ const TheoDoiKeHoach = () => {
     useEffect(() => {
         reFetchData();
     }, []);
+
+    const handleChangeStateFileOfPlan = async () => {
+        try {
+            const planIds = stateCheckBox.map((id) => id.split("checkbox")[1]);
+            planIds.forEach(async (id) => {
+                let res;
+                res = await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DOI_SO_NOI_VU_DUYET);
+                if (res.error_code == 400) {
+                    notifyError("Cập nhật trạng thái kế hoạch thất bại");
+                }
+                res = await FileAPIService.updateStateFileByNLLSIds(id);
+                if (res.error_code == 400) {
+                    notifyError("Cập nhật trạng thái hồ sơ thất bại");
+                }
+            })
+
+            notifySuccess("Cập nhật trạng thái thành công");
+        } catch (error) {
+            notifyError("Thay đổi trạng thái thất bại");
+        }
+    };
+
 
     return <div className="w-full">
         <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
@@ -80,7 +105,7 @@ const TheoDoiKeHoach = () => {
             </div>
             <div className="w-[11.11111%] px-[5px]">
                 <Button
-                    onClick={() => null}
+                    onClick={() => handleChangeStateFileOfPlan()}
                     className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
                 >
                     <div className="mr-[8px]">

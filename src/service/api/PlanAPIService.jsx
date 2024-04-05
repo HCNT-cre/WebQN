@@ -25,8 +25,6 @@ const PlanAPIService = {
     updateStatePlan: async (id, newState) => {
         const plan = await PlanAPIService.getPlanById(id);
         plan["state"] = newState;
-        delete plan["attachment"];
-        console.log(plan);
         const response = await axiosHttpService.put(API_PLAN + '/' + id, plan);
         return response.data;
     },
