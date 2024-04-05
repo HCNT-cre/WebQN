@@ -514,12 +514,6 @@ const KeHoachNopLuuLichSu = () => {
 						{/* <WatchFile id={rawData.id} reFetchData={reFetchData} />  */}
 					</div>
 				),
-				function: (
-					<div className="flex justify-center">
-						<Delete id={rawData.id} reFetchData={reFetchData} />
-						<Update id={rawData.id} reFetchData={reFetchData}/>
-					</div>
-				),
 				
 				send: (
 					<div>
