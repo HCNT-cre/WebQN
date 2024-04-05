@@ -495,7 +495,7 @@ export const TABS_SIDEBAR = [
 					},
 
 					{
-						title: "Thẩm định hồ sơ",
+						title: "Theo dõi và thẩm định hồ sơ",
 						to: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su",
 						key: "/luu-tru-lich-su/theo-doi-ke-hoach-nop-luu-lich-su",
 						number: 104,
