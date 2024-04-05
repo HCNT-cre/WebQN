@@ -28,7 +28,6 @@ const FIELDS_TABLE = [
 	{ title: "Cơ quan / Đơn vị lập kế hoạch", key: "organ", width: "100%" },
 	{ title: "Trạng thái", key: "state", width: "70%" },
 	{ title: "Thêm / Xoá hồ sơ", key: "add_remove_file", width: "70%" },
-	{ title: "Chức năng", key: "function", width: "40%" },
 	{ title: "Gửi hồ sơ", key: "send", width: "60px" },
 ];
 
