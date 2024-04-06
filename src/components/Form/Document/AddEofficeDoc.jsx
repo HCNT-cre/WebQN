@@ -163,7 +163,7 @@ const AddEofficeDoc = ({
 
             setIsLoading(false)
             handleChangeForm("code_number", response.data.no.join(' '));
-            handleChangeForm("issued_date", GetDateFromString(response.data.date.join(' ')));
+            // handleChangeForm("issued_date", GetDateFromString(response.data.date.join(' ')));
             handleChangeForm("autograph", response.data.signer.join(' '));
 
             notifySuccess('Trích xuất thành công')
