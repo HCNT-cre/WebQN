@@ -227,11 +227,11 @@ const Delete = ({ id, reFetchData }) => {
 	);
 };
 
-const AddFile = ({ id }) => {
+const AddFile = ({ id, disabled}) => {
 	const [openModalAddFile, setOpenModalAddFile] = useState(false);
 	const [addFile, setAddFile] = useState([]);
 	const [resetAdd, setResetAdd] = useState(false);
-	
+
 	return (
 		<div>
 			<Button
@@ -239,23 +239,24 @@ const AddFile = ({ id }) => {
 					setOpenModalAddFile(true)
 				}}
 				className="border-none"
+				disabled={disabled}
 			>
 				<i className="fa-solid fa-plus"></i>
 			</Button>
-				<ThemHoSo
-					id={id}
-					open={openModalAddFile}
-					setOpen={setOpenModalAddFile}
-					selectedFiles={addFile}
-					setSelectedFiles={setAddFile}
-					doesReset={resetAdd}
-					setDoesReset={setResetAdd}
-				/>
+			<ThemHoSo
+				id={id}
+				open={openModalAddFile}
+				setOpen={setOpenModalAddFile}
+				selectedFiles={addFile}
+				setSelectedFiles={setAddFile}
+				doesReset={resetAdd}
+				setDoesReset={setResetAdd}
+			/>
 		</div>
 	);
 };
 
-const RemoveFile = ({ id }) => {
+const RemoveFile = ({ id, disabled }) => {
 	const [openModalDeleteFile, setOpenModalDeleteFile] = useState(false);
 	const [removeFile, setRemoveFile] = useState([]);
 	const [resetRemove, setResetRemove] = useState(false);
@@ -266,23 +267,24 @@ const RemoveFile = ({ id }) => {
 					setOpenModalDeleteFile(true)
 				}}
 				className="border-none"
+				disabled={disabled}
 			>
 				<i className="fa-solid fa-minus"></i>
 			</Button>
-				<XoaHoSo
-					open={openModalDeleteFile}
-					idPlan={id}
-					setOpen={setOpenModalDeleteFile}
-					selectedFiles={removeFile}
-					setSelectedFiles={setRemoveFile}
-					doesReset={resetRemove}
-					setDoesReset={setResetRemove}
-				/>
+			<XoaHoSo
+				open={openModalDeleteFile}
+				idPlan={id}
+				setOpen={setOpenModalDeleteFile}
+				selectedFiles={removeFile}
+				setSelectedFiles={setRemoveFile}
+				doesReset={resetRemove}
+				setDoesReset={setResetRemove}
+			/>
 		</div>
 	);
 };
 
-const WatchFile = ({ id}) => {
+const WatchFile = ({ id }) => {
 	const [openModalWatchFile, setOpenModalWatchFile] = useState(false);
 	const [watchFile, setWatchFile] = useState([]);
 	const [resetWatch, setResetWatch] = useState(false);
@@ -296,15 +298,15 @@ const WatchFile = ({ id}) => {
 			>
 				<i className="fa-solid fa-eye"></i>
 			</Button>
-				<XemDanhSach
-					open={openModalWatchFile}
-					idPlan={id}
-					setOpen={setOpenModalWatchFile}
-					selectedFiles={watchFile}
-					setSelectedFiles={setWatchFile}
-					doesReset={resetWatch}
-					setDoesReset={setResetWatch}
-				/>
+			<XemDanhSach
+				open={openModalWatchFile}
+				idPlan={id}
+				setOpen={setOpenModalWatchFile}
+				selectedFiles={watchFile}
+				setSelectedFiles={setWatchFile}
+				doesReset={resetWatch}
+				setDoesReset={setResetWatch}
+			/>
 		</div>
 	);
 };
@@ -507,13 +509,13 @@ const KeHoachNopLuuLichSu = () => {
 				state: <button>{rawData.state}</button>,
 				add_remove_file: (
 					<div className="flex justify-center">
-						<AddFile id={rawData.id} />
-						<RemoveFile id={rawData.id} />
+						<AddFile id={rawData.id} disabled={rawData.state === 'Đã thu thập'} />
+						<RemoveFile id={rawData.id} disabled={rawData.state === 'Đã thu thập'} />
 						<WatchFile id={rawData.id} />
 						{/* <WatchFile id={rawData.id} reFetchData={reFetchData} />  */}
 					</div>
 				),
-				
+
 				send: (
 					<div>
 						<Button onClick={() => handleClick(rawData.id, rawData.name)} className="border-none">

@@ -141,6 +141,7 @@ const XemDanhSach = ({
                 for (const file of files) {
                     if (
                         file.state.props.children === ENUM_STATE_FILE.LUU_TRU_CO_QUAN
+                        || file.state.props.children === ENUM_STATE_FILE.NOP_LUU_LICH_SU
                     )
                     newFiles.push(file)
                 }
