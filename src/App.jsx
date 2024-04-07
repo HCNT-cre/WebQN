@@ -24,7 +24,9 @@ import HoSoBiTraVeCoQuan from "src/pages/LuuTruCoQuan/HoSoBiTraVeCoQuan";
 import NhanVien from "src/pages/KhaiBaoDanhMuc/DanhMucCoQuan/NhanVien";
 import PhongBan from "src/pages/KhaiBaoDanhMuc/DanhMucCoQuan/PhongBan";
 import CoQuan from "src/pages/KhaiBaoDanhMuc/DanhMucCoQuan/CoQuan";
-import DanhMucHoSo from "src/pages/KhaiBaoDanhMuc/DanhMucHoSo";
+import DanhMucHoSo from "src/pages/KhaiBaoDanhMuc/DanhMucHoSo/DanhMucHoSo";
+import DanhMucHoSoNam from "src/pages/KhaiBaoDanhMuc/DanhMucHoSo/DanhMucHoSoNam";
+import DanhMucHoSoCoQuan from "src/pages/KhaiBaoDanhMuc/DanhMucHoSo/DanhMucHoSoCoQuan";
 import KeHoachThuThap from "src/pages/ThuThapVaNopLuu/KeHoachThuThap";
 import ThuThapHoSo from "src/pages/ThuThapVaNopLuu/ThuThapHoSo";
 import BienBanBanGiao from "src/pages/ThuThapVaNopLuu/BienBanBanGiao";
@@ -332,6 +334,14 @@ const App = () => {
         {
             path: "/khai-bao-danh-muc/danh-muc-ho-so",
             element: <DanhMucHoSo />
+        },
+        {
+            path: "/khai-bao-danh-muc/danh-muc-ho-so/:year",
+            element: <DanhMucHoSoNam />
+        },
+        {
+            path: "/khai-bao-danh-muc/danh-muc-ho-so/:year/:organ_id",
+            element: <DanhMucHoSoCoQuan />
         },
         {
             path: "/thu-thap-va-nop-luu/tao-ke-hoach-thu-thap",

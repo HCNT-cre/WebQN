@@ -1169,3 +1169,13 @@ export const THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO = [
 	{ title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
 	{ title: "Chế độ sử dụng", key: "rights", width: "100%" },
 ]
+
+export const DANH_MUC_HO_SO = [
+	{title: "Năm", key: "year", width: "100%"}
+]
+
+export const DANH_MUC_HO_SO_BY_NAM = [
+	{title: "Cơ quan", key: "organ", width: "100%"},
+	{title: "Mã cơ quan", key: "organ_code", width: "100%"},
+	{title: "Tổng danh mục", key: "total", width: "100%"}
+]
