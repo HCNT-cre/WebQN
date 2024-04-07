@@ -28,9 +28,7 @@ const App = (props) => {
   const allowedFiles = ['application/pdf'];
   const handleFile = async (e) => {
     let selectedFile = e.target.files[0];
-    // console.log(selectedFile.type);
     if (selectedFile) {
-      console.log("uploaded file:", selectedFile);
       if (selectedFile && allowedFiles.includes(selectedFile.type)) {
         let reader = new FileReader();
         reader.readAsDataURL(selectedFile);
@@ -39,7 +37,6 @@ const App = (props) => {
           setPdfFile(e.target.result);
         }
 
-        console.log("Props day tml:", props);
 
         // call API
         const formData = new FormData();
@@ -52,7 +49,6 @@ const App = (props) => {
           props.setDocDate("Đang phân tích ...");
           props.setDocSigner("Đang phân tích ...");
           const response = await axiosHttpService.post('http://157.230.37.228:4444/extract', formData);
-          console.log(response.data);
           props.setDocNo(response.data.no.join(' '));
           props.setDocDate(response.data.date.join(' '));
           props.setDocSigner(response.data.signer.join(' '));

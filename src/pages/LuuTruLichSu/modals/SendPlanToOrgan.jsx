@@ -33,10 +33,6 @@ export const SendPlanToOrgan = (
         dispatch({ type: "close_table_send_plan_to_organ" });
     };
 
-    const handleSearch = () => {
-        console.log("search");
-    };
-
     const onChange = (e, userId) => {
         if (e.target.checked) {
             setOrganIds([...organIds, userId]);

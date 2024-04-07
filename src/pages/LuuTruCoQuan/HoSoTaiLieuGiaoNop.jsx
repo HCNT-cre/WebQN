@@ -17,7 +17,6 @@ const current = {
 const HoSoTaiLieuGiaoNop = () => {
     const filter = (files) => {
         const newFiles = []
-        console.log(files)
         for (const file of files) {
             if (file.state.props.children === ENUM_STATE_FILE.CHO_XEP_KHO)
                 newFiles.push(file)

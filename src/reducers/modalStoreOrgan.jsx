@@ -8,7 +8,6 @@ const modalStoreOrganReducer = (state = { state: false, id: null }, action) => {
                 current_state: parseInt(action.current_state)
             }
         case "close_modal_confirm_luutrucoquan":
-            console.log(111)
             return {
                 ...state,
                 state: false,

@@ -18,7 +18,6 @@ const current = {
 const KhoiPhucHoSo = () => {
 
     const filter = (files) => {
-        console.log("files", files);
         const newFiles = [];
         for (const file of files) {
             if (file.state.props.children !== ENUM_STATE_FILE.THHS_DA_TIEU_HUY) continue;

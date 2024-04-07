@@ -2,7 +2,6 @@ import { ADD_DOC_TO_CART, ADD_FILE_TO_CART, REMOVE_DOC_FROM_CART, REMOVE_FILE_FR
 import DocumentAPIService from "../api/DocumentAPIService"
 import FileAPIService from "../api/FileAPIService";
 export const addFileToCart = (file) => {
-    console.log(file)
     return async (dispatch) => {
         try {
             const doc = await DocumentAPIService.getAllDocumentByFileId(file.id);

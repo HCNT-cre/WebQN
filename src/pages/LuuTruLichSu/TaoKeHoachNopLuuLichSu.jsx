@@ -14,6 +14,7 @@ import UserAPIService from "src/service/api/userAPIService";
 import { ChonNguoiDuyetKeHoach } from "./modals/ChonNguoiDuyetKeHoach";
 import PropTypes from 'prop-types';
 import { UploadOutlined } from '@ant-design/icons';
+import { ModalOpenAttachments } from "../Modals";
 
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
@@ -511,16 +512,12 @@ const TaoKeHoachLuuTruLichSu = () => {
 			icon: <i className="fa-solid fa-sync"></i>,
 		},
 	];
-	const handleDownloadAttachment = async (fileUrl) => {
-		const response = await axiosHttpService.get(fileUrl, {
-			responseType: "blob",
-		});
-		const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
-		const link = document.createElement("a");
-		link.href = downloadUrl;
-		link.setAttribute("download", fileUrl.split("/").pop());
-		document.body.appendChild(link);
-		link.click();
+
+	const handleClickAttachments = async (attachments) => {
+		dispatch({
+			type: "open_modalOpenAttachments",
+			attachments,
+		})
 	};
 
 	const reFetchData = async () => {
@@ -529,18 +526,11 @@ const TaoKeHoachLuuTruLichSu = () => {
 		const rawDatas = res.data.reverse();
 		const plan = [];
 		for (const rawData of rawDatas) {
-			console.log(rawData);
 			if (rawData.state != ENUM_STATE_PLAN.TAO_MOI && rawData.state != ENUM_STATE_PLAN.CHO_DUYET && rawData.state != ENUM_STATE_PLAN.DA_DUYET) continue;
-			let attachmentName = rawData.attachment;
-			if (attachmentName) {
-				attachmentName = attachmentName.split("/").pop();
-			} else {
-				attachmentName = "";
-			}
 			const row = {
 				id: rawData.id,
 				name: rawData.name,
-				attachment: <button onClick={() => handleDownloadAttachment(rawData.attachment)}>{attachmentName}</button>,
+				attachment:  rawData.attachments ? <Button onClick={() => handleClickAttachments(rawData.attachments)}> Danh sách tệp đính kèm</Button> : "Không có tệp đính kèm",
 				start_date: rawData.start_date,
 				organ_name: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
@@ -641,6 +631,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 				reFetchData={reFetchData}
 			/>
 			<ChonNguoiDuyetKeHoach/>
+			<ModalOpenAttachments/>
 		</div>
 	);
 };

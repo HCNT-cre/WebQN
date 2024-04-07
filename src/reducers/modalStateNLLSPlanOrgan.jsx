@@ -5,7 +5,6 @@ const initState = {
     reFetchData: null
 }
 const ModalStateNLLSPlanOrganReducer = (state = initState, action) => {
-    console.log(action)
     switch (action.type) {
         case "open_modalStateNLLSPlanOrganReducer":
             return {

@@ -138,10 +138,6 @@ const AddDoc = ({
             setLanguage(language);
             setFond(fond);
             setFormat(format);
-            // console.log('organ', _organ);
-            // console.log('language', language);
-            // console.log('format', format);
-            // console.log('fond', fond);
         }
 
         setIsLoading(true);
@@ -311,7 +307,6 @@ const AddDoc = ({
         handleChangeForm(name, fileData[name])
     }
 
-    console.log('pdfFile', pdfFile);
 
     return (
         <>

@@ -189,7 +189,6 @@ const File = ({ stateFile, setStateFile, govFileId }) => {
                                         <div className="flex justify-between">
                                             <div className="w-[50%] px-[10px]">
                                                 {FIELDS_LEFT.map((field, index) => {
-                                                    console.log(field.options)
                                                     const placeholder = field.key === 'gov_file_code' ? "Mã nhảy tự động" : field.title
                                                     return (
                                                         <div

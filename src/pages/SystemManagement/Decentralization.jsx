@@ -392,7 +392,6 @@ const UserChange = ({ setStateUserChange, stateUserChange, reFetchUser, LIST_GRO
         getGroupPermission()
     }, [user])
 
-    console.log(user)
     const handleSelectPermission = (id) => {
         if (selectPermission.includes(id)) {
             setSelectPermission(selectPermission.filter((i) => i !== id))

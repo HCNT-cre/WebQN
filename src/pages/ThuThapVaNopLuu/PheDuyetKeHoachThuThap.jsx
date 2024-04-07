@@ -1,9 +1,9 @@
-import { Button, Input, Modal, Popconfirm, Select, Upload } from "antd";
+import { Button, Input, Modal, Select, Upload } from "antd";
 import { Table } from "src/custom/Components/Table";
 import { useState, useEffect, useRef } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
-import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
+import { ENUM_STATE_PLAN } from "src/storage/Storage";
 import { useDispatch } from "react-redux";
 import { ModalPlan } from "../Modals";
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
@@ -18,129 +18,6 @@ const FIELDS_TABLE = [
 	{ title: "Trạng thái", key: "state", width: "70%" },
 	{ title: "Chức năng", key: "function", width: "120px" },
 ];
-
-const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
-	const [request, setRequest] = useState({});
-	const [organ, setOrgan] = useState([]);
-	const [fileList, setFileList] = useState([]);
-	const props = {
-		onRemove: (file) => {
-			const index = fileList.indexOf(file);
-			const newFileList = fileList.slice();
-			newFileList.splice(index, 1);
-			setFileList(newFileList);
-		},
-		beforeUpload: (file) => {
-			setFileList([...fileList, file]);
-			return false;
-		},
-		fileList,
-	};
-	useEffect(() => {
-		const getOrgan = async () => {
-			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
-			const _ = data.map((item) => {
-				return {
-					label: item.name,
-					value: item.name,
-				};
-			});
-			setOrgan(_);
-		};
-
-		getOrgan();
-	}, []);
-
-	const handleOk = async () => {
-		const formData = new FormData();
-		fileList.forEach((file) => {
-			formData.append('files[]', file);
-		});
-		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
-		request["files"] = formData;
-		request["type"] = ENUM_TYPE_PLAN.THU_THAP_NOP_LUU;
-
-		await axiosHttpService.post(`${API_COLLECTION_PLAN}`, request);
-		setTimeout(() => {
-			reFetchData();
-			setRequest({});
-			setModelOpen(false);
-		}, 500);
-	};
-
-	const handleCancle = () => {
-		setModelOpen(false);
-	};
-
-	const handleChangeRequest = (name, value) => {
-		setRequest({
-			...request,
-			[name]: value,
-		});
-	};
-
-
-
-	return (
-		<Modal
-			title="Tạo mới"
-			style={{
-				top: 20,
-			}}
-			open={modalOpen}
-			onOk={handleOk}
-			onCancel={handleCancle}
-		>
-			<div>
-				<div className="flex justify-between py-[12px]">
-					<span>Tên kế hoạch</span>
-					<Input
-						name="name"
-						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
-						type="text"
-						className="w-[70%]"
-						value={request["name"]}
-					/>
-				</div>
-
-				<div className="flex justify-between py-[12px]">
-					<span>Ngày kế hoạch</span>
-					<Input
-						name="date"
-						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
-						type="date"
-						className="w-[70%]"
-						value={request["date"]}
-					/>
-				</div>
-
-				<div className="flex justify-between py-[12px]">
-					<span>Cơ quan / Đơn vị </span>
-					<Select
-						name="organ"
-						onChange={(value) => handleChangeRequest("organ", value)}
-						className="w-[70%]"
-						value={request["organ"]}
-						options={organ}
-					/>
-				</div>
-
-
-				<div className="flex justify-between py-[12px]">
-					<span>Văn bản đính kèm</span>
-					<Upload
-						{...props}
-						className="w-[70%]"
-						name="file"
-					>
-						<Button>Tải tệp lên</Button>
-					</Upload>
-				</div>
-			</div>
-		</Modal>
-	);
-};
-
 
 const Update = ({
 	reFetchData,

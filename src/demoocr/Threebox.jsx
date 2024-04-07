@@ -47,8 +47,6 @@ const ThreeBoxes = (props) => {
           alert("Chưa có người ký");
           return;
         }
-        // console.log("prop doc no:", props.doc_no);
-        // return;
         if (
           props.doc_no.trim() ===
           xmlDoc.getElementsByTagName("no")[0].childNodes[0].nodeValue.trim()

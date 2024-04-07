@@ -230,7 +230,7 @@ const Update = ({ reFetchData, id }) => {
 
     useEffect(() => {
         getPlan();
-        console.log("id", id)
+        ("id", id)
     }, [id]);
 
     const handleChangeRequest = (name, value) => {

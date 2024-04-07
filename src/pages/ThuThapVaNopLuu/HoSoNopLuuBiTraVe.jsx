@@ -14,17 +14,10 @@ const HoSoNopLuuBiTraVe = () => {
 
     const filter = (files) => {
 
-        // console.log(allOrganStorageFiles)
         const newFiles = []
         for (const file of files) {
-            console.log(file)
             if (file.state.props.children === "Nộp lưu cơ quan bị trả về") {
                 newFiles.push(file)
-                // for (const fileS of allOrganStorageFiles) {
-                //     console.log(fileS)
-                //     if (fileS.file_id === file.id)
-
-                // }
             }
         }
 

@@ -79,7 +79,6 @@ const UserAPIService = {
     getAllUserByOrganID: async (id) => {
         try {
             const response = await axiosHttpService.get(API_GET_ALL_USER_BY_ORGAN_ID + '/' + id);
-            console.log(response.data);
             return response.data;
         } catch (err) {
             console.log(err);

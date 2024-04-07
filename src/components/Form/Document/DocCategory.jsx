@@ -203,7 +203,6 @@ const DocCategory = ({ eOffice = true }) => {
       link.setAttribute("download", `DanhSachVanBan.xlsx`);
       document.body.appendChild(link);
       link.click();
-      console.log(fileSheet);
     };
     getExcel();
   };
@@ -214,8 +213,6 @@ const DocCategory = ({ eOffice = true }) => {
       setOpenLoginEoffice(true);
     } else {
       const data = await DocumentAPIService.getEofficeDoc(1);
-      console.log('data', data);
-      console.log('is data array', Array.isArray(data));
       if (!Array.isArray(data)) {
         setOpenLoginEoffice(true);
         return;

@@ -32,7 +32,6 @@ const DuyetQuyetDinh = () => {
         today = new Date(`${y}-${m}-${d}`)
 
         for (const file of files) {
-            console.log(file.state.props.children)
             if (file.state.props.children !== ENUM_STATE_FILE.THHS_CHO_PHE_DUYET_TIEU_HUY) continue;
             // if (file.maintenance_name !== "Vĩnh viễn") continue;
             // if (file.end_date === null || file.end_date === undefined || (file.state.props.children !== 'Nộp lưu lịch sử' || file.maintenance !== "Vĩnh viễn"))

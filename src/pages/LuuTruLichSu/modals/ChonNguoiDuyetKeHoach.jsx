@@ -40,7 +40,6 @@ export const ChonNguoiDuyetKeHoach = (
     };
 
     const handleSearch = () => {
-        console.log("search");
     };
 
     const onChange = (e, userId) => {
