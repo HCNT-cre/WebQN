@@ -10,6 +10,8 @@ import UserAPIService from "src/service/api/userAPIService";
 import LuutrucoquanAPIService from "src/service/api/LuutrucoquanAPIService";
 import FileAPIService from "src/service/api/FileAPIService";
 import PlanAPIService from "src/service/api/PlanAPIService";
+import OrganAPIService from "src/service/api/organAPIService";
+import CategoryAPIService from "src/service/api/categoryAPIService";
 
 const API_GOV_FILE_UPDATE_STATE = import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE
 const API_GOV_FILE_SET_DRAWER = import.meta.env.VITE_API_GOV_FILE_SET_DRAWER
@@ -1019,3 +1021,146 @@ export const ModalOpenAttachments = () => {
         </Modal >
     )
 }
+
+
+export const ModalCreateDanhMucCoQuan = () => {
+    const open = useSelector(state => state.modalCreateDanhMucCoQuan.open);
+    const reFetchData = useSelector(state => state.modalCreateDanhMucCoQuan.reFetchData);
+    const order = useSelector(state => state.modalCreateDanhMucCoQuan.order);
+    const parent = useSelector(state => state.modalCreateDanhMucCoQuan.parent);
+    const select = useSelector(state => state.modalCreateDanhMucCoQuan.select);
+    
+    const dispatch = useDispatch()
+    const [request, setRequest] = useState({})
+    const [selectOrder, setSelectOrder] = useState([])
+    const [defaultValue, setDefaultValue] = useState("Danh mục gốc")
+    const [organ, setOrgan] = useState([])
+
+    useEffect(() => {
+        let selectFiltered = null
+        const newSelect = []
+
+        if (order === 1) {
+            setDefaultValue("Danh mục gốc")
+            setSelectOrder([])
+            return
+        }
+
+        if (order === 2)
+            selectFiltered = select.filter(item => item.order === 1)
+        if (order === 3)
+            selectFiltered = select.filter(item => item.order === 2)
+
+        selectFiltered.forEach(item => {
+            const newItem = {
+                label: item.name,
+                value: item.id
+            }
+            newSelect.push(newItem)
+        })
+
+        setDefaultValue(newSelect.filter(item => item.value === parent?.id)[0].label)
+        setSelectOrder(prev => newSelect)
+    }, [order])
+
+    useEffect(() => {
+        const fetchAllOrgans = async () => {
+            const organs = await OrganAPIService.getAllOrgan();
+            setOrgan(organs.map(organ => ({
+                label: organ.name,
+                value: organ.id
+            })));
+        }
+        fetchAllOrgans();
+    }, [])
+
+    const handleOk = async () => {
+        request["order"] = order
+        
+        if (parent) {
+            request["parent"] = parent?.id
+        }else {
+            request["parent"] = null
+        }
+    
+        await CategoryAPIService.createCategoryFile(request)
+
+        setTimeout(() => {
+            notifySuccess("Đã tạo danh mục thành công");
+            reFetchData()
+            setRequest({})
+            dispatch({
+                type: "close_modalCreateDanhMucCoQuanReducer"
+            })
+        }, 500)
+    }
+
+    const handleCancel = () => {
+        dispatch({
+            type: "close_modalCreateDanhMucCoQuanReducer"
+        })
+    }
+
+    const handleChangeRequest = (name, value) => {
+        setRequest({
+            ...request,
+            [name]: value
+        })
+    }
+
+    return (
+        <Modal
+            title="Tạo mới"
+            style={{
+                top: 20,
+            }}
+            open={open}
+            onOk={handleOk}
+            onCancel={handleCancel}
+        >
+            <div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Tên</span>
+                    <Input name="name" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="text" className="w-[70%]" value={request["name"]} />
+                </div>
+
+                <div className="flex justify-between py-[12px]">
+                    <span>Năm</span>
+                    <Input name="year" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="text" className="w-[70%]" value={request["year"]} />
+                </div>
+
+                <div className="flex justify-between py-[12px]">
+                    <span>Cơ quan</span>
+                    <Select
+                        options={organ}
+                        name="organ"
+                        value={request["organ"]}
+                        onChange={(value) => handleChangeRequest("organ", value)}
+                        type="text"
+                        className="w-[70%]"
+                    />
+                </div>
+
+                <div className="flex justify-between py-[12px]">
+                    <span>Đề mục / Nhóm lớn</span>
+                    <Select
+                        options={selectOrder}
+                        value={defaultValue}
+                        name="parent"
+                        onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
+                        type="text"
+                        className="w-[70%]"
+                    // value={order === 1 ? "Danh mục gốc" : request["parent"]}
+                    />
+                </div>
+
+                <div className="flex justify-between py-[12px]">
+                    <span>Mô tả</span>
+                    <Input name="description" onChange={(e) => handleChangeRequest(e.target.name, e.target.value)} type="text" className="w-[70%]" value={request["description"]} />
+                </div>
+            </div>
+        </Modal>
+    )
+}
+
+

@@ -11,10 +11,9 @@ const Search = Input.Search
 
 const SearchBar = () => {
     return (
-        <div className="mx-[24px] mt-[8px] flex">
-
-            <div className="bg-white p-[12px] w-[300px] max-w-[25%]">
-                <p className="mb-[12px]">Tìm kiếm</p>
+        <div className="mx-[24px] mt-[8px]">
+            <div className="bg-white p-[12px] w-[400px] flex">
+                <p className="mb-[12px] w-[100px]">Tìm kiếm</p>
                 <Search placeholder="Tìm kiếm" onSearch={(ev) => console.log(ev)} enterButton />
             </div>
         </div>
@@ -64,6 +63,7 @@ const DanhMucHoSo = () => {
                 fieldDatas={fieldData}
                 SearchBar={<SearchBar />}
                 isLoading={isLoading}
+                reFetchData={fetchFieldData}
             />
             <File />
         </Spin>

@@ -26,6 +26,7 @@ import modalChoosePersonReducer from './modalChoosePerson'
 import tableSenPlanToOrganReducer from './tableSendPlanToOrgan'
 import ModalStateNLLSPlanOrganReducer from './modalStateNLLSPlanOrgan'
 import modalOpenAttachmentsReducer from './modalOpenAttachments'
+import modalCreateDanhMucCoQuanReducer from './modalCreateDanhMucCoQuan'
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
@@ -53,7 +54,8 @@ const rootReducer = combineReducers({
     modalChoosePerson: modalChoosePersonReducer,
     tableSendPlanToOrgan: tableSenPlanToOrganReducer,
     modalStateNLLSPlanOrgan: ModalStateNLLSPlanOrganReducer,
-    modalOpenAttachments: modalOpenAttachmentsReducer
+    modalOpenAttachments: modalOpenAttachmentsReducer,
+    modalCreateDanhMucCoQuan: modalCreateDanhMucCoQuanReducer
 })
 
 export default rootReducer
