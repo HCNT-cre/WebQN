@@ -8,13 +8,14 @@ import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import UserAPIService from "src/service/api/userAPIService";
 import { notifySuccess } from "src/custom/Function";
 import { UploadOutlined } from '@ant-design/icons';
+import { useDispatch } from "react-redux";
+import { ModalOpenAttachments } from "../Modals";
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 
 const API_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
 const API_STORAGE_GET_ORGAN_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
-const API_GET_ORGAN = import.meta.env.VITE_API_STORAGE_GET_ORGAN;
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
 	{ title: "Văn bản đính kèm", key: "attachment", width: "100%" },
@@ -43,14 +44,6 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 
 		getOrgan();
 	}, []);
-
-	function convert(input) {
-		let output = ""
-		for (var i = 0; i < input.length; i++) {
-			output += input[i].charCodeAt(0).toString(2) + " ";
-		}
-		return output
-	}
 
 	const handleOk = async () => {
 		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
@@ -392,7 +385,7 @@ const KeHoachThuThap = () => {
 	const [stateCheckBox, setStateCheckBox] = useState([]);
 	const [plan, setPlan] = useState([]);
 	const [mapOrgan, setMapOrgan] = useState({});
-	const [fileUploaded, setFileUploaded] = useState([]);
+	const dispatch = useDispatch();
 	const handleSendCollectPlan = async () => {
 		const planIds = stateCheckBox.map((item) => {
 			return Number(item.split("checkbox")[1]);
@@ -441,16 +434,11 @@ const KeHoachThuThap = () => {
 		setId(id);
 	}
 
-	const handleDownloadAttachment = async (fileUrl) => {
-		const response = await axiosHttpService.get(fileUrl, {
-			responseType: "blob",
-		});
-		const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
-		const link = document.createElement("a");
-		link.href = downloadUrl;
-		link.setAttribute("download", fileUrl.split("/").pop());
-		document.body.appendChild(link);
-		link.click();
+	const handleClickAttachments = async (attachments) => {
+		dispatch({
+			type: "open_modalOpenAttachments",
+			attachments,
+		})
 	};
 
 	const reFetchData = async () => {
@@ -464,24 +452,18 @@ const KeHoachThuThap = () => {
 		const mapOrgan = {};
 		for (const rawData of rawDatas) {
 			mapOrgan[rawData.id] = rawData.organ;
-			let attachmentName = rawData.attachment;
-			if (attachmentName) {
-				attachmentName = attachmentName.split("/").pop();
-			} else {
-				attachmentName = "";
-			}
 			const row = {
 				id: rawData.id,
 				name: <p
 					onClick={() => handleClickUpdate(rawData.id)}
 					className="cursor-pointer hover:underline"
 				> {rawData.name} </p>,
-				attachment: <button onClick={() => handleDownloadAttachment(rawData.attachment)}>{attachmentName}</button>,
+				attachment:  rawData.attachments ? <Button onClick={() => handleClickAttachments(rawData.attachments)}> Danh sách tệp đính kèm</Button> : "Không có tệp đính kèm",
 				start_date: rawData.start_date,
 				organ: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
 				function: (
-					<div className="flex ">
+					<div className="flex">
 						<Delete id={rawData.id} reFetchData={reFetchData} />
 						<Button onClick={() => handleClickUpdate(rawData.id)} className="border-none">
 							<i className="fa-regular fa-pen-to-square"></i>
@@ -587,6 +569,8 @@ const KeHoachThuThap = () => {
 				modalOpen={updateOpen}
 				setModalOpen={setUpdateOpen}
 			/>
+
+			<ModalOpenAttachments/>
 		</div>
 	);
 };

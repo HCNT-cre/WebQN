@@ -5,13 +5,16 @@ import { OpenFile } from "../actions/formFile";
 import axiosHttpService from "src/utils/httpService";
 import { notifyError, notifySuccess } from "../custom/Function";
 import { ENUM_STATE_PLAN, ENUM_STATE_FILE, STATE, ENUM_STATE_NLLS_PLAN } from "../storage/Storage";
-const API_GOV_FILE_UPDATE_STATE = import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE
-const API_GOV_FILE_SET_DRAWER = import.meta.env.VITE_API_GOV_FILE_SET_DRAWER
-const API_PLAN = import.meta.env.VITE_API_PLAN;
+
 import UserAPIService from "src/service/api/userAPIService";
 import LuutrucoquanAPIService from "src/service/api/LuutrucoquanAPIService";
 import FileAPIService from "src/service/api/FileAPIService";
 import PlanAPIService from "src/service/api/PlanAPIService";
+
+const API_GOV_FILE_UPDATE_STATE = import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE
+const API_GOV_FILE_SET_DRAWER = import.meta.env.VITE_API_GOV_FILE_SET_DRAWER
+const API_PLAN = import.meta.env.VITE_API_PLAN;
+const API_DOWNLOAD_ATTACHMENT = import.meta.env.VITE_API_DOWNLOAD_ATTACHMENT;
 
 const CheckBoxx = ({ id, type, name, handleClickCheckBox, isChecked }) => {
     return (
@@ -551,7 +554,6 @@ export const ModalModificationDocumentConfirmStore = () => {
 
 export const ModalModificationDocumentAddDocument = () => {
     const open = useSelector(state => state.modalModificationDocumentAddDocument.state)
-    const IDFile = useSelector(state => state.modalModificationDocumentAddDocument.id)
 
     const dispatch = useDispatch();
     const [modalOpen, setModalOpen] = useState(false)
@@ -569,12 +571,6 @@ export const ModalModificationDocumentAddDocument = () => {
     }
 
     const handleClickApprove = async () => {
-        //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT_ADDED, { idFile: IDFile })
-
-        //  const rejected = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT)
-        const id = rejected.data.find(item => item.idFile === IDFile).id
-        //  await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT + "/" + id)
-
         notifySuccess("Nộp thành công")
         dispatch({ type: "close_modal_confirm_bmcl_bosunghosotailieu", id: null })
         setTimeout(() => {
@@ -724,23 +720,12 @@ export const ModalModificationDocumentAddedDocument = () => {
 
 export const ModalModificationDocumentRequireAddDoc = () => {
     const open = useSelector(state => state.modalModificationDocumentRequireAddDocReducer.state)
-    const IDFile = useSelector(state => state.modalModificationDocumentRequireAddDocReducer.id)
     const dispatch = useDispatch();
-    const [isCheck, setIsCheck] = useState([]);
     const [modalOpen, setModalOpen] = useState(false)
 
     useEffect(() => {
         setModalOpen(open)
     }, [open])
-
-    const handleClickCheckBox = e => {
-        const { id, checked } = e.target;
-        if (checked) {
-            setIsCheck([...isCheck, id]);
-        } else {
-            setIsCheck(isCheck.filter(item => item !== id));
-        }
-    };
 
     const handleOk = () => {
         setModalOpen(false)
@@ -748,38 +733,6 @@ export const ModalModificationDocumentRequireAddDoc = () => {
 
     const handleCancle = () => {
         dispatch({ type: "close_modal_confirm_bmcl_yeucaubosunghosotailieudaluukho", id: null })
-    }
-
-    const handleClickApprove = async () => {
-        // await axiosHttpService.post(API_DOCUMENT_MODIFICATION_APPROVE, { idFile: IDFile })
-        // await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [{
-        //     id: IDFile, current_state: 3,
-        //     new_state: 3 + 1
-        // }])
-
-        // const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
-        // const id = added.data.find(item => item.idFile === IDFile).id
-        // await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
-
-        // notifySuccess("Đã trình duyệt lưu kho hồ sơ bổ sung thành công")
-        // dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
-        // // setTimeout(() => {
-        // //     document.location.reload()
-        // // }, 1000)
-
-    }
-    const handleClickReject = async () => {
-        //  await axiosHttpService.post(API_DOCUMENT_MODIFICATION_REJECT, { idFile: IDFile })
-        notifySuccess("Đã trả về hồ sơ")
-
-        //   const added = await axiosHttpService.get(API_DOCUMENT_MODIFICATION_REJECT_ADDED)
-        const id = added.data.find(item => item.idFile === IDFile).id
-        //    await axiosHttpService.delete(API_DOCUMENT_MODIFICATION_REJECT_ADDED + "/" + id)
-
-        dispatch({ type: "close_modal_confirm_bmcl_hosotailieudabosung", id: null })
-        setTimeout(() => {
-            document.location.reload()
-        }, 1000)
     }
 
     return (
@@ -859,7 +812,7 @@ export const ModalRecoverFile = () => {
         ids.forEach(async (id) => {
             await PlanAPIService.removeFileFromPlanTieuHuy(id);
         });
-        
+
         const payload = ids.map((id) => {
             return {
                 id,
@@ -1016,6 +969,52 @@ export const ModalStateNLLSPlanOrgan = () => {
             <div className="flex justify-center">
                 <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleOk}>Duyệt</Button>
                 <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleCancle}>Từ chối</Button>
+            </div>
+        </Modal >
+    )
+}
+
+export const ModalOpenAttachments = () => {
+    const dispatch = useDispatch();
+    const open = useSelector(state => state.modalOpenAttachments.open);
+    const attachments = useSelector(state => state.modalOpenAttachments.attachments);
+
+    const handleOk = async () => {
+        dispatch({
+            type: "close_modalOpenAttachments"
+        });
+    }
+
+    const handleDownloadAttachment = async (fileUrl) => {
+        const response = await axiosHttpService.get(API_DOWNLOAD_ATTACHMENT + '/' + fileUrl, {
+            responseType: "blob",
+        });
+        const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = downloadUrl;
+        link.setAttribute("download", fileUrl.split("/").pop());
+        document.body.appendChild(link);
+        link.click();
+    }
+
+    return (
+        <Modal
+            title="Danh sách tệp đính kèm"
+            open={open}
+            onOk={handleOk}
+            onCancel={handleOk}
+            footer={null}
+        >
+            <div >
+                {attachments && attachments.map((attachment) => {
+                    return (
+                        <div key={attachment} className="mt-2">
+                            <Button
+                                onClick={() => handleDownloadAttachment(attachment)}
+                            >{attachment.split('/')[2]}</Button>
+                        </div>
+                    )
+                })}
             </div>
         </Modal >
     )

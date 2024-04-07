@@ -206,11 +206,6 @@ const DocCategory = ({ eOffice = true }) => {
       console.log(fileSheet);
     };
     getExcel();
-    // console.log(fileSheet)
-    // const wb = XLSX.utils.book_new()
-    // const ws = XLSX.utils.json_to_sheet(fileSheet)
-    // XLSX.utils.book_append_sheet(wb, ws, "SheetJS")
-    // XLSX.writeFile(wb, "sheetVB.xlsx")
   };
 
   const handleAddDocFromEoffice = async () => {
