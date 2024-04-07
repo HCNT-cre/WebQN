@@ -3,7 +3,7 @@ import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
 import { Link } from "react-router-dom";
-import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
+import { ENUM_STATE_NLLS_PLAN, ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
 import ThemHoSo from "src/pages/LuuTruLichSu/modals/ThemHoSoLuuTruLS";
 import SuaHoSo from "../LuuTruLichSu/modals/SuaHoSoLuuTruLS";
@@ -13,10 +13,9 @@ import PlanAPIService from "src/service/api/PlanAPIService";
 import XoaHoSo from "../LuuTruLichSu/modals/XoaHoSoLuuTruLS";
 import { useDispatch } from "react-redux";
 import { ModalConfirmSendPlan } from "./Modals/LuuTruLichSu";
-import { Watch } from "@mui/icons-material";
+import UserAPIService from "src/service/api/userAPIService";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
-const API_GET_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE
 const API_STORAGE_GET_ORGAN_ALL =
 	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const API_SET_PLAN_FOR_FILE = import.meta.env.VITE_API_SET_PLAN_FOR_FILE;
@@ -227,7 +226,7 @@ const Delete = ({ id, reFetchData }) => {
 	);
 };
 
-const AddFile = ({ id, disabled}) => {
+const AddFile = ({ id, disabled }) => {
 	const [openModalAddFile, setOpenModalAddFile] = useState(false);
 	const [addFile, setAddFile] = useState([]);
 	const [resetAdd, setResetAdd] = useState(false);
@@ -452,7 +451,10 @@ const KeHoachNopLuuLichSu = () => {
 	};
 	const handleSendPlan = async (id) => {
 		try {
+			const userOrgan = await UserAPIService.getUserOrgan();
+			console.log("userOrgan", userOrgan);
 			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DA_THU_THAP);
+			await PlanAPIService.updateStateNLLSOrgan(id, userOrgan.id, ENUM_STATE_NLLS_PLAN.DA_NOP);
 			await FileAPIService.updateStateByIdPlan(id, {
 				current_state: 4, // luu tru co quan
 				new_state: 5, // nop luu lich su
