@@ -452,8 +452,6 @@ const KeHoachNopLuuLichSu = () => {
 	const handleSendPlan = async (id) => {
 		try {
 			const userOrgan = await UserAPIService.getUserOrgan();
-			console.log("userOrgan", userOrgan);
-			await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.DA_THU_THAP);
 			await PlanAPIService.updateStateNLLSOrgan(id, userOrgan.id, ENUM_STATE_NLLS_PLAN.DA_NOP);
 			await FileAPIService.updateStateByIdPlan(id, {
 				current_state: 4, // luu tru co quan
