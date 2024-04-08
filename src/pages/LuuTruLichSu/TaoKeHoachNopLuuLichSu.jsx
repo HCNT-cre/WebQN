@@ -1,4 +1,4 @@
-import {Button, Input, Modal, Popconfirm, Select, Form, Upload } from "antd";
+import { Button, Input, Modal, Popconfirm, Select, Form, Upload } from "antd";
 import { Table } from "src/custom/Components/Table";
 import { useState, useEffect } from "react";
 import axiosHttpService from "src/utils/httpService";
@@ -15,6 +15,7 @@ import { ChonNguoiDuyetKeHoach } from "./modals/ChonNguoiDuyetKeHoach";
 import PropTypes from 'prop-types';
 import { UploadOutlined } from '@ant-design/icons';
 import { ModalOpenAttachments } from "../Modals";
+import { ModalSendExtraPeople } from "./modals/SendExtraPeople";
 
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
@@ -45,12 +46,12 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		request["state"] = "Mới lập";
 		request["type"] = ENUM_TYPE_PLAN.NOP_LUU_LICH_SU;
 
-		if (fileUploaded.length > 0) { 
+		if (fileUploaded.length > 0) {
 			fileUploaded.forEach((file, idx) => {
 				const key = "attachment" + idx;
 				request[key] = file;
 			})
-		}	
+		}
 
 		const response = await axiosHttpService.post(`${API_GET_PLAN}`, request, {
 			headers: {
@@ -176,26 +177,26 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 						/>
 					</div>
 					<div className="flex justify-between py-[12px]">
-					<span>Văn bản đính kèm</span>
-					<Form encType="multipart/form-data">
-						<Form.Item
-							rules={[
-								{
-									required: true,
-									message: 'Vui lòng chọn văn bản đính kèm'
-								}
-							]}
-						>
-							<Upload
-								multiple
-								accept="application/pdf"
-								beforeUpload={() => false}
-								onChange={handleFileUpload}
+						<span>Văn bản đính kèm</span>
+						<Form encType="multipart/form-data">
+							<Form.Item
+								rules={[
+									{
+										required: true,
+										message: 'Vui lòng chọn văn bản đính kèm'
+									}
+								]}
 							>
-								<Button htmlType="submit" icon={<UploadOutlined />}>Thêm văn bản</Button>
-							</Upload>
-						</Form.Item>
-					</Form>
+								<Upload
+									multiple
+									accept="application/pdf"
+									beforeUpload={() => false}
+									onChange={handleFileUpload}
+								>
+									<Button htmlType="submit" icon={<UploadOutlined />}>Thêm văn bản</Button>
+								</Upload>
+							</Form.Item>
+						</Form>
 					</div>
 				</div>
 
@@ -467,6 +468,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 	const [plan, setPlan] = useState([]);
 	const dispatch = useDispatch();
 	const modalState = useSelector(state => state.modalChoosePerson);
+	const sendExtraPeopleState = useSelector(state => state.modalSendExtraPeople);
 
 	const handleChoosePerson = () => {
 		if (stateCheckBox.length === 0) {
@@ -475,6 +477,14 @@ const TaoKeHoachLuuTruLichSu = () => {
 		}
 		dispatch({ type: "open_modal_choose_person", data: { "planIds": stateCheckBox.map(item => parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))) } });
 	};
+
+	const handleSendExtraPeople = () => {
+		if (stateCheckBox.length === 0) {
+			notifyError("Vui lòng chọn kế hoạch cần gửi");
+			return;
+		}
+		dispatch({ type: "open_modal_send_extra_people", planIds: stateCheckBox.map(item => parseInt(item.substring(item.indexOf("checkbox") + "checkbox".length))) });
+	}
 
 	useEffect(() => {
 		if (modalState.state == false) {
@@ -488,9 +498,27 @@ const TaoKeHoachLuuTruLichSu = () => {
 				notifyError("Gửi kế hoạch thất bại");
 			}
 
+			if(modalState.success !== null)
+				dispatch({ type: "close_modal_choose_person", success: null});
 		}
 	}, [modalState?.state])
-	
+
+	useEffect(() => {
+		if(sendExtraPeopleState.open === false) {
+			if(sendExtraPeopleState.success === true) {
+				setTimeout(() => {
+					reFetchData();
+					setIsLoading(false);
+					notifySuccess("Gửi kế hoạch thành công");
+				}, 500);
+			} else if(sendExtraPeopleState.success === false) {
+				notifyError("Gửi kế hoạch thất bại");
+			}
+			if(sendExtraPeopleState.success !== null)
+				dispatch({ type: "close_modal_send_extra_people", success: null});
+		}
+	}, [sendExtraPeopleState])
+
 	const BUTTON_ACTIONS = [
 		{
 			title: "Tìm kiếm",
@@ -511,6 +539,12 @@ const TaoKeHoachLuuTruLichSu = () => {
 			onClick: handleChoosePerson,
 			icon: <i className="fa-solid fa-sync"></i>,
 		},
+		{
+			title: "Gửi đến cá nhân",
+			onClick: handleSendExtraPeople,
+			btn_class_name: "custom-btn-add-file",
+			icon: <i className="fa-solid fa-plus"></i>,
+		},
 	];
 
 	const handleClickAttachments = async (attachments) => {
@@ -530,7 +564,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 			const row = {
 				id: rawData.id,
 				name: rawData.name,
-				attachment:  rawData.attachments ? <Button onClick={() => handleClickAttachments(rawData.attachments)}> Danh sách tệp đính kèm</Button> : "Không có tệp đính kèm",
+				attachment: rawData.attachments ? <Button onClick={() => handleClickAttachments(rawData.attachments)}> Danh sách tệp đính kèm</Button> : "Không có tệp đính kèm",
 				start_date: rawData.start_date,
 				organ_name: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
@@ -630,8 +664,9 @@ const TaoKeHoachLuuTruLichSu = () => {
 				setModelOpen={setModalOpen}
 				reFetchData={reFetchData}
 			/>
-			<ChonNguoiDuyetKeHoach/>
-			<ModalOpenAttachments/>
+			<ChonNguoiDuyetKeHoach />
+			<ModalOpenAttachments />
+			<ModalSendExtraPeople/>
 		</div>
 	);
 };

@@ -80,7 +80,6 @@ const AddDoc = ({
     
         { key: "mode", title: "Chế độ sử dụng", require: true, type: "select", options: RIGHTS, default: true},
         { key: "language", title: "Ngôn ngữ", require: true, type: "select", options: language , default: true},
-        // { key: "confidence_level", title: "Mức độ tin cậy", require: true, type: "select", options: },
         { key: "format", title: "Tình trạng vật lý", require: true, type: "select", options: format, default: true },
         { key: "organ_id", title: "Mã phông/công trình/sưu tập lưu trữ", require: true, type: "select", options: fond, extract: true, default: true},
     
@@ -127,8 +126,6 @@ const AddDoc = ({
                 value: item.id
             }))
 
-            
-
             setRequest(prev => ({
                ...prev,
                identifier: _organ.name
@@ -138,6 +135,14 @@ const AddDoc = ({
             setLanguage(language);
             setFond(fond);
             setFormat(format);
+
+            setRequest(prev => ({
+                ...prev,
+               language: (language && language.length > 0) ? language[0].value : null,
+               format: (format && format.length > 0) ? format[0].value : null,
+               organ_id: (fond && fond.length > 0) ? fond[0].value : null,
+               mode: RIGHTS[0].value
+            }));
         }
 
         setIsLoading(true);
@@ -146,6 +151,8 @@ const AddDoc = ({
 
     }, [])
 
+    console.log('request', request);
+    
     useEffect(() => {
         setRequest(prev => ({
             ...prev,
