@@ -160,19 +160,11 @@ const Login = () => {
       </LoginForm>
       <LogoContainer>
         <a href="https://tinnhiemmang.vn/danh-ba-tin-nhiem/luutrudientuquangngaigovvn-1710901592"
-          title="Chung nhan Tin Nhiem Mang" target="_blank"
-          style={{marginRight: "60px"}}>
+          title="Chung nhan Tin Nhiem Mang" target="_blank">
           <img src="https://tinnhiemmang.vn/handle_cert?id=luutrudientu.quangngai.gov.vn" width="150px" height="auto" alt="Chung nhan Tin Nhiem Mang" />
         </a>
 
-        <a href="https://ipv6-test.com/validate.php?url=referer" style={{marginLeft: "60px"}}>
-          <img
-            src="https://ipv6-test.com/button-ipv6-big.png"
-            alt="ipv6 ready"
-            title="ipv6 ready"
-            style={{ borderWidth: 0, borderStyle: 'solid', display: 'unset' }}
-          />
-        </a>
+        
       </LogoContainer>
     </LoginContainer>
   );
