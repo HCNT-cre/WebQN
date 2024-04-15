@@ -19,8 +19,9 @@ const API_EXPORT_EXCEL_DOC = import.meta.env.VITE_API_EXPORT_EXCEL_DOC
 const TABLE_FIELDS = [
   { title: "TT", key: "doc_ordinal", width: "50px" },
   { title: "Ngày ban hành", key: "issued_date", width: "100%" },
-  { title: "Bút ký", key: "autograph", width: "100%" },
-  { title: "Mã văn bản", key: "code_number", width: "100%" },
+  { title: "Bút ký", key: "autograph", width: "70%" },
+  { title: "Mã văn bản", key: "code_number", width: "30%" },
+  { title: "Trích yếu", key: "subject", width: "200%"},
   { title: "Tên văn bản", key: "doc_name", width: "100%" },
   { title: "Chức năng", key: "Function", width: "100px" },
 ];
@@ -156,6 +157,7 @@ const DocCategory = ({ eOffice = true }) => {
               issued_date: rawData.issued_date,
               autograph: rawData.autograph,
               code_number: rawData.code_number,
+              subject: rawData.subject,
               doc_name: rawData.doc_name,
               Function: (
                 <ButtonFunctions

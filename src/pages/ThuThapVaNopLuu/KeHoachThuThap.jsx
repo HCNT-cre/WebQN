@@ -33,18 +33,16 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [fileUploaded, setFileUploaded] = useState([]);
 
 	useEffect(() => {
-		const getOrgan = async () => {
-			const { data } = await axiosHttpService.get(API_STORAGE_GET_ORGAN_ALL);
-			const _ = data.map((item) => {
-				return {
-					label: item.name,
-					value: item.id,
-				};
-			});
-			setOrgan(_);
-		};
-
-		getOrgan();
+		const fetchOrganName = async () => {
+			const response = await UserAPIService.getUserOrgan();
+			let organObject = {
+				value: response.id,
+				label: response.name
+			}
+			setOrgan([organObject]);
+			handleChangeRequest('organ', organObject.value)
+		}
+		fetchOrganName();
 	}, []);
 
 	const handleOk = async () => {
@@ -120,7 +118,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
 						type="date"
 						className="w-[70%]"
-						value={request["date"]}
+						value={request["start_date"]}
 					/>
 				</div>
 
@@ -132,6 +130,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 						className="w-[70%]"
 						value={request["organ"]}
 						options={organ}
+						disabled
 					/>
 				</div>
 
@@ -353,11 +352,11 @@ const Update = ({
 				<div className="flex justify-between py-[12px]">
 					<span>Ngày kế hoạch</span>
 					<Input
-						name="date"
+						name="start_date"
 						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
 						type="date"
 						className="w-[70%]"
-						value={request["date"]}
+						value={request["start_date"]}
 					/>
 				</div>
 				<div className="flex justify-between py-[12px]">
@@ -367,7 +366,7 @@ const Update = ({
 						className="w-[70%]"
 						showSearch
 						allowClear
-						defaultValue={request.organ}
+						value={request["organ"]}
 						optionFilterProp="children"
 						onChange={(value) => handleChangeRequest('organ', value)}
 						filterOption={(input, option) =>

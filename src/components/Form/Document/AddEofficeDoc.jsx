@@ -24,6 +24,7 @@ const AddEofficeDoc = ({
     govFileID,
     name,
     date,
+    trichYeu,
     fetchDocumentsOfFile
 }) => {
     const [day, month, year] = date.split("/");
@@ -45,7 +46,7 @@ const AddEofficeDoc = ({
         type_name: null,
         code_notation: null,
         organ_name: null,
-        subject: null,
+        subject: trichYeu,
         language: null,
         page_amount: null,
         description: null,
@@ -72,11 +73,10 @@ const AddEofficeDoc = ({
         { key: "identifier", title: "Mã cơ quan lưu trữ", require: true, type: "text", disable: true }, // organ
 
 
-        { key: "mode", title: "Chế độ sử dụng", require: true, type: "select", options: RIGHTS },
-        { key: "language", title: "Ngôn ngữ", require: true, type: "select", options: language },
-        // { key: "confidence_level", title: "Mức độ tin cậy", require: true, type: "select", options: },
-        { key: "format", title: "Tình trạng vật lý", require: true, type: "select", options: format },
-        { key: "organ_id", title: "Mã phông/công trình/sưu tập lưu trữ", require: true, type: "select", options: fond, extract: true },
+        { key: "mode", title: "Chế độ sử dụng", require: true, type: "select", options: RIGHTS, default: true},
+        { key: "language", title: "Ngôn ngữ", require: true, type: "select", options: language, default: true},
+        { key: "format", title: "Tình trạng vật lý", require: true, type: "select", options: format, default: true},
+        { key: "organ_id", title: "Mã phông/công trình/sưu tập lưu trữ", require: true, type: "select", options: fond, extract: true, default: true},
 
 
 
@@ -320,8 +320,7 @@ const AddEofficeDoc = ({
                                                                                             onChange={(value) => handleChangeForm(field.key, value)}
                                                                                             options={field.options}
                                                                                             className="w-full mt-[12px]"
-                                                                                            defaultValue={field.options[0]}
-                                                                                            value={request[field.key]}
+                                                                                            value={request[field.key]? request[field.key] : field.options[0]}
                                                                                         >
                                                                                         </Select>
                                                                                     ) : (
