@@ -259,7 +259,6 @@ const Update = ({
 					})
 				);
 			}
-			console.log(attachments);
 		}
 
 		getAttachments();
@@ -275,7 +274,6 @@ const Update = ({
 			}
 			setOrgan([organObject]);
 		};
-
 		getOrgan();
 	}, []);
 
@@ -315,7 +313,6 @@ const Update = ({
 		}
 
 		setModalOpen(false);
-
 	};
 
 	const handleCancel = () => {
