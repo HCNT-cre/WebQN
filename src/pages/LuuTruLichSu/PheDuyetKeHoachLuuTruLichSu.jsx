@@ -11,6 +11,7 @@ import { notifySuccess, notifyError } from "src/custom/Function";
 import PlanAPIService from "src/service/api/PlanAPIService";
 import XoaHoSo from "./modals/XoaHoSoLuuTruLS";
 import { SendPlanToOrgan } from "./modals/SendPlanToOrgan";
+import { ModalOpenAttachments } from "../Modals";
 const API_GET_PLAN = import.meta.env.VITE_API_PLAN;
 const API_DELETE_PLAN = import.meta.env.VITE_API_PLAN;
 
@@ -351,16 +352,12 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 		}
 	];
 
-	const handleDownloadAttachment = async (fileUrl) => {
-		const response = await axiosHttpService.get(fileUrl, {
-			responseType: "blob",
-		});
-		const downloadUrl = window.URL.createObjectURL(new Blob([response.data]));
-		const link = document.createElement("a");
-		link.href = downloadUrl;
-		link.setAttribute("download", fileUrl.split("/").pop());
-		document.body.appendChild(link);
-		link.click();
+	
+	const handleClickAttachments = async (attachments) => {
+		dispatch({
+			type: "open_modalOpenAttachments",
+			attachments,
+		})
 	};
 
 	const reFetchData = async () => {
@@ -369,16 +366,10 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 		const plans = [];
 		const plansRaw =res.reverse();
 		for (const planRaw of plansRaw) {
-			let attachment = planRaw.attachments;
-			if (attachment) {
-				attachment = attachment[0].split("/").pop();
-			} else {
-				attachment = "";
-			}
 			const row = {
 				id: planRaw.id,
 				name: planRaw.name,
-				attachment: <button onClick={() => handleDownloadAttachment(planRaw.attachment)}>{attachment}</button>,
+				attachment:  planRaw.attachments ? <Button onClick={() => handleClickAttachments(planRaw.attachments)}> Danh sách tệp đính kèm</Button> : "Không có tệp đính kèm",
 				start_date: planRaw.start_date,
 				organ_name: planRaw.organ_name,
 				state: <button>{planRaw.state}</button>,
@@ -473,7 +464,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 				isCheckBox={true}
 				selectedFiles={stateCheckBox}
 			/>
-
+			<ModalOpenAttachments/>
 			<SendPlanToOrgan />
 		</div>
 	);

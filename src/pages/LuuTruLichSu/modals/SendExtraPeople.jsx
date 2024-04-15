@@ -4,54 +4,35 @@ import { useDispatch, useSelector } from "react-redux";
 import UserAPIService from "src/service/api/userAPIService";
 import { SearchOutlined } from '@ant-design/icons';
 import PlanAPIService from "src/service/api/PlanAPIService";
-import FileAPIService from "src/service/api/FileAPIService";
-import { ENUM_STATE_PLAN } from "src/storage/Storage";
 
 
-export const ChonNguoiDuyetKeHoach = (
+export const ModalSendExtraPeople = (
 ) => {
-
-    const open = useSelector(state => state.modalChoosePerson.state);
-    const planIds = useSelector(state => state.modalChoosePerson?.data?.planIds);
-    const [approverIds, setApproverIds] = useState([]);
+    const open = useSelector(state => state.modalSendExtraPeople.open);
+    const planIds = useSelector(state => state.modalSendExtraPeople.planIds);
+    const [userIds, setUserIds] = useState([]);
     const dispatch = useDispatch();
     const [userList, setUserList] = useState([]);
 
     const handleOk = async () => {
         try {
-            planIds.forEach(async id => {
-                const res = await PlanAPIService.updateStatePlan(id, ENUM_STATE_PLAN.CHO_DUYET);
-
-                if(res.error) {
-                    dispatch({ type: "close_modal_choose_person", success: false });
-                    return;
-                }
-
-                await FileAPIService.updateStateByIdPlan(id, {
-                    current_state: 4, // luu tru co quan
-                    new_state: 5, // nop luu lich su
-                });
-            });
-            await PlanAPIService.sendNLLSPLanInternal(planIds, approverIds);
-            dispatch({ type: "close_modal_choose_person", success: true });
+            await PlanAPIService.sendNLLSPLanInternal(planIds, userIds);
+            dispatch({ type: "close_modal_send_extra_people", success: true });
         } catch (err) {
             console.error(err)
-            dispatch({ type: "close_modal_choose_person", success: false });
+            dispatch({ type: "close_modal_send_extra_people", success: false });
         }
-
-
     };
 
     const handleCancel = () => {
-        dispatch({ type: "close_modal_choose_person" });
+        dispatch({ type: "close_modal_send_extra_people" });
     };
 
     const onChange = (e, userId) => {
-        console.log(`User with ID ${userId} checked: ${e.target.checked}`);
         if (e.target.checked) {
-            setApproverIds([...approverIds, userId]);
+            setUserIds([...userIds, userId]);
         } else {
-            setApproverIds(approverIds.filter(id => id !== userId));
+            setUserIds(userIds.filter(id => id !== userId));
         }
     };
 
