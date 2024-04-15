@@ -1,18 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
-import { Worker, Viewer } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import {useEffect, useState} from 'react'
+import {Viewer, Worker} from '@react-pdf-viewer/core';
+import {defaultLayoutPlugin} from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axiosHttpService from 'src/utils/httpService';
-import { Spin, Select, Input, Button } from "antd"
-import { GetDateFromString, notifyError, notifySuccess } from '../../../custom/Function';
-import { ValidateFormDoc } from '../../../custom/Function';
-import { FirstLower } from '../../../custom/Function';
+import {Button, Input, Select, Spin} from "antd"
+import {FirstLower, notifyError, notifySuccess, ValidateFormDoc} from 'src/custom/Function';
 
 import UserAPIService from 'src/service/api/userAPIService';
 import DocumentAPIService from 'src/service/api/DocumentAPIService';
-import { RIGHTS } from 'src/storage/FileStorage';
+import {RIGHTS} from 'src/storage/FileStorage';
 
 const API_EXTRACT_OCR = import.meta.env.VITE_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = import.meta.env.VITE_API_DOCUMENT_UPLOAD
@@ -119,8 +117,6 @@ const AddEofficeDoc = ({
                 value: item.id
             }))
 
-
-
             setRequest(prev => ({
                 ...prev,
                 identifier: _organ.name
@@ -130,6 +126,14 @@ const AddEofficeDoc = ({
             setLanguage(language);
             setFond(fond);
             setFormat(format);
+
+            setRequest(prev => ({
+                ...prev,
+                language: (language && language.length > 0) ? language[0].value : null,
+                format: (format && format.length > 0) ? format[0].value : null,
+                organ_id: (fond && fond.length > 0) ? fond[0].value : null,
+                mode: RIGHTS[0].value
+            }));
         }
 
         setIsLoading(true);
@@ -163,7 +167,6 @@ const AddEofficeDoc = ({
 
             setIsLoading(false)
             handleChangeForm("code_number", response.data.no.join(' '));
-            // handleChangeForm("issued_date", GetDateFromString(response.data.date.join(' ')));
             handleChangeForm("autograph", response.data.signer.join(' '));
 
             notifySuccess('Trích xuất thành công')
@@ -192,8 +195,7 @@ const AddEofficeDoc = ({
 
         setIsLoading(true);
 
-        const num_page = Number(document.getElementsByClassName("rpv-toolbar__label")[0].textContent.split(" ")[1]);
-        request["num_page"] = num_page;
+        request["num_page"] = Number(document.getElementsByClassName("rpv-toolbar__label")[0].textContent.split(" ")[1]);
         await axiosHttpService.get(docUrl, {
             responseType: 'blob',
             headers: {
@@ -255,32 +257,6 @@ const AddEofficeDoc = ({
                                         </div>
                                         <div className='h-full w-[50%] pl-[12px] mr-[12px] '>
                                             <div className='w-full flex justify-end'>
-                                                {/**<div className="text-white text-center px-[5px] rounded-[5px]  relative">
-                                                    <Button
-                                                        onClick={toggleContent}
-                                                        ref={buttonRef}
-                                                        className=" disabled:opacity-30 rounded-[5px] flex justify-center items-center py-[6px] text-[12px] bg-sky-500 "
-                                                    >
-                                                        Ký số
-                                                        <div className="ml-[4px]">
-                                                            <i className="fa-solid fa-chevron-down"></i>
-                                                        </div>
-                                                    </Button>
-
-                                                    {showContent && (
-                                                        <div
-                                                            ref={(el) => {
-                                                                contentRef.current[0] = el;
-                                                            }}
-                                                            className="rounded-[2px] text-left top-[40px] w-[204px] absolute bg-sky-500 text-[14px] z-10"
-                                                        >
-                                                            <div className='p-[2px]'>
-                                                                <img className='borer-2 block border-sky-100 w-[200px] max-w-[1000px]' alt='sign' src={sign} />
-                                                                <img className='borer-2 block border-sky-100 mt-[2px] w-[200px] max-w-[1000px]' alt='sign' src={sign2} />
-                                                            </div>
-                                                        </div>
-                                                    )}
-                                                        </div>**/}
                                                 <Button onClick={extractDataOCR} className=' h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-white text-[12px] custom-btn-search '>Trích xuất thông tin</Button>
                                                 <Button htmlType="submit" form="add-doc-form" className='bg-green-400 h-[30px] rounded-[5px] border-solid border-[1px] px-[8px] mx-[4px] min-w-[50px] text-black font-medium text-[12px] '>Lưu</Button>
                                             </div>
@@ -315,15 +291,6 @@ const AddEofficeDoc = ({
                                                                                 </label>
 
                                                                                 {field.type === "select" ? (
-                                                                                    field.default === true ? (
-                                                                                        <Select
-                                                                                            onChange={(value) => handleChangeForm(field.key, value)}
-                                                                                            options={field.options}
-                                                                                            className="w-full mt-[12px]"
-                                                                                            value={request[field.key]? request[field.key] : field.options[0]}
-                                                                                        >
-                                                                                        </Select>
-                                                                                    ) : (
                                                                                         <Select
                                                                                             onChange={(value) => handleChangeForm(field.key, value)}
                                                                                             options={field.options}
@@ -331,7 +298,6 @@ const AddEofficeDoc = ({
                                                                                             value={request[field.key]}
                                                                                         >
                                                                                         </Select>
-                                                                                    )
                                                                                 ) : (
                                                                                     <Input
                                                                                         disabled={field?.disable}

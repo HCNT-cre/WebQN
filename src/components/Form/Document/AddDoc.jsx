@@ -1,22 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from 'react'
-import { Worker, Viewer } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
+import {useEffect, useState} from 'react'
+import {Viewer, Worker} from '@react-pdf-viewer/core';
+import {defaultLayoutPlugin} from '@react-pdf-viewer/default-layout';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import axiosHttpService from 'src/utils/httpService';
-import { Spin, Select } from "antd"
-import { GetDateFromString, notifyError, notifySuccess } from '../../../custom/Function';
-import { Input, Button } from "antd"
-import { ValidateFormDoc } from '../../../custom/Function';
-import { FirstLower } from '../../../custom/Function';
-import { SetNull } from '../../../custom/Function';
-import { useButtonClickOutside } from 'src/custom/Hook';
+import {Button, Input, Select, Spin} from "antd"
+import {
+    FirstLower,
+    GetDateFromString,
+    notifyError,
+    notifySuccess,
+    SetNull,
+    ValidateFormDoc
+} from '../../../custom/Function';
+import {useButtonClickOutside} from 'src/custom/Hook';
 import sign from 'src/assets/img/sign.jpg'
 import sign2 from 'src/assets/img/sign2.png'
 import UserAPIService from 'src/service/api/userAPIService';
 import DocumentAPIService from 'src/service/api/DocumentAPIService';
-import { RIGHTS } from 'src/storage/FileStorage';
+import {RIGHTS} from 'src/storage/FileStorage';
 
 const API_EXTRACT_OCR = import.meta.env.VITE_API_EXTRACT_OCR
 const API_DOCUMENT_UPLOAD = import.meta.env.VITE_API_DOCUMENT_UPLOAD
@@ -148,7 +151,6 @@ const AddDoc = ({
         setIsLoading(true);
         fetchData();
         setIsLoading(false);
-
     }, [])
 
     console.log('request', request);
@@ -204,12 +206,25 @@ const AddDoc = ({
         setCurrentTab(0)
         setPdfFile(null)
         setFiles(null)
+
         setRequest(prev => {
             const cur = SetNull(prev)
             cur['gov_file_id'] = govFileID
             cur['identifier'] =  organ.name
+
+            if (language && language.length > 0) {
+                cur['language'] = language[0].value;
+            }
+            if (format && format.length > 0) {
+                cur['format'] = format[0].value;
+            }
+            if (fond && fond.length > 0) {
+                cur['organ_id'] = fond[0].value
+            }
+            cur['mode'] = RIGHTS[0].value
             return cur
         })
+
         if (isSubmitFormSuccess === true) {
             fetchDocumentsOfFile(govFileID)
         }
@@ -289,13 +304,11 @@ const AddDoc = ({
             }
         }
 
-        const num_page = Number(document.getElementsByClassName("rpv-toolbar__label")[0].textContent.split(" ")[1])
-        request["num_page"] = num_page
+        request["num_page"] = Number(document.getElementsByClassName("rpv-toolbar__label")[0].textContent.split(" ")[1])
         request["file"] = files[0]
         const formDataValidated = ValidateFormDoc(request)
         try {
             setIsLoading(true)
-            request['identifier'] = organ.id;
             await axiosHttpService.post(API_DOCUMENT_UPLOAD, formDataValidated, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -313,7 +326,6 @@ const AddDoc = ({
     const handleExtract = (name) => {
         handleChangeForm(name, fileData[name])
     }
-
 
     return (
         <>
@@ -416,7 +428,7 @@ const AddDoc = ({
                                                         <form id="add-doc-form" onSubmit={handleSubmitForm}>
                                                             <div className="flex justify-between">
                                                                 <div className="w-full px-[10px]">
-                                                                    {FORM_FIELDS.map((field, index) => {
+                                                                    {FORM_FIELDS.map((field) => {
                                                                         return (
                                                                             <div
                                                                                 key={field.key}
@@ -436,15 +448,6 @@ const AddDoc = ({
                                                                                 </label>
 
                                                                                 {field.type === "select" ? (
-                                                                                    field.default === true ? (
-                                                                                        <Select
-                                                                                            onChange={(value) => handleChangeForm(field.key, value)}
-                                                                                            options={field.options}
-                                                                                            className="w-full mt-[12px]"
-                                                                                            value={request[field.key]? request[field.key] : field.options[0]}
-                                                                                        >
-                                                                                        </Select>
-                                                                                    ) : (
                                                                                         <Select
                                                                                             onChange={(value) => handleChangeForm(field.key, value)}
                                                                                             options={field.options}
@@ -452,7 +455,6 @@ const AddDoc = ({
                                                                                             value={request[field.key]}
                                                                                         >
                                                                                         </Select>
-                                                                                    )
                                                                                 ) : (
                                                                                     <Input
                                                                                         disabled={field?.disable}
