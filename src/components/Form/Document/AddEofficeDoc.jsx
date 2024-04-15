@@ -24,6 +24,7 @@ const AddEofficeDoc = ({
     govFileID,
     name,
     date,
+    trichYeu,
     fetchDocumentsOfFile
 }) => {
     const [day, month, year] = date.split("/");
@@ -45,7 +46,7 @@ const AddEofficeDoc = ({
         type_name: null,
         code_notation: null,
         organ_name: null,
-        subject: null,
+        subject: trichYeu,
         language: null,
         page_amount: null,
         description: null,
@@ -74,7 +75,6 @@ const AddEofficeDoc = ({
 
         { key: "mode", title: "Chế độ sử dụng", require: true, type: "select", options: RIGHTS, default: true},
         { key: "language", title: "Ngôn ngữ", require: true, type: "select", options: language, default: true},
-        // { key: "confidence_level", title: "Mức độ tin cậy", require: true, type: "select", options: },
         { key: "format", title: "Tình trạng vật lý", require: true, type: "select", options: format, default: true},
         { key: "organ_id", title: "Mã phông/công trình/sưu tập lưu trữ", require: true, type: "select", options: fond, extract: true, default: true},
 

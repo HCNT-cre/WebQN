@@ -24,6 +24,7 @@ const Attachment = ({
   setState,
   govFileID,
   date,
+  trichYeu,
   fetchDocumentsOfFile
 }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -106,6 +107,7 @@ const Attachment = ({
                       <AddEofficeDoc
                         fetchDocumentsOfFile={fetchDocumentsOfFile}
                         date={date}
+                        trichYeu={trichYeu}
                         name={nameDoc}
                         govFileID={govFileID}
                         stateAddDoc={stateDoc}

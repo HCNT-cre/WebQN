@@ -30,10 +30,12 @@ const EOFFICE = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [param, setParam] = useState(null);
   const [openLoginEoffice, setOpenLoginEoffice] = useState(false);
+  const [trichYeu, setTrichYeu] = useState(null);
 
-  const handleClickDocument = (id, date) => {
+  const handleClickDocument = (id, date, trichYeu) => {
     setIdAttachment(id);
     setDate(date);
+    setTrichYeu(trichYeu);
     setStateAttachment(true);
   }
   const getDoc = async (page, param) => {
@@ -48,7 +50,7 @@ const EOFFICE = ({
     setDataTable(docs.map((doc) => {
       return {
         id: doc.id,
-        coQuanBanHanh: <p className="cursor-pointer" onClick={() => handleClickDocument(doc.id, doc.ngayVanBan)}>{doc.coQuanBanHanh}</p>,
+        coQuanBanHanh: <p className="cursor-pointer" onClick={() => handleClickDocument(doc.id, doc.ngayVanBan, doc.trichYeu)}>{doc.coQuanBanHanh}</p>,
         soKihieu: doc.soKihieu,
         trichYeu: doc.trichYeu,
       }
@@ -163,6 +165,7 @@ const EOFFICE = ({
       <Attachment
         fetchDocumentsOfFile={fetchDocumentsOfFile}
         date={date}
+        trichYeu={trichYeu}
         govFileID={govFileID}
         id={idAttachment}
         state={stateAttachment}
