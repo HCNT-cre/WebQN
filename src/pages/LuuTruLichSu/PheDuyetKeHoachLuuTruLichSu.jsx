@@ -369,7 +369,7 @@ const PheDuyetKeHoachLuuTruLichSu = () => {
 			const row = {
 				id: planRaw.id,
 				name: planRaw.name,
-				attachment:  planRaw.attachments ? <Button onClick={() => handleClickAttachments(planRaw.attachments)}> Danh sách tệp đính kèm</Button> : "Không có tệp đính kèm",
+				attachment:  planRaw.attachments ? <Button onClick={() => handleClickAttachments(planRaw.attachments)}>Xem danh sách</Button> : "Không có tệp đính kèm",
 				start_date: planRaw.start_date,
 				organ_name: planRaw.organ_name,
 				state: <button>{planRaw.state}</button>,

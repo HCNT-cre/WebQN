@@ -569,7 +569,7 @@ const TaoKeHoachLuuTruLichSu = () => {
 			const row = {
 				id: rawData.id,
 				name: rawData.name,
-				attachment: rawData.attachments ? <Button onClick={() => handleClickAttachments(rawData.attachments)}> Danh sách tệp đính kèm</Button> : "Không có tệp đính kèm",
+				attachment: rawData.attachments ? <Button onClick={() => handleClickAttachments(rawData.attachments)}>Xem danh sách</Button> : "Không có tệp đính kèm",
 				start_date: rawData.start_date,
 				organ_name: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
