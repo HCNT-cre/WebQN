@@ -312,6 +312,8 @@ const Update = ({ reFetchData, id }) => {
 						}
 					})
 				);
+			}else {
+				setFileUploaded([])
 			}
 		}
 

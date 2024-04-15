@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 
 import UserAPIService from "src/service/api/userAPIService";
-import { notifySuccess } from "src/custom/Function";
+import {notifyError, notifySuccess} from "src/custom/Function";
 import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch } from "react-redux";
 import { ModalOpenAttachments } from "../Modals";
@@ -258,6 +258,8 @@ const Update = ({
 						}
 					})
 				);
+			}else {
+				setFileUploaded([])
 			}
 		}
 
@@ -309,7 +311,7 @@ const Update = ({
 			notifySuccess("Cập nhật kế hoạch thành công");
 			reFetchData();
 		} else {
-			notifySuccess("Cập nhật kế hoạch không thành công");
+			notifyError("Cập nhật kế hoạch không thành công");
 		}
 
 		setModalOpen(false);
