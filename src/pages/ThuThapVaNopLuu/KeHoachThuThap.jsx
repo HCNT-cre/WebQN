@@ -10,6 +10,8 @@ import { notifySuccess } from "src/custom/Function";
 import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch } from "react-redux";
 import { ModalOpenAttachments } from "../Modals";
+import AttachmentAPIService from "src/service/api/attachmentsAPIService";
+import PlanAPIService from "src/service/api/PlanAPIService";
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 
 const API_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
@@ -49,12 +51,12 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		request["state"] = ENUM_STATE_PLAN.TAO_MOI;
 		request["type"] = ENUM_TYPE_PLAN.THU_THAP_NOP_LUU;
 
-		if (fileUploaded.length > 0) { 
+		if (fileUploaded.length > 0) {
 			fileUploaded.forEach((file, idx) => {
 				const key = "attachment" + idx;
 				request[key] = file;
 			})
-		}	
+		}
 
 		await axiosHttpService.post(`${API_PLAN}`, request, {
 			headers: {
@@ -69,7 +71,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 		}, 500);
 	};
 
-	const handleCancle = () => {
+	const handleCancel = () => {
 		setModelOpen(false);
 	};
 
@@ -97,7 +99,7 @@ const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 			}}
 			open={modalOpen}
 			onOk={handleOk}
-			onCancel={handleCancle}
+			onCancel={handleCancel}
 		>
 			<div>
 				<div className="flex justify-between py-[12px]">
@@ -229,26 +231,12 @@ const Update = ({
 	modalOpen,
 	setModalOpen }) => {
 	const [request, setRequest] = useState({});
-
-	const [fileList, setFileList] = useState([]);
-
+	const [organ, setOrgan] = useState([]);
 	const [fileUploaded, setFileUploaded] = useState([]);
-	const props = {
-		onRemove: (file) => {
-			const index = fileList.indexOf(file);
-			const newFileList = fileList.slice();
-			newFileList.splice(index, 1);
-			setFileList(newFileList);
-		},
-		beforeUpload: (file) => {
-			setFileList([...fileList, file]);
-			return false;
-		},
-		fileList,
-	};
 
 	useEffect(() => {
 		if (!id) return;
+
 		const getPlan = async () => {
 			const { data } = await axiosHttpService.get(API_PLAN + '/' + id);
 			setRequest({
@@ -258,9 +246,26 @@ const Update = ({
 				state: data.state,
 			});
 		};
+
+		const getAttachments = async () => {
+			const attachments = await AttachmentAPIService.getAttachmentsByPlanId(id);
+			if (attachments && attachments.length > 0) {
+				setFileUploaded(
+					attachments.map((attachment) => {
+						return {
+							uid: attachment.id,
+							name: attachment.name,
+							url: attachment.url,
+						}
+					})
+				);
+			}
+			console.log(attachments);
+		}
+
+		getAttachments();
 		getPlan();
 	}, [id]);
-	const [organ, setOrgan] = useState([]);
 
 	useEffect(() => {
 		const getOrgan = async () => {
@@ -283,33 +288,58 @@ const Update = ({
 	};
 
 	const handleOk = async () => {
-		if (fileUploaded.length > 0) {
-			request["attachment"] = fileUploaded[0];
-		}
-		await axiosHttpService.put(API_PLAN + '/' + id, request, {
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'multipart/form-data',
-			}
+		const fileObjs = fileUploaded.filter((file) => {
+			return file.originFileObj;
+		}).map((file) => {
+			return file.originFileObj;
 		});
 
+		request["old_files"] = fileUploaded.filter((file) => {
+			return !file.originFileObj;
+		});
+
+		let res = await PlanAPIService.updatePlan(id, request);
+
+		if (res && fileObjs.length > 0) {
+			const payload = {};
+			fileObjs.forEach((file, i) => {
+				payload['attachment' + i] = file;
+			})
+			res = await PlanAPIService.addAttachmentToPlan(id, payload);
+		}
+
+		if(res) {
+			notifySuccess("Cập nhật kế hoạch thành công");
+			reFetchData();
+		} else {
+			notifySuccess("Cập nhật kế hoạch không thành công");
+		}
+
 		setModalOpen(false);
-		reFetchData();
-		notifySuccess("Cập nhật thành công");
+
 	};
 
-	const handleCancle = () => {
+	const handleCancel = () => {
 		setModalOpen(false);
 	};
+
+	const handleFileUpload = (files) => {
+		const { fileList } = files;
+		setFileUploaded(fileList);
+	}
+
+	const handleDownloadFile = (e) => {
+		AttachmentAPIService.downloadAttachment(e.url)
+	}
 
 	return (
 		<div>
 
 			<Modal
 				open={modalOpen}
-				title="Sửa"
+				title="Sửa kế hoạch"
 				onOk={handleOk}
-				onCancel={handleCancle}
+				onCancel={handleCancel}
 			>
 				<div className="flex justify-between items-center">
 					<span>Tên kế hoạch</span>
@@ -349,28 +379,28 @@ const Update = ({
 
 				<div className="flex justify-between py-[12px]">
 					<span>Văn bản đính kèm</span>
-					<form encType="multipart/form-data">
-						<label
-							className="flex justify-center items-center cursor-pointer h-[30px] border-[#ccc] border-2 rounded-[5px] text-black hover:opacity-90 text-[12px] w-[100px]"
-							htmlFor="file-upload"
+					<Form encType="multipart/form-data">
+						<Form.Item
+							rules={[
+								{
+									required: true,
+									message: 'Vui lòng chọn văn bản đính kèm'
+								}
+							]}
 						>
-							<p className="ml-[8px]">Thêm văn bản</p>
-						</label>
-						<input
-							onClick={(ev) => {
-								ev.target.value = "";
-							}}
-							type="file"
-							id="file-upload"
-							name="file-upload"
-							className="hidden"
-							onChange={(ev) => {
-								setFileUploaded(Array.from(ev.target.files));
-							}}
-							accept="application/pdf"
-							multiple
-						></input>
-					</form>
+							<Upload
+								fileList={fileUploaded}
+								multiple
+								accept="application/pdf"
+								beforeUpload={() => false}
+								onChange={handleFileUpload}
+								onPreview={handleDownloadFile}
+
+							>
+								<Button htmlType="submit" icon={<UploadOutlined />}>Thêm văn bản</Button>
+							</Upload>
+						</Form.Item>
+					</Form>
 				</div>
 			</Modal>
 		</div>
@@ -458,7 +488,7 @@ const KeHoachThuThap = () => {
 					onClick={() => handleClickUpdate(rawData.id)}
 					className="cursor-pointer hover:underline"
 				> {rawData.name} </p>,
-				attachment:  rawData.attachments ? <Button onClick={() => handleClickAttachments(rawData.attachments)}> Danh sách tệp đính kèm</Button> : "Không có tệp đính kèm",
+				attachment: rawData.attachments ? <Button onClick={() => handleClickAttachments(rawData.attachments)}> Danh sách tệp đính kèm</Button> : "Không có tệp đính kèm",
 				start_date: rawData.start_date,
 				organ: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
@@ -570,7 +600,7 @@ const KeHoachThuThap = () => {
 				setModalOpen={setUpdateOpen}
 			/>
 
-			<ModalOpenAttachments/>
+			<ModalOpenAttachments />
 		</div>
 	);
 };

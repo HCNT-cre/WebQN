@@ -15,7 +15,7 @@ const API_GET_NLLS_INTERNAL = import.meta.env.VITE_API_GET_NLLS_INTERNAL
 const API_GET_NLLS_ORGAN = import.meta.env.VITE_API_GET_NLLS_ORGAN
 const API_GET_SENT_PLAN_NLLS_BY_SENDER_ID = import.meta.env.VITE_API_GET_SENT_PLAN_NLLS_BY_SENDER_ID
 const API_UPDATE_STATE_NLLS_ORGAN = import.meta.env.VITE_API_UPDATE_STATE_NLLS_ORGAN
-
+const API_CREATE_ATTACHMENT = import.meta.env.VITE_API_CREATE_ATTACHMENT;
 const PlanAPIService = {
     getPlanById: async (id) => {
         const response = await axiosHttpService.get(API_PLAN + '/' + id);
@@ -54,12 +54,12 @@ const PlanAPIService = {
     },
 
     setPlanForFile: async (payload) => {
-        const response = await axiosHttpService.post(API_SET_PLAN_FOR_FILE , payload);
+        const response = await axiosHttpService.post(API_SET_PLAN_FOR_FILE, payload);
         return response;
     },
 
     setPlanTieuHuyForFile: async (payload) => {
-        const response = await axiosHttpService.post(API_SET_PLAN_TIEU_HUY_FOR_FILE , payload);
+        const response = await axiosHttpService.post(API_SET_PLAN_TIEU_HUY_FOR_FILE, payload);
         return response;
     },
 
@@ -91,7 +91,7 @@ const PlanAPIService = {
                 plan_name: plan.name,
                 organ_name: plan.organ_name,
                 progress: "", // t is short for temp
-                watch: <AddWatchTheoDoiNopLuuLichSu item={plan}/>,
+                watch: <AddWatchTheoDoiNopLuuLichSu item={plan} />,
             }
         })
     },
@@ -135,13 +135,38 @@ const PlanAPIService = {
         const response = await axiosHttpService.get(API_GET_NLLS_ORGAN + '/' + organ.id)
         return response.data
     },
-    updateStateNLLSOrgan : async (planId, organId, newState) => {
+    updateStateNLLSOrgan: async (planId, organId, newState) => {
         const response = await axiosHttpService.post(API_UPDATE_STATE_NLLS_ORGAN, {
             plan_id: planId,
             organ_id: organId,
             state: newState
         });
         return response.data;
+    },
+
+    createPlanWithAttachment: async (payload) => {
+        const res = await axiosHttpService.post(API_PLAN, payload, {
+            headers: {
+                'Accept': 'application/json',
+                "content-type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s'
+            }
+        });
+        return res.data;
+    },
+
+    updatePlan: async (id, payload) => {
+        const res = await axiosHttpService.put(API_PLAN + '/' + id, payload);
+        return res.data;
+    },
+
+    addAttachmentToPlan: async (id, payload) => {
+        const res = await axiosHttpService.post(API_CREATE_ATTACHMENT + '/' + id, payload, {
+            headers: {
+                'Accept': 'application/json',
+                "content-type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s'
+            }
+        });
+        return res.data;
     }
 
 }
