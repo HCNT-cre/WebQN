@@ -21,6 +21,8 @@ yarn.lock
 
 doc/
 
+.env
+
 dist
 dist/*
 dist/index.html
