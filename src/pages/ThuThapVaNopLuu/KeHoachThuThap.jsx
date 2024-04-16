@@ -486,7 +486,7 @@ const KeHoachThuThap = () => {
 					onClick={() => handleClickUpdate(rawData.id)}
 					className="cursor-pointer hover:underline"
 				> {rawData.name} </p>,
-				attachment: rawData.attachments ? <Button onClick={() => handleClickAttachments(rawData.attachments)}> Danh sách tệp đính kèm</Button> : "Không có tệp đính kèm",
+				attachment: rawData.attachments ? <Button onClick={() => handleClickAttachments(rawData.attachments)}>Xem danh sách</Button> : "Không có tệp đính kèm",
 				start_date: rawData.start_date,
 				organ: rawData.organ_name,
 				state: <button>{rawData.state}</button>,
