@@ -27,9 +27,17 @@ fi
 echo "Environment: $ENV"
 
 if [ "$ENV" == "production" ]; then
-    echo $TARGET
-    sed -i '' "s|VITE_API_STORAGE=http://localhost/api/|VITE_API_STORAGE=https://luutrudientu.quangngai.gov.vn/api/|g" $TARGET
-    sed -i '' "s|VITE_API_EXPORT_EXCEL=http://localhost:5678/excel|VITE_API_EXPORT_EXCEL=https://luutrudientu.quangngai.gov.vn/execl|g" $TARGET
+    # check os
+    if [ "$(uname)" == "Darwin" ]; then
+        echo "Mac OS detected"
+        sed -i '' "s|VITE_API_STORAGE=http://localhost/api/|VITE_API_STORAGE=https://luutrudientu.quangngai.gov.vn/api/|g" $TARGET
+        sed -i '' "s|VITE_API_EXPORT_EXCEL=http://localhost:5678/excel|VITE_API_EXPORT_EXCEL=https://luutrudientu.quangngai.gov.vn/execl|g" $TARGET
+    elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+        echo "Linux OS detected"
+        sed -i "s|VITE_API_STORAGE=http://localhost/api/|VITE_API_STORAGE=https://luutrudientu.quangngai.gov.vn/api/|g" $TARGET
+        sed -i "s|VITE_API_EXPORT_EXCEL=http://localhost:5678/excel|VITE_API_EXPORT_EXCEL=https://luutrudientu.quangngai.gov.vn/execl|g" $TARGET
+    fi
+
 fi
 
 echo "== .env copy completed =="
