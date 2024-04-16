@@ -400,7 +400,7 @@ const Update = ({ reFetchData, id }) => {
 				<div className="flex justify-between py-[12px]">
 					<span>Ngày kế hoạch</span>
 					<Input
-						name="date"
+						name="start_date"
 						onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
 						type="date"
 						className="w-[70%]"
