@@ -16,6 +16,8 @@ const API_GET_NLLS_ORGAN = import.meta.env.VITE_API_GET_NLLS_ORGAN
 const API_GET_SENT_PLAN_NLLS_BY_SENDER_ID = import.meta.env.VITE_API_GET_SENT_PLAN_NLLS_BY_SENDER_ID
 const API_UPDATE_STATE_NLLS_ORGAN = import.meta.env.VITE_API_UPDATE_STATE_NLLS_ORGAN
 const API_CREATE_ATTACHMENT = import.meta.env.VITE_API_CREATE_ATTACHMENT;
+const API_GET_PLAN_SO_NOI_VU_DUYET = import.meta.env.VITE_API_GET_PLAN_SO_NOI_VU_DUYET;
+const API_DUYET_NOI_VU_PLAN = import.meta.env.VITE_API_DUYET_NOI_VU_PLAN;
 const PlanAPIService = {
     getPlanById: async (id) => {
         const response = await axiosHttpService.get(API_PLAN + '/' + id);
@@ -167,8 +169,19 @@ const PlanAPIService = {
             }
         });
         return res.data;
-    }
+    },
 
+    getSoNoiVuDuyetPlan: async () => {
+        const res = await axiosHttpService.get(API_GET_PLAN_SO_NOI_VU_DUYET);
+        return res.data;
+    },
+
+    approvePlanNLLS: async (planIds) => {
+        const res = await axiosHttpService.post(API_DUYET_NOI_VU_PLAN, {
+            "plan_ids": planIds
+        })
+        return res.data
+    }
 }
 
 export default PlanAPIService;

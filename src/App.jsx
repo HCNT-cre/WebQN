@@ -38,7 +38,7 @@ import DanhSachHoSoChoTieuHuy from "src/pages/TieuHuyHoSo/DSHoSoChoTieuHuy/ThoiG
 import TaoQuyetDinh from "src/pages/TieuHuyHoSo/QuyetDinh/TaoQuyetDinh"
 import TraVe from "src/pages/TieuHuyHoSo/QuyetDinh/Trave"
 import DuyetQuyetDinh from "src/pages/TieuHuyHoSo/QuyetDinh/DuyetQuyetDinh"
-import SoNoiVuPheDuyet from "./pages/LuuTruLichSu/SoNoiVuPheDuyet";
+import SoNoiVuPheDuyet from "./pages/LuuTruLichSu/SoNoiVuPheDuyet/SoNoiVuPheDuyet";
 import DanhMucChucVu from "src/pages/KhaiBaoDanhMuc/DanhMucChucVu";
 import KhoiPhucHoSo from "src/pages/TieuHuyHoSo/KhoiPhuc/TaoQuyetDinhKhoiPhuc";
 import DuyetQuyetDinhKhoiPhuc from "src/pages/TieuHuyHoSo/KhoiPhuc/DuyetQuyetDinhKhoiPhuc";
@@ -96,6 +96,8 @@ import ThongKeKhaiThac from "./pages/BaoCaoThongKe/ThongKeKhaiThac";
 import TheoDoiKeHoachNopLuuLichSuCoQuan from "./pages/LuuTruLichSu/TheoDoiKeHoachNopLuuLichSu/TheoDoiKeHoachNopLuuLichSuCoQuan";
 import TheoDoiKeHoachNopLuuLichSuHoSo from "./pages/LuuTruLichSu/TheoDoiKeHoachNopLuuLichSu/TheoDoiKeHoachNopLuuLichSuHoSo";
 import PheDuyetKeHoachLuuTruLichSu from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu";
+import SoNoiVuPheDuyetCoQuan from "src/pages/LuuTruLichSu/SoNoiVuPheDuyet/SoNoiVuPheDuyetCoQuan";
+import SoNoiVuPheDuyetHoSo from "src/pages/LuuTruLichSu/SoNoiVuPheDuyet/SoNoiVuPheDuyetHoSo";
 
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
@@ -258,6 +260,14 @@ const App = () => {
         {
             path: "/luu-tru-lich-su/so-noi-vu-phe-duyet",
             element: <SoNoiVuPheDuyet />,
+        },
+        {
+            path: "/luu-tru-lich-su/so-noi-vu-phe-duyet/:plan_id",
+            element: <SoNoiVuPheDuyetCoQuan />,
+        },
+        {
+            path: "/luu-tru-lich-su/so-noi-vu-phe-duyet/:plan_id/:organ_id",
+            element: <SoNoiVuPheDuyetHoSo />,
         },
         {
             path: "/luu-tru-co-quan/kho-luu-tru-co-quan",

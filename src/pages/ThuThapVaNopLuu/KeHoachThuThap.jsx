@@ -16,8 +16,6 @@ const API_PLAN = import.meta.env.VITE_API_PLAN;
 
 const API_PLAN_BY_TYPE = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
 const API_COLLECTION_PLAN = import.meta.env.VITE_API_PLAN;
-const API_STORAGE_GET_ORGAN_ALL =
-	import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const FIELDS_TABLE = [
 	{ title: "Tên kế hoạch", key: "name", width: "150%" },
 	{ title: "Văn bản đính kèm", key: "attachment", width: "100%" },
