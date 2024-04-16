@@ -7,7 +7,6 @@ set -e # Exit with nonzero exit code if anything fails
 
 ENV_FILE="${PWD}/config/.env.base"
 TARGET="${PWD}/.env"
-ENV=local
 
 echo "== Start .env copy =="
 
@@ -19,6 +18,13 @@ fi
 
 echo "Copying $ENV_FILE to $TARGET..."
 cp $ENV_FILE $TARGET
+
+# check ENV exist or not
+if [ -z "$ENV" ]; then
+    ENV="local"
+fi
+
+echo "Environment: $ENV"
 
 if [ "$ENV" == "production" ]; then
     echo $TARGET
