@@ -240,7 +240,7 @@ const Update = ({
 			const { data } = await axiosHttpService.get(API_PLAN + '/' + id);
 			setRequest({
 				name: data.name,
-				date: data.start_date,
+				start_date: data.start_date,
 				organ: data.organ,
 				state: data.state,
 			});
@@ -372,6 +372,7 @@ const Update = ({
 							(option?.label ?? '').toLowerCase().includes(input.toLowerCase())
 						}
 						options={organ}
+						disabled
 					/>
 				</div>
 
