@@ -76,6 +76,7 @@ const SideBar = ({ sideBarWidth }) => {
         setSidebarTabs(updateTabs(sidebarTabs, key));
     };
 
+    console.log('permissions', permissions);
     return (
         permissions === null ? <Spin /> :
             <>

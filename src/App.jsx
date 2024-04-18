@@ -98,6 +98,9 @@ import TheoDoiKeHoachNopLuuLichSuHoSo from "./pages/LuuTruLichSu/TheoDoiKeHoachN
 import PheDuyetKeHoachLuuTruLichSu from "./pages/LuuTruLichSu/PheDuyetKeHoachLuuTruLichSu";
 import SoNoiVuPheDuyetCoQuan from "src/pages/LuuTruLichSu/SoNoiVuPheDuyet/SoNoiVuPheDuyetCoQuan";
 import SoNoiVuPheDuyetHoSo from "src/pages/LuuTruLichSu/SoNoiVuPheDuyet/SoNoiVuPheDuyetHoSo";
+import ChoXepKho from "src/pages/LuuTruLichSu/ChoXepKho/ChoXepKho";
+import ChoXepKhoCoQuan from "src/pages/LuuTruLichSu/ChoXepKho/ChoXepKhoCoQuan";
+import ChoXepKhoHoSo from "src/pages/LuuTruLichSu/ChoXepKho/ChoXepKhoHoSo";
 
 const API_ORGAN_GET_STAFF = import.meta.env.VITE_API_ORGAN_GET_STAFF
 
@@ -571,6 +574,18 @@ const App = () => {
         {
             path: "/bao-cao-va-thong-ke/thong-ke-khai-thac",
             element: <ThongKeKhaiThac />
+        },
+        {
+            path: "/luu-tru-lich-su/cho-xep-kho",
+            element: <ChoXepKho/>
+        },
+        {
+            path: "/luu-tru-lich-su/cho-xep-kho/:plan_id",
+            element: <ChoXepKhoCoQuan/>
+        },
+        {
+            path: "/luu-tru-lich-su/cho-xep-kho/:plan_id/:organ_id",
+            element: <ChoXepKhoHoSo/>
         }
     ];
 

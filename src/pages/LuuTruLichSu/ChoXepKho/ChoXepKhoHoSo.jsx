@@ -24,7 +24,7 @@ const SearchBar = () => {
 }
 
 
-const SoNoiVuPheDuyetHoSo = () => {
+const ChoXepKhoHoSo = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [fieldData, setFieldData] = useState([])
     const params = useParams();
@@ -69,15 +69,15 @@ const SoNoiVuPheDuyetHoSo = () => {
             <PheDuyetKeHoachNLLSBase
                 title={
                     <span>
-                        <span >Sở Nội Vụ Phê Duyệt</span> /
+                        <span >Chờ xếp kho</span> /
                         <span className="text-black"> Cơ quan </span> /
                         <span className="text-black"> Hồ sơ </span>
                     </span>
                 }
                 breadcrumb={
                     <span>
-                        <Link to={`/luu-tru-lich-su/so-noi-vu-phe-duyet`}> Sở Nội Vụ Phê Duyệt</Link> /
-                        <Link to={`/luu-tru-lich-su/so-noi-vu-phe-duyet/${params.plan_id}`}> Cơ quan </Link>
+                        <Link to={`/luu-tru-lich-su/cho-xep-kho`}> Sở Nội Vụ Phê Duyệt</Link> /
+                        <Link to={`/luu-tru-lich-su/cho-xep-kho/${params.plan_id}`}> Cơ quan </Link>
                     </span>
                 }
                 fieldNames={THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO}
@@ -90,5 +90,5 @@ const SoNoiVuPheDuyetHoSo = () => {
     )
 }
 
-export default SoNoiVuPheDuyetHoSo
+export default ChoXepKhoHoSo
 

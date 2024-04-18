@@ -58,6 +58,7 @@ export const ENUM_STATE_PLAN = {
 	DOI_THU_THAP: "Đợi thu thập",
 	DOI_THAM_DINH: "Đợi thẩm định",
 	DA_THU_THAP: "Đã thu thập",
+	DA_DUYET_KE_HOACH_NOP_LUU_LICH_SU: "Đã duyệt kế hoạch nộp lưu lịch sử",
 }
 
 export const ENUM_STATE_NLLS_PLAN = {
@@ -648,6 +649,16 @@ export const TABS_SIDEBAR = [
 						],
 					}
 				],
+			},
+			{
+				title: "Chờ xếp kho",
+				to: "/luu-tru-lich-su/cho-xep-kho",
+				key: "/luu-tru-lich-su/cho-xep-kho",
+				number: 106,
+				parent: 30,
+				isParent: false,
+				numChildTabs: 0,
+				childTabs: []
 			},
 			{
 				title: "Kho lưu trữ lịch sử",
