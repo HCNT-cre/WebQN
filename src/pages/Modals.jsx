@@ -1164,3 +1164,276 @@ export const ModalCreateDanhMucCoQuan = () => {
 }
 
 
+export const ModalXepKhoLuuTruLichSu = () => {
+    const dispatch = useDispatch()
+    const open = useSelector(state => state.modalXepKhoLuuTruLichSu.open)
+    const reFetchFile = useSelector(state => state.reFetchFile.fetchFileFunction)
+    const IDFile = useSelector(state => state.modalXepKhoLuuTruLichSu.id)
+
+    const [optionShelf, setOptionShelf] = useState([])
+    const [optionOrgan, setOptionOrgan] = useState([])
+    const [optionWarehouse, setOptionWarehouse] = useState([])
+    const [optionWarehouseRoom, setOptionWarehouseRoom] = useState([])
+    const [optionDrawers, setOptionDrawers] = useState([])
+
+    const [shelf, setShelf] = useState(null)
+    const [warehouse, setWarehouse] = useState(null)
+    const [warehouseRoom, setWarehouseRoom] = useState(null)
+    const [drawer, setDrawer] = useState(null)
+
+    const [request, setRequest] = useState({
+        organ: null,
+        warehouse: null,
+        warehouseroom: null,
+        shelf: null,
+        drawer: null,
+    })
+
+    console.log('open', open)
+    const fetchOrganName = async () => {
+        const response = await UserAPIService.getUserOrgan();
+        let organObject = {
+            value: response.id,
+            label: response.name
+        }
+        setOptionOrgan([organObject]);
+        handleChangeRequest('organ', organObject.value)
+    }
+
+    useEffect(() => {
+        const fetchWarehouse = async (id) => {
+            if (!id) return;
+            const warehouse = await LuutrucoquanAPIService.getWarehouseByOrganId(id);
+            const raws = []
+            for (const data of warehouse) {
+                raws.push({
+                    value: data.id,
+                    label: data.name
+                })
+            }
+            setOptionWarehouse(raws)
+        }
+        fetchWarehouse(request['organ'])
+        setWarehouse(null)
+        handleChangeRequest('warehouse', null)
+    }, [request['organ']])
+
+    useEffect(() => {
+        const fetchWarehouseRoom = async (id) => {
+            if (!id) return;
+            const warehouseRoom = await LuutrucoquanAPIService.getWarehouseRoomByWarehouseId(id);
+            const raws = []
+            for (const data of warehouseRoom) {
+                raws.push({
+                    value: data.id,
+                    label: data.name
+                })
+            }
+            setOptionWarehouseRoom(raws)
+        }
+        fetchWarehouseRoom(request['warehouse'])
+        setWarehouseRoom(null)
+        handleChangeRequest('warehouseroom', null)
+    }, [request['warehouse']])
+
+    useEffect(() => {
+        const fetchShelf = async (id) => {
+            if (!id) return;
+            const shelf = await LuutrucoquanAPIService.getShelfByWarehouseRoomId(id);
+            const raws = []
+            for (const data of shelf) {
+                raws.push({
+                    value: data.id,
+                    label: data.name
+                })
+            }
+            setOptionShelf(raws)
+        }
+        fetchShelf(request['warehouseroom'])
+        setShelf(null)
+        handleChangeRequest('shelf', null)
+    }, [request['warehouseroom']])
+
+    useEffect(() => {
+        const fetchDrawer = async (id) => {
+            if (!id) return;
+            const drawer = await LuutrucoquanAPIService.getDrawerByShelfId(id);
+            const raws = []
+            for (const data of drawer) {
+                raws.push({
+                    value: data.id,
+                    label: data.name
+                })
+            }
+            setOptionDrawers(raws)
+        }
+        fetchDrawer(request['shelf'])
+        setDrawer(null)
+        handleChangeRequest('drawer', null)
+    }, [request['shelf']])
+
+    useEffect(() => {
+        fetchOrganName()
+    }, [])
+
+    const handleChangeRequest = (name, value) => {
+        return setRequest((prev) => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
+    const handleCancel = () => {
+        dispatch({ type: "close_modalXepKhoLuuTruLichSu"})
+    }
+
+    const handleOk = () => {
+        dispatch({ type: "close_modalXepKhoLuuTruLichSu"})
+    }
+
+    const handleClickApprove = async () => {
+        for (const key in request) {
+            if (request[key] === null) {
+                notifyError("Vui lòng chọn đủ thông tin " + key)
+                return
+            }
+        }
+
+        await axiosHttpService.post(API_GOV_FILE_UPDATE_STATE, [
+            { id: IDFile, current_state: 19, new_state: 6 } // CHO_XEP_KHO -> LUU_TRU_CO_QUAN
+        ]);
+
+        await axiosHttpService.post(API_GOV_FILE_SET_DRAWER, [
+            { gov_file_id: IDFile, drawer_id: request.drawer }
+        ]);
+
+        dispatch({ type: "close_modalXepKhoLuuTruLichSu", id: null })
+        notifySuccess("Duyệt thành công")
+        reFetchFile()
+    }
+
+    //   const warehouseDisabled = !optionOrgan.find(item => item.value === request.organ);
+    let warehouseRoomDisabled = !request.warehouse || !optionWarehouse.find(item => item.value === request.warehouse);
+    let shelfDisabled = !request.warehouseroom || !optionWarehouseRoom.find(item => item.value === request.warehouseroom);
+    let drawerDisabled = !request.shelf || !optionShelf.find(item => item.value === request.shelf);
+
+    return (
+        <div>
+            <Modal
+                title="Xếp hồ sơ vào kho"
+                footer={null}
+                style={{
+                    top: 200,
+                }}
+                open={open}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <div className="flex justify-between py-[12px]">
+                    <span>Cơ quan</span>
+                    <Select
+                        name="organ"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        defaultValue={optionOrgan[0]?.value}
+                        optionFilterProp="children"
+                        onChange={(value) => handleChangeRequest('organ', value)}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionOrgan}
+                        disabled={true}
+                    />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Kho</span>
+                    <Select
+                        name="warehouse"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn kho"
+                        optionFilterProp="children"
+                        onChange={(value, ev) => {
+                            handleChangeRequest('warehouse', value)
+                            setWarehouse(ev.label)
+                        }}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionWarehouse}
+                        value={warehouse}
+                    />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Phòng kho</span>
+                    <Select
+                        name="warehouseroom"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn phòng kho"
+                        optionFilterProp="children"
+                        onChange={(value, ev) => {
+                            handleChangeRequest('warehouseroom', value)
+                            setWarehouseRoom(ev.label)
+                        }}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionWarehouseRoom}
+                        value={warehouseRoom}
+                        disabled={warehouseRoomDisabled}
+                    />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Kệ</span>
+                    <Select
+                        name="warehouseroom"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn kệ"
+                        optionFilterProp="children"
+                        onChange={(value, ev) => {
+                            handleChangeRequest('shelf', value)
+                            setShelf(ev.label)
+                        }}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        options={optionShelf}
+                        value={shelf}
+                        disabled={shelfDisabled}
+                    />
+                </div>
+                <div className="flex justify-between py-[12px]">
+                    <span>Hộp</span>
+                    <Select
+                        name="warehouseroom"
+                        className="w-[70%] bg-white outline-none rounded-md"
+                        showSearch
+                        allowClear
+                        placeholder="Chọn hộp"
+                        optionFilterProp="children"
+                        onChange={(value, ev) => {
+                            handleChangeRequest('drawer', value)
+                            setDrawer(ev.label)
+                        }}
+                        filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                        }
+                        value={drawer}
+                        options={optionDrawers}
+                        disabled={drawerDisabled}
+                    />
+                </div>
+                <div className="flex justify-center">
+                    <Button className="mx-[8px] bg-green-500 text-white font-medium disabled:opacity-40" onClick={handleClickApprove}>Xếp vào kho</Button>
+                </div>
+            </Modal>
+        </div>
+    )
+
+}

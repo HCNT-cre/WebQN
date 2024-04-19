@@ -18,6 +18,7 @@ export const STATE = [
 	"Đã tiêu huỷ",
 	"Đã khôi phục",
 	"Chờ Sở Nội vụ duyệt",
+	"Chờ xếp kho lưu trữ lịch sử",
 ];
 
 export const ENUM_STATE_FILE = {
@@ -40,6 +41,7 @@ export const ENUM_STATE_FILE = {
 	THHS_DA_TIEU_HUY: "Đã tiêu huỷ",
 	THHS_KHOI_PHUC: "Đã khôi phục",
 	NOP_LUU_LICH_SU_CHO_SO_NOI_VU_DUYET: "Chờ Sở Nội vụ duyệt",
+	CHO_XEP_KHO_NOP_LUU_LICH_SU: "Chờ xếp kho lưu trữ lịch sử",
 };
 
 export const ENUM_TYPE_PLAN = {
@@ -59,6 +61,7 @@ export const ENUM_STATE_PLAN = {
 	DOI_THAM_DINH: "Đợi thẩm định",
 	DA_THU_THAP: "Đã thu thập",
 	DA_DUYET_KE_HOACH_NOP_LUU_LICH_SU: "Đã duyệt kế hoạch nộp lưu lịch sử",
+	CHO_XEP_KHO_NOP_LUU_LICH_SU: "Chờ xếp kho nộp lưu lịch sử",
 }
 
 export const ENUM_STATE_NLLS_PLAN = {

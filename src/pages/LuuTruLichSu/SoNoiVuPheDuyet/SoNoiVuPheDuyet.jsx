@@ -4,9 +4,7 @@ import { Table } from "src/custom/Components"
 import { useState, useEffect } from "react"
 import PlanAPIService from "src/service/api/PlanAPIService";
 import { THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU } from "src/storage/StorageOffice";
-import {notifyError, notifySuccess} from "src/custom/Function";
-import {ENUM_STATE_PLAN} from "src/storage/Storage";
-import axiosHttpService from "src/utils/httpService";
+import {notifySuccess} from "src/custom/Function";
 
 const SoNoiVuPheDuyet = () => {
     const [stateCheckBox, setStateCheckBox] = useState([]);
@@ -91,7 +89,7 @@ const SoNoiVuPheDuyet = () => {
             </div>
             <div className="w-[11.11111%] text-white text-center px-[5px] rounded-[5px] flex">
                 <Button
-                    onClick={() => handleChangeStateFileOfPlanSoNoiVu({"current_state": 18, "new_state": 6})}
+                    onClick={() => handleChangeStateFileOfPlanSoNoiVu({"current_state": 18, "new_state": 19})}
                     className=" rounded-[5px] flex justify-center bg-[#00f] w-full px-[90px] py-[1px] text-[12px] text-white items-center"
                 >
                     <div className="mr-[8px]">

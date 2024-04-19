@@ -15,7 +15,16 @@ import { DeleteData, GetKey, reloadPage } from "../custom/Function";
 import { useButtonClickOutside } from "../custom/Hook";
 import { Link } from "react-router-dom";
 import { notifyError, notifySuccess } from "../custom/Function";
-import { ModalCensorship, ModalConfirmLuuTruCoQuan, ModalModificationDocumentAddDocument, ModalModificationDocumentAddedDocument, ModalModificationDocumentConfirmStore, ModalModificationDocumentRequireAddDoc, ModalRecoverFile } from "./Modals";
+import {
+	ModalCensorship,
+	ModalConfirmLuuTruCoQuan,
+	ModalModificationDocumentAddDocument,
+	ModalModificationDocumentAddedDocument,
+	ModalModificationDocumentConfirmStore,
+	ModalModificationDocumentRequireAddDoc,
+	ModalRecoverFile,
+	ModalXepKhoLuuTruLichSu
+} from "./Modals";
 
 
 import UserAPIService from "src/service/api/userAPIService";
@@ -387,7 +396,6 @@ const BasePage = ({
 	apiPlan = API_COLLECTION_PLAN,
 	eOffice = true,
 	currentStateModal = ENUM_STATE_FILE.NOP_LUU_CO_QUAN,
-	currentTab = null,
 	haveActionButton = true,
 	XepVaoKho = false,
 	luuTruCoQuan = false,
@@ -441,6 +449,16 @@ const BasePage = ({
 
 			if (buttonFuctions != null) {
 				switch (currentStateModal) {
+					case ENUM_STATE_FILE.CHO_XEP_KHO_NOP_LUU_LICH_SU:
+						newButton = cloneElement(buttonFuctions, {
+							clickFunction: () => {
+								dispatch({
+									type: "open_modalXepKhoLuuTruLichSu",
+									id: rawData.id,
+								});
+							},
+						});
+						break;
 					case ENUM_STATE_FILE.NOP_LUU_CO_QUAN:
 						newButton = cloneElement(buttonFuctions, {
 							clickFunction: () => {
@@ -646,11 +664,11 @@ const BasePage = ({
 		dispatch({ type: "ADD_FETCH_FILE_ACTION", fetchFileFunction: reset });
 		const getPlan = async () => {
 			const { data } = await axiosHttpService.get(apiPlan);
-			const filterdData = data.filter((item) => {
+			const filteredPlans = data.filter((item) => {
 				return filtePlanCondition(item);
 			});
 
-			const _ = filterdData.map((item) => {
+			const _ = filteredPlans.map((item) => {
 				return {
 					value: item.id,
 					label: item.name,
@@ -665,7 +683,7 @@ const BasePage = ({
 		getPlan();
 	}, []);
 
-	const handleSearch = async (ev) => {
+	const handleSearch = async () => {
 		try {
 			let request = API_GOV_FILE_SEARCH;
 			Object.keys(search).forEach((key) => {
@@ -1200,6 +1218,7 @@ const BasePage = ({
 					<ModalModificationDocumentAddedDocument />
 					<ModalModificationDocumentRequireAddDoc />
 					<ModalRecoverFile />
+					<ModalXepKhoLuuTruLichSu/>
 					<ModalConfirmSendPlan handleSendPlan={null} />
 					<ChonNguoiDuyetKeHoach handleSendPlan={null} />
 					<PlanAndCategoryFile

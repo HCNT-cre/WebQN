@@ -28,6 +28,8 @@ import ModalStateNLLSPlanOrganReducer from './modalStateNLLSPlanOrgan'
 import modalOpenAttachmentsReducer from './modalOpenAttachments'
 import modalCreateDanhMucCoQuanReducer from './modalCreateDanhMucCoQuan'
 import modalSendExtraPeopleReducer from './modalSendExtraPeople'
+import modalXepKhoLuuTruLichSuReducer from "src/reducers/modalXepKhoLuuTruLichSuReducer";
+
 const rootReducer = combineReducers({
     user: userReducer,
     formFile: formFileReducer,
@@ -57,8 +59,8 @@ const rootReducer = combineReducers({
     modalStateNLLSPlanOrgan: ModalStateNLLSPlanOrganReducer,
     modalOpenAttachments: modalOpenAttachmentsReducer,
     modalCreateDanhMucCoQuan: modalCreateDanhMucCoQuanReducer,
-    modalSendExtraPeople: modalSendExtraPeopleReducer
-
+    modalSendExtraPeople: modalSendExtraPeopleReducer,
+    modalXepKhoLuuTruLichSu: modalXepKhoLuuTruLichSuReducer
 })
 
 export default rootReducer

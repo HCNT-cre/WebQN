@@ -1,7 +1,8 @@
-import { ENUM_TYPE_PLAN } from "src/storage/Storage";
+import {ENUM_TYPE_PLAN} from "src/storage/Storage";
 import axiosHttpService from "src/utils/httpService";
-import { AddWatchTheoDoiNopLuuLichSu } from "../helper/Plan";
+import {AddWatchTheoDoiNopLuuLichSu} from "../helper/Plan";
 import UserAPIService from "./userAPIService";
+
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 const API_GET_FILE_BY_PLAN_NNLS_ID = import.meta.env.VITE_API_GET_FILE_BY_PLAN_NNLS_ID;
 const API_REMOVE_FILE_FROM_PLAN = import.meta.env.VITE_API_REMOVE_FILE_FROM_PLAN;
@@ -33,43 +34,33 @@ const PlanAPIService = {
     },
 
     getFileByPlanNLLSId: async (id) => {
-        const response = await axiosHttpService.get(API_GET_FILE_BY_PLAN_NNLS_ID + id);
-        return response;
+        return await axiosHttpService.get(API_GET_FILE_BY_PLAN_NNLS_ID + id);
     },
 
     getFileByPlanTieuHuyId: async (id) => {
-        const response = await axiosHttpService.get(API_GET_FILE_BY_PLAN_TIEUHUY_ID + id);
-        return response;
+        return await axiosHttpService.get(API_GET_FILE_BY_PLAN_TIEUHUY_ID + id);
     },
 
     removeFileFromPlan: async (idFile) => {
-        const response = await axiosHttpService.post(API_REMOVE_FILE_FROM_PLAN, {
+        return await axiosHttpService.post(API_REMOVE_FILE_FROM_PLAN, {
             gov_file_id: idFile
         });
-        return response;
     },
 
     removeFileFromPlanTieuHuy: async (idFile) => {
-        const response = await axiosHttpService.post(API_REMOVE_FILE_FROM_PLAN_TIEUHUY, {
+        return await axiosHttpService.post(API_REMOVE_FILE_FROM_PLAN_TIEUHUY, {
             gov_file_id: idFile
         });
-        return response;
     },
 
     setPlanForFile: async (payload) => {
-        const response = await axiosHttpService.post(API_SET_PLAN_FOR_FILE, payload);
-        return response;
+        return await axiosHttpService.post(API_SET_PLAN_FOR_FILE, payload);
     },
 
     setPlanTieuHuyForFile: async (payload) => {
-        const response = await axiosHttpService.post(API_SET_PLAN_TIEU_HUY_FOR_FILE, payload);
-        return response;
+        return await axiosHttpService.post(API_SET_PLAN_TIEU_HUY_FOR_FILE, payload);
     },
 
-    getDeletePlan: async () => {
-        const response = await axiosHttpService.get(API_PLAN);
-        return response.data.filter((plan) => plan.type === ENUM_TYPE_PLAN.QUYET_DINH_TIEU_HUY);
-    },
 
     createPlan: async (payload) => {
         const response = await axiosHttpService.post(API_PLAN, payload);
@@ -147,16 +138,6 @@ const PlanAPIService = {
         return response.data;
     },
 
-    createPlanWithAttachment: async (payload) => {
-        const res = await axiosHttpService.post(API_PLAN, payload, {
-            headers: {
-                'Accept': 'application/json',
-                "content-type": 'multipart/form-data; boundary=----WebKitFormBoundaryqTqJIxvkWFYqvP5s'
-            }
-        });
-        return res.data;
-    },
-
     updatePlan: async (id, payload) => {
         const res = await axiosHttpService.put(API_PLAN + '/' + id, payload);
         return res.data;
@@ -187,7 +168,7 @@ const PlanAPIService = {
             "plan_ids": planIds
         })
         return res.data
-    }
+    },
 }
 
 export default PlanAPIService;

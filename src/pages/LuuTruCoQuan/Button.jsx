@@ -1,8 +1,7 @@
 
 import { Button } from "antd";
-import { GetKey } from "../../custom/Function";
+import { GetKey } from "src/custom/Function";
 import { Fragment } from "react";
-import { ENUM_STATE_FILE } from "src/storage/Storage";
 
 const ButtonFuctions = ({
     clickFunction,
