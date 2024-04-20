@@ -8,11 +8,9 @@ import { useSelector } from "react-redux";
 import { ENUM_STATE_PLAN, ENUM_TYPE_PLAN } from "src/storage/Storage";
 const API_PLAN = import.meta.env.VITE_API_PLAN;
 
-const API_STORAGE_GET_ORGAN_ALL = import.meta.env.VITE_API_STORAGE_GET_ORGAN_ALL;
 const API_PLAN_BY_ID = import.meta.env.VITE_API_GET_PLAN_BY_TYPE;
 
 import UserAPIService from "src/service/api/userAPIService";
-
 
 const Create = ({ modalOpen, setModelOpen, reFetchData }) => {
 	const [request, setRequest] = useState({});

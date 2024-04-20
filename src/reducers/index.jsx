@@ -29,6 +29,9 @@ import modalOpenAttachmentsReducer from './modalOpenAttachments'
 import modalCreateDanhMucCoQuanReducer from './modalCreateDanhMucCoQuan'
 import modalSendExtraPeopleReducer from './modalSendExtraPeople'
 import modalXepKhoLuuTruLichSuReducer from "src/reducers/modalXepKhoLuuTruLichSuReducer";
+import modalRejectNopLuuLichSuFileReducer from "src/reducers/modalRejectNopLuuLichSuFile";
+import modalRejectNopLuuLichSuOrganReducer from "src/reducers/modalRejectNopLuuLichSuOrganReducer";
+import modalRejectReasonReducer from "src/reducers/modalRejectReason";
 
 const rootReducer = combineReducers({
     user: userReducer,
@@ -60,7 +63,10 @@ const rootReducer = combineReducers({
     modalOpenAttachments: modalOpenAttachmentsReducer,
     modalCreateDanhMucCoQuan: modalCreateDanhMucCoQuanReducer,
     modalSendExtraPeople: modalSendExtraPeopleReducer,
-    modalXepKhoLuuTruLichSu: modalXepKhoLuuTruLichSuReducer
+    modalXepKhoLuuTruLichSu: modalXepKhoLuuTruLichSuReducer,
+    modalRejectNopLuuLichSuFile: modalRejectNopLuuLichSuFileReducer,
+    modalRejectNopLuuLichSuOrgan: modalRejectNopLuuLichSuOrganReducer,
+    modalRejectReason: modalRejectReasonReducer,
 })
 
 export default rootReducer

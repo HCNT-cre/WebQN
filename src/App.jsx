@@ -251,7 +251,7 @@ const App = () => {
             element: <TheoDoiKeHoachNopLuuLichSuHoSo />
         },
         {
-            path: "/nop-luu-lich-su/ke-hoach-nop-luu-lich-su",
+            path: "/luu-tru-co-quan/ke-hoach-nop-luu-lich-su",
             element: <KeHochNopLuuLichSu />,
         },
         {

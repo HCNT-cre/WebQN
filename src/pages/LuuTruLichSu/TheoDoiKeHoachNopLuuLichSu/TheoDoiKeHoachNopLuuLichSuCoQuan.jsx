@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import LuutrucoquanAPIService from "src/service/api/LuutrucoquanAPIService";
 import { ORGAN_PLAN_NLLS } from "src/storage/StorageOffice";
-import { ModalStateNLLSPlanOrgan } from "src/pages/Modals";
+import {ModalRejectNopLuuLichSuOrgan, ModalStateNLLSPlanOrgan} from "src/pages/Modals";
 import { useDispatch } from "react-redux";
 const Search = Input.Search
 
@@ -32,6 +32,20 @@ const TheoDoiKeHoachNopLuuLichSuCoQuan = () => {
     const handleClickOrgan = (planId, organId) => {
         dispatch({ type: "open_modalStateNLLSPlanOrganReducer", planId, organId, reFetchData })
     }
+
+    const handleApprove = (organId, planId) => {
+
+    }
+
+    const handleReject = (organId, planId) => {
+        dispatch({
+            type: "open_modalRejectNopLuuLichSuOrgan",
+            organId,
+            planId,
+            reFetchData
+        })
+    }
+
     const reFetchData = async () => {
         setIsLoading(true)
         const organs = await LuutrucoquanAPIService.getOrganAndStateOfNLLSPlan(params.plan_id);
@@ -41,9 +55,14 @@ const TheoDoiKeHoachNopLuuLichSuCoQuan = () => {
                 "id": organ.id,
                 "name": <Link to={`./${organ.id}`} className="cursor-pointer">{organ.name}</Link>,
                 "state": <button>{organ.state}</button>,
-                "action": <Button className="border-none shadow-none text-green-500" onClick={() => handleClickOrgan(organ.plan_id, organ.id)}>
-                    <i className="text-[20px] fa-regular fa-square-check"></i>
-                </Button>
+                "action": <div>
+                    <Button
+                        onClick={() => handleApprove(organ.id, params.plan_id)}
+                        className="border-none shadow-none text-green-500 text-[20px] fa-regular fa-square-check"></Button>
+                    <Button
+                        onClick={() => handleReject(organ.id, params.plan_id)}
+                        className="border-none shadow-none text-red-500 text-[20px] fa-regular fa-circle-xmark"></Button>
+                </div>
             })
         }
         setFieldData(newData)
@@ -79,6 +98,7 @@ const TheoDoiKeHoachNopLuuLichSuCoQuan = () => {
                 isLoading={isLoading}
             />
             <ModalStateNLLSPlanOrgan />
+            <ModalRejectNopLuuLichSuOrgan/>
         </Spin>
     )
 }

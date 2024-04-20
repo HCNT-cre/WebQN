@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PheDuyetKeHoachNLLSBase from "src/pages/LuuTruLichSu/TheoDoiKeHoachNopLuuLichSu";
-import { Input, Spin } from "antd";
+import { Input, Spin, Button } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -8,6 +8,8 @@ import { THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO } from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
 import { OpenFile } from "src/actions/formFile";
 import File from "src/components/Form/File/File";
+import {ModalRejectNopLuuLichSuFile} from "src/pages/Modals";
+import {notifySuccess} from "src/custom/Function";
 const Search = Input.Search
 
 
@@ -33,11 +35,30 @@ const TheoDoiKeHoachNopLuuLichSuHoSo = () => {
     const handleClickFile = (fileId) => {
         dispatch(OpenFile(fileId));
     }
+
+    const handleApprove = async (id) => {
+        await FileAPIService.updateState([{
+            id,
+            current_state: 5,
+            new_state: 20,
+        }])
+        notifySuccess('Chấp nhận hồ sơ thành công')
+    }
+
+    const handleReject = (id) => {
+        dispatch({
+            type: "open_modalRejectNopLuuLichSuFile",
+            id: id,
+            reFetchData: fetchFieldData,
+        })
+    }
+
     const fetchFieldData = async () => {
         setIsLoading(true)
         const files = await FileAPIService.getFileOfNLLSPlanByOrganId(params.plan_id, params.organ_id);
         const newData = []
         for (const file of files) {
+            console.log('file', file)
             newData.push({
                 "id": file.id,
                 "gov_file_code": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.gov_file_code}</p>, 
@@ -48,7 +69,15 @@ const TheoDoiKeHoachNopLuuLichSuHoSo = () => {
                 "start_date": file.start_date, 
                 "end_date": file.end_date, 
                 "maintenance": file.maintenance, 
-                "rights": file.rights, 
+                "rights": file.rights,
+                "action": <div>
+                    <Button
+                        onClick={() => handleApprove(file.id)}
+                        className="border-none shadow-none text-green-500 text-[20px] fa-regular fa-square-check"></Button>
+                    <Button
+                        onClick={() => handleReject(file.id)}
+                        className="border-none shadow-none text-red-500 text-[20px] fa-regular fa-circle-xmark"></Button>
+                </div>,
             })
         }
         setFieldData(newData)
@@ -86,6 +115,7 @@ const TheoDoiKeHoachNopLuuLichSuHoSo = () => {
                 isLoading={isLoading}
             />
             <File />
+            <ModalRejectNopLuuLichSuFile/>
         </Spin>
     )
 }

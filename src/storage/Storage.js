@@ -19,6 +19,7 @@ export const STATE = [
 	"Đã khôi phục",
 	"Chờ Sở Nội vụ duyệt",
 	"Chờ xếp kho lưu trữ lịch sử",
+	"Đã chấp nhận nộp lưu"
 ];
 
 export const ENUM_STATE_FILE = {
@@ -42,6 +43,7 @@ export const ENUM_STATE_FILE = {
 	THHS_KHOI_PHUC: "Đã khôi phục",
 	NOP_LUU_LICH_SU_CHO_SO_NOI_VU_DUYET: "Chờ Sở Nội vụ duyệt",
 	CHO_XEP_KHO_NOP_LUU_LICH_SU: "Chờ xếp kho lưu trữ lịch sử",
+	CHAP_NHAN_NOP_LUU_LICH_SU_CHO_SO_NOI_VU_DUYET: "Đã chấp nhận nộp lưu"
 };
 
 export const ENUM_TYPE_PLAN = {
@@ -351,9 +353,16 @@ export const TABS_SIDEBAR = [
 				childTabs: [
 					{
 						title: "Kế hoạch nộp lưu",
-						to: "/nop-luu-lich-su/ke-hoach-nop-luu-lich-su",
-						key: "/nop-luu-lich-su/ke-hoach-nop-luu-lich-su",
+						to: "/luu-tru-co-quan/ke-hoach-nop-luu-lich-su",
+						key: "/luu-tru-co-quan/ke-hoach-nop-luu-lich-su",
 						number: 80,
+						parent: 103,
+					},
+					{
+						title: "Hồ sơ bị trả về",
+						to: "/luu-tru-co-quan/ho-so-bi-tra-ve",
+						key: "/luu-tru-co-quan/ho-so-bi-tra-ve",
+						number: 107,
 						parent: 103,
 					}
 				]
@@ -1182,6 +1191,7 @@ export const THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO = [
 	{ title: "Thời gian kết thúc", key: "end_date", width: "100%" },
 	{ title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
 	{ title: "Chế độ sử dụng", key: "rights", width: "100%" },
+	{ title: "Hành động", key: "action", width: "100%" },
 ]
 
 export const DANH_MUC_HO_SO = [
@@ -1192,4 +1202,18 @@ export const DANH_MUC_HO_SO_BY_NAM = [
 	{title: "Cơ quan", key: "organ", width: "100%"},
 	{title: "Mã cơ quan", key: "organ_code", width: "100%"},
 	{title: "Tổng danh mục", key: "total", width: "100%"}
+]
+
+export const HO_SO_NOP_LUU_LICH_SU_TRA_VE = [
+	{ title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
+	{ title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
+	{ title: "Phông", key: "organ_id_name", width: "100%" },
+	{ title: "Số lượng tờ", key: "sheet_number", width: "70px" },
+	{ title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
+	{ title: "Thời gian bắt đầu", key: "start_date", width: "100%" },
+	{ title: "Thời gian kết thúc", key: "end_date", width: "100%" },
+	{ title: "Thời hạn bảo quản", key: "maintenance_name", width: "100%" },
+	{ title: "Chế độ sử dụng", key: "rights", width: "100%" },
+	{ title: "Trạng thái", key: "state", width: "130%" },
+	{ title: "Lí do trả về", key: "reject_reason", width: "120px" },
 ]

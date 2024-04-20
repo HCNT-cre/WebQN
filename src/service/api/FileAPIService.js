@@ -7,12 +7,8 @@ const API_UPDATE_STATE_GOV_FILE =
 	import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE;
 const API_GET_FILE_BY_ORGAN_PLAN_NLLS = import.meta.env.VITE_API_GET_FILE_BY_ORGAN_PLAN_NLLS;
 const API_UPDATE_GOVE_FILE_STATE_BY_NLLS_PLAN_ID = import.meta.env.VITE_API_UPDATE_GOVE_FILE_STATE_BY_NLLS_PLAN_ID;
+const API_GET_FILE_BY_STATE = import.meta.env.VITE_API_GET_FILE_BY_STATE;
 const FileAPIService = {
-    getFileByTitle: async (title) => {
-        const response = await axiosHttpService.get(`${API_GOV_FILE_SEARCH}title=${title}`)
-        return response.data;
-    },
-
     getFileById: async (id) => {
         const response = await axiosHttpService.get(`${API_GOV_FILE_GET_ALL}id=${id}`)
         return response.data;
@@ -22,11 +18,6 @@ const FileAPIService = {
         let request = API_GOV_FILE_SEARCH 
         if(query !== "") request += "&" + query;
         const response = await axiosHttpService.get(request);
-        return response.data;
-    },
-
-    getAllFile: async () => {
-        const response = await axiosHttpService.get(API_GOV_FILE_GET_ALL + 1);
         return response.data;
     },
 
@@ -63,7 +54,12 @@ const FileAPIService = {
     updateStateFileByNLLSIds: async (id) => {
         const files = await axiosHttpService.post(API_UPDATE_GOVE_FILE_STATE_BY_NLLS_PLAN_ID, {id});
         return files.data;
+    },
+
+    getFilesByState: async (state) => {
+        const res = await axiosHttpService.get(API_GET_FILE_BY_STATE + state);
+        return res.data;
     }
-}   
+}
 
 export default FileAPIService;

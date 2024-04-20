@@ -1437,3 +1437,159 @@ export const ModalXepKhoLuuTruLichSu = () => {
     )
 
 }
+
+export const ModalRejectNopLuuLichSuFile = () => {
+    const dispatch = useDispatch()
+    const open = useSelector(state => state.modalRejectNopLuuLichSuFile.open)
+    const id = useSelector(state => state.modalRejectNopLuuLichSuFile.id)
+    const reFetchData = useSelector(state => state.modalRejectNopLuuLichSuFile.reFetchData)
+    const [rejectReason, setRejectReason] = useState({})
+
+    const handleChangeRejectReason = (value) => {
+        setRejectReason(value)
+    }
+
+    const handleOk = () =>{
+        dispatch({ type: "close_modalRejectNopLuuLichSuFile"})
+    }
+
+    const handleCancel = () => {
+        dispatch({ type: "close_modalRejectNopLuuLichSuFile"})
+    }
+
+    const handleClickReject = async () => {
+        await FileAPIService.updateState([{
+            id: id,
+            current_state: 5,
+            new_state: 8,
+            reject_reason: rejectReason,
+        }]);
+        await reFetchData()
+        notifySuccess("Đã trả về hồ sơ")
+    }
+
+    return (
+        <div>
+            <Modal
+                title="Từ chối hồ sơ nộp lưu lịch sử"
+                footer={null}
+                style={{
+                    top: 200,
+                }}
+                open={open}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <div className="flex justify-between py-[12px]">
+                    <span>Lý do từ chối</span>
+                    <Input
+                        name="reject_reason"
+                        type="text"
+                        className="w-[70%]"
+                        onChange={(e) => handleChangeRejectReason(e.target.value)}
+                    />
+                </div>
+                <div className="flex justify-center">
+                    <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Trả về</Button>
+                </div>
+            </Modal>
+        </div>
+    )
+}
+
+export const ModalRejectNopLuuLichSuOrgan = () => {
+    const dispatch = useDispatch()
+    const open = useSelector(state => state.modalRejectNopLuuLichSuOrgan.open)
+    const organId = useSelector(state => state.modalRejectNopLuuLichSuOrgan.organId)
+    const planId = useSelector(state => state.modalRejectNopLuuLichSuOrgan.planId)
+    const reFetchData = useSelector(state => state.modalRejectNopLuuLichSuOrgan.reFetchData)
+    const [request, setRequest] = useState({})
+
+    const handleChangeRequest = (name, value) => {
+        setRequest({
+            ...request,
+            [name]: value
+        })
+    }
+
+    const handleOk = () =>{
+        dispatch({ type: "close_modalRejectNopLuuLichSuFile"})
+    }
+
+    const handleCancel = () => {
+        dispatch({ type: "close_modalRejectNopLuuLichSuFile"})
+    }
+
+    const handleClickReject = async () => {
+        // await FileAPIService.updateState(IDFile);
+        await reFetchData()
+        notifySuccess("Đã trả về hồ sơ")
+    }
+
+    return (
+        <div>
+            <Modal
+                title="Từ chối hồ sơ nộp lưu lịch sử thuộc cơ quan"
+                footer={null}
+                style={{
+                    top: 200,
+                }}
+                open={open}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <div className="flex justify-between py-[12px]">
+                    <span>Lý do từ chối</span>
+                    <Input
+                        name="reject_reason"
+                        type="text"
+                        className="w-[70%]"
+                        onChange={(e) => handleChangeRequest(e.target.name, e.target.value)}
+                    />
+                </div>
+                <div className="flex justify-center">
+                    <Button className="mx-[8px] bg-red-500 text-white font-medium" onClick={handleClickReject}>Trả về</Button>
+                </div>
+            </Modal>
+        </div>
+    )
+}
+
+export const ModalRejectReason = () => {
+    const reason = useSelector(state => state.modalRejectReason.reason)
+    const open = useSelector(state => state.modalRejectReason.open)
+    const dispatch = useDispatch()
+
+    const handleOk = () => {
+        dispatch({ type: "close_modalRejectReason"})
+    }
+
+    const handleCancel = () => {
+        dispatch({ type: "close_modalRejectReason"})
+    }
+
+    return (
+        <div>
+            <Modal
+                title="Lý do từ chối"
+                footer={null}
+                style={{
+                    top: 200,
+                }}
+                open={open}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <div className="flex justify-between py-[12px]">
+                    <span>Lý do từ chối</span>
+                    <Input
+                        type="text"
+                        className="w-[70%]"
+                        value={reason}
+                        disabled
+                    />
+                </div>
+            </Modal>
+        </div>
+    )
+}

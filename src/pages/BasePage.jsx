@@ -25,15 +25,12 @@ import {
 	ModalRecoverFile,
 	ModalXepKhoLuuTruLichSu
 } from "./Modals";
-
-
 import UserAPIService from "src/service/api/userAPIService";
 import FileAPIService from "src/service/api/FileAPIService";
 import PlanAPIService from "src/service/api/PlanAPIService";
-import SoNoiVuPheDuyet from "./LuuTruLichSu/SoNoiVuPheDuyet";
 import { ModalConfirmSendPlan } from "./LuuTruCoQuan/Modals/LuuTruLichSu";
 import { ChonNguoiDuyetKeHoach } from "./LuuTruLichSu/modals/ChonNguoiDuyetKeHoach";
-// import ExcelAPIService from "src/service/api/execAPIService";
+
 const API_GOV_FILE_GET_ALL = import.meta.env.VITE_API_GOV_FILE_GET_ALL;
 const API_UPDATE_STATE_GOV_FILE =
 	import.meta.env.VITE_API_GOV_FILE_UPDATE_STATE;
@@ -143,7 +140,6 @@ const PlanAndCategoryFile = ({
 };
 
 const ButtonFunctionOfEachFile = ({
-	handleClickOnFile,
 	IDFile,
 	reset,
 	state,
