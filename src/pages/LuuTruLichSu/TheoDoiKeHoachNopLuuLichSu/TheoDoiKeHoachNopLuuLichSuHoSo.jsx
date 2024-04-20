@@ -4,12 +4,13 @@ import { Input, Spin, Button } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO } from "src/storage/Storage";
+import {STATE, THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO} from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
 import { OpenFile } from "src/actions/formFile";
 import File from "src/components/Form/File/File";
 import {ModalRejectNopLuuLichSuFile} from "src/pages/Modals";
 import {notifySuccess} from "src/custom/Function";
+
 const Search = Input.Search
 
 
@@ -43,6 +44,9 @@ const TheoDoiKeHoachNopLuuLichSuHoSo = () => {
             new_state: 20,
         }])
         notifySuccess('Chấp nhận hồ sơ thành công')
+        setTimeout(() => {
+            fetchFieldData()
+        }, 300)
     }
 
     const handleReject = (id) => {
@@ -58,19 +62,16 @@ const TheoDoiKeHoachNopLuuLichSuHoSo = () => {
         const files = await FileAPIService.getFileOfNLLSPlanByOrganId(params.plan_id, params.organ_id);
         const newData = []
         for (const file of files) {
-            console.log('file', file)
+            let state = 'Chưa duyệt'
+            if(file.state === 20) {
+                state = 'Đã chấp nhận'
+            }
             newData.push({
                 "id": file.id,
                 "gov_file_code": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.gov_file_code}</p>, 
                 "title": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.title}</p>, 
-                "organ_id": file.organ_id, 
-                "sheet_number": file.sheet_number, 
-                "TotalDoc": file.TotalDoc, 
-                "start_date": file.start_date, 
-                "end_date": file.end_date, 
-                "maintenance": file.maintenance, 
-                "rights": file.rights,
-                "action": <div>
+                "state":<button> {state}</button>,
+                "action":  file.state === 5 && <div>
                     <Button
                         onClick={() => handleApprove(file.id)}
                         className="border-none shadow-none text-green-500 text-[20px] fa-regular fa-square-check"></Button>

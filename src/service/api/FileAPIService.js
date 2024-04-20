@@ -59,6 +59,9 @@ const FileAPIService = {
     getFilesByState: async (state) => {
         const res = await axiosHttpService.get(API_GET_FILE_BY_STATE + state);
         return res.data;
+    },
+
+    rejectPlanNLLSOrgan: async (organId, planId, reason) => {
     }
 }
 

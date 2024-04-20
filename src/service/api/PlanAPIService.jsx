@@ -1,4 +1,3 @@
-import {ENUM_TYPE_PLAN} from "src/storage/Storage";
 import axiosHttpService from "src/utils/httpService";
 import {AddWatchTheoDoiNopLuuLichSu} from "../helper/Plan";
 import UserAPIService from "./userAPIService";

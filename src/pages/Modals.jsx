@@ -1464,6 +1464,7 @@ export const ModalRejectNopLuuLichSuFile = () => {
             new_state: 8,
             reject_reason: rejectReason,
         }]);
+        await PlanAPIService.removeFileFromPlan(id);
         await reFetchData()
         notifySuccess("Đã trả về hồ sơ")
     }
@@ -1513,15 +1514,15 @@ export const ModalRejectNopLuuLichSuOrgan = () => {
     }
 
     const handleOk = () =>{
-        dispatch({ type: "close_modalRejectNopLuuLichSuFile"})
+        dispatch({ type: "close_modalRejectNopLuuLichSuOrgan"})
     }
 
     const handleCancel = () => {
-        dispatch({ type: "close_modalRejectNopLuuLichSuFile"})
+        dispatch({ type: "close_modalRejectNopLuuLichSuOrgan"})
     }
 
     const handleClickReject = async () => {
-        // await FileAPIService.updateState(IDFile);
+        await FileAPIService.rejectPlanNLLSOrgan(planId, organId, request);
         await reFetchData()
         notifySuccess("Đã trả về hồ sơ")
     }
@@ -1571,7 +1572,7 @@ export const ModalRejectReason = () => {
     return (
         <div>
             <Modal
-                title="Lý do từ chối"
+                title="Lý do trả về"
                 footer={null}
                 style={{
                     top: 200,
@@ -1581,7 +1582,7 @@ export const ModalRejectReason = () => {
                 onCancel={handleCancel}
             >
                 <div className="flex justify-between py-[12px]">
-                    <span>Lý do từ chối</span>
+                    <span>Lý do trả về</span>
                     <Input
                         type="text"
                         className="w-[70%]"

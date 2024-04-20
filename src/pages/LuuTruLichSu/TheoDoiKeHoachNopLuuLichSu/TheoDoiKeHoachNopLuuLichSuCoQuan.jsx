@@ -55,14 +55,14 @@ const TheoDoiKeHoachNopLuuLichSuCoQuan = () => {
                 "id": organ.id,
                 "name": <Link to={`./${organ.id}`} className="cursor-pointer">{organ.name}</Link>,
                 "state": <button>{organ.state}</button>,
-                "action": <div>
-                    <Button
-                        onClick={() => handleApprove(organ.id, params.plan_id)}
-                        className="border-none shadow-none text-green-500 text-[20px] fa-regular fa-square-check"></Button>
-                    <Button
-                        onClick={() => handleReject(organ.id, params.plan_id)}
-                        className="border-none shadow-none text-red-500 text-[20px] fa-regular fa-circle-xmark"></Button>
-                </div>
+                // "action": <div>
+                //     <Button
+                //         onClick={() => handleApprove(organ.id, params.plan_id)}
+                //         className="border-none shadow-none text-green-500 text-[20px] fa-regular fa-square-check"></Button>
+                //     <Button
+                //         onClick={() => handleReject(organ.id, params.plan_id)}
+                //         className="border-none shadow-none text-red-500 text-[20px] fa-regular fa-circle-xmark"></Button>
+                // </div>
             })
         }
         setFieldData(newData)

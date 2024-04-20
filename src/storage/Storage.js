@@ -1184,13 +1184,7 @@ export const ACTION_GROUP = [
 export const THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO = [
 	{ title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
 	{ title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
-	{ title: "Phông", key: "organ_id", width: "100%" },
-	{ title: "Số lượng tờ", key: "sheet_number", width: "70px" },
-	{ title: "Số lượng văn bản", key: "TotalDoc", width: "70px" },
-	{ title: "Thời gian bắt đầu", key: "start_date", width: "100%" },
-	{ title: "Thời gian kết thúc", key: "end_date", width: "100%" },
-	{ title: "Thời hạn bảo quản", key: "maintenance", width: "100%" },
-	{ title: "Chế độ sử dụng", key: "rights", width: "100%" },
+	{ title: "Trạng thái", key: "state", width: "100%" },
 	{ title: "Hành động", key: "action", width: "100%" },
 ]
 
@@ -1214,6 +1208,6 @@ export const HO_SO_NOP_LUU_LICH_SU_TRA_VE = [
 	{ title: "Thời gian kết thúc", key: "end_date", width: "100%" },
 	{ title: "Thời hạn bảo quản", key: "maintenance_name", width: "100%" },
 	{ title: "Chế độ sử dụng", key: "rights", width: "100%" },
-	{ title: "Trạng thái", key: "state", width: "130%" },
+	// { title: "Trạng thái", key: "state", width: "130%" },
 	{ title: "Lí do trả về", key: "reject_reason", width: "120px" },
 ]

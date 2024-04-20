@@ -36,11 +36,11 @@ const HoSoBiTraVeCoQuan = () => {
                 end_date: file.end_date || "",
                 maintenance_name: file.maintenance_name || "",
                 rights: file.rights || "",
-                state: (
-                    <button>
-                        {STATE[file.state]}
-                    </button>
-                ),
+                // state: (
+                //     <button>
+                //         {STATE[file.state]}
+                //     </button>
+                // ),
                 reject_reason:
                     <Button
                     onClick={() => handleClickRejectReason(file.reject_reason)}
