@@ -1,12 +1,14 @@
 import {Table} from "src/custom/Components";
 import {useEffect, useState} from "react";
-import {HO_SO_NOP_LUU_LICH_SU_TRA_VE, STATE} from "src/storage/Storage";
+import {HO_SO_NOP_LUU_LICH_SU_TRA_VE} from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
 import {Button} from "antd";
 import {useDispatch} from "react-redux";
 import {ModalRejectReason} from "src/pages/Modals";
+import {notifySuccess} from "src/custom/Function";
 
 const HoSoBiTraVeCoQuan = () => {
+    const [stateCheckBox, setStateCheckBox] = useState([])
     const [isLoading, setIsLoading] = useState(false)
     const [files, setFiles] = useState([])
     const dispatch = useDispatch();
@@ -36,11 +38,6 @@ const HoSoBiTraVeCoQuan = () => {
                 end_date: file.end_date || "",
                 maintenance_name: file.maintenance_name || "",
                 rights: file.rights || "",
-                // state: (
-                //     <button>
-                //         {STATE[file.state]}
-                //     </button>
-                // ),
                 reject_reason:
                     <Button
                     onClick={() => handleClickRejectReason(file.reject_reason)}
@@ -57,6 +54,27 @@ const HoSoBiTraVeCoQuan = () => {
         fetchData();
     }, []);
 
+    const handleDayVaoKho = async () => {
+        const ids = stateCheckBox.map((item) => item.split('checkbox')[1]);
+        console.log('ids', ids)
+        const payload = ids.map((id) => {
+            console.log('id', id)
+            return {
+                id: id,
+                current_state: 0,
+                new_state: 10
+            }
+        })
+
+        await FileAPIService.updateState(payload);
+        setTimeout(() => {
+            fetchData();
+            notifySuccess("Đã đẩy vào kho lưu trữ cơ quan")
+        }, 300)
+
+
+    }
+
     return (
         <div className="w-full">
             <div className="w-full px-[24px] pt-[12px] pb-[16px] bg-white">
@@ -69,8 +87,21 @@ const HoSoBiTraVeCoQuan = () => {
 
             <div className="w-full px-[24px] pb-[16px] bg-white flex justify-between">
                 <p className="text-[20px] font-bold ">Hồ sơ nộp lưu lịch sử bị trả về</p>
-               </div>
+            </div>
+            <div className="mt-[16px] mx-[24px] flex justify-end">
+                <div className="w-[20%] text-white text-center px-[5px] rounded-[5px] flex justify-start">
+                    <Button
+                        onClick={() => handleDayVaoKho()}
+                        className={`rounded-[5px] flex justify-center bg-[#00f] w-full px-[12px] py-[6px] text-[12px] text-white items-center`}
+                    >
+                        Đẩy vào kho lưu trữ cơ quan
+                    </Button>
+                </div>
+            </div>
+
             <Table
+                isCheckBox={true}
+                setStateCheckBox={setStateCheckBox}
                 fieldNames={HO_SO_NOP_LUU_LICH_SU_TRA_VE}
                 fieldDatas={files}
                 isLoading={isLoading}
