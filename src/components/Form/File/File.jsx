@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import axiosHttpService from "src/utils/httpService";
 
-import { Link, useLocation } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { useEffect, useState } from "react"
 import 'react-toastify/dist/ReactToastify.css';
 import { useDispatch, useSelector, } from "react-redux";
 import * as actionFile from "../../../actions/formFile";
-import { FORMAT, LANGUAGE, MAINTENANCE, ORGAN_ID, IDENTIFIER, RIGHTS, IDENTIFIER_CODE } from "../../../storage/FileStorage";
+import { RIGHTS } from "src/storage/FileStorage";
 import { Select, Input } from "antd";
-import { FirstLower, notifyError, notifySuccess } from "../../../custom/Function";
+import { FirstLower, notifyError, notifySuccess } from "src/custom/Function";
 import UserAPIService from "src/service/api/userAPIService";
 
 const API_GOV_FILE_CREATE = import.meta.env.VITE_API_GOV_FILE_CREATE
@@ -30,7 +30,6 @@ const File = ({
     const language = useSelector((state) => state.language.language)
     const format = useSelector((state) => state.format.format)
     const maintance = useSelector((state) => state.maintance.maintance)
-    const [idFileCreate, setIdFileCreate] = useState(null);
     const [organ, setOrgan] = useState(null);
     const [fond, setFond] = useState([]);
 
@@ -249,6 +248,7 @@ const File = ({
                 return
             }
         }
+
         const handleChangeStateFile = async (id) => {
             const bmclFile = {
                 current_state: 1,
@@ -282,7 +282,7 @@ const File = ({
                         ...prev,
                         rights: null,
                         gov_file_code: null,
-                        identifier: null,
+                        //identifier: null,
                         organ_id: null,
                         file_catalog: null,
                         file_notation: null,

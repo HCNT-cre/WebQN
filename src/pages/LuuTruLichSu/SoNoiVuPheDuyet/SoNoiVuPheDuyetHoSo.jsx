@@ -42,13 +42,13 @@ const SoNoiVuPheDuyetHoSo = () => {
                 "id": file.id,
                 "gov_file_code": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.gov_file_code}</p>, 
                 "title": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.title}</p>, 
-                "organ_id": file.organ_id, 
-                "sheet_number": file.sheet_number, 
-                "TotalDoc": file.TotalDoc, 
-                "start_date": file.start_date, 
-                "end_date": file.end_date, 
-                "maintenance": file.maintenance, 
-                "rights": file.rights, 
+                // "organ_id": file.organ_id,
+                // "sheet_number": file.sheet_number,
+                // "TotalDoc": file.TotalDoc,
+                // "start_date": file.start_date,
+                // "end_date": file.end_date,
+                // "maintenance": file.maintenance,
+                // "rights": file.rights,
             })
         }
         setFieldData(newData)

@@ -58,6 +58,8 @@ const PlanAndCategoryFile = ({
 	const [selectedPlan, setSelectedPlan] = useState(null);
 	const handleOk = () => {
 		setOpen(false);
+		setCategory(null);
+		setSelectedPlan(null);
 		dispatch(CreateFile(category, selectedPlan));
 	};
 

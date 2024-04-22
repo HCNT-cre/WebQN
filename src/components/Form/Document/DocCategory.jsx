@@ -303,13 +303,13 @@ const DocCategory = ({ eOffice = true }) => {
                       ></input>
                     </form>
                   </div>
-                  <div className="w-[12.5%] text-white text-center px-[5px] flex">
-                    <button
-                      className="rounded-[5px] h-[30px] flex justify-center bg-red-500 w-full px-[4px] items-center text-[12px]"
-                    >
-                      Số hóa tài liệu
-                    </button>
-                  </div>
+                  {/*<div className="w-[12.5%] text-white text-center px-[5px] flex">*/}
+                  {/*  <button*/}
+                  {/*    className="rounded-[5px] h-[30px] flex justify-center bg-red-500 w-full px-[4px] items-center text-[12px]"*/}
+                  {/*  >*/}
+                  {/*    Số hóa tài liệu*/}
+                  {/*  </button>*/}
+                  {/*</div>*/}
 
                   <div className="w-[12.5%] text-white text-center px-[5px] flex">
 

@@ -389,16 +389,16 @@ const AddDoc = ({
                                         <div className='h-full w-[50%] pl-[12px] mr-[12px] '>
                                             <div className='w-full flex justify-end'>
                                                 <div className="text-white text-center px-[5px] rounded-[5px]  relative">
-                                                    <Button
-                                                        onClick={toggleContent}
-                                                        ref={buttonRef}
-                                                        className=" disabled:opacity-30 rounded-[5px] flex justify-center items-center py-[6px] text-[12px] bg-sky-500 "
-                                                    >
-                                                        Ký số
-                                                        <div className="ml-[4px]">
-                                                            <i className="fa-solid fa-chevron-down"></i>
-                                                        </div>
-                                                    </Button>
+                                                    {/*<Button*/}
+                                                    {/*    onClick={toggleContent}*/}
+                                                    {/*    ref={buttonRef}*/}
+                                                    {/*    className=" disabled:opacity-30 rounded-[5px] flex justify-center items-center py-[6px] text-[12px] bg-sky-500 "*/}
+                                                    {/*>*/}
+                                                    {/*    Ký số*/}
+                                                    {/*    <div className="ml-[4px]">*/}
+                                                    {/*        <i className="fa-solid fa-chevron-down"></i>*/}
+                                                    {/*    </div>*/}
+                                                    {/*</Button>*/}
 
                                                     {showContent && (
                                                         <div

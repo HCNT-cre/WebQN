@@ -194,7 +194,7 @@ export const TABS_SIDEBAR = [
 				],
 			},
 			{
-				key: "/bien-muc-chinh-ly",
+				key: "/bien-muc-chinh-ly-co-quan",
 				isExpand: false,
 				icon: `<i class="fa-solid fa-screwdriver-wrench"></i>`,
 				display: false,
@@ -546,7 +546,7 @@ export const TABS_SIDEBAR = [
 			// },
 
 			{
-				key: "/bien-muc-chinh-ly",
+				key: "/bien-muc-chinh-ly-luu-tru",
 				isExpand: false,
 				icon: `<i class="fa-solid fa-screwdriver-wrench"></i>`,
 				display: false,
@@ -1184,8 +1184,8 @@ export const ACTION_GROUP = [
 export const THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO = [
 	{ title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
 	{ title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
-	{ title: "Trạng thái", key: "state", width: "100%" },
-	{ title: "Hành động", key: "action", width: "100%" },
+	// { title: "Trạng thái", key: "state", width: "100%" },
+	// { title: "Hành động", key: "action", width: "100%" },
 ]
 
 export const DANH_MUC_HO_SO = [
