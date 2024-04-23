@@ -152,11 +152,14 @@ const Update = ({ reFetchData, id }) => {
 		});
 		await handleRemoveFile();
 		await handleAddFile();
-		setResetAdd(true);
-		setResetRemove(true);
-		reFetchData();
-		setModalOpen(false);
-		notifySuccess("Cập nhật thành công");
+
+		setTimeout(() => {
+			reFetchData();
+			notifySuccess("Cập nhật thành công");
+			setResetAdd(true);
+			setResetRemove(true);
+			setModalOpen(false);
+		}, 300);
 	};
 
 	const handleCancle = () => {

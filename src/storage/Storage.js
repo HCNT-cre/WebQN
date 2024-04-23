@@ -1184,8 +1184,15 @@ export const ACTION_GROUP = [
 export const THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO = [
 	{ title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
 	{ title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
-	// { title: "Trạng thái", key: "state", width: "100%" },
-	// { title: "Hành động", key: "action", width: "100%" },
+	{ title: "Văn bản", key: "document", width: "100%" },
+	{ title: "Trạng thái", key: "state", width: "100%" },
+	{ title: "Hành động", key: "action", width: "100%" },
+]
+
+export const DUYET_KE_HOACH_NOP_LUU_LICH_SU_HO_SO = [
+	{ title: "Mã hồ sơ", key: "gov_file_code", width: "150%" },
+	{ title: "Tiêu đề hồ sơ", key: "title", width: "100%" },
+	{ title: "Văn bản", key: "document", width: "100%" },
 ]
 
 export const DANH_MUC_HO_SO = [

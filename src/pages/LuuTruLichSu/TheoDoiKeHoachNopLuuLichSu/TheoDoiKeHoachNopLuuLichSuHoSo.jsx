@@ -4,12 +4,13 @@ import { Input, Spin, Button } from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import {STATE, THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO} from "src/storage/Storage";
+import {THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO} from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
 import { OpenFile } from "src/actions/formFile";
 import File from "src/components/Form/File/File";
 import {ModalRejectNopLuuLichSuFile} from "src/pages/Modals";
 import {notifySuccess} from "src/custom/Function";
+import DocCategory from "src/components/Form/Document/DocCategory";
 
 const Search = Input.Search
 
@@ -57,6 +58,13 @@ const TheoDoiKeHoachNopLuuLichSuHoSo = () => {
         })
     }
 
+    const handleClickDocument = (id) => {
+        dispatch({
+            type: "open",
+            id:id,
+        })
+    }
+
     const fetchFieldData = async () => {
         setIsLoading(true)
         const files = await FileAPIService.getFileOfNLLSPlanByOrganId(params.plan_id, params.organ_id);
@@ -68,8 +76,9 @@ const TheoDoiKeHoachNopLuuLichSuHoSo = () => {
             }
             newData.push({
                 "id": file.id,
-                "gov_file_code": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.gov_file_code}</p>, 
-                "title": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.title}</p>, 
+                "gov_file_code": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.gov_file_code}</p>,
+                "title": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.title}</p>,
+                "document": <Button onClick={() => handleClickDocument(file.id)}>Xem văn bản</Button>,
                 "state":<button> {state}</button>,
                 "action":  file.state === 5 && <div>
                     <Button
@@ -117,6 +126,7 @@ const TheoDoiKeHoachNopLuuLichSuHoSo = () => {
             />
             <File />
             <ModalRejectNopLuuLichSuFile/>
+            <DocCategory/>
         </Spin>
     )
 }

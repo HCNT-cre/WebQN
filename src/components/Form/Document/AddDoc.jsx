@@ -13,7 +13,7 @@ import {
     notifySuccess,
     SetNull,
     ValidateFormDoc
-} from '../../../custom/Function';
+} from 'src/custom/Function';
 import {useButtonClickOutside} from 'src/custom/Hook';
 import sign from 'src/assets/img/sign.jpg'
 import sign2 from 'src/assets/img/sign2.png'

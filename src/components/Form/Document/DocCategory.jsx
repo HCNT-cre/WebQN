@@ -127,6 +127,8 @@ const DocCategory = ({ eOffice = true }) => {
 
   const dispatch = useDispatch();
 
+  console.log('stateDocCategory', stateDocCategory);
+    console.log('govFileID', govFileID);
   const handleClickOnDocument = async (URL_PDF_FILE, pdfData, pdfID) => {
     setPdfFileLink(URL_PDF_FILE);
     setPdfData(pdfData);

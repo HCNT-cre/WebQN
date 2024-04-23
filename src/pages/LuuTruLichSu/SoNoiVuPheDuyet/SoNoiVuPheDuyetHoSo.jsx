@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import PheDuyetKeHoachNLLSBase from "src/pages/LuuTruLichSu/TheoDoiKeHoachNopLuuLichSu";
-import { Input, Spin } from "antd";
+import {Button, Input, Spin} from "antd";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO } from "src/storage/Storage";
+import { DUYET_KE_HOACH_NOP_LUU_LICH_SU_HO_SO } from "src/storage/Storage";
 import FileAPIService from "src/service/api/FileAPIService";
 import { OpenFile } from "src/actions/formFile";
 import File from "src/components/Form/File/File";
+import DocCategory from "src/components/Form/Document/DocCategory";
 const Search = Input.Search
 
 
@@ -33,6 +34,14 @@ const SoNoiVuPheDuyetHoSo = () => {
     const handleClickFile = (fileId) => {
         dispatch(OpenFile(fileId));
     }
+
+    const handleClickDocument = (id) => {
+        dispatch({
+            type: "open",
+            id:id,
+        })
+    }
+
     const fetchFieldData = async () => {
         setIsLoading(true)
         const files = await FileAPIService.getFileOfNLLSPlanByOrganId(params.plan_id, params.organ_id);
@@ -41,7 +50,8 @@ const SoNoiVuPheDuyetHoSo = () => {
             newData.push({
                 "id": file.id,
                 "gov_file_code": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.gov_file_code}</p>, 
-                "title": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.title}</p>, 
+                "title": <p className="cursor-pointer" onClick={() => handleClickFile(file.id)}>{file.title}</p>,
+                "document": <Button onClick={() => handleClickDocument(file.id)}>Xem văn bản</Button>,
                 // "organ_id": file.organ_id,
                 // "sheet_number": file.sheet_number,
                 // "TotalDoc": file.TotalDoc,
@@ -80,12 +90,13 @@ const SoNoiVuPheDuyetHoSo = () => {
                         <Link to={`/luu-tru-lich-su/so-noi-vu-phe-duyet/${params.plan_id}`}> Cơ quan </Link>
                     </span>
                 }
-                fieldNames={THEO_DOI_KE_HOACH_NOP_LUU_LICH_SU_HO_SO}
+                fieldNames={DUYET_KE_HOACH_NOP_LUU_LICH_SU_HO_SO}
                 fieldDatas={fieldData}
                 SearchBar={<SearchBar />}
                 isLoading={isLoading}
             />
             <File />
+            <DocCategory/>
         </Spin>
     )
 }
